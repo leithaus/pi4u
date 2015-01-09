@@ -1,0 +1,69 @@
+\section{Concurrent process calculi and spatial logics }\label{sec:concurrent_process_calculi_and_spatial_logics_} % (fold)
+In the last thirty years the process calculi have matured into a
+remarkably powerful analytic tool for reasoning about concurrent and
+distributed systems. Process-calculus-based algebraical specification of
+processes began with Milner's Calculus for Communicating Systems (CCS)
+\cite{MilnerCCS80} and Hoare's Communicating Sequential Processes
+(CSP) \cite{CSP} \cite{CSP1} \cite{CSP2} \cite{CSP3}, and continue
+through the development of the so-called mobile process calculi,
+e.g. Milner, Parrow and Walker's $\pi$-calculus \cite{ParrowWalker},
+Cardelli and Caires's spatial logic \cite{CairesC04} \cite{CairesC03}
+\cite{Caires04}, or Meredith and Radestock's reflective calculi
+\cite{MeredithR05} \cite{meredith2005rho}. The process-calculus-based
+algebraical specification of processes has expanded its scope of
+applicability to include the specification, analysis, simulation and
+execution of processes in domains such as:
+
+\begin{itemize}
+\item telecommunications, networking, security and application level protocols
+\cite{AbadiB02} 
+\cite{AbadiB03} 
+\cite{BrownLM05} 
+\cite{LaneveZ05}; 
+\item programming language semantics and design
+\cite{BrownLM05}
+\cite{djoin}
+\cite{JoCaml}
+\cite{WojciechowskiS99};
+\item webservices
+\cite{BrownLM05}
+\cite{LaneveZ05}
+\cite{MeredithB03};
+\item and biological systems
+\cite{Cardelli04}
+\cite{DanosL03}
+\cite{RegevS03}
+\cite{PriamiRSS01}.
+\end{itemize}
+
+Among the many reasons for the continued success of this approach are
+two central points. First, the process algebras provide a
+compositional approach to the specification, analysis and execution of
+concurrent and distributed systems. Owing to Milner's original
+insights into computation as interaction \cite{Milner93}, the process
+calculi are so organized that the behavior ---the semantics--- of a
+system may be composed from the behavior of its components
+\cite{Fokkink}. This means that specifications can be constructed in
+terms of components ---without a global view of the system--- and
+assembled into increasingly complete descriptions.
+
+The second central point is that process algebras have a potent proof
+principle, yielding a wide range of effective and novel proof
+techniques \cite{MilnerS92} \cite{SangiorgiWalker} \cite{Sangiorgi95}
+\cite{hop}. In particular, \emph{bisimulation} encapsulates an effective
+notion of process equivalence that has been used in applications as
+far-ranging as algorithmic games semantics
+\cite{Abramsky2005Algorithmic-Gam} and the construction of
+model-checkers \cite{Caires04}. The essential notion can be stated in
+an intuitively recursive formulation: a \emph{bisimulation} between two
+processes $P$ and $Q$ is an equivalence relation $E$ relating $P$
+and $Q$ such that: whatever action of $P$ can be observed, taking it
+to a new state $P'$, can be observed of $Q$, taking it to a new state
+$Q'$, such that $P'$ is related to $Q'$ by $E$ and vice versa. $P$ and
+$Q$ are \emph{bisimilar} if there is some bisimulation relating
+them. Part of what makes this notion so robust and widely applicable
+is that it is parameterized in the actions observable of processes
+$P$ and $Q$, thus providing a framework for a broad range of
+equivalences and up-to techniques \cite{milner92techniques} all governed by the same core
+principle \cite{SangiorgiWalker} \cite{Sangiorgi95} \cite{hop}.
+% section concurrent_process_calculi_and_spatial_logics_ (end)

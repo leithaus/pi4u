@@ -1,0 +1,107 @@
+\section{Conclusions and future work}
+
+\paragraph{Testing physical space}
+You, gentle reader, may wonder why of all the theorems to be proved
+given this set up we pick the one above. In some sense it's hardly
+central to quantum mechanics. We see it as central in the sense that
+it firmly establishes a notion of physical space arising from a notion
+of the equivalence of behavior. Relating bisimulation to a metric is a
+big step forward, but one is faced with interpreting the relationship
+of that metric space to something more physical. Quantum mechanical
+notions of ``physical'' space are still far from intuitive, but by
+relating this idea of distance as testing to calculations that predict
+physical circumstances we are making a not insignificant step forward
+toward an understanding of the physical space we inhabit as
+essentially dynamic.
+
+\paragraph{Effectivity and simulation}
+One of the observations we have yet to make is that the entire program
+spelled out here is effective. We have built various interpreters for
+the reflective calculus at work in this interpretation. In principle,
+then, we can simulate quantum mechanics on a computer. The place where
+the simulation may lose fidelity is the infinitely branching summation
+for the annihilator.
+
+In this connection i also want to point out that the evaluation style
+calculation of the inner product puts the non-determinism of the
+summation right at the heart of measurement. This suggests that
+Milner's original reduction-based formulation of the dynamics of his
+calculi in terms of sums was not just notationally suggestive of a
+notion of measure-and-continue but captured some significant part of a
+physical intuition.
+
+\paragraph{Quantum continuations}
+In light of this last observation i want to point out that the
+connection to the observation regarding iterated experiments and
+continuations made in section \ref{sec:quantum_continuation}. An
+account of continuation is necessary to provide a truly compositional
+story of physical processes involving quantum operations. As noted, in
+a real lab, when a measurement is made the observation can be made to
+feed into another device that then makes another measurement
+conditioned on the results of the first. This is not a mere nicety; it
+is a pragmatic requirement of a theory that provides a computational
+basis for the design of large-scale processes (i.e., consisting of
+many steps, or having a high degree of branching, or enjoying some
+other complexity characteristic) involving quantum operations. It
+shows up in descriptions of quantum cryptographic protocols
+\cite{DBLP:conf/popl/GayN05} \cite{DBLP:conf/lics/AbramskyC04} and
+computational processes that mix classical and quantum computations
+\cite{DBLP:conf/tlca/SelingerV05}
+\cite{DBLP:conf/flops/Selinger04}. This suggests that there might be
+advantages to a more uniform account of dynamics that encompasses both
+quantum and computational paradigms.
+
+\paragraph{Quantum logic}
+In this connection, we also note that by virtue of having the
+Hennessy-Milner construction, we can pull the construction through the
+interpretation of QM. This gives us a natural candidate for a quantum
+logic that enjoys an extremely tight connection with it's domain of
+interpretation, making the construction much less ad hoc (rather it is
+the image of functor!).
+
+\paragraph{Quantum probabiity}
+i have questions about the basis of the interpretation of inner
+product as probability amplitude. In particular, using which
+axiomatization of probability theory does the notion of probability
+amplitude earn the right to be so dubbed? In other words, where is the
+proof that the operation for calculating a probability amplitude (and
+then squaring) satisfies the axioms of what it means to calculate a
+probability? Even if such a proof exists (i have yet to find it in the
+literature), i wonder if it might not be possible to turn things on
+their heads. Can we view the calculation of the probability amplitude
+as an axiomatization of probability? If so, then the definition we
+give for calculating probability amplitude may provide the basis for
+an \emph{effective} theory of probability.
+
+\paragraph{Quantum vs ``biological'' information}
+Finally, i want to conclude with a more philosophical observation. At
+a recent workshop in which QM was a predominant topic i noticed
+something about quantum information. The speaker was giving a riveting
+discussion of axiomatic QM and showing how properties of ``no
+cloning'' and ``no deleting'' emerged as consequences of the
+axiomatization. Theorems of this form are necessary to give us a sense
+of confidence that our axioms characterize the physical theory. What
+struck me, though, was that if quantum information is neither erasable
+nor replicable it is markedly different from \emph{life}. Two of the
+things we know about life is that
+
+\begin{itemize}
+  \item it ends;
+  \item to gain some measure of persistence, to transcend it's
+    finitude it is imminently copyable.
+\end{itemize}
+
+Both of these qualities are summarized succinctly in the aphorism: all
+flesh is grass. For me these two kinds of ``information'' -- call them
+quantum and biological -- are end points on a spectrum of strategies
+for persistence. At one end, we have those curious entities that enjoy
+uniqueness and permanence; at the other, we have those who in the face
+of a certain end and an uncertain present make a go of passing
+something on. To me one of the more remarkable aspects of the latter
+strategy is that in the presence of noise (and certain features of
+copying) we get a kind of dynamism, a chance for improvement against a
+given persistent condition.
+
+% subsection other_calculi_other_bisimulations_and_geometry_as_behavior (end)
+
+

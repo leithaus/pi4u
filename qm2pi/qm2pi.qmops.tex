@@ -1,0 +1,473 @@
+\section{Interpretation of QM}
+\subsection{Supporting definitions}
+
+To provide our interpretation of quantum mechanics we need to develop
+a number of supporting definitions. As the reader familiar with
+process algebraic systems can readily verify, these definitions make
+\emph{essential} use of the reflective operations and as such identify
+this calculus as uniquely suited to this particular task.
+
+Among these operations we find a notion of \emph{multiplication} of
+names that interacts well with a notion of \emph{tensor product} of
+processes. Even more intriguingly, we find a notion of a \emph{dual}
+to a process in the form of maps from processes to names. While
+notions of composite names have been investigated in the process
+algebraic literature, it is the fact that names reflect process
+structure that enables the collection of duals to enjoy an algebraic
+structure dual to the collection of processes (i.e. there are
+operations available to duals that reflect the operations on
+processes). Moreover, it is this structure that enables an effective
+definition of inner product.
+
+\subsubsection{Multiplication}
+\begin{mathpar}
+  \quotep{Q} \cdot \quotep{R} := \quotep{Q|R}
+  \and \\
+  \quotep{Q} \cdot P := P\{ \quotep{Q|R} / \quotep{R} : \quotep{R} \in \freenames{P} \}
+\end{mathpar}
+
+\paragraph{Discussion}
+The first equation needs little explanation; the second says that each
+free name of the process is replaced with the multiplication of that
+name by the scalar. Multiplication of a scalar (name) by a state
+(process) results in a process all the names of which have been `moved
+over' by parallel composition with the process the scalar
+quotes. There is a subtlety that the bound names have to be
+manipulated so that multiplied names aren't accidentally
+captured. There are many ways to achieve this.
+
+\begin{remark}\label{rem:multiplication_identities}
+  The reader is invited to verify that for all $x,y,z \in \QProc$ and $P \in \Proc$
+  \begin{mathpar}
+    x \cdot \quotep{0} \equiv x 
+    \and
+    x \cdot y \equiv y \cdot x
+    \and
+    x \cdot (y \cdot z) \equiv (x \cdot y) \cdot z
+    \and \\
+    \quotep{0} \cdot P \equiv P
+    \and \\
+    x \cdot (y \cdot P) \equiv (x \cdot y) \cdot P
+    \and \\
+    x \cdot (P|Q) \equiv (x \cdot P) | (x \cdot Q)
+    \and \\    
+  \end{mathpar}
+\end{remark}
+
+\subsubsection{Tensor product}
+
+We define a tensor product on processes by structural induction.
+
+\paragraph{Tensor of sums} First note that all summations, including
+$\pzero$ and sequence, can be written $\Sigma_{i} x_{i}.A_{i} +
+\Sigma_{j} x_{j}.C_{j}$, where we have grouped input-guarded processes
+together and output-guarded processes together.
+
+Thus, we can define the tensor product of two summations, $N_{1}\otimes N_{2}$, where
+
+\begin{mathpar}
+  N_{1} := \Sigma_{i} x_{i}.A_{i} + \Sigma_{j} x_{j}.C_{j}
+  \and
+  N_{2} := \Sigma_{i'} y_{i'}.B_{i'} + \Sigma_{j'} y_{j'}.D_{j'} 
+\end{mathpar}
+
+as follows.
+
+\begin{mathpar}
+  \Sigma_{i} x_{i}.A_{i} + \Sigma_{j} x_{j}.C_{j} \otimes \Sigma_{i'}
+  y_{i'}.B_{i'} + \Sigma_{j'} y_{j'}.D_{j'} 
+  \and \\
+  := \; \Sigma_{i} \Sigma_{i'} \quotep{\stackrel{\vee}{x_{i}}| \stackrel{\vee}{y_{i'}}}.(A_{i}\otimes B_{i'}) \; | \; \Sigma_{i'} \Sigma_{i} \quotep{\stackrel{\vee}{y_{i'}}|\stackrel{\vee}{x_{i}}}.(B_{i'}\otimes A_{i})
+  \and
+  \;\; | \;\; \Sigma_{j} \Sigma_{j'} \quotep{\stackrel{\vee}{x_{j}}|\stackrel{\vee}{y_{j'}}}.(A_{j}\otimes B_{j'}) \; | \; \Sigma_{j'} \Sigma_{j} \quotep{\stackrel{\vee}{y_{j'}}|\stackrel{\vee}{x_{j}}}.(B_{j'}\otimes A_{j})
+\end{mathpar}
+
+\begin{remark}
+  Do we need to $x^{L}$ and $y^{R}$ for this construction as well?
+\end{remark}
+
+\paragraph{Tensor of parallel compositions} Next, we distribute tensor
+over par.
+
+\begin{mathpar}
+  P_{1}|P_{2} \otimes Q_{1}|Q_{2} := (P_{1} \otimes Q_{1}) | (P_{1}
+  \otimes Q_{2}) | (P_{2} \otimes Q_{1}) | (P_{2} \otimes Q_{2})
+\end{mathpar}
+
+\paragraph{Tensor with dropped names} We treat tensor of a
+process with a dropped name as parallel composition.
+
+\begin{mathpar}
+  P \otimes \dropn{x} := P | \dropn{x}
+\end{mathpar}
+
+\paragraph{Tensor of agents}
+
+Finally, we need to define tensor on agents. Note that the definition
+of tensor on summations only tensors inputs with inputs and outputs
+with outputs. Thus, we only have to define the operation on
+``homogeneous'' pairings.
+
+\begin{mathpar}
+  (\vec{x})P \otimes (\vec{y})Q
+  \and \\
+  := (x_{0}^{L}|y_{0}^{R},\ldots,x_{0}^{L}|y_{n}^{R},\ldots,x_{m}^{L}|y_{0}^{R},\ldots,x_{m}^{L}|y_{n}^R)(P\{ \vec{x}^{L}/\vec{x}\} \otimes Q \{ \vec{y}^{R}/\vec{y}\})
+  \and \\
+  \clift{\vec{P}} \otimes \clift{\vec{Q}}
+  \and \\
+  := \clift{P_{0}\otimes Q_{0},\ldots,P_{0}\otimes Q_{n},\ldots,P_{m}\otimes Q_{0},\ldots,P_{m}\otimes Q_{n}}
+\end{mathpar}
+
+\begin{remark}
+  Observe that arities of tensored abstractions matches arities of
+  tensored concretions if the original arities matched. Note also that
+  the length of the arities corresponds to the increase in dimension
+  we see in ordinary vector space tensor product.
+\end{remark}
+
+\begin{remark}
+  Operationally, this definition distributes the tensor down to
+  components ``linked'' by summation. Tensor over summation is
+  intriguing in that it mixes names. Moreover, as a consequence of the
+  way it mixes names we have the identities for all $x \in \QProc$ and
+  $P,Q \in \Proc$
+
+  \begin{mathpar}
+    (x \cdot P) \otimes Q \equiv x \cdot (P \otimes Q) \equiv P \otimes (x \cdot Q)
+    \and \\
+    P \otimes \pzero \equiv P
+  \end{mathpar}
+
+  that the reader is invited to verify.
+\end{remark}
+
+\subsubsection{Annihilation}
+\begin{mathpar}
+  P^{\perp} := \{ Q : \forall R. P|Q \red^{*} R \Rightarrow R \red^{*} \pzero \}
+  \and \\
+  \annihilate{P} := \Sigma_{Q \in P^{\perp}} \quotep{Q}?(y).(\dropn{y}|Q) | \Sigma_{Q \in P^{\perp}} \quotep{Q}\clift{\Box}
+\end{mathpar}
+
+\paragraph{Discussion} The reader will note that $P^{\perp}$ is a
+\emph{set} of processes, while $\annihilate{P}$ is a
+\emph{context}. We call the set $P^{\perp}$ the \emph{annihilators} of
+$P$. The parallel composition of a process in the annihilators of $P$
+with $P$ will result in a process, the state space of which has all
+paths eventually leading to $\pzero$. Execution may endure loops; but
+under reasonable conditions of fairness (naturally guaranteed under
+most notions of bisimulation) such a composite process cannot get
+stuck in such a loop and will, eventually pop out and terminate.
+
+The context $\annihilate{P}$ is ready and willing to ``take the
+$P$ out of'' the process to which it is applied. It will effectively
+transmit the code of the process to which it is applied to one of the
+annihilators and run the process against it.
+
+\begin{remark}
+  Note that ${\annihilate{P}}^*$ is the abstraction corresponding to
+  context $\annihilate{P}$. We will set $\dualize{P} := {\annihilate{P}}^*$.
+\end{remark}
+
+\subsubsection{Evaluation}
+We fix $M$ a domain of fully abstract interpretation with an equality
+coincident with bisimulation. We take $\meaningof{\cdot} : \Proc \to
+M$ to be the map interpreting processes and $\nmeaningof{\cdot} : \M
+\to Proc$ to be the map running the other way. Then we define
+
+\begin{mathpar}
+  \int P := \nmeaningof{\meaningof{P}}
+\end{mathpar}
+
+\paragraph{Discussion}
+There are many fully abstract interpretations of Milner's
+$\pi$-calculus. Any of them can be used as a basis for interpreting
+the reflective calculus here. Equipped with such a domain it is
+largely a matter of grinding through to check that the Yoneda
+construction for the normalization-by-evaluation program can be
+extended to this setting.
+
+\begin{remark}
+  The reader is invited to verify that $\int (\annihilate{P}[P]) = 0$,
+  and equivalently $(\nu\; x)\int \dualize{P}\langle x \rangle |
+  x\clift{P} = 0$.
+\end{remark}
+
+\subsection{Quantum mechanics}
+
+\subsubsection{What is the quantum mechanical notion of continuation?}\label{sec:quantum_continuation}
+
+Imagine the following experimental set-up. Alice, our intrepid quantum
+investigator, prepares a state by performing some operation on some
+initial state. Then she performs some measurement to obtain an
+observation. Using the information of the observation, she selects a
+new initial state, operation and measurement and repeats the steps
+above. She iterates this procedure until she obtains some desired
+observation. What is the expression of this procedure in the language
+of quantum mechanics?
+
+\begin{figure}[htp]\label{fig:iterated_experiment}
+%  \fbox{
+    \begin{lstlisting}[mathescape]
+      $\mathcal{E} ::=$
+      let S = $U \state{L}$ in (* prepare state*)
+      let m = $\innerprod{M}{S}^2$ in (* take measurement *)
+      match m with (* use m to decide next experiment *)
+      v$_0$ -> $\mathcal{E}$
+      | $\ldots$
+      | v$_N$ -> $\mathcal{E}$
+      | v$_{Exit}$ -> m (* return observation *)
+    \end{lstlisting}
+%    }
+  \caption{Iterated experiment schematic}
+\end{figure}
+
+Figure \ref{fig:iterated_experiment} gives a schematic description of
+such an iterated experimental procedure. The question is how do we
+write down this iterated procedure without stepping outside the
+language of quantum mechanics? Note that accounts of famous composite
+quantum experiments, like the Stern-Gerlach experiment leave the
+language of quantum mechanics to describe the iterated experiment.
+
+We ask this question for many reasons, but one of them is to help set
+up the exegesis of our interpretation. In our framework
+\emph{everything} is a computation, both the quantum operations and
+processes (classical or quantum) that invoke those operations. There
+is no need to step out of the conceptual (and more pragmatically, the
+computational) framework to describe these kinds of experiments. More
+to the point, the framework we are proposing is -- like the hybrid
+functional language employed in the schema -- \emph{compositional}:
+experiments, computations are built out of experiments and
+computations. This is of enormous pragmatic value if we are to build
+and reason about systems of significant scale.
+
+\begin{remark}
+  It is also worth noting in this connection that this schema is the
+  core of a wide range of recursive functions. Further, this
+  connection to calculations of fixpoints makes it a close neighbor of
+  search techniques like natural selection and the scientific
+  method. This is a theme to which we will return, for quantum
+  information seems very \emph{unlife-like} in it's uncloneable,
+  undeleteable nature.
+\end{remark}
+
+Returning the matter of the computational interpretation, our
+interpretation will take the form of a map, written
+$\meaningof{-}(-)$, from expressions in Dirac notation to expressions
+in our target reflective calculus. The map takes an \emph{ancillary}
+argument, a channel along which to communicate results to subsequent
+computations. This is how we communicate, for example, the results of
+taking a measurement to a subsequent step in an experiment.
+
+\subsubsection{Interpretation}
+
+Table \ref{tbl:core_qm_op_defns} gives the core operational
+correspondences. It is meant as an intuitive guide.
+
+\begin{table}[htp]\label{tbl:core_qm_op_defns}
+  \center{
+    \fbox{
+      \begin{tabular}{c|c}
+        quantum mechanics & process calculus \\
+        \hline
+        scalar & $x := \quotep{P}$ \\
+        state vector & $\state{P} := P$ \\
+        dual & $\state{P}^{*} := \event{\annihilate{P}} := \quotep{\annihilate{P}}[-]$ \\
+        matrix & $ \Sigma_{\alpha} \state{P_{\alpha}}x_{\alpha}\event{Q_{\alpha}}$ \\
+        vector addition & $\state{P} + \state{Q} := \state{P | Q}$ \\
+        tensor product & $\state{P} \otimes \state{Q} := \state{P \otimes Q}$ \\
+        inner product & $\innerprod{P}{Q} := \quotep{\int \annihilate{P}[Q]}$ \\
+      \end{tabular}
+    }
+  }
+  \caption{QM - operational definitions}
+\end{table}
+
+\paragraph{Discussion}
+The process algebraic view of a state is called, ironically, a
+process, and that is what we map vectors to in our interpretation. It
+has long been noted in the process algebraic community that names play
+a role somewhat similar to scalars in a vector space. What is unique
+about the reflective calculus, and makes it suitable for an
+interpretation of this form is that with the structure of names
+reflecting the structure of processes we can both make this similarity
+in a precision instrument; and find a notion of \emph{dual} to a
+state. 
+
+If we posit names as scalars, then in perfect analogy with vector
+spaces a dual is a map from processes to names. We actually have two
+candidates for this interpretation: nominal contexts, $\quotep{M}$,
+and their corresponding abstraction, $\quotep{M}^{*}$. The goal of
+supporting a notion of continuation selects the latter of the two for
+our interpretation.
+
+Taking these as the basis of the interpretation together with the
+algebraic identities required by the Dirac notation more or less fixes
+the definitions of the rest of the operations. Among the interesting
+particularities, the definition of inner product finds near perfect
+mirroring of the Feyman interpretation.
+
+\begin{mathpar}
+  \inferrule* [lab=states] {} {\meaningof{\state{P}}(c) = c?(l,r).r\clift{P}}
+  \and
+  \inferrule* [lab=events] {} {\meaningof{\event{P}}(c) = (x)c?(l,r).l\clift{\dualize{P}\langle x \rangle} } 
+  \and
+  \inferrule* [lab=vector addition] {} {\meaningof{\state{P} + \state{Q}}(c) = \meaningof{\state{P | Q}}(c)}
+  \and
+  \inferrule* [lab=tensor product] {} {\meaningof{\state{P} \otimes \state{Q}}(c) = \meaningof{\state{P\otimes Q}}(c)}
+  \and
+  \inferrule* [lab=inner product] {} {\meaningof{\innerprod{P}{Q}}(c) = (\nu\; x)c\clift{\int \dualize{P}\langle x \rangle | x\clift{Q}}}
+  \and
+  \inferrule* [lab=matrix] {} {\meaningof{\fprmatrix{P}{x}{Q}}(c) = \\\\ (u)(\nu \; lr) c!(l,r).(l?(e). (\nu\; y)\meaningof{\innerprod{\dropn{e}}{Q}}(x) | x?(z).x?(a).c\clift{(\dualize{P}\sigma(z,a))\langle u \rangle}|y!(x) \\\\
+    + r?(e). (\nu\; x)\meaningof{\innerprod{P}{\dropn{e}}}(x) | x?(z).x?(a).c\clift{Q\sigma(z,a)}|x!(x_{\alpha}))}  
+  \and
+  \inferrule* [lab=matrix application] {} {\meaningof{(\fprmatrix{P}{x}{Q})(\state{S})}(c) = (\nu\; c'u)\meaningof{\fprmatrix{P}{x}{Q}}(c')\langle u \rangle | \meaningof{\state{S}}(c') | c'?(a).c!(a)
+  \\\\
+  \meaningof{(\fprmatrix{P}{x}{Q})(\event{S})}(c) = (\nu\; c'u)\meaningof{\fprmatrix{P}{x}{Q}}(c')\langle u \rangle | \meaningof{\event{S}}(c') | c'?(a).c!(a)}
+\end{mathpar}
+
+where
+
+\begin{mathpar}
+  P\sigma(z,a) := P\{ z\cdot a\cdot r/r : r \in \freenames{P} \}
+\end{mathpar}
+
+\begin{remark}
+  The reader is invited to verify that
+  \begin{mathpar}
+    \meaningof{\innerprod{P}{Q}}(c)
+    \and \\
+    \wbbisim 
+    \and \\
+    %\and
+    (\nu\; x)(\nu c'lr)\meaningof{\event{P}}(c')\langle x \rangle \;|\; \meaningof{\state{Q}}(c')
+    %\and
+    |\; c'!(l,r).l?(p).r?(q).c\clift{\int \dropn{p} | x!(q)}
+  \end{mathpar}
+  This provides a (more) compositional definition of inner product. It
+  also illustrates an important point of the computational
+  interpretation. We have a notion of equivalence providing a crucial
+  proof method: bisimulation.
+\end{remark}
+
+\begin{remark}
+  Assuming $\int (\annihilate{P}[P]) = 0$, the reader is
+  invited to verify that $(\fprmatrix{P}{x}{P})(\state{P}) = x \cdot \state{P}$.
+\end{remark}
+
+% \begin{remark}
+%   The reader is invited to verify that $\innerprod{P}{Q}$ could
+%   equally well have been written $\quotep{\int \stackrel{\vee}{x}}$
+%   where $x = \event{\annihilate{P}}(Q)$.
+
+%   One of the motivations for this remark is that there is another way
+%   to factor these operations. We could package up evaluation in the dual:
+
+%   \begin{mathpar}
+%     \state{P}^{*} := \event{\int \annihilate{P}} := \quotep{\int \annihilate{P}}[-]
+%   \end{mathpar}
+
+%   and then have inner product defined by
+  
+%   \begin{mathpar}
+%     \innerprod{M}{Q} := \event{M}(Q)
+%   \end{mathpar}
+
+%   where we use $M$ to label the dual to emphasize that it is a context.
+
+%   Hopefully, experience with the calculations will provide guidance on
+%   the best factoring.
+% \end{remark}
+
+\begin{remark}\label{rem:abstract_scalars}
+  Assuming $\int (\annihilate{P}[P]) = 0$, the reader is
+  invited to verify that $\forall P,Q. (\prmatrix{0}{Q})(\state{0}) =
+  \state{0}$ and dually $(\prmatrix{P}{0})(\event{0}) = \event{0}$.
+\end{remark}
+
+\subsubsection{Interpreting continuations}
+
+As promised, we can combine these interpretations with standard
+semantics for conditionals and continuations to provide an
+interpretation of the iterated experiment.
+
+\begin{lstlisting}[mathescape]      
+  $\ldb$ let S = $U \state{L}$ in 
+  let m = $\innerprod{M}{S}^2$ in 
+  match m with 
+  v$_0$ -> $\mathcal{E}$
+  | $\ldots$
+  | v$_N$ -> $\mathcal{E}$
+  | v$_{Exit}$ -> m $\rdb(c)$
+  $=$
+  $(\nu\; c')\meaningof{\innerprod{M}{U\state{L}}}(c')$
+  $| c'?(m).m!(m) | \Sigma_{i=0}^{N}v_{i}?(m).\meaningof{\mathcal{E}} + v_{Exit}?(m).c!(m)$
+\end{lstlisting}
+
+\paragraph{A quick tally}
+Already the interpretation is beginning to show signs of
+promise. First of all, it is no more notationally cumbersome than the
+notation used in QM calculations. Beyond syntax, we have a new proof
+principle in hand and the ability to reason about more complex
+experimental situations than is directly calculable in ordinary
+quantum mechanics.
+
+\subsubsection{Adjointness}
+
+We need to give a definition of $(\cdot)^{\dagger}$ for matrices. The
+obvious candidate definition is
+\begin{mathpar}
+\meaningof{(\fprmatrix{P}{x}{Q})^{\dagger}}(c)
+= (\nu\; u)\meaningof{\fprmatrix{\dualize{Q}\langle u \rangle}{\overline{x}}{\dualize{P}\langle u \rangle}}(c) 
+\end{mathpar}
+
+% But, $(Q_{\alpha}^{\underline{\perp}})^{*}$ requires a name along
+% which to communicate the process to achieve the context application.
+
+\begin{remark}
+  i'm a little worried that i don't (yet) have proper support for
+  complex conjugacy. But, the observation above may give us a
+  clue. According to Abramsky, it must be the case that the scalars
+  are iso to the homset of the identity for the tensor -- which the
+  observation above (\ref{rem:abstract_scalars}) characterizes. For
+  now, we will simply bookmark the notion with $\overline{x}$.
+\end{remark}
+
+\subsubsection{Basis for a basis}
+If processes label states and ``addition'' of states (a.k.a. vector
+addition) is interpreted as parallel composition, what corresponds to
+notions of linear independence and basis? Here, we recall that Yoshida
+has developed a set of \emph{combinators} for an asynchronous verison
+of Milner's $\pi$-calculus \cite{DBLP:conf/concur/Yoshida98}. These
+are a finite set of processes such any process can be expressed as
+parallel composition of these combinators together with liberal uses
+of the new operator and replication. We can simply give a translation
+of these into the present calculus and have reasonable expectation
+that the property carries over. That is, that the resultant set allows
+to express all processes via parallel composition. Note, however, that
+there is no new operator or replication in this calculus. As a result,
+we expect that the corresponding set is actually infinite. That is, we
+expect that the space is actually infinite dimensional.
+
+\begin{remark}
+  The reader familiar with the lambda calculus may reasonably object:
+  certainly, the collection $S$, $K$ and $I$ is a finite set of
+  combinators \cite{Barendregt84}. Shouldn't we expect to see a finite
+  set of combinators for an effectively equivalent system? i am very
+  sympathetic to this critique and feel it warrants full attention. On
+  the other hand, i also have in mind the following analogy. The
+  natural numbers, as a monoid under addition, has exactly $1$
+  generator, while the natural numbers, as a monoid under
+  multiplication, has countably many generators (the primes). We
+  observe that the application of the lambda calculus is much less
+  resource sensitive than the parallel composition of the
+  $\pi$-calculus. Could it be the case that we have an analogy of the
+  form
+  
+  \begin{mathpar}
+    m + n : MN :: m*n : M|N
+  \end{mathpar}
+
+  giving a similar blow up in the set of ``primes''?  This is such a
+  wonderful thought that, even if it's not true, i think it's worth
+  writing down.
+\end{remark}

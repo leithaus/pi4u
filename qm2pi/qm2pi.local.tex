@@ -1,0 +1,236 @@
+
+% Double brackets
+\newcommand{\ldb}{[\![}
+\newcommand{\rdb}{]\!]}
+\newcommand{\ldrb}{(\!(}
+\newcommand{\rdrb}{)\!)}
+\newcommand{\lrbb}{(\!|}
+\newcommand{\rrbb}{|\!)}
+\newcommand{\lliftb}{\langle\!|}
+\newcommand{\rliftb}{|\!\rangle}
+%\newcommand{\plogp}{:\!-}
+\newcommand{\plogp}{\leftarrow}
+%\newcommand{\plogp}{\coloneq}
+% \newcommand{\lpquote}{\langle}
+% \newcommand{\rpquote}{\rangle}
+% \newcommand{\lpquote}{\lceil}
+% \newcommand{\rpquote}{\rceil}
+\newcommand{\lpquote}{\ulcorner}
+\newcommand{\rpquote}{\urcorner}
+\newcommand{\newkw}{\nu}
+
+% SYNTAX
+\newcommand{\id}[1]{\texttt{#1}}
+\newcommand{\none}{\emptyset}
+\newcommand{\eps}{\epsilon}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\rep}[2]{\id{\{$#1$,$#2$\}}}
+\newcommand{\elt}[2]{\id{$#1$[$#2$]}}
+\newcommand{\infinity}{$\infty$}
+
+\newcommand{\pzero}{\mathbin{0}}
+\newcommand{\seq}{\mathbin{\id{,}}}
+\newcommand{\all}{\mathbin{\id{\&}}}
+\newcommand{\choice}{\mathbin{\id{|}}}
+\newcommand{\altern}{\mathbin{\id{+}}}
+\newcommand{\juxtap}{\mathbin{\id{|}}}
+\newcommand{\concat}{\mathbin{.}}
+\newcommand{\punify}{\mathbin{\id{:=:}}}
+\newcommand{\fuse}{\mathbin{\id{=}}}
+\newcommand{\scong}{\mathbin{\equiv}}
+\newcommand{\nameeq}{\mathbin{\equiv_N}}
+\newcommand{\alphaeq}{\mathbin{\equiv_{\alpha}}}
+\newcommand{\names}[1]{\mathbin{\mathcal{N}(#1)}}
+\newcommand{\freenames}[1]{\mathbin{\mathcal{FN}(#1)}}
+\newcommand{\boundnames}[1]{\mathbin{\mathcal{BN}(#1)}}
+%\newcommand{\lift}[2]{\texttt{lift} \; #1 \concat #2}
+\newcommand{\binpar}[2]{#1 | #2}
+\newcommand{\outputp}[2]{#1!(#2)}
+\newcommand{\prefix}[3]{#1?(#2) . #3}
+\newcommand{\lift}[2]{#1 \lliftb #2 \rliftb}
+\newcommand{\clift}[1]{\lliftb #1 \rliftb}
+\newcommand{\quotep}[1]{\lpquote #1 \rpquote}
+\newcommand{\dropn}[1]{\rpquote #1 \lpquote}
+\newcommand{\procn}[1]{\stackrel{\vee}{x}}
+
+\newcommand{\newp}[2]{(\newkw \; #1 ) #2}
+\newcommand{\bangp}[1]{! #1}
+
+\newcommand{\substp}[2]{\{ \quotep{#1} / \quotep{#2} \}}
+\newcommand{\substn}[2]{\{ #1 / #2 \}}
+
+\newcommand{\psubstp}[2]{\widehat{\substp{#1}{#2}}}
+\newcommand{\psubstn}[2]{\widehat{\substn{#1}{#2}}}
+
+\newcommand{\applyp}[2]{#1 \langle #2 \rangle}
+\newcommand{\absp}[2]{( #1 ) #2}
+\newcommand{\annihilate}[1]{#1^{\times}}
+\newcommand{\dualize}[1]{#1^{\bullet}}
+
+\newcommand{\transitions}[3]{\mathbin{#1 \stackrel{#2}{\longrightarrow} #3}}
+\newcommand{\meaningof}[1]{\ldb #1 \rdb}
+\newcommand{\pmeaningof}[1]{\ldb #1 \rdb}
+\newcommand{\nmeaningof}[1]{\lrbb #1 \rrbb}
+
+\newcommand{\Proc}{\mathbin{Proc}}
+\newcommand{\QProc}{\quotep{\mathbin{Proc}}}
+
+\newcommand{\entailm}{\mathbin{\vdash_{\mathfrak m}}} %matching
+\newcommand{\entailp}{\mathbin{\vdash_{\mathfrak p}}} %behavioral
+\newcommand{\entailv}{\mathbin{\vdash_{\mathfrak v}}} %validation
+\newcommand{\congd}{\mathbin{\equiv_{\mathfrak d}}}
+\newcommand{\congs}{\mathbin{\equiv_{\mathfrak s}}}
+\newcommand{\congp}{\mathbin{\equiv_{\mathfrak p}}}
+%\newcommand{\logequiv}{\mathbin{\leftrightarrow}}
+
+\newcommand{\barb}[2]{\mathbin{#1 \downarrow_{#2}}}
+\newcommand{\dbarb}[2]{\mathbin{#1 \Downarrow_{#2}}}
+
+% From pi-duce paper
+\newcommand{\red}{\rightarrow}
+\newcommand{\wred}{\Rightarrow}
+\newcommand{\redhat}{\hat{\longrightarrow}}
+\newcommand{\lred}[1]{\stackrel{#1}{\longrightarrow}} %transitions
+\newcommand{\wlred}[1]{\stackrel{#1}{\Longrightarrow}}
+
+\newcommand{\opm}[2]{\overline{#1} [ #2 ]} % monadic
+\newcommand{\ipm}[2]{{#1} ( #2 )} 
+\newcommand{\ipmv}[2]{{#1} ( #2 )} % monadic
+\newcommand{\parop}{\;|\;}		% parallel operator
+\newcommand{\patmatch}[3]{#2 \in #3 \Rightarrow #1}
+\newcommand{\sdot}{\, . \,}		% Space around '.'
+\newcommand{\bang}{!\,}
+%\newcommand{\fuse}[1]{\langle #1 \rangle}		
+\newcommand{\fusion}[2]{#1 = #2} % fusion prefix/action
+\newcommand{\rec}[2]{\mbox{\textsf{rec}} \, #1. \, #2}
+\newcommand{\match}[2]{\mbox{\textsf{match}} \; #1 \; \mbox{\textsf{with}} \; #2}
+\newcommand{\sep}{:}
+\newcommand{\val}[2]{\mbox{\textsf{val}} \; #1 \; \mbox{\textsf{as}} \; #2}
+
+\newcommand{\rel}[1]{\;{\mathcal #1}\;} %relation
+\newcommand{\bisim}{\stackrel{.}{\sim}_b} %bisimilar
+\newcommand{\wb}{\approx_b} %weak bisimilar
+\newcommand{\bbisim}{\stackrel{\centerdot}{\sim}} %barbed bisimilar
+\newcommand{\wbbisim}{\stackrel{\centerdot}{\approx}} %weak barbed bisimilar
+\newcommand{\bxless}{\lesssim}	%expansion less (amssymb required)
+\newcommand{\bxgtr}{\gtrsim}	%expansion greater (amssymb required)
+\newcommand{\beq}{\sim}		%barbed congruent
+\newcommand{\fwbeq}{\stackrel{\circ}{\approx}}	%weak barbed congruent
+\newcommand{\wbeq}{\approx}	%weak barbed congruent
+\newcommand{\sheq}{\simeq}	%symbolic hypereq
+\newcommand{\wbc}{\approx_{cb}}
+
+% rho logic
+
+\newcommand{\ptrue}{\mathbin{true}}
+\newcommand{\psatisfies}[2]{#1 \models #2}
+\newcommand{\pdropf}[1]{\rpquote #1 \lpquote}
+\newcommand{\plift}[2]{#1 \lliftb #2 \rliftb}
+\newcommand{\pprefix}[3]{\langle #1 ? #2 \rangle #3}
+\newcommand{\pgfp}[2]{\textsf{rec} \; #1 \mathbin{.} #2}
+\newcommand{\pquant}[3]{\forall #1 \mathbin{:} #2 \mathbin{.} #3}
+\newcommand{\pquantuntyped}[2]{\forall #1 \mathbin{.} #2}
+\newcommand{\riff}{\Leftrightarrow}
+
+\newcommand{\PFormula}{\mathbin{PForm}}
+\newcommand{\QFormula}{\mathbin{QForm}}
+\newcommand{\PropVar}{\mathbin{\mathcal{V}}}
+
+% qm notation
+\newcommand{\state}[1]{\juxtap #1 \rangle}
+\newcommand{\event}[1]{\langle #1 \juxtap}
+\newcommand{\innerprod}[2]{\langle #1 \juxtap #2 \rangle}
+\newcommand{\prmatrix}[2]{\juxtap #1 \rangle \langle #2 \juxtap}
+\newcommand{\fprmatrix}[3]{\juxtap #1 \rangle #2 \langle #3 \juxtap}
+
+% End piduce contribution
+
+\newcommand{\typedby}{\mathbin{\:\colon}}
+\newcommand{\mixedgroup}[1]{\id{mixed($#1$)}}
+\newcommand{\cast}[2]{\id{CAST AS} \; #1 \; (#2)}
+\newcommand{\bslsh}{\mathbin{\id{\\}}}
+\newcommand{\bslshslsh}{\mathbin{\id{\\\\}}}
+\newcommand{\fslsh}{\mathbin{\id{/}}}
+\newcommand{\fslshslsh}{\mathbin{\id{//}}}
+\newcommand{\bb}[1]{\mbox{#1}}
+\newcommand{\bc}{\mathbin{\mathbf{::=}}}
+%\newcommand{\bm}{\mathbin{\mathbf\mid}}
+\newcommand{\be}{\mathbin{=}}
+\newcommand{\bd}{\mathbin{\buildrel {\rm \scriptscriptstyle def} \over \be}}
+%\newcommand{\category}[1]{\mbox{\bf #1}}
+
+%GRAMMAR
+\newlength{\ltext}
+\newlength{\lmath}
+\newlength{\cmath}
+\newlength{\rmath}
+\newlength{\rtext}
+
+\settowidth{\ltext}{complex type name}
+\settowidth{\lmath}{$xxx$}
+\settowidth{\cmath}{$::=$}
+\settowidth{\rmath}{\id{attributeGroup}}
+\settowidth{\rtext}{repetition of $g$ between $m$ and $n$ times}
+
+\newenvironment{grammar}{
+  \[
+  \begin{array}{l@{\quad}rcl@{\quad}l}
+  \hspace{\ltext} & \hspace{\lmath} & \hspace{\cmath} & \hspace{\rmath} & \hspace{\rtext} \\
+}{
+  \end{array}\]
+}
+
+% Over-full v-boxes on even pages are due to the \v{c} in author's name
+%\vfuzz2pt % Don't report over-full v-boxes if over-edge is small
+
+% THEOREM Environments ---------------------------------------------------
+% MATH -------------------------------------------------------------------
+ \newcommand{\veps}{\varepsilon}
+ \newcommand{\To}{\longrightarrow}
+ \newcommand{\h}{\mathcal{H}}
+ \newcommand{\s}{\mathcal{S}}
+ \newcommand{\A}{\mathcal{A}}
+ \newcommand{\J}{\mathcal{J}}
+ \newcommand{\M}{\mathcal{M}}
+ \newcommand{\W}{\mathcal{W}}
+ \newcommand{\X}{\mathcal{X}}
+ \newcommand{\BOP}{\mathbf{B}}
+ \newcommand{\BH}{\mathbf{B}(\mathcal{H})}
+ \newcommand{\KH}{\mathcal{K}(\mathcal{H})}
+ \newcommand{\Real}{\mathbb{R}}
+ \newcommand{\Complex}{\mathbb{C}}
+ \newcommand{\Field}{\mathbb{F}}
+ \newcommand{\RPlus}{\Real^{+}}
+ \newcommand{\Polar}{\mathcal{P}_{\s}}
+ \newcommand{\Poly}{\mathcal{P}(E)}
+ \newcommand{\EssD}{\mathcal{D}}
+ \newcommand{\Lom}{\mathcal{L}}
+ \newcommand{\States}{\mathcal{T}}
+ \newcommand{\abs}[1]{\left\vert#1\right\vert}
+% \newcommand{\set}[1]{\left\{#1\right\}}
+%\newcommand{\seq}[1]{\left<#1\right>}
+ \newcommand{\norm}[1]{\left\Vert#1\right\Vert}
+ \newcommand{\essnorm}[1]{\norm{#1}_{\ess}}
+
+%%% NAMES
+\newcommand{\Names}{{\mathcal N}}
+\newcommand{\Channels}{{\sf X}}
+\newcommand{\Variables}{{\mathcal V}}
+\newcommand{\Enames}{{\mathcal E}}
+\newcommand{\Nonterminals}{{\mathcal S}}
+\newcommand{\Pnames}{{\mathcal P}}
+\newcommand{\Dnames}{{\mathcal D}}
+\newcommand{\Types}{{\mathcal T}}
+
+\newcommand{\fcalc}{fusion calculus}
+\newcommand{\xcalc}{${\mathfrak x}$-calculus}
+\newcommand{\lcalc}{$\lambda$-calculus}
+\newcommand{\pic}{$\pi$-calculus}
+\newcommand{\spic}{spi-calculus}
+\newcommand{\rhoc}{$\rho$-calculus}
+\newcommand{\rhol}{$\rho$-logic}
+\newcommand{\hcalc}{highwire calculus}
+\newcommand{\dcalc}{data calculus}
+%XML should be all caps, not small caps. --cb
+%\newcommand{\xml}{\textsc{xml}}
+\newcommand{\xml}{XML} 
