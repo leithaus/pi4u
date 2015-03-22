@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_1) (preloaded format=pdflatex 2014.9.29)  22 MAR 2015 05:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_1) (preloaded format=pdflatex 2014.9.29)  22 MAR 2015 05:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -431,32 +431,33 @@ Overfull \hbox (24.37796pt too wide) in paragraph at lines 365--365
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 381--382
+Overfull \hbox (5.27695pt too wide) in paragraph at lines 381--393
+\T1/aer/m/n/9 His-tor-i-cally, cat-e-gor-i-cal se-man-tics for pro-gram-ming la
+n-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 401--402
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 385--386
+Underfull \hbox (badness 10000) in paragraph at lines 407--408
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 391--392
-
- []
-
-
-Overfull \hbox (238.3733pt too wide) detected at line 404
+Overfull \hbox (238.3733pt too wide) detected at line 420
 []
  []
 
 
-Overfull \hbox (2.05199pt too wide) detected at line 433
+Overfull \hbox (2.05199pt too wide) detected at line 449
 []  
  []
 
 
-Overfull \hbox (6.6342pt too wide) in paragraph at lines 444--447
+Overfull \hbox (6.6342pt too wide) in paragraph at lines 460--463
 []\T1/aer/m/it/9 An \T1/aer/m/n/9 ob-ser-va-tion re-la-tion\T1/aer/m/it/9 , $\O
 MS/cmsy/m/n/9 #[]$\T1/aer/m/it/9 , over
  []
@@ -464,87 +465,87 @@ MS/cmsy/m/n/9 #[]$\T1/aer/m/it/9 , over
 [2
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 475--476
+Underfull \hbox (badness 10000) in paragraph at lines 491--492
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 479--480
+Underfull \hbox (badness 10000) in paragraph at lines 495--496
 
  []
 
-<images/Pi2HCT-Output.jpg, id=25, 275.33852pt x 152.6831pt>
+<images/Pi2HCT-Output.jpg, id=24, 275.33852pt x 152.6831pt>
 File: images/Pi2HCT-Output.jpg Graphic file (type jpg)
 
 <use images/Pi2HCT-Output.jpg>
-Package pdftex.def Info: images/Pi2HCT-Output.jpg used on input line 483.
+Package pdftex.def Info: images/Pi2HCT-Output.jpg used on input line 499.
 (pdftex.def)             Requested size: 137.66891pt x 76.34135pt.
 
-<images/Pi2HCT-Output2.jpg, id=26, 546.6055pt x 156.75465pt>
+<images/Pi2HCT-Output2.jpg, id=25, 546.6055pt x 156.75465pt>
 File: images/Pi2HCT-Output2.jpg Graphic file (type jpg)
 
 <use images/Pi2HCT-Output2.jpg>
-Package pdftex.def Info: images/Pi2HCT-Output2.jpg used on input line 490.
+Package pdftex.def Info: images/Pi2HCT-Output2.jpg used on input line 506.
 (pdftex.def)             Requested size: 273.30208pt x 78.37714pt.
 
-Overfull \hbox (57.68004pt too wide) in paragraph at lines 490--491
+Overfull \hbox (57.68004pt too wide) in paragraph at lines 506--507
  [] 
  []
 
-<images/Pi2HCT-Input.jpg, id=27, 364.91261pt x 142.50423pt>
+<images/Pi2HCT-Input.jpg, id=26, 364.91261pt x 142.50423pt>
 File: images/Pi2HCT-Input.jpg Graphic file (type jpg)
 
 <use images/Pi2HCT-Input.jpg>
-Package pdftex.def Info: images/Pi2HCT-Input.jpg used on input line 497.
+Package pdftex.def Info: images/Pi2HCT-Input.jpg used on input line 513.
 (pdftex.def)             Requested size: 182.45586pt x 71.25192pt.
 
-<images/Pi2HCT-InputGuardedProcess.jpg, id=28, 250.90923pt x 326.74184pt>
+<images/Pi2HCT-InputGuardedProcess.jpg, id=27, 250.90923pt x 326.74184pt>
 File: images/Pi2HCT-InputGuardedProcess.jpg Graphic file (type jpg)
 
 <use images/Pi2HCT-InputGuardedProcess.jpg>
 Package pdftex.def Info: images/Pi2HCT-InputGuardedProcess.jpg used on input li
-ne 504.
+ne 520.
 (pdftex.def)             Requested size: 125.4543pt x 163.37051pt.
 
-<images/Pi2HCT-PiRedex.jpg, id=29, 285.5174pt x 497.23796pt>
+<images/Pi2HCT-PiRedex.jpg, id=28, 285.5174pt x 497.23796pt>
 File: images/Pi2HCT-PiRedex.jpg Graphic file (type jpg)
 
 <use images/Pi2HCT-PiRedex.jpg>
-Package pdftex.def Info: images/Pi2HCT-PiRedex.jpg used on input line 511.
+Package pdftex.def Info: images/Pi2HCT-PiRedex.jpg used on input line 527.
 (pdftex.def)             Requested size: 142.75835pt x 248.61836pt.
 
-<images/Pi2HCT-AdjunctionRewriteTemplate.jpg, id=30, 494.1843pt x 307.40198pt>
+<images/Pi2HCT-AdjunctionRewriteTemplate.jpg, id=29, 494.1843pt x 307.40198pt>
 File: images/Pi2HCT-AdjunctionRewriteTemplate.jpg Graphic file (type jpg)
 
 <use images/Pi2HCT-AdjunctionRewriteTemplate.jpg>
 Package pdftex.def Info: images/Pi2HCT-AdjunctionRewriteTemplate.jpg used on in
-put line 518.
+put line 534.
 (pdftex.def)             Requested size: 247.09154pt x 153.7006pt.
 
-Overfull \hbox (31.4695pt too wide) in paragraph at lines 518--519
+Overfull \hbox (31.4695pt too wide) in paragraph at lines 534--535
  [] 
  []
 
 
-Overfull \hbox (14.76231pt too wide) in paragraph at lines 523--523
+Overfull \hbox (14.76231pt too wide) in paragraph at lines 539--539
 []\secfnt CONCLUSIONS AND FU-TURE WORK 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 525--526
+Underfull \hbox (badness 10000) in paragraph at lines 541--542
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 528--529
+Underfull \hbox (badness 10000) in paragraph at lines 544--545
 
  []
 
 (./hctm.bbl) [3 <./images/Pi2HCT-Output.jpg> <./images/Pi2HCT-Output2.jpg> <./i
-mages/Pi2HCT-Input.jpg> <./images/Pi2HCT-InputGuardedProcess.jpg> <./images/Pi2
-HCT-PiRedex.jpg>] [4
+mages/Pi2HCT-Input.jpg> <./images/Pi2HCT-InputGuardedProcess.jpg>] [4
 
- <./images/Pi2HCT-AdjunctionRewriteTemplate.jpg>]
+ <./images/Pi2HCT-PiRedex.jpg> <./images/Pi2HCT-AdjunctionRewriteTemplate.jpg>]
+
 (./hctm.aux) ) 
 Here is how much of TeX's memory you used:
  6101 strings out of 494213
@@ -571,7 +572,7 @@ fb></opt/local/share/texmf-texlive/fonts/type1/urw/helvetic/uhvb8a.pfb></opt/lo
 cal/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></opt/local/share/t
 exmf-texlive/fonts/type1/urw/times/utmb8a.pfb></opt/local/share/texmf-texlive/f
 onts/type1/urw/times/utmri8a.pfb>
-Output written on hctm.pdf (4 pages, 524515 bytes).
+Output written on hctm.pdf (4 pages, 526131 bytes).
 PDF statistics:
  92 PDF objects out of 1000 (max. 8388607)
  62 compressed objects within 1 object stream
