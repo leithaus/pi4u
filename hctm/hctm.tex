@@ -394,23 +394,81 @@ Some examples of process expressions. \\
 
 \subsubsection{Syntax}
 
-TBD \\
+\begin{grammar}
+{M, N} \bc \pzero & \mbox{stopped process} \\
+       \;\;\; \bm \; {x}{?}{( y_1, \ldots, y_N )} \Rightarrow {P} & \mbox{input} \\
+       \;\;\; \bm \; {x}{!}{( y_1, \ldots, y_N )} & \mbox{output} \\
+       \;\;\; \bm \; {M}{+}{N} & \mbox{choice} \\
+{ P, Q } \bc M & \mbox{include IO processes} \\                                
+       \;\;\; \bm \; {P} \juxtap {Q} & \mbox{parallel} \\                                
+\end{grammar}
 
 \subsubsection{Free and bound names}
 
-TBD \\
+\begin{equation*}
+  \begin{aligned}
+    & \freenames{\pzero} \defneqls \emptyset \\
+    & \freenames{{x}{?}{( y_1, \ldots, y_N )} \Rightarrow {P}} \defneqls \\
+    & \;\;\;\;\;\{ x \} \cup (\freenames{P} \setminus \{ y_1, \ldots y_N \}) \\
+    & \freenames{{x}{!}{( y_1, \ldots, y_N )}} \defneqls \{ x, y_1, \ldots, y_N \} \\
+    & \freenames{\binpar{P}{Q}} \defneqls \freenames{P} \cup \freenames{Q} \\
+  \end{aligned}
+\end{equation*}
+
+An occurrence of $x$ in a process $P$ is \textit{bound} if it is not
+free. The set of names occurring in a process (bound or free) is
+denoted by $\names{P}$.
 
 \subsubsection{Structural congruence}
 
-TBD \\
+The {\em structural congruence} of processes, noted $\scong$, is the
+least congruence containing $\alpha$-equivalence, $\alphaeq$, making
+$( P, |, 0 )$ and $( P, + 0 )$ commutative monoids.
 
 \subsubsection{Operational Semantics}
  
-TBD \\
+\infrule[Comm]
+{ |\vec{y}| = |\vec{z}| }
+{P_1 + {{ x_{0}{?}{(}{\vec{y}}{)} \concat {P}}\juxtap {x_{1}}{!}{(}{\vec{z}}{)} + P_2}
+\red {{P}{\{}\quotep{\vec{z}}{/}{\vec{y}}{\}}}}
+
+In addition, we have the following context rules:
+
+\infrule[Par]{{P} \red {P}'}{{{P} \juxtap {Q}} \red {{P}' \juxtap {Q}}}
+
+\infrule[Equiv]{{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
 
 \subsubsection{Bisimulation}
 
-TBD \\
+\begin{defn}
+An \emph{observation relation}, $\downarrow_{\mathcal N}$, over a set
+of names, $\mathcal N$, is the smallest relation satisfying the rules
+below.
+
+\infrule[Out-barb]{ x \in {\mathcal N}}
+		  {{x}!(\vec{y}) \downarrow_{\mathcal N} x}
+\infrule[Par-barb]{\mbox{$P\downarrow_{\mathcal N} x$ or $Q\downarrow_{\mathcal N} x$}}
+		  {\binpar{P}{Q} \downarrow_{\mathcal N} x}
+
+We write $P \Downarrow_{\mathcal N} x$ if there is $Q$ such that 
+$P \wred Q$ and $Q \downarrow_{\mathcal N} x$.
+\end{defn}
+
+Notice that $\prefix{x}{y}{P}$ has no barb.  Indeed, in {\rhoc} as well
+as other asynchronous calculi, an observer has no direct means to
+detect if a sent message has been received or not.
+
+\begin{defn}
+%\label{def.bbisim}
+An  ${\mathcal N}$-\emph{barbed bisimulation} over a set of names, ${\mathcal N}$, is a symmetric binary relation 
+${\mathcal S}_{\mathcal N}$ between agents such that $P\rel{S}_{\mathcal N}Q$ implies:
+\begin{enumerate}
+\item If $P \red P'$ then $Q \wred Q'$ and $P'\rel{S}_{\mathcal N} Q'$.
+\item If $P\downarrow_{\mathcal N} x$, then $Q\Downarrow_{\mathcal N} x$.
+\end{enumerate}
+$P$ is ${\mathcal N}$-barbed bisimilar to $Q$, written
+$P \wbbisim_{\mathcal N} Q$, if $P \rel{S}_{\mathcal N} Q$ for some ${\mathcal N}$-barbed bisimulation ${\mathcal S}_{\mathcal N}$.
+\end{defn}
 
 \section{Categorical machinery}
 
