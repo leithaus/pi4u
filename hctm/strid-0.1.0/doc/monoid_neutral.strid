@@ -1,0 +1,5 @@
+matrix {
+\\
+text(r)[l,t=#$M$#]&&line(l,r)&text(r)[l,t=#$M$#]&\\
+\\
+}

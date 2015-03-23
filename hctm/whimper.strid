@@ -1,0 +1,7 @@
+matrix {
+text(d)[l,t=#$$#]&text(d)[l,t=#$N$#]&text(d)[l,t=#$N$#]&text(d)[l,t=#$\ldots$#]&text(d)[l,t=#$N$#]&text(d)[l,t=#$P$#]\\
+\\
+&&4box1(ul,u,urr,urrr,d)[l,t=#$?$#]\\
+\\
+text(d)[l,t=#$$#]&text(d)[l,t=#$$#]&text(u)[l,t=#$P$#]&text(d)[l,t=#$$#]\\
+}

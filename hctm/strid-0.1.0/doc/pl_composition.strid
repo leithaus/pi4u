@@ -1,0 +1,10 @@
+matrix {
+\\
+region(6d6r)\\
+&&&mult(dl,dr,uu)[l,t=#$f$#]\\
+\\
+&&mult(4dl,dr,u)[l,t=#$g$#]\\
+\\
+&&&&mult(ul,uuu,dd)[l,t=#$\mu$#]\\
+\\
+}

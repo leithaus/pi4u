@@ -36,6 +36,7 @@
 \usepackage{latexsym}
 \usepackage{amssymb}
 \usepackage{caption}
+\usepackage{tikz}
 %\usepackage{multicol}
 
 % Double brackets
@@ -489,52 +490,87 @@ $P \wbbisim_{\mathcal N} Q$, if $P \rel{S}_{\mathcal N} Q$ for some ${\mathcal N
 \section{Categorical machinery}
 
 TBD \\
+$!$
 
 \section{The interpretation}
 
 TBD \\
 
-\begin{figure}[hbp]
-  \begin{center}
-    \includegraphics[scale=.50]{images/Pi2HCT-Output.jpg}
-    \caption{ Interpretation of output }
-  \end{center}
-\end{figure}
+\subsubsection{0-cells}
 
-\begin{figure}[hbp]
-  \begin{center}
-    \includegraphics[scale=.50]{images/Pi2HCT-Output2.jpg}
-    \caption{ Interpretation of output - again }
-  \end{center}
-\end{figure}
+\[
+\input{p.tex}
+\]
 
-\begin{figure}[hbp]
-  \begin{center}
-    \includegraphics[scale=.50]{images/Pi2HCT-Input.jpg}
-    \caption{ Interpretation of input }
-  \end{center}
-\end{figure}
+\[
+\input{n.tex}
+\]
 
-\begin{figure}[hbp]
-  \begin{center}
-    \includegraphics[scale=.50]{images/Pi2HCT-InputGuardedProcess.jpg}
-    \caption{ Interpretation of input guarded process }
-  \end{center}
-\end{figure}
+\subsubsection{1-cells}
+\[
+\input{p_unit.tex}
+\]
 
-\begin{figure}[hbp]
-  \begin{center}
-    \includegraphics[scale=.50]{images/Pi2HCT-PiRedex.jpg}
-    \caption{ Interpretation of basic {\pic} redex }
-  \end{center}
-\end{figure}
+\[
+\input{p_split.tex}
+\]
 
-\begin{figure}[hbp]
-  \begin{center}
-    \includegraphics[scale=.50]{images/Pi2HCT-AdjunctionRewriteTemplate.jpg}
-    \caption{ Interpretation of adjunction-based rewrite template }
-  \end{center}
-\end{figure}
+\[
+\input{n_unit.tex}
+\]
+
+\[
+\input{n_split.tex}
+\]
+
+\[
+\input{bang.tex}
+\]
+
+\[
+\input{whimper.tex}
+\]
+% \begin{figure}[hbp]
+%   \begin{center}
+%     \includegraphics[scale=.50]{images/Pi2HCT-Output.jpg}
+%     \caption{ Interpretation of output }
+%   \end{center}
+% \end{figure}
+
+% \begin{figure}[hbp]
+%   \begin{center}
+%     \includegraphics[scale=.50]{images/Pi2HCT-Output2.jpg}
+%     \caption{ Interpretation of output - again }
+%   \end{center}
+% \end{figure}
+
+% \begin{figure}[hbp]
+%   \begin{center}
+%     \includegraphics[scale=.50]{images/Pi2HCT-Input.jpg}
+%     \caption{ Interpretation of input }
+%   \end{center}
+% \end{figure}
+
+% \begin{figure}[hbp]
+%   \begin{center}
+%     \includegraphics[scale=.50]{images/Pi2HCT-InputGuardedProcess.jpg}
+%     \caption{ Interpretation of input guarded process }
+%   \end{center}
+% \end{figure}
+
+% \begin{figure}[hbp]
+%   \begin{center}
+%     \includegraphics[scale=.50]{images/Pi2HCT-PiRedex.jpg}
+%     \caption{ Interpretation of basic {\pic} redex }
+%   \end{center}
+% \end{figure}
+
+% \begin{figure}[hbp]
+%   \begin{center}
+%     \includegraphics[scale=.50]{images/Pi2HCT-AdjunctionRewriteTemplate.jpg}
+%     \caption{ Interpretation of adjunction-based rewrite template }
+%   \end{center}
+% \end{figure}
 
 \section{Conclusions and future work}
 

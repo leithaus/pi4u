@@ -1,0 +1,7 @@
+matrix {
+text(d)[l,t=#$$#]\\
+\\
+line(u,d)[l,t=#$N$#]\\
+\\
+text(u)[l,t=#$$#]\\
+}
