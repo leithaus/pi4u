@@ -1,7 +1,7 @@
 matrix {
 text(d)[l,t=#$$#]\\
 \\
-line(u,d)[l,t=#$N$#]\\
+line(u,d)[a]&text(r)[l,t=#$N$#]\\
 \\
 text(u)[l,t=#$$#]\\
 }

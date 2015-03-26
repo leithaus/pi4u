@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_1) (preloaded format=pdflatex 2014.9.29)  23 MAR 2015 06:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_1) (preloaded format=pdflatex 2014.9.29)  25 MAR 2015 21:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -741,10 +741,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 580--581
 
 ] (./hctm.aux) ) 
 Here is how much of TeX's memory you used:
- 15919 strings out of 494213
- 294756 string characters out of 6157463
- 338905 words of memory out of 5000000
- 18845 multiletter control sequences out of 15000+600000
+ 15921 strings out of 494213
+ 294791 string characters out of 6157463
+ 338906 words of memory out of 5000000
+ 18847 multiletter control sequences out of 15000+600000
  69743 words of font info for 96 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
  55i,12n,54p,385b,551s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -765,7 +765,7 @@ m/cmti9.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmtt
 local/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></opt/local/share
 /texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></opt/local/share/texmf-texlive
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on hctm.pdf (4 pages, 170002 bytes).
+Output written on hctm.pdf (4 pages, 169958 bytes).
 PDF statistics:
  89 PDF objects out of 1000 (max. 8388607)
  65 compressed objects within 1 object stream
