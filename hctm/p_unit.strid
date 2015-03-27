@@ -1,6 +1,6 @@
 matrix {
 \\
-unit(d)\\
+unit(d)[a]\\
 text(d)[l,t=#$P$#]\\
 \\
 }

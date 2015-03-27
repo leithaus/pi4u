@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_1) (preloaded format=pdflatex 2014.9.29)  25 MAR 2015 21:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_1) (preloaded format=pdflatex 2014.9.29)  26 MAR 2015 22:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -765,7 +765,7 @@ m/cmti9.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmtt
 local/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></opt/local/share
 /texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></opt/local/share/texmf-texlive
 /fonts/type1/urw/times/utmri8a.pfb>
-Output written on hctm.pdf (4 pages, 169958 bytes).
+Output written on hctm.pdf (4 pages, 169986 bytes).
 PDF statistics:
  89 PDF objects out of 1000 (max. 8388607)
  65 compressed objects within 1 object stream
