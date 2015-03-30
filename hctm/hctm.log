@@ -1,8 +1,8 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_1) (preloaded format=pdflatex 2014.9.29)  26 MAR 2015 22:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_6) (preloaded format=pdflatex 2015.2.19)  29 MAR 2015 22:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**hctm.tex
+**hctm
 (./hctm.tex
 LaTeX2e <2014/05/01>
 Babel <3.9k> and hyphenation patterns for 43 languages loaded.
@@ -189,8 +189,8 @@ File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
 \Urlmuskip=\muskip11
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-(/opt/local/share/texmf-texlive/tex/latex/bigpage.sty)
-(/opt/local/share/texmf-texlive/tex/latex/bcprules.sty
+(/Users/stay/Library/texmf/tex/latex/local/common/bigpage.sty)
+(/Users/stay/Library/texmf/tex/latex/local/common/bcprules.sty
 \afterruleskip=\skip44
 \labelminsep=\skip45
 \labelcolwidth=\dimen123
@@ -198,7 +198,8 @@ Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 \rulebox=\box31
 \ruledim=\dimen124
 \labeldim=\dimen125
-) (./mathpartir.sty
+)
+(./mathpartir.sty
 Package: mathpartir 2003/07/10 version 1.1.1 Math Paragraph for Typesetting Inf
 erence Rules
 \mpr@tmpdim=\dimen126
@@ -552,20 +553,20 @@ File: tikzlibrarytopaths.code.tex 2008/06/17 v3.0.0 (rcs-revision 1.2)
 \cmath=\skip55
 \rmath=\skip56
 \rtext=\skip57
-LaTeX Font Info:    Try loading font information for U+msa on input line 201.
+LaTeX Font Info:    Try loading font information for U+msa on input line 202.
  (/opt/local/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 201.
+LaTeX Font Info:    Try loading font information for U+msb on input line 202.
  (/opt/local/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+lasy on input line 201.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 202.
 
 (/opt/local/share/texmf-texlive/tex/latex/base/ulasy.fd
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
 )
-LaTeX Font Info:    Try loading font information for T1+aett on input line 203.
+LaTeX Font Info:    Try loading font information for T1+aett on input line 204.
 
 
 (/opt/local/share/texmf-texlive/tex/latex/ae/t1aett.fd
@@ -575,18 +576,18 @@ File: t1aett.fd 1997/11/16 Font definitions for T1/aett.
  (./hctm.aux)
 \openout1 = `hctm.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 302.
-LaTeX Font Info:    ... okay on input line 302.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 302.
-LaTeX Font Info:    ... okay on input line 302.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 302.
-LaTeX Font Info:    ... okay on input line 302.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 302.
-LaTeX Font Info:    ... okay on input line 302.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 302.
-LaTeX Font Info:    ... okay on input line 302.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 302.
-LaTeX Font Info:    ... okay on input line 302.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 303.
+LaTeX Font Info:    ... okay on input line 303.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 303.
+LaTeX Font Info:    ... okay on input line 303.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 303.
+LaTeX Font Info:    ... okay on input line 303.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 303.
+LaTeX Font Info:    ... okay on input line 303.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 303.
+LaTeX Font Info:    ... okay on input line 303.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 303.
+LaTeX Font Info:    ... okay on input line 303.
 
 (/opt/local/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -654,62 +655,62 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 
 ABD: EveryShipout initializing macros
-Overfull \hbox (236.06546pt too wide) in paragraph at lines 361--364
+Overfull \hbox (236.06546pt too wide) in paragraph at lines 362--365
 [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 361--364
+Underfull \hbox (badness 10000) in paragraph at lines 362--365
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 361--364
+Underfull \hbox (badness 10000) in paragraph at lines 362--365
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 361--364
+Underfull \hbox (badness 10000) in paragraph at lines 362--365
 
  []
 
 [1
 
-{/Users/lgm/.texlive2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+{/opt/local/var/db/texmf/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
-Overfull \hbox (24.37796pt too wide) in paragraph at lines 366--366
+Overfull \hbox (24.37796pt too wide) in paragraph at lines 367--367
  [] 
  []
 
 
-Overfull \hbox (5.27695pt too wide) in paragraph at lines 382--394
+Overfull \hbox (5.27695pt too wide) in paragraph at lines 383--395
 \T1/aer/m/n/9 His-tor-i-cally, cat-e-gor-i-cal se-man-tics for pro-gram-ming la
 n-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 402--403
+Underfull \hbox (badness 10000) in paragraph at lines 403--404
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 408--409
+Underfull \hbox (badness 10000) in paragraph at lines 409--410
 
  []
 
 
-Overfull \hbox (238.3733pt too wide) detected at line 421
+Overfull \hbox (238.3733pt too wide) detected at line 422
 []
  []
 
 
-Overfull \hbox (2.05199pt too wide) detected at line 450
+Overfull \hbox (2.05199pt too wide) detected at line 451
 []  
  []
 
 
-Overfull \hbox (6.6342pt too wide) in paragraph at lines 461--464
+Overfull \hbox (6.6342pt too wide) in paragraph at lines 462--465
 []\T1/aer/m/it/9 An \T1/aer/m/n/9 ob-ser-va-tion re-la-tion\T1/aer/m/it/9 , $\O
 MS/cmsy/m/n/9 #[]$\T1/aer/m/it/9 , over
  []
@@ -717,58 +718,57 @@ MS/cmsy/m/n/9 #[]$\T1/aer/m/it/9 , over
 [2
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 497--498
+Underfull \hbox (badness 10000) in paragraph at lines 511--512
 
  []
 
-(./p.tex) (./n.tex) (./p_unit.tex) (./p_split.tex) (./n_unit.tex)
-(./n_split.tex) [3] (./bang.tex) (./whimper.tex)
-Overfull \hbox (14.76231pt too wide) in paragraph at lines 575--575
+(./p.tex) (./n.tex) (./p_unit.tex) [3] (./p_split.tex) (./n_unit.tex)
+(./n_split.tex) (./bang.tex) (./whimper.tex)
+Overfull \hbox (14.76231pt too wide) in paragraph at lines 592--592
 []\secfnt CONCLUSIONS AND FU-TURE WORK 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 577--578
+Underfull \hbox (badness 10000) in paragraph at lines 594--595
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 580--581
+Underfull \hbox (badness 10000) in paragraph at lines 597--598
 
  []
 
-(./hctm.bbl) [4
-
-] (./hctm.aux) ) 
+(./hctm.bbl) [4] (./hctm.aux) ) 
 Here is how much of TeX's memory you used:
- 15921 strings out of 494213
- 294791 string characters out of 6157463
- 338906 words of memory out of 5000000
- 18847 multiletter control sequences out of 15000+600000
+ 15924 strings out of 494213
+ 294856 string characters out of 6157463
+ 338931 words of memory out of 5000000
+ 18850 multiletter control sequences out of 15000+600000
  69743 words of font info for 96 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
- 55i,12n,54p,385b,551s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/opt/local/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</o
-pt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></opt/lo
-cal/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></opt/local/
-share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmitt10.pfb></opt/local/shar
-e/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi6.pfb></opt/local/share/texm
-f-texlive/fonts/type1/public/amsfonts/cm/cmmi9.pfb></opt/local/share/texmf-texl
-ive/fonts/type1/public/amsfonts/cm/cmr6.pfb></opt/local/share/texmf-texlive/fon
-ts/type1/public/amsfonts/cm/cmr8.pfb></opt/local/share/texmf-texlive/fonts/type
-1/public/amsfonts/cm/cmr9.pfb></opt/local/share/texmf-texlive/fonts/type1/publi
-c/amsfonts/cm/cmsy6.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsf
-onts/cm/cmsy9.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/c
-m/cmti9.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmtt
-9.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/symbols/msam7
-.pfb></opt/local/share/texmf-texlive/fonts/type1/urw/helvetic/uhvb8a.pfb></opt/
-local/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></opt/local/share
-/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></opt/local/share/texmf-texlive
-/fonts/type1/urw/times/utmri8a.pfb>
-Output written on hctm.pdf (4 pages, 169986 bytes).
+ 55i,12n,54p,576b,549s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/opt/local/share/texmf-texlive/fonts/enc/dvips/
+base/8r.enc}</opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx
+12.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.p
+fb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmitt10.pfb><
+/opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi6.pfb></opt/l
+ocal/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi9.pfb></opt/local/s
+hare/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr6.pfb></opt/local/share/te
+xmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb></opt/local/share/texmf-tex
+live/fonts/type1/public/amsfonts/cm/cmr9.pfb></opt/local/share/texmf-texlive/fo
+nts/type1/public/amsfonts/cm/cmsy6.pfb></opt/local/share/texmf-texlive/fonts/ty
+pe1/public/amsfonts/cm/cmsy9.pfb></opt/local/share/texmf-texlive/fonts/type1/pu
+blic/amsfonts/cm/cmti9.pfb></opt/local/share/texmf-texlive/fonts/type1/public/a
+msfonts/cm/cmtt9.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfont
+s/symbols/msam10.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfont
+s/symbols/msam7.pfb></opt/local/share/texmf-texlive/fonts/type1/urw/helvetic/uh
+vb8a.pfb></opt/local/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></
+opt/local/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></opt/local/shar
+e/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
+Output written on hctm.pdf (4 pages, 182325 bytes).
 PDF statistics:
- 89 PDF objects out of 1000 (max. 8388607)
- 65 compressed objects within 1 object stream
+ 93 PDF objects out of 1000 (max. 8388607)
+ 68 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  13 words of extra memory for PDF output out of 10000 (max. 10000000)
 

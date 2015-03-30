@@ -39,6 +39,7 @@
 \usepackage{tikz}
 %\usepackage{multicol}
 
+\newcommand{\maps}{\colon}
 % Double brackets
 \newcommand{\ldb}{[\![}
 \newcommand{\rdb}{]\!]}
@@ -316,7 +317,7 @@
 \alignauthor
 Mike Stay\\
   \affaddr{Google}\\
-  \email{\fontsize{8}{8}\selectfont metaweta@gmail.com} \\
+  \email{\fontsize{8}{8}\selectfont stay@google.com} \\
 \alignauthor 
 L.G. Meredith\\
   \affaddr{Biosimilarity, LLC}\\
@@ -345,12 +346,12 @@ L.G. Meredith\\
 \normalsize{ 
 
   We present an approach to modeling computational calculi using
-  higher category theory. While the paper focuses on applications to
+  higher category theory.  While the paper focuses on applications to
   the mobile process calculi, and more specifically, the {\pic},
   because they provide unique challenges for categorical models, the
   approach extends smoothly to a variety of other computational
-  calculi, including important milestones such as the
-  $\lambda$-calculus. One of the key contributions is a method of
+  calculi, including important milestones such as the lazy 
+	$\lambda$-calculus. One of the key contributions is a method of
   restricting rewrites to specific contexts inspired by catalysis in
   chemical reactions.
 
@@ -410,7 +411,7 @@ Some examples of process expressions. \\
 \subsection{Our running process calculus}
 
 \subsubsection{Syntax}
-
+\label{syntax}
 \begin{grammar}
 {M, N} \bc \pzero & \mbox{stopped process} \\
        \;\;\; \bm \; {x}{?}{( y_1, \ldots, y_N )} \Rightarrow {P} & \mbox{input} \\
@@ -440,7 +441,7 @@ denoted by $\names{P}$.
 
 The {\em structural congruence} of processes, noted $\scong$, is the
 least congruence containing $\alpha$-equivalence, $\alphaeq$, making
-$( P, |, 0 )$ and $( P, + 0 )$ commutative monoids.
+$( P, |, 0 )$ and $( P, +, 0 )$ into commutative monoids.
 
 \subsubsection{Operational Semantics}
  
@@ -489,11 +490,24 @@ $P \wbbisim_{\mathcal N} Q$, if $P \rel{S}_{\mathcal N} Q$ for some ${\mathcal N
 
 \section{Categorical machinery}
 
-TBD \\
-$!$
+We take our models in bicartesian closed 2-categories; by this we mean 2-categories that have all finite products, infinite coproducts, and are closed with respect to the product.  The 2-category Cat of categories, functors, and natural transformations is the principal example.  We denote the terminal object by 1; the internal hom by a lollipop $\multimap$; duplication and deletion of an object $X$ by $\Delta_X:X \to X \times X$ and $\delta_X:X \to 1,$ respectively; and the type of lists of an object $X$ by $X^* = 1 + X + X\times X + X\times X \times X + \cdots.$
 
 \section{The interpretation}
 
+Given the BNF of a term calculus like that in section \ref{syntax}, we introduce an object in our 2-category for each parameter of the calculus.  The pi calculus is parametric in a set of names and a set of processes, so we have objects $N$ and $P$.  We introduce 1-morphisms for each term constructor, a set of 1-morphisms for identifying reduction contexts, 2-morphisms for each reduction relation, and equations for structural equivalence.
+
+The theory of the pi calculus is the free such 2-category on
+\begin{itemize}
+	\item an objects $N$ for names,
+	\item an object $P$ for processes,
+	\item a 1-morphism $0\maps 1 \to P,$
+	\item a 1-morphism $|\maps P \times P \to P,$
+	\item a 1-morphism $?\maps N \times (N^* \multimap P) \to P,$
+	\item a 1-morphism $!\maps N \times N^* \to P,$
+	\item a 1-morphism $COMM\maps 1 \to P,$
+	\item a 2-morphism $comm$ encoding the COMM rule (see the diagram in section \ref{commdiagram}), and
+	\item equations making $(P, |, 0)$ into a commutative monoid
+\end{itemize}
 TBD \\
 
 \subsubsection{0-cells}
@@ -571,6 +585,9 @@ TBD \\
 %     \caption{ Interpretation of adjunction-based rewrite template }
 %   \end{center}
 % \end{figure}
+\subsection{2-cells}
+\label{commdiagram}
+TBD
 
 \section{Conclusions and future work}
 
