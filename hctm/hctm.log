@@ -1,8 +1,8 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_6) (preloaded format=pdflatex 2015.2.19)  29 MAR 2015 22:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_1) (preloaded format=pdflatex 2014.9.29)  30 MAR 2015 01:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**hctm
+**hctm.tex
 (./hctm.tex
 LaTeX2e <2014/05/01>
 Babel <3.9k> and hyphenation patterns for 43 languages loaded.
@@ -189,8 +189,8 @@ File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
 \Urlmuskip=\muskip11
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-(/Users/stay/Library/texmf/tex/latex/local/common/bigpage.sty)
-(/Users/stay/Library/texmf/tex/latex/local/common/bcprules.sty
+(/opt/local/share/texmf-texlive/tex/latex/bigpage.sty)
+(/opt/local/share/texmf-texlive/tex/latex/bcprules.sty
 \afterruleskip=\skip44
 \labelminsep=\skip45
 \labelcolwidth=\dimen123
@@ -198,8 +198,7 @@ Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 \rulebox=\box31
 \ruledim=\dimen124
 \labeldim=\dimen125
-)
-(./mathpartir.sty
+) (./mathpartir.sty
 Package: mathpartir 2003/07/10 version 1.1.1 Math Paragraph for Typesetting Inf
 erence Rules
 \mpr@tmpdim=\dimen126
@@ -676,7 +675,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 362--365
 
 [1
 
-{/opt/local/var/db/texmf/fonts/map/pdftex/updmap/pdftex.map}
+{/Users/lgm/.texlive2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
 
 ]
 Overfull \hbox (24.37796pt too wide) in paragraph at lines 367--367
@@ -718,35 +717,40 @@ MS/cmsy/m/n/9 #[]$\T1/aer/m/it/9 , over
 [2
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 511--512
+Overfull \hbox (6.14055pt too wide) in paragraph at lines 497--504
+\T1/aer/m/n/9 in sec-tion 2.1.1[], we in-tro-duce an ob-ject in our 2-category
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 517--518
 
  []
 
 (./p.tex) (./n.tex) (./p_unit.tex) [3] (./p_split.tex) (./n_unit.tex)
 (./n_split.tex) (./bang.tex) (./whimper.tex)
-Overfull \hbox (14.76231pt too wide) in paragraph at lines 592--592
+Overfull \hbox (14.76231pt too wide) in paragraph at lines 607--607
 []\secfnt CONCLUSIONS AND FU-TURE WORK 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 594--595
+Underfull \hbox (badness 10000) in paragraph at lines 609--610
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 597--598
+Underfull \hbox (badness 10000) in paragraph at lines 612--613
 
  []
 
 (./hctm.bbl) [4] (./hctm.aux) ) 
 Here is how much of TeX's memory you used:
  15924 strings out of 494213
- 294856 string characters out of 6157463
- 338931 words of memory out of 5000000
+ 294816 string characters out of 6157463
+ 338930 words of memory out of 5000000
  18850 multiletter control sequences out of 15000+600000
  69743 words of font info for 96 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
- 55i,12n,54p,576b,549s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,12n,54p,580b,549s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/opt/local/share/texmf-texlive/fonts/enc/dvips/
 base/8r.enc}</opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx
 12.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmcsc10.p
@@ -765,7 +769,7 @@ s/symbols/msam7.pfb></opt/local/share/texmf-texlive/fonts/type1/urw/helvetic/uh
 vb8a.pfb></opt/local/share/texmf-texlive/fonts/type1/urw/helvetic/uhvr8a.pfb></
 opt/local/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></opt/local/shar
 e/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on hctm.pdf (4 pages, 182325 bytes).
+Output written on hctm.pdf (4 pages, 182971 bytes).
 PDF statistics:
  93 PDF objects out of 1000 (max. 8388607)
  68 compressed objects within 1 object stream

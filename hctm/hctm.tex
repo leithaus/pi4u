@@ -494,9 +494,15 @@ We take our models in bicartesian closed 2-categories; by this we mean 2-categor
 
 \section{The interpretation}
 
-Given the BNF of a term calculus like that in section \ref{syntax}, we introduce an object in our 2-category for each parameter of the calculus.  The pi calculus is parametric in a set of names and a set of processes, so we have objects $N$ and $P$.  We introduce 1-morphisms for each term constructor, a set of 1-morphisms for identifying reduction contexts, 2-morphisms for each reduction relation, and equations for structural equivalence.
+Given the abstract syntax of a term calculus like that in section
+\ref{syntax}, we introduce an object in our 2-category for each
+parameter of the calculus.  The {\pic} is parametric in a set of
+names and a set of processes, so we have objects $N$ and $P$.  We
+introduce 1-morphisms for each term constructor, a set of 1-morphisms
+for identifying reduction contexts, 2-morphisms for each reduction
+relation, and equations for structural equivalence.
 
-The theory of the pi calculus is the free such 2-category on
+The theory of the {\pic} is the free such 2-category on
 \begin{itemize}
 	\item an objects $N$ for names,
 	\item an object $P$ for processes,
@@ -587,7 +593,16 @@ TBD \\
 % \end{figure}
 \subsection{2-cells}
 \label{commdiagram}
-TBD
+
+\subsection{Semantics}
+\begin{equation*}
+  \begin{aligned}
+    & \meaningof{\pzero} \defneqls \ldots \\
+    & \meaningof{{x}{?}{( y_1, \ldots, y_N )} \Rightarrow {P}} \defneqls \ldots \\
+    & \meaningof{{x}{!}{( y_1, \ldots, y_N )}} \defneqls \ldots \\
+    & \meaningof{\binpar{P}{Q}} \defneqls \ldots \\
+  \end{aligned}
+\end{equation*}
 
 \section{Conclusions and future work}
 
