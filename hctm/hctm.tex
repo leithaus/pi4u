@@ -413,11 +413,11 @@ Some examples of process expressions. \\
 \subsubsection{Syntax}
 \label{syntax}
 \begin{grammar}
-{M, N} \bc \pzero & \mbox{stopped process} \\
+{P} \bc \pzero & \mbox{stopped process} \\
        \;\;\; \bm \; {x}{?}{( y_1, \ldots, y_N )} \Rightarrow {P} & \mbox{input} \\
        \;\;\; \bm \; {x}{!}{( y_1, \ldots, y_N )} & \mbox{output} \\
-       \;\;\; \bm \; {M}{+}{N} & \mbox{choice} \\
-{ P, Q } \bc M & \mbox{include IO processes} \\                                
+%       \;\;\; \bm \; {M}{+}{N} & \mbox{choice} \\
+%{ P, Q } \bc M & \mbox{include IO processes} \\                                
        \;\;\; \bm \; {P} \juxtap {Q} & \mbox{parallel} \\                                
 \end{grammar}
 
@@ -441,13 +441,14 @@ denoted by $\names{P}$.
 
 The {\em structural congruence} of processes, noted $\scong$, is the
 least congruence containing $\alpha$-equivalence, $\alphaeq$, making
-$( P, |, 0 )$ and $( P, +, 0 )$ into commutative monoids.
+$( P, |, 0 )$ into commutative monoids.
 
 \subsubsection{Operational Semantics}
  
 \infrule[Comm]
 { |\vec{y}| = |\vec{z}| }
-{P_1 + {{ x_{0}{?}{(}{\vec{y}}{)} \concat {P}}\juxtap {x_{1}}{!}{(}{\vec{z}}{)} + P_2}
+%{P_1 + {{ x_{0}{?}{(}{\vec{y}}{)} \concat {P}}\juxtap {x_{1}}{!}{(}{\vec{z}}{)} + P_2}
+{{{ x{?}{(}{\vec{y}}{)} \concat {P}}\juxtap {x}{!}{(}{\vec{z}}{)}}
 \red {{P}{\{}\quotep{\vec{z}}{/}{\vec{y}}{\}}}}
 
 In addition, we have the following context rules:
