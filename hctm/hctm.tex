@@ -499,19 +499,15 @@ $P \wbbisim_{\mathcal N} Q$, if $P \rel{S}_{\mathcal N} Q$ for some ${\mathcal N
 
 \section{Categorical machinery}
 
-We take our models in bicartesian closed 2-categories; by this we mean 2-categories that have all finite products, infinite coproducts, and are closed with respect to the product.  The 2-category Cat of categories, functors, and natural transformations is the principal example.  We denote the terminal object by 1; the internal hom by a lollipop $\multimap$; duplication and deletion of an object $X$ by $\Delta_X:X \to X \times X$ and $\delta_X:X \to 1,$ respectively; and the type of lists of an object $X$ by $X^* = 1 + X + X\times X + X\times X \times X + \cdots.$  We denote the type of natural numbers $1*$ by $\NN$ and the morphism taking any list to its length by $\left|-\right|\maps X* \to \NN.$
+We take our models in cartesian closed 2-categories; the 2-category Cat of categories, functors, and natural transformations is the principal example.  We denote the terminal object by 1; the internal hom by a lollipop $\multimap$; and duplication and deletion of an object $X$ by $\Delta_X:X \to X \times X$ and $\delta_X:X \to 1,$ respectively.
 
 \section{The interpretation}
 
-Given the abstract syntax of a term calculus like that in section
-\ref{syntax}, we introduce an object in our 2-category for each
-parameter of the calculus.  The {\pic} is parametric in a set of
-names and a set of processes, so we have objects $N$ and $P$.  We
-introduce 1-morphisms for each term constructor, a set of 1-morphisms
-for identifying reduction contexts, 2-morphisms for each reduction
-relation, and equations for structural equivalence.
+Given the abstract syntax of a term calculus like that in section \ref{syntax}, we introduce an object in our 2-category for each parameter of the calculus.  The {\pic} is parametric in a set of names and a set of processes, so we have objects $N$ and $P$.  We introduce 1-morphisms for each term constructor, 2-morphisms for each reduction relation, and equations for structural equivalence.
 
-The theory of the {\pic} is the free such 2-category on
+We also add 1-morphisms from $P$ to $P$ to mark contexts in which reductions may occur.  In the {\pic,} all reductions occur at the topmost level.  There are some benefits to constructing the top context out of the existing binary morphism $|\maps P \times P \to P$ and a unary morphism $COMM\maps 1 \to P.$ [[Rewrite that stuff in more detail.]]
+
+The theory of the {\pic} is the free cartesian closed 2-category on
 \begin{itemize}
   \item an objects $N$ for names,
     \[\begin{pspicture}(0,0)(0,2)
@@ -541,7 +537,7 @@ The theory of the {\pic} is the free such 2-category on
       \pnode(2,4){D}
       \nccurve[angleB=45]{D}{A} \naput{$P$}
     \end{pspicture}\]
-  \item a 1-morphism $?\maps N \times (N^* \multimap P) \to P,$
+  \item a 1-morphism $?_n\maps N \times (N^n \multimap P) \to P$ for each natural number $n \ge 0,$
     \[\begin{pspicture}(0,0)(0,4)
       \rput(1,2){\ovalnode{A}{$?$}}
       \pnode(1,0){B}
@@ -554,7 +550,7 @@ The theory of the {\pic} is the free such 2-category on
       \nccurve[angleB=35]{E}{A} \naput{$N^*\multimap P$} \ncput[npos=.25]{\cnode{4pt}{clasp2}}
       \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
     \end{pspicture}\]
-  \item a 1-morphism $!\maps N \times N^* \to P,$
+  \item a 1-morphism $!_n\maps N \times N^n \to P$ for each natural number $n \ge 0,$
     \[\begin{pspicture}(0,0)(0,4)
       \rput(1,2){\ovalnode{A}{$!$}}
       \pnode(1,0){B}
@@ -570,7 +566,7 @@ The theory of the {\pic} is the free such 2-category on
       \pnode(0,0){B}
       \nccurve{A}{B} \naput{$P$}
     \end{pspicture}\]  
-  \item a 2-morphism $comm$ encoding the COMM rule, and
+  \item a 2-morphism $comm_n$ encoding the COMM rule for each natural number $n \ge 0,$ and
   \item equations making $(P, |, 0)$ into a commutative monoid
 \end{itemize}
 
