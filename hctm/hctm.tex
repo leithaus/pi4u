@@ -539,7 +539,7 @@ The theory of the {\pic} is the free cartesian closed 2-category on
     \end{pspicture}\]
   \item a 1-morphism $?_n\maps N \times (N^n \multimap P) \to P$ for each natural number $n \ge 0,$
     \[\begin{pspicture}(0,0)(0,4)
-      \rput(1,2){\ovalnode{A}{$?$}}
+      \rput(1,2){\ovalnode{A}{$?_n$}}
       \pnode(1,0){B}
       \nccurve{A}{B} \naput{$P$}
       \pnode(0,4){C}
@@ -547,18 +547,18 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \pnode(1.75,4){D}
       \nccurve[angleA=65,angleB=-90]{A}{D} \ncput[npos=.75]{\pnode{clasp1}}
       \pnode(2.25,4){E}
-      \nccurve[angleB=35]{E}{A} \naput{$N^*\multimap P$} \ncput[npos=.25]{\cnode{4pt}{clasp2}}
+      \nccurve[angleB=35]{E}{A} \naput{$N^n\multimap P$} \ncput[npos=.25]{\cnode{4pt}{clasp2}}
       \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
     \end{pspicture}\]
   \item a 1-morphism $!_n\maps N \times N^n \to P$ for each natural number $n \ge 0,$
     \[\begin{pspicture}(0,0)(0,4)
-      \rput(1,2){\ovalnode{A}{$!$}}
+      \rput(1,2){\ovalnode{A}{$!_n$}}
       \pnode(1,0){B}
       \nccurve{A}{B} \naput{$P$}
       \pnode(0,4){C}
       \nccurve[angleB=135]{C}{A} \naput{$N$}
       \pnode(2,4){D}
-      \nccurve[angleB=45]{D}{A} \naput{$N^*$}
+      \nccurve[angleB=45]{D}{A} \naput{$N^n$}
     \end{pspicture}\]
   \item a 1-morphism $COMM\maps 1 \to P,$
     \[\begin{pspicture}(0,0)(0,2.5)
