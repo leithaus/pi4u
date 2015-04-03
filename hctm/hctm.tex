@@ -629,7 +629,11 @@ The theory of the {\pic} is the free cartesian closed 2-category on
 \end{equation*}
 
 \section{Conclusions and future work}
-
+To model lazy lambda calculus, we use two unary contexts $T$ and $U$, mark the topmost context with $T$, and use two rules:
+\begin{itemize}
+  \item $T(App(l, r)) \Rightarrow U(App(T(l), r))$ for moving $T$ to the leftmost subterm, and
+  \item $U(App(T(Lam(x, M)), N) \Rightarrow T(M\{N / x\})$ for $\beta-$reduction.
+\end{itemize}
 TBD \\
 
 \paragraph{Acknowledgments.}
