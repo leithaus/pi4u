@@ -586,11 +586,11 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \rput(2.5,3){\ovalnode{I}{$|$}}
       \rput(3.5,1.5){\ovalnode{J}{$|$}}
       \pnode(3.5,0){K}
-      \nccurve[angleB=135]{D}{I}
-      \nccurve[angleB=45]{G}{I}
-      \nccurve[angleB=135]{I}{J}
-      \nccurve[angleB=45]{H}{J}
-      \nccurve{J}{K}
+      \nccurve[angleB=135]{D}{I} \nbput{$P$}
+      \nccurve[angleB=45]{G}{I} \naput{$P$}
+      \nccurve[angleB=135]{I}{J} \nbput{$P$}
+      \nccurve[angleB=45]{H}{J} \naput{$P$}
+      \nccurve{J}{K} \nbput{$P$}
     \end{pspicture}\]
     \[comm_n\Downarrow\]
     \[\begin{pspicture}(-1,0)(10,8)
@@ -598,7 +598,6 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \rput(0,7){\cnode*{2pt}{B}}
       \pnode(1,8){C}
       \nccurve{A}{B} \nbput{$N$} 
-%      \rput(2.5,5){\ovalnode{D}{eval}}
       \rput(2.5,5){\cnode{18pt}{D}}
       \nccurve[angleB=135]{C}{D} \naput{$N^n$} \ncput[npos=1]{\pnode{Z}}
       \pnode(5,8){E}
@@ -609,9 +608,9 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \rput(8,5){\ovalnode{H}{$COMM$}}
       \rput(3.5,1.5){\ovalnode{J}{$|$}}
       \pnode(3.5,0){K}
-      \nccurve[angleB=135]{D}{J} \ncput[npos=0]{\pnode{W}}
-      \nccurve[angleB=45]{H}{J}
-      \nccurve{J}{K}
+      \nccurve[angleB=135]{D}{J} \nbput{$P$} \ncput[npos=0]{\pnode{W}}
+      \nccurve[angleB=45]{H}{J} \naput{$P$}
+      \nccurve{J}{K} \nbput{$P$}
       \nccurve[angleA=305,angleB=270]{Z}{Y}
       \nccurve[angleA=225,angleB=90]{X}{W}
       \rput(2,5){$ev$}
