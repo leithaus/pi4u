@@ -567,6 +567,51 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \nccurve{A}{B} \naput{$P$}
     \end{pspicture}\]  
   \item a 2-morphism $comm_n$ encoding the COMM rule for each natural number $n \ge 0,$ and
+    \[\begin{pspicture}(-1,0)(10,8)
+      \pnode(0,8){A}
+			\pnode(0,7){B}
+			\pnode(1,8){C}
+			\rput(1,5){\ovalnode{D}{$!_n$}}
+			\nccurve{A}{B} \nbput{$N$} 
+			\nccurve[angleA=225,angleB=135]{B}{D}
+			\nccurve[angleB=45]{C}{D} \naput[npos=.25]{$N^n$}
+			\pnode(5,8){E}
+			\pnode(6,8){F}
+			\rput(5,5){\ovalnode{G}{$?_n$}}
+			\nccurve[angleA=305,angleB=135]{B}{G}
+			\nccurve[angleA=90,angleB=270]{G}{E} \ncput[npos=.75]{\pnode{clasp1}}
+			\nccurve[angleB=45]{F}{G} \ncput[npos=.25]{\cnode{4pt}{clasp2}} \naput{$N^n \multimap P$}
+			\nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
+			\rput(8,5){\ovalnode{H}{$COMM$}}
+			\rput(2.5,3){\ovalnode{I}{$|$}}
+			\rput(3.5,1.5){\ovalnode{J}{$|$}}
+			\pnode(3.5,0){K}
+			\nccurve[angleB=135]{D}{I}
+			\nccurve[angleB=45]{G}{I}
+			\nccurve[angleB=135]{I}{J}
+			\nccurve[angleB=45]{H}{J}
+			\nccurve{J}{K}
+    \end{pspicture}\]
+		\[comm_n\Downarrow\]
+		\[\begin{pspicture}(-1,0)(10,8)
+      \pnode(0,8){A}
+			\rput(0,7){\cnode*{2pt}{B}}
+			\pnode(1,8){C}
+			\nccurve{A}{B} \nbput{$N$} 
+			\rput(2.5,5){\ovalnode{D}{eval}}
+			\nccurve[angleB=135]{C}{D} \naput{$N^n$}
+			\pnode(5,8){E}
+			\pnode(6,8){F}
+			\nccurve[angleA=90,angleB=270]{D}{E} \ncput[npos=.75]{\pnode{clasp1}}
+			\nccurve[angleB=45]{F}{D} \ncput[npos=.25]{\cnode{4pt}{clasp2}} \naput{$N^n \multimap P$}
+			\nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
+			\rput(8,5){\ovalnode{H}{$COMM$}}
+			\rput(3.5,1.5){\ovalnode{J}{$|$}}
+			\pnode(3.5,0){K}
+			\nccurve[angleB=135]{D}{J}
+			\nccurve[angleB=45]{H}{J}
+			\nccurve{J}{K}
+		\end{pspicture}\]
   \item equations making $(P, |, 0)$ into a commutative monoid
 \end{itemize}
 
