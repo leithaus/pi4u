@@ -598,19 +598,23 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \rput(0,7){\cnode*{2pt}{B}}
       \pnode(1,8){C}
       \nccurve{A}{B} \nbput{$N$} 
-      \rput(2.5,5){\ovalnode{D}{eval}}
-      \nccurve[angleB=135]{C}{D} \naput{$N^n$}
+%      \rput(2.5,5){\ovalnode{D}{eval}}
+      \rput(2.5,5){\cnode{18pt}{D}}
+      \nccurve[angleB=135]{C}{D} \naput{$N^n$} \ncput[npos=1]{\pnode{Z}}
       \pnode(5,8){E}
       \pnode(6,8){F}
-      \nccurve[angleA=90,angleB=270]{D}{E} \ncput[npos=.75]{\pnode{clasp1}}
-      \nccurve[angleB=45]{F}{D} \ncput[npos=.25]{\cnode{4pt}{clasp2}} \naput{$N^n \multimap P$}
+      \nccurve[angleA=90,angleB=270]{D}{E} \ncput[npos=.75]{\pnode{clasp1}} \ncput[npos=0]{\pnode{Y}}
+      \nccurve[angleB=45]{F}{D} \ncput[npos=.25]{\cnode{4pt}{clasp2}} \naput{$N^n \multimap P$} \ncput[npos=1]{\pnode{X}}
       \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
       \rput(8,5){\ovalnode{H}{$COMM$}}
       \rput(3.5,1.5){\ovalnode{J}{$|$}}
       \pnode(3.5,0){K}
-      \nccurve[angleB=135]{D}{J}
+      \nccurve[angleB=135]{D}{J} \ncput[npos=0]{\pnode{W}}
       \nccurve[angleB=45]{H}{J}
       \nccurve{J}{K}
+      \nccurve[angleA=305,angleB=270]{Z}{Y}
+      \nccurve[angleA=225,angleB=90]{X}{W}
+      \rput(2,5){$ev$}
     \end{pspicture}\]
   \item equations making $(P, |, 0)$ into a commutative monoid
 \end{itemize}
