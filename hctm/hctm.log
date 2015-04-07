@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_7) (preloaded format=latex 2014.9.29)  7 APR 2015 05:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_7) (preloaded format=latex 2014.9.29)  7 APR 2015 05:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -722,46 +722,53 @@ MS/cmsy/m/n/9 #[]$\T1/aer/m/it/9 , over
  []
 
 
+Overfull \hbox (2.17891pt too wide) in paragraph at lines 521--522
+\T1/aer/m/n/9 Cat (cat-e-gories, func-tors, and nat-u-ral trans-for-ma-tions)
+ []
+
+
 Overfull \hbox (6.14055pt too wide) in paragraph at lines 525--526
 \T1/aer/m/n/9 in sec-tion 2.1.1[], we in-tro-duce an ob-ject in our 2-category
- []
-
-[3]
-Overfull \hbox (29.04106pt too wide) detected at line 613
-[]
- []
-
-
-Overfull \hbox (29.04106pt too wide) detected at line 636
-[]
  []
 
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
+ [3]
+Overfull \hbox (19.08264pt too wide) detected at line 634
+[]
+ []
 
-Overfull \hbox (14.76231pt too wide) in paragraph at lines 650--650
+
+Overfull \hbox (19.08264pt too wide) detected at line 657
+[]
+ []
+
+
+Overfull \hbox (14.76231pt too wide) in paragraph at lines 670--670
 []\secfnt CONCLUSIONS AND FU-TURE WORK 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 656--657
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 659--660
+[4]
+Underfull \hbox (badness 10000) in paragraph at lines 676--677
 
  []
 
-(./hctm.bbl) [4] (./hctm.aux) ) 
+
+Underfull \hbox (badness 10000) in paragraph at lines 679--680
+
+ []
+
+(./hctm.bbl) [5
+
+] (./hctm.aux) ) 
 Here is how much of TeX's memory you used:
  14405 strings out of 494214
  240622 string characters out of 6157489
- 435026 words of memory out of 5000000
+ 460018 words of memory out of 5000000
  17441 multiletter control sequences out of 15000+600000
  57217 words of font info for 69 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
  53i,12n,92p,588b,316s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on hctm.dvi (4 pages, 134380 bytes).
+Output written on hctm.dvi (5 pages, 148056 bytes).
