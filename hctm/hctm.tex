@@ -323,7 +323,7 @@
 \numberofauthors{3}
 \author{
 \alignauthor
-Mike Stay\\
+Michael Stay\\
   \affaddr{Google}\\
   \email{\fontsize{8}{8}\selectfont stay@google.com} \\
 \alignauthor 
@@ -441,8 +441,8 @@ Some examples of process expressions. \\
 \label{syntax}
 \begin{grammar}
 {P} \bc \pzero & \mbox{stopped process} \\
-       \;\;\; \bm \; {x}{?}{( y_1, \ldots, y_N )} \Rightarrow {P} & \mbox{input} \\
-       \;\;\; \bm \; {x}{!}{( y_1, \ldots, y_N )} & \mbox{output} \\
+       \;\;\; \bm \; {x}{?}{( y_1, \ldots, y_n )} \Rightarrow {P} & \mbox{input} \\
+       \;\;\; \bm \; {x}{!}{( y_1, \ldots, y_n )} & \mbox{output} \\
 %       \;\;\; \bm \; {M}{+}{N} & \mbox{choice} \\
 %{ P, Q } \bc M & \mbox{include IO processes} \\                                
        \;\;\; \bm \; {P} \juxtap {Q} & \mbox{parallel} \\                                
@@ -453,9 +453,9 @@ Some examples of process expressions. \\
 \begin{equation*}
   \begin{aligned}
     & \freenames{\pzero} \defneqls \emptyset \\
-    & \freenames{{x}{?}{( y_1, \ldots, y_N )} \Rightarrow {P}} \defneqls \\
-    & \;\;\;\;\;\{ x \} \cup (\freenames{P} \setminus \{ y_1, \ldots y_N \}) \\
-    & \freenames{{x}{!}{( y_1, \ldots, y_N )}} \defneqls \{ x, y_1, \ldots, y_N \} \\
+    & \freenames{{x}{?}{( y_1, \ldots, y_n )} \Rightarrow {P}} \defneqls \\
+    & \;\;\;\;\;\{ x \} \cup (\freenames{P} \setminus \{ y_1, \ldots y_n \}) \\
+    & \freenames{{x}{!}{( y_1, \ldots, y_n )}} \defneqls \{ x, y_1, \ldots, y_n \} \\
     & \freenames{{P} \juxtap {Q}} \defneqls \freenames{P} \cup \freenames{Q} \\
   \end{aligned}
 \end{equation*}
@@ -605,7 +605,6 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
     \end{pspicture}\]  
   \item equations making $(P, |, 0)$ into a commutative monoid,
   \item equations making $(N, \Delta, \delta)$ into a cocommutative comonoid, and
-	\vfill
   \item a 2-morphism $comm_n$ encoding the COMM rule for each natural number $n \ge 0.$
     \[\begin{pspicture}(-.5,0)(10,8)
       \pnode(0,8){A}
@@ -656,16 +655,53 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
       \rput(2,5){$ev$}
     \end{pspicture}\]
 \end{itemize}
-
+\vfill
 \subsection{Semantics}
 \begin{equation*}
   \begin{aligned}
-    & \meaningof{\pzero} \defneqls \ldots \\
-    & \meaningof{{x}{?}{( y_1, \ldots, y_N )} \Rightarrow {P}} \defneqls \ldots \\
-    & \meaningof{{x}{!}{( y_1, \ldots, y_N )}} \defneqls \ldots \\
-    & \meaningof{\binpar{P}{Q}} \defneqls \ldots \\
+    & \meaningof{\pzero} \defneqls
+    \begin{pspicture}(-1,1)(0,2.5)
+      \rput(0,2){\ovalnode{A}{$0$}}
+      \pnode(0,0){B}
+      \nccurve{A}{B} \naput{$P$}
+    \end{pspicture} \\
+    & \meaningof{{x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}} \defneqls
+    \begin{pspicture}(-1,2)(0,5.5)
+      \rput(1,2){\ovalnode{A}{$?_n$}}
+      \pnode(1,0){B}
+      \nccurve{A}{B} \naput{$P$}
+      \rput(0,4){\ovalnode{C}{$x$}}
+      \nccurve[angleB=135]{C}{A} \naput{$N$}
+			\rput(2,4){\ovalnode{D}{$curry(Q)$}}
+      \nccurve[angleA=65,angleB=-135]{A}{D} \ncput[npos=.65]{\pnode{clasp1}}
+      \nccurve[angleA=-90,angleB=35]{D}{A} \naput{$N^{\otimes n}\multimap P$} \ncput[npos=.25]{\cnode{4pt}{clasp2}}
+      \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
+    \end{pspicture} \\
+    & \meaningof{{x}{!}{( y_1, \ldots, y_n )}} \defneqls 
+    \begin{pspicture}(-1,2)(0,6.5)
+      \rput(1,2){\ovalnode{A}{$!_n$}}
+			\pnode(1,0){B}
+      \nccurve{A}{B} \naput{$P$}
+      \rput(0,4){\ovalnode{C}{$x$}}
+      \nccurve[angleB=135]{C}{A} \naput{$N$}
+      \rput(2.5,4){\ovalnode{D}{$y_1 \otimes \cdots \otimes y_n$}}
+      \nccurve[angleB=45]{D}{A} \naput{$N^{\otimes n}$}
+    \end{pspicture} \\
+    & \meaningof{\binpar{Q}{Q'}} \defneqls 
+		\begin{pspicture}(-1,2)(0,5.5)
+			\rput(0,3){\ovalnode{A}{$Q$}}
+			\rput(2,3){\ovalnode{B}{$Q'$}}
+			\rput(1,1.5){\ovalnode{C}{$|$}}
+			\pnode(1,0){D}
+			\nccurve[angleB=135]{A}{C} \nbput{$P$}
+			\nccurve[angleB=45]{B}{C} \naput{$P$}
+			\nccurve{C}{D} \naput{$P$}
+		\end{pspicture} \\			
   \end{aligned}
 \end{equation*}
+\vspace{10mm}
+\\
+Note that in the string diagrams, only free names appear as inputs; bound names appear only as internal wires, so the model automatically satisfies alpha equivalence.
 
 \section{Conclusions and future work}
 To model lazy lambda calculus, we use two unary contexts $T$ and $U$, mark the topmost context with $T$, and use two rules:
