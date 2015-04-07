@@ -507,26 +507,28 @@ detect if a sent message has been received or not.
 \begin{defn}
 %\label{def.bbisim}
 An  ${\mathcal N}$-\emph{barbed bisimulation} over a set of names, ${\mathcal N}$, is a symmetric binary relation 
-${\mathcal S}_{\mathcal N}$ between agents such that $P\rel{S}_{\mathcal N}Q$ implies:
+${\mathcal S}_{\mathcal N}$ between agents such that $P\rel{S_{\mathcal N}}Q$ implies:
 \begin{enumerate}
-\item If $P \red P'$ then $Q \wred Q'$ and $P'\rel{S}_{\mathcal N} Q'$.
+\item If $P \red P'$ then $Q \wred Q'$ and $P'\rel{S_{\mathcal N}} Q'$.
 \item If $P\downarrow_{\mathcal N} x$, then $Q\Downarrow_{\mathcal N} x$.
 \end{enumerate}
 $P$ is ${\mathcal N}$-barbed bisimilar to $Q$, written
-$P \wbbisim_{\mathcal N} Q$, if $P \rel{S}_{\mathcal N} Q$ for some ${\mathcal N}$-barbed bisimulation ${\mathcal S}_{\mathcal N}$.
+$P \wbbisim_{\mathcal N} Q$, if $P \rel{S_{\mathcal N}} Q$ for some ${\mathcal N}$-barbed bisimulation ${\mathcal S}_{\mathcal N}$.
 \end{defn}
 
 \section{Categorical machinery}
 
-We take our models in cartesian closed 2-categories; the 2-category Cat of categories, functors, and natural transformations is the principal example.  We denote the terminal object by 1; the internal hom by a lollipop $\multimap$; and duplication and deletion of an object $X$ by $\Delta_X:X \to X \times X$ and $\delta_X:X \to 1,$ respectively.
+We take our models in 2-categories with an underlying symmetric monoidal closed category; the 2-categories Cat (categories, functors, and natural transformations) and Rel (sets, relations, and implications) are examples.  We denote the monoidal unit object by $I$, the tensor product by $\otimes,$ the $n$th tensor power of an object $X$ by $X^{\otimes n},$ and the internal hom by a lollipop $\multimap$.
 
 \section{The interpretation}
 
-Given the abstract syntax of a term calculus like that in section \ref{syntax}, we introduce an object in our 2-category for each parameter of the calculus.  The {\pic} is parametric in a set of names and a set of processes, so we have objects $N$ and $P$.  We introduce 1-morphisms for each term constructor, 2-morphisms for each reduction relation, and equations for structural equivalence.
+Given the abstract syntax of a term calculus like that in section \ref{syntax}, we introduce an object in our 2-category for each parameter of the calculus.  We introduce 1-morphisms for each term constructor, 2-morphisms for each reduction relation, and equations for structural equivalence; we also add 1-morphisms to mark contexts in which reductions may occur.
 
-We also add 1-morphisms from $P$ to $P$ to mark contexts in which reductions may occur.  In the {\pic,} all reductions occur at the topmost level.  There are some benefits to constructing the top context out of the existing binary morphism $|\maps P \times P \to P$ and a unary morphism $COMM\maps 1 \to P.$ [[Rewrite that stuff in more detail.]]
+The {\pic} is parametric in a set of names and a set of processes, so we have objects $N$ and $P$.  Since names can be reused in the {\pic,} we also add 1-morphisms and equations to make $N$ be a cocommutative comonoid.  We denote comultiplication by $\Delta\maps N \to N \otimes N$ and counit by $\delta\maps N \to I.$  If the underlying category is cartesian, $I$ is the terminal object, $N$ is a comonoid in a unique way, and $\Delta$ and $\delta$ are duplication and deletion, respectively.  
 
-The theory of the {\pic} is the free cartesian closed 2-category on
+In the {\pic,} all reductions occur at the topmost context, so we have one unary morphism from $P$ to $P$.  There are some benefits to constructing the top context marker out of the existing binary morphism $|\maps P \otimes P \to P$ and a unary morphism $COMM\maps I \to P;$ we'll talk about some of the benefits in the conclusion.
+
+The theory of the {\pic} is the free symmetric monoidal closed 2-category on
 \begin{itemize}
   \item an objects $N$ for names,
     \[\begin{pspicture}(0,0)(0,2)
@@ -540,13 +542,29 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \pnode(0,0){B}
       \nccurve{A}{B} \naput{$P$}
     \end{pspicture}\]
-  \item a 1-morphism $0\maps 1 \to P,$
+	\item a 1-morphism $\Delta\maps N \to N \otimes N,$
+    \[\begin{pspicture}(0,0)(0,4)
+			\pnode(1,4){A}
+      \pnode(1,2){B}
+			\nccurve{A}{B} \naput{$N$}
+			\pnode(0,0){C}
+			\pnode(2,0){D}
+			\nccurve[angleA=225]{B}{C} \naput{$N$}
+			\nccurve[angleA=315]{B}{D} \naput{$N$}
+    \end{pspicture}\]
+	\item a 1-morphism $\delta\maps N \to I,$
+    \[\begin{pspicture}(0,0)(0,2.5)
+      \rput(0,0){\cnode*{2pt}{A}}
+      \pnode(0,1){B}
+      \nccurve{B}{A} \naput{$N$}
+    \end{pspicture}\]  
+  \item a 1-morphism $0\maps I \to P,$
     \[\begin{pspicture}(0,0)(0,2.5)
       \rput(0,2){\ovalnode{A}{$0$}}
       \pnode(0,0){B}
       \nccurve{A}{B} \naput{$P$}
     \end{pspicture}\]  
-  \item a 1-morphism $|\maps P \times P \to P,$
+  \item a 1-morphism $|\maps P \otimes P \to P,$
     \[\begin{pspicture}(0,0)(0,4)
       \rput(1,2){\ovalnode{A}{$|$}}
       \pnode(1,0){B}
@@ -556,7 +574,7 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \pnode(2,4){D}
       \nccurve[angleB=45]{D}{A} \naput{$P$}
     \end{pspicture}\]
-  \item a 1-morphism $?_n\maps N \times (N^n \multimap P) \to P$ for each natural number $n \ge 0,$
+  \item a 1-morphism $?_n\maps N \otimes (N^{\otimes n} \multimap P) \to P$ for each natural number $n \ge 0,$
     \[\begin{pspicture}(0,0)(0,4)
       \rput(1,2){\ovalnode{A}{$?_n$}}
       \pnode(1,0){B}
@@ -566,10 +584,10 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \pnode(1.75,4){D}
       \nccurve[angleA=65,angleB=-90]{A}{D} \ncput[npos=.75]{\pnode{clasp1}}
       \pnode(2.25,4){E}
-      \nccurve[angleB=35]{E}{A} \naput{$N^n\multimap P$} \ncput[npos=.25]{\cnode{4pt}{clasp2}}
+      \nccurve[angleB=35]{E}{A} \naput{$N^{\otimes n}\multimap P$} \ncput[npos=.25]{\cnode{4pt}{clasp2}}
       \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
     \end{pspicture}\]
-  \item a 1-morphism $!_n\maps N \times N^n \to P$ for each natural number $n \ge 0,$
+  \item a 1-morphism $!_n\maps N \otimes N^{\otimes n} \to P$ for each natural number $n \ge 0,$
     \[\begin{pspicture}(0,0)(0,4)
       \rput(1,2){\ovalnode{A}{$!_n$}}
       \pnode(1,0){B}
@@ -577,29 +595,32 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \pnode(0,4){C}
       \nccurve[angleB=135]{C}{A} \naput{$N$}
       \pnode(2,4){D}
-      \nccurve[angleB=45]{D}{A} \naput{$N^n$}
+      \nccurve[angleB=45]{D}{A} \naput{$N^{\otimes n}$}
     \end{pspicture}\]
-  \item a 1-morphism $COMM\maps 1 \to P,$
+  \item a 1-morphism $COMM\maps I \to P,$
     \[\begin{pspicture}(0,0)(0,2.5)
       \rput(0,2){\ovalnode{A}{$COMM$}}
       \pnode(0,0){B}
       \nccurve{A}{B} \naput{$P$}
     \end{pspicture}\]  
-  \item a 2-morphism $comm_n$ encoding the COMM rule for each natural number $n \ge 0,$ and
-    \[\begin{pspicture}(-1,0)(10,8)
+  \item equations making $(P, |, 0)$ into a commutative monoid,
+  \item equations making $(N, \Delta, \delta)$ into a cocommutative comonoid, and
+	\vfill
+  \item a 2-morphism $comm_n$ encoding the COMM rule for each natural number $n \ge 0.$
+    \[\begin{pspicture}(-.5,0)(10,8)
       \pnode(0,8){A}
       \pnode(0,7){B}
       \pnode(1,8){C}
       \rput(1,5){\ovalnode{D}{$!_n$}}
       \nccurve{A}{B} \nbput{$N$} 
       \nccurve[angleA=225,angleB=135]{B}{D}
-      \nccurve[angleB=45]{C}{D} \naput[npos=.25]{$N^n$}
+      \nccurve[angleB=45]{C}{D} \naput[npos=.25]{$N^{\otimes n}$}
       \pnode(5,8){E}
       \pnode(6,8){F}
       \rput(5,5){\ovalnode{G}{$?_n$}}
-      \nccurve[angleA=305,angleB=135]{B}{G}
+      \nccurve[angleA=315,angleB=135]{B}{G}
       \nccurve[angleA=90,angleB=270]{G}{E} \ncput[npos=.75]{\pnode{clasp1}}
-      \nccurve[angleB=45]{F}{G} \ncput[npos=.25]{\cnode{4pt}{clasp2}} \naput{$N^n \multimap P$}
+      \nccurve[angleB=45]{F}{G} \ncput[npos=.25]{\cnode{4pt}{clasp2}} \naput{$N^{\otimes n} \multimap P$}
       \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
       \rput(8,5){\ovalnode{H}{$COMM$}}
       \rput(2.5,3){\ovalnode{I}{$|$}}
@@ -612,17 +633,17 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \nccurve{J}{K} \nbput{$P$}
     \end{pspicture}\]
     \[comm_n\Downarrow\]
-    \[\begin{pspicture}(-1,0)(10,8)
+    \[\begin{pspicture}(-.5,0)(10,8)
       \pnode(0,8){A}
       \rput(0,7){\cnode*{2pt}{B}}
       \pnode(1,8){C}
       \nccurve{A}{B} \nbput{$N$} 
       \rput(2.5,5){\cnode{18pt}{D}}
-      \nccurve[angleB=135]{C}{D} \naput{$N^n$} \ncput[npos=1]{\pnode{Z}}
+      \nccurve[angleB=135]{C}{D} \naput{$N^{\otimes n}$} \ncput[npos=1]{\pnode{Z}}
       \pnode(5,8){E}
       \pnode(6,8){F}
       \nccurve[angleA=90,angleB=270]{D}{E} \ncput[npos=.75]{\pnode{clasp1}} \ncput[npos=0]{\pnode{Y}}
-      \nccurve[angleB=45]{F}{D} \ncput[npos=.25]{\cnode{4pt}{clasp2}} \naput{$N^n \multimap P$} \ncput[npos=1]{\pnode{X}}
+      \nccurve[angleB=45]{F}{D} \ncput[npos=.25]{\cnode{4pt}{clasp2}} \naput{$N^{\otimes n} \multimap P$} \ncput[npos=1]{\pnode{X}}
       \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
       \rput(8,5){\ovalnode{H}{$COMM$}}
       \rput(3.5,1.5){\ovalnode{J}{$|$}}
@@ -630,11 +651,10 @@ The theory of the {\pic} is the free cartesian closed 2-category on
       \nccurve[angleB=135]{D}{J} \nbput{$P$} \ncput[npos=0]{\pnode{W}}
       \nccurve[angleB=45]{H}{J} \naput{$P$}
       \nccurve{J}{K} \nbput{$P$}
-      \nccurve[angleA=305,angleB=270]{Z}{Y}
+      \nccurve[angleA=315,angleB=270]{Z}{Y}
       \nccurve[angleA=225,angleB=90]{X}{W}
       \rput(2,5){$ev$}
     \end{pspicture}\]
-  \item equations making $(P, |, 0)$ into a commutative monoid
 \end{itemize}
 
 \subsection{Semantics}
