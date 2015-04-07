@@ -404,11 +404,30 @@ languages used in practice.
 Motivated, in part, by the desire to make a closer connection between
 theory and practice, the approach taken here investigates a direct
 categorical interpretation of the operational presentation of the
-{\pic}.
+{\pic}. It's not only due to lack of space that we focus on a minimal
+presentation of the calculus. One of the goals has been to provide a
+modular semantics to address a range of different calculi and modeling
+options. For example, a significant bifurcation occurs in the
+treatment of names with Milner's original calculus hiding all internal
+structure of names, while the $\rho$-calculus variant provides a
+reflective version in which names are the codes or processes. The
+semantics presented here can be seen as a framework capable of
+providing a categorical interpretation of both variants. Of particular
+interest to theoreticians and implementers, the semantics shines light
+on a key difference between the categorical and computational
+machinery it interprets. The latter is intrinsically lazy in the sense
+that all contexts where rewrites can apply must be explicitly spelled
+out (cf the context rules), while the former is intrinsically eager;
+in fact, one of the contributions of the paper is the delineation of
+an explicit control mechanism to prevent unwanted rewrites that would
+otherwise create an insurmountable divergence between the two formalisms.
 
 \subsubsection{Organization of the rest of the paper}
 
-TBD\\
+In the remainder of the paper we present the core fragment of the
+calculus we model followed by a manifest of the categorical equipment
+needed to faithfully model it. Then we give the semantics function an
+sketch a proof that the interpretation is fully abstract.
 
 %%% ----------------------------------------------------------------------
 
@@ -437,7 +456,7 @@ Some examples of process expressions. \\
     & \freenames{{x}{?}{( y_1, \ldots, y_N )} \Rightarrow {P}} \defneqls \\
     & \;\;\;\;\;\{ x \} \cup (\freenames{P} \setminus \{ y_1, \ldots y_N \}) \\
     & \freenames{{x}{!}{( y_1, \ldots, y_N )}} \defneqls \{ x, y_1, \ldots, y_N \} \\
-    & \freenames{\binpar{P}{Q}} \defneqls \freenames{P} \cup \freenames{Q} \\
+    & \freenames{{P} \juxtap {Q}} \defneqls \freenames{P} \cup \freenames{Q} \\
   \end{aligned}
 \end{equation*}
 
@@ -475,7 +494,7 @@ below.
 \infrule[Out-barb]{ x \in {\mathcal N}}
       {{x}!(\vec{y}) \downarrow_{\mathcal N} x}
 \infrule[Par-barb]{\mbox{$P\downarrow_{\mathcal N} x$ or $Q\downarrow_{\mathcal N} x$}}
-      {\binpar{P}{Q} \downarrow_{\mathcal N} x}
+      {{P} \juxtap {Q} \downarrow_{\mathcal N} x}
 
 We write $P \Downarrow_{\mathcal N} x$ if there is $Q$ such that 
 $P \wred Q$ and $Q \downarrow_{\mathcal N} x$.
