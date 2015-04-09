@@ -412,15 +412,25 @@ treatment of names with Milner's original calculus hiding all internal
 structure of names, while the $\rho$-calculus variant provides a
 reflective version in which names are the codes or processes. The
 semantics presented here can be seen as a framework capable of
-providing a categorical interpretation of both variants. Of particular
-interest to theoreticians and implementers, the semantics shines light
-on a key difference between the categorical and computational
-machinery it interprets. The latter is intrinsically lazy in the sense
-that all contexts where rewrites can apply must be explicitly spelled
-out (cf the context rules), while the former is intrinsically eager;
-in fact, one of the contributions of the paper is the delineation of
-an explicit control mechanism to prevent unwanted rewrites that would
-otherwise create an insurmountable divergence between the two formalisms.
+providing a categorical interpretation of both variants.
+
+Of particular interest to theoreticians and implementers, the
+semantics shines light on a key difference between the categorical and
+computational machinery it interprets. The latter is intrinsically
+lazy in the sense that all contexts where rewrites can apply must be
+explicitly spelled out (cf the context rules), while the former is
+intrinsically eager; in fact, one of the contributions of the paper is
+the delineation of an explicit control mechanism to prevent unwanted
+rewrites that would otherwise create an insurmountable divergence
+between the two formalisms. It is worth noting that even when modeling
+such fundamental calculi as the lazy lambda calculus, attempting to
+use higher categorical notion to capture a more operational semantics
+is still faced with this challenge. Fortunately, the techniques
+developed here extend to that setting, as we sketch at the end.
+
+\subsubsection{Related work}
+
+Montanari, et al have considered double category models of the {\pic}.
 
 \subsubsection{Organization of the rest of the paper}
 
@@ -716,6 +726,12 @@ The last point deserves a bit more explanation.  At the top level, all remaining
 		\nccurve{B}{F} \naput{$P$}
 	\end{pspicture}
 \end{center}
+
+\subsubsection{Full abstraction}
+
+\begin{thm}[full abstraction]
+  $P \wbbisim Q \iff \meaningof{P} = \meaningof{Q}$
+\end{thm}
 
 \section{Conclusions and future work}
 To model lazy lambda calculus, we use two unary contexts $T$ and $U$, mark the topmost context with $T$, and use two rules:
