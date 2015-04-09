@@ -658,6 +658,7 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
 \vfill
 \subsection{Semantics}
 \begin{description}
+  \item $\meaningof{Q}_{top} \defneqls | \circ (\meaningof{Q} \otimes COMM) \circ \freenames{Q}$
   \item $\meaningof{\pzero} \defneqls$
   \[\begin{pspicture}(0,0)(0,2)
     \rput(0,2){\ovalnode{A}{$0$}}
@@ -696,15 +697,14 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
 		\nccurve[angleB=45]{B}{C} \naput{$P$}
 		\nccurve{C}{D} \naput{$P$}
 	\end{pspicture}\]
-  \item $\meaningof{Q}_{top} \defneqls (\meaningof{Q} | COMM) \circ \freenames{Q}$
 \end{description}
-The last point deserves a bit more explanation.  At the top level, all remaining inputs are wired up to the corresponding free names and the result is placed in parallel with COMM. For example, suppose that the top level term is ${x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}$ and that only $y_1, \ldots, y_n$ are free in $Q$; then only $x$ is free in ${{x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}}$ and the interpretation is
+The first point deserves a bit more explanation.  At the top level, we put the process in parallel with COMM, since that's our context marker.  For terms at lower levels, all names are internal wires; only at the top level do we bind inputs to particular names.  For example, suppose that the top level term is ${x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}$ and that only $y_1, \ldots, y_n$ are free in $Q$; then only $x$ is free in ${{x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}}$ and the interpretation is
 \begin{center}
-	\begin{pspicture}(2,-4)(2,4.5)
+	\begin{pspicture}(2,-4)(2,5.5)
 	  \rput(1,2){\ovalnode{A}{$?_n$}}
 		\rput(1,-1){\ovalnode{B}{$|$}}
 	  \nccurve[angleB=135]{A}{B} \naput{$P$}
-		\rput(0,4){\ovalnode{C}{$x$}}
+		\rput(0,5){\ovalnode{C}{$x$}}
 	  \nccurve[angleB=135]{C}{A} \naput{$N$}
 		\rput(2.5,4){\ovalnode{D}{$curry(\meaningof{Q})$}}
 	  \nccurve[angleA=65,angleB=-135]{A}{D} \ncput[npos=.65]{\pnode{clasp1}}
