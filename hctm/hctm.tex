@@ -409,8 +409,9 @@ presentation of the calculus. One of the goals has been to provide a
 modular semantics to address a range of different calculi and modeling
 options. For example, a significant bifurcation occurs in the
 treatment of names with Milner's original calculus hiding all internal
-structure of names, while the $\rho$-calculus variant provides a
-reflective version in which names are the codes or processes. The
+structure of names \cite{milner91polyadicpi}, while the
+$\rho$-calculus variant provides a reflective version in which names
+are the codes or processes \cite{DBLP:journals/entcs/MeredithR05}. The
 semantics presented here can be seen as a framework capable of
 providing a categorical interpretation of both variants.
 
@@ -430,7 +431,24 @@ developed here extend to that setting, as we sketch at the end.
 
 \subsubsection{Related work}
 
-Montanari, et al have considered double category models of the {\pic}.
+%Montanari, et al have considered double category models of the {\pic}.
+
+In his seminal paper \cite{DBLP:journals/mscs/Milner92} Milner
+provided the template still used today for specifying computational
+calculi, presenting the {\pic} in terms of a freely generated algebra
+quotiented by a structural equivalence relation that is then subject
+of some rewrite rules. This constitutes the modern view of structured
+operational semantics \cite{Plotkin04theorigins}. In the latter part
+of his research Milner focused on finding a satisfying relationship
+between a categorical presentation of the rewrite rules and the notion
+of bisimulation \cite{DBLP:conf/concur/LeiferM00}. This, in turn,
+spawned a variety of 2-categorical investigations designed to
+recapture bisimulation equivalences
+\cite{Sassone02derivingbisimulation}. Hershowitz has an even more
+ambitious program of categorifying the whole of the operational
+semantics framework from the presentation of higher order syntax (or
+terms with binding constructors like {\pic} or $\lambda$-calculus), to
+rewrite rules \cite{hirschowitzcc2c}. 
 
 \subsubsection{Organization of the rest of the paper}
 

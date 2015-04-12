@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_7) (preloaded format=latex 2014.9.29)  8 APR 2015 18:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_7) (preloaded format=latex 2014.9.29)  12 APR 2015 07:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -704,80 +704,94 @@ n-
  []
 
 
-Overfull \hbox (7.15944pt too wide) in paragraph at lines 417--430
+Overfull \hbox (7.15944pt too wide) in paragraph at lines 418--431
 []\T1/aer/m/n/9 Of par-tic-u-lar in-ter-est to the-o-reti-cians and im-ple-ment
 ers,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 446--447
+LaTeX Warning: Citation `DBLP:conf/concur/LeiferM00' on page \thepage  undefine
+d on input line 444.
 
- []
+
+LaTeX Warning: Citation `Sassone02derivingbisimulation' on page \thepage  undef
+ined on input line 447.
 
 
-Overfull \hbox (218.05576pt too wide) detected at line 459
-[]
- []
+LaTeX Warning: Citation `hirschowitzcc2c' on page \thepage  undefined on input 
+line 451.
 
 [2
 
 ]
-Overfull \hbox (6.6342pt too wide) in paragraph at lines 500--503
+Underfull \hbox (badness 10000) in paragraph at lines 464--465
+
+ []
+
+
+Overfull \hbox (218.05576pt too wide) detected at line 477
+[]
+ []
+
+
+Overfull \hbox (6.6342pt too wide) in paragraph at lines 518--521
 []\T1/aer/m/it/9 An \T1/aer/m/n/9 ob-ser-va-tion re-la-tion\T1/aer/m/it/9 , $\O
 MS/cmsy/m/n/9 #[]$\T1/aer/m/it/9 , over
  []
 
 
-Overfull \hbox (2.17891pt too wide) in paragraph at lines 531--532
+Overfull \hbox (2.17891pt too wide) in paragraph at lines 549--550
 \T1/aer/m/n/9 Cat (cat-e-gories, func-tors, and nat-u-ral trans-for-ma-tions)
  []
 
 
-Overfull \hbox (6.14055pt too wide) in paragraph at lines 535--536
+Overfull \hbox (6.14055pt too wide) in paragraph at lines 553--554
 \T1/aer/m/n/9 in sec-tion 2.1.1[], we in-tro-duce an ob-ject in our 2-category
  []
 
 [3]
-Overfull \hbox (19.08264pt too wide) detected at line 643
+Overfull \hbox (19.08264pt too wide) detected at line 661
 []
  []
 
 
-Overfull \hbox (19.08264pt too wide) detected at line 666
+Overfull \hbox (19.08264pt too wide) detected at line 684
 []
  []
 
 [4]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
-
-Overfull \hbox (13.24384pt too wide) in paragraph at lines 733--734
+ [5]
+Overfull \hbox (13.24384pt too wide) in paragraph at lines 751--752
 []$\OML/cmm/m/it/9 P [] Q  \OMS/cmsy/m/n/9 ([])
  []
 
 
-Overfull \hbox (14.76231pt too wide) in paragraph at lines 736--736
+Overfull \hbox (14.76231pt too wide) in paragraph at lines 754--754
 []\secfnt CONCLUSIONS AND FU-TURE WORK 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 742--743
+Underfull \hbox (badness 10000) in paragraph at lines 760--761
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 745--746
+Underfull \hbox (badness 10000) in paragraph at lines 763--764
 
  []
 
-(./hctm.bbl) [5] (./hctm.aux) ) 
+(./hctm.bbl) [6
+
+] (./hctm.aux) ) 
 Here is how much of TeX's memory you used:
- 14407 strings out of 494214
- 240640 string characters out of 6157489
- 481344 words of memory out of 5000000
- 17442 multiletter control sequences out of 15000+600000
+ 14414 strings out of 494214
+ 240819 string characters out of 6157489
+ 469325 words of memory out of 5000000
+ 17449 multiletter control sequences out of 15000+600000
  58727 words of font info for 70 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
  53i,12n,92p,588b,316s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on hctm.dvi (5 pages, 214212 bytes).
+Output written on hctm.dvi (6 pages, 216440 bytes).
