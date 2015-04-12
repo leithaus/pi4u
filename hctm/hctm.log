@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_7) (preloaded format=latex 2014.9.29)  12 APR 2015 07:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/MacPorts 2014_7) (preloaded format=latex 2014.9.29)  12 APR 2015 07:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -709,18 +709,6 @@ Overfull \hbox (7.15944pt too wide) in paragraph at lines 418--431
 ers,
  []
 
-
-LaTeX Warning: Citation `DBLP:conf/concur/LeiferM00' on page \thepage  undefine
-d on input line 444.
-
-
-LaTeX Warning: Citation `Sassone02derivingbisimulation' on page \thepage  undef
-ined on input line 447.
-
-
-LaTeX Warning: Citation `hirschowitzcc2c' on page \thepage  undefined on input 
-line 451.
-
 [2
 
 ]
@@ -782,16 +770,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 763--764
 
  []
 
-(./hctm.bbl) [6
-
-] (./hctm.aux) ) 
+(./hctm.bbl) [6] (./hctm.aux) ) 
 Here is how much of TeX's memory you used:
  14414 strings out of 494214
  240819 string characters out of 6157489
- 469325 words of memory out of 5000000
+ 469334 words of memory out of 5000000
  17449 multiletter control sequences out of 15000+600000
  58727 words of font info for 70 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
  53i,12n,92p,588b,316s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on hctm.dvi (6 pages, 216440 bytes).
+Output written on hctm.dvi (6 pages, 217568 bytes).
