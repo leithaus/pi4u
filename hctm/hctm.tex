@@ -390,44 +390,54 @@ L.G. Meredith\\
 
 One of the major distinctions in programming language semantics has
 been the division between denotational and operational semantics. In
-the former computations are interpreted as mathematical objects 
+the former computations are interpreted as mathematical objects
 which---more often than not---completely unfold the computational
 dynamics, and are thus infinitary in form. In the latter computations
-are interpreted in terms of rules operating on finite syntactic
-structure. Historically, categorical semantics for programming
-languages, even variations such as games semantics which capture much
-more of the intensional structure of computations, are distinctly
-denotational in flavor. Meanwhile, operational semantics continues to
-dominate in the presentation of calculi underlying programming
-languages used in practice.
+are interpreted in terms of rewrite rules operating on finite
+syntactic structure. Historically, categorical semantics for
+programming languages, even variations such as games semantics
+\cite{DBLP:conf/lics/McCusker96} which capture much more of the
+intensional structure of computations, are distinctly denotational in
+flavor \cite{DBLP:journals/iandc/Moggi91}. Meanwhile, operational
+semantics continues to dominate in the presentation of calculi
+underlying programming languages used in practice
+\cite{DBLP:conf/aplas/MaffeisMT08}
+\cite{DBLP:conf/oopsla/IgarashiPW99}
+\cite{Politz:2013:PFM:2509136.2509536}.
 
 Motivated, in part, by the desire to make a closer connection between
-theory and practice, the approach taken here investigates a direct
-categorical interpretation of the operational presentation of the
-{\pic}. It's not only due to lack of space that we focus on a minimal
-presentation of the calculus. One of the goals has been to provide a
-modular semantics to address a range of different calculi and modeling
-options. For example, a significant bifurcation occurs in the
-treatment of names with Milner's original calculus hiding all internal
-structure of names \cite{milner91polyadicpi}, while the
-$\rho$-calculus variant provides a reflective version in which names
-are the codes or processes \cite{DBLP:journals/entcs/MeredithR05}. The
-semantics presented here can be seen as a framework capable of
-providing a categorical interpretation of both variants.
+theory and practice, many efforts in the programming language
+semantics, and in concurrency theory communities have begun to
+investigate more direct categorical interpretations of operational
+semantics. This paper finds its place in this latter context,
+providing a fully abstract interpretation of the {\pic} in terms of a
+higher categorical model of its operational semantics. In particular,
+while it remains faithful to a Curry-Howard orientation, modeling
+terms as typed morphisms, it models the computational dynamics of the
+calculus, its rewrite rules, as 2-morphisms. One of the goals has been
+to provide a modular semantics to address a range of features and
+modeling options typically associated with the {\pic}. For example, a
+significant bifurcation occurs in the treatment of names with Milner's
+original calculus hiding all internal structure of names
+\cite{milner91polyadicpi}, while the $\rho$-calculus variant provides
+a reflective version in which names are the codes or processes
+\cite{DBLP:journals/entcs/MeredithR05}. The semantics presented here
+is capable of providing a categorical interpretation of both variants.
 
 Of particular interest to theoreticians and implementers, the
 semantics shines light on a key difference between the categorical and
 computational machinery it interprets. The latter is intrinsically
 lazy in the sense that all contexts where rewrites can apply must be
-explicitly spelled out (cf the context rules), while the former is
-intrinsically eager; in fact, one of the contributions of the paper is
-the delineation of an explicit control mechanism to prevent unwanted
-rewrites that would otherwise create an insurmountable divergence
-between the two formalisms. It is worth noting that even when modeling
-such fundamental calculi as the lazy lambda calculus, attempting to
-use higher categorical notion to capture a more operational semantics
-is still faced with this challenge. Fortunately, the techniques
-developed here extend to that setting, as we sketch at the end.
+explicitly spelled out (cf the context rules in section
+\ref{section:opsem}), while the former is intrinsically eager; in
+fact, one of the contributions of the paper is the delineation of an
+explicit control mechanism to prevent unwanted rewrites that would
+otherwise create an insurmountable divergence between the two
+formalisms. It is worth noting that even when modeling such
+fundamental calculi as the lazy lambda calculus, attempting to use
+higher categorical notion to capture a more operational semantics is
+still faced with this challenge. Fortunately, the techniques developed
+here extend to that setting, as we sketch at the end.
 
 \subsubsection{Related work}
 
@@ -437,18 +447,29 @@ In his seminal paper \cite{DBLP:journals/mscs/Milner92} Milner
 provided the template still used today for specifying computational
 calculi, presenting the {\pic} in terms of a freely generated algebra
 quotiented by a structural equivalence relation that is then subject
-of some rewrite rules. This constitutes the modern view of structured
+to some rewrite rules. This constitutes the modern view of structured
 operational semantics \cite{Plotkin04theorigins}. In the latter part
 of his research Milner focused on finding a satisfying relationship
 between a categorical presentation of the rewrite rules and the notion
-of bisimulation \cite{DBLP:conf/concur/LeiferM00}. This, in turn,
-spawned a variety of 2-categorical investigations designed to
-recapture bisimulation equivalences
-\cite{Sassone02derivingbisimulation}. Hershowitz has an even more
-ambitious program of categorifying the whole of the operational
+of bisimulation \cite{DBLP:conf/concur/LeiferM00}. While this work did
+not explicitly employ higher categorical techniques, it spawned a
+variety of 2-categorical investigations designed to capture and recast
+bisimulation equivalences in terms of 2-morphisms
+\cite{Sassone02derivingbisimulation}. Hershowitz has developed an even
+more ambitious program of categorifying the whole of the operational
 semantics framework from the presentation of higher order syntax (or
 terms with binding constructors like {\pic} or $\lambda$-calculus), to
-rewrite rules \cite{hirschowitzcc2c}. 
+rewrite rules \cite{hirschowitzcc2c}.
+
+The present work, while presenting a modular semantics, and some tools
+that apply to a number of calculi, is focused on providing a direct
+account of the {\pic}, rather than providing a framework for
+interpreting a number of computational calculi. Moreover, our
+particular reconciliation of operational laziness with categorical
+eagerness introduces an explicit resource sensitivity, which we have
+not seen before in the theoretical literature, yet is remarkably
+similar to resource constraints in actual implementations of
+concurrent and distributed computations.
 
 \subsubsection{Organization of the rest of the paper}
 
@@ -461,7 +482,32 @@ sketch a proof that the interpretation is fully abstract.
 
 \section{The calculus}
 
-Some examples of process expressions. \\
+One notable feature of the {\pic} is its ability to succinctly and
+faithfully model a number of phenomena of concurrent and distributed
+computing. Competition for resources amongst autonomously executing
+processes is a case in point. The expression
+\begin{equation*}
+  x?( y ) \Rightarrow P \juxtap x!( u ) \juxtap x?( v ) \Rightarrow Q
+\end{equation*}
+is made by composing three processes, two of which, $x?( y )
+\Rightarrow P$ and $x?( v ) \Rightarrow Q$ are seeking input from
+channel $x$ before they launch their respective continuations, $P$
+and/or $Q$; while the third, $x!( u )$, is supplying output on that
+same said channel. Only one of the input-guarded processes will win,
+receiving $u$ and binding it to the input variable, $y$, or
+respectively, $v$ in the body of the corresponding continuation --
+while the loser remains in the input-guarded state awaiting input
+along channel $x$. The calculus is equinanimous, treating both
+outcomes as equally likely, and in this regard is unlike its
+sequential counterpart, the $\lambda$-calculus, in that it is not
+\emph{confluent}. There is no guarantee that the different branches of
+computation must eventually converge. Note that just adding a
+$\mathsf{new}$-scope around the expression
+\begin{equation*}
+  (\mathsf{new}\; x)( x?( y ) \Rightarrow P \juxtap x!( u ) \juxtap x?( v ) \Rightarrow Q )
+\end{equation*}
+ensures that the competition is for a local resource, hidden from any
+external observer.
 
 \subsection{Our running process calculus}
 
@@ -473,6 +519,7 @@ Some examples of process expressions. \\
        \;\;\; \bm \; {x}{!}{( y_1, \ldots, y_n )} & \mbox{output} \\
 %       \;\;\; \bm \; {M}{+}{N} & \mbox{choice} \\
 %{ P, Q } \bc M & \mbox{include IO processes} \\                                
+       \;\;\; \bm \; (\mathsf{new}\; x){P} & \mbox{new channel} \\
        \;\;\; \bm \; {P} \juxtap {Q} & \mbox{parallel} \\                                
 \end{grammar}
 
@@ -484,6 +531,7 @@ Some examples of process expressions. \\
     & \freenames{{x}{?}{( y_1, \ldots, y_n )} \Rightarrow {P}} \defneqls \\
     & \;\;\;\;\;\{ x \} \cup (\freenames{P} \setminus \{ y_1, \ldots y_n \}) \\
     & \freenames{{x}{!}{( y_1, \ldots, y_n )}} \defneqls \{ x, y_1, \ldots, y_n \} \\
+    & \freenames{(\mathsf{new}\; x){P}} \defneqls \freenames{P} \setminus \{x\} \\    
     & \freenames{{P} \juxtap {Q}} \defneqls \freenames{P} \cup \freenames{Q} \\
   \end{aligned}
 \end{equation*}
@@ -496,9 +544,19 @@ denoted by $\names{P}$.
 
 The {\em structural congruence} of processes, noted $\scong$, is the
 least congruence containing $\alpha$-equivalence, $\alphaeq$, making
-$( P, |, 0 )$ into commutative monoids.
+$( P, |, 0 )$ into commutative monoids and satisfying
 
-\subsubsection{Operational Semantics}
+\begin{equation*}  
+  (\mathsf{new}\; x)(\mathsf{new}\; x){P} \scong (\mathsf{new}\; x)P
+\end{equation*}
+\begin{equation*}  
+  (\mathsf{new}\; x)(\mathsf{new}\; y){P} \scong (\mathsf{new}\; y)(\mathsf{new}\; x)P
+\end{equation*}
+\begin{equation*}  
+  ((\mathsf{new}\; x){P}) \juxtap {Q} \scong (\mathsf{new}\; x)({P} \juxtap {Q})
+\end{equation*}
+
+\subsubsection{Operational Semantics}\label{section:opsem}
  
 \infrule[Comm]
 { |\vec{y}| = |\vec{z}| }
@@ -509,6 +567,8 @@ $( P, |, 0 )$ into commutative monoids.
 In addition, we have the following context rules:
 
 \infrule[Par]{{P} \red {P}'}{{{P} \juxtap {Q}} \red {{P}' \juxtap {Q}}}
+
+\infrule[New]{{P} \red {P}'}{{(\mathsf{new}\; x){P}} \red {(\mathsf{new}\; x){P}'}}
 
 \infrule[Equiv]{{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
 
