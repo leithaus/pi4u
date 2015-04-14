@@ -320,7 +320,7 @@
 %\title{\huge{\papertitle}}
 \title{\papertitle}
 
-\numberofauthors{3}
+%\numberofauthors{3}
 \author{
 \alignauthor
 Michael Stay\\
@@ -354,14 +354,13 @@ L.G. Meredith\\
 \normalsize{ 
 
   We present an approach to modeling computational calculi using
-  higher category theory.  While the paper focuses on applications to
-  the mobile process calculi---and more specifically, the 
-  {\pic}---because they provide unique challenges for categorical 
-  models, the approach extends smoothly to a variety of other computational
-  calculi, including important milestones such as the lazy 
-  $\lambda$-calculus. One of the key contributions is a method of
-  restricting rewrites to specific contexts inspired by catalysis in
-  chemical reactions.
+  higher category theory. Specifically we present a fully abstract
+  semantics for the {\pic}. The interpretation is consistent with
+  Curry-Howard, interpreting terms as typed morphisms, while
+  simultaneously providing an explicit interpretation of the rewrite
+  rules of standard operational presentations as 2-morphisms. One of
+  the key contributions is a method of restricting rewrites to
+  specific contexts inspired by catalysis in chemical reactions.
 
 }
 
@@ -433,19 +432,18 @@ explicitly spelled out (cf the context rules in section
 fact, one of the contributions of the paper is the delineation of an
 explicit control mechanism to prevent unwanted rewrites that would
 otherwise create an insurmountable divergence between the two
-formalisms. It is worth noting that even when modeling such
-fundamental calculi as the lazy lambda calculus, attempting to use
-higher categorical notion to capture a more operational semantics is
-still faced with this challenge. Fortunately, the techniques developed
-here extend to that setting, as we sketch at the end.
+formalisms. 
 
 \subsubsection{Related work}
 
 %Montanari, et al have considered double category models of the {\pic}.
 
-In his seminal paper \cite{DBLP:journals/mscs/Milner92} Milner
-provided the template still used today for specifying computational
-calculi, presenting the {\pic} in terms of a freely generated algebra
+This paper draws inspiration from \cite{DBLP:conf/lics/Seely87} and
+\cite{DBLP:journals/tcs/Hilken96}, but also seeks a more direct
+account of what works in modern day operational semantics. In his
+seminal paper \cite{DBLP:journals/mscs/Milner92} Milner provided the
+template still used today for specifying computational calculi,
+presenting the {\pic} in terms of a freely generated algebra
 quotiented by a structural equivalence relation that is then subject
 to some rewrite rules. This constitutes the modern view of structured
 operational semantics \cite{Plotkin04theorigins}. In the latter part
@@ -575,33 +573,32 @@ In addition, we have the following context rules:
 \subsubsection{Bisimulation}
 
 \begin{defn}
-An \emph{observation relation}, $\downarrow_{\mathcal N}$, over a set
-of names, $\mathcal N$, is the smallest relation satisfying the rules
+An \emph{observation relation}, $\downarrow$ is the smallest relation satisfying the rules
 below.
 
-\infrule[Out-barb]{ x \in {\mathcal N}}
-      {{x}!(\vec{y}) \downarrow_{\mathcal N} x}
-\infrule[Par-barb]{\mbox{$P\downarrow_{\mathcal N} x$ or $Q\downarrow_{\mathcal N} x$}}
-      {{P} \juxtap {Q} \downarrow_{\mathcal N} x}
+\infrule[Out-barb]{ }
+      {{x}!(\vec{y}) \downarrow x}
+\infrule[Par-barb]{\mbox{$P\downarrow x$ or $Q\downarrow x$}}
+      {{P} \juxtap {Q} \downarrow x}
 
-We write $P \Downarrow_{\mathcal N} x$ if there is $Q$ such that 
-$P \wred Q$ and $Q \downarrow_{\mathcal N} x$.
+We write $P \Downarrow x$ if there is $Q$ such that 
+$P \wred Q$ and $Q \downarrow x$.
 \end{defn}
 
-Notice that $\prefix{x}{y}{P}$ has no barb.  Indeed, in {\rhoc} as well
+Notice that $\prefix{x}{y}{P}$ has no barb.  Indeed, in {\pic} as well
 as other asynchronous calculi, an observer has no direct means to
 detect if a sent message has been received or not.
 
 \begin{defn}
 %\label{def.bbisim}
-An  ${\mathcal N}$-\emph{barbed bisimulation} over a set of names, ${\mathcal N}$, is a symmetric binary relation 
-${\mathcal S}_{\mathcal N}$ between agents such that $P\rel{S_{\mathcal N}}Q$ implies:
+An \emph{barbed bisimulation}, is a symmetric binary relation 
+${\mathcal S}$ between agents such that $P\rel{S}Q$ implies:
 \begin{enumerate}
-\item If $P \red P'$ then $Q \wred Q'$ and $P'\rel{S_{\mathcal N}} Q'$.
-\item If $P\downarrow_{\mathcal N} x$, then $Q\Downarrow_{\mathcal N} x$.
+\item If $P \red P'$ then $Q \wred Q'$ and $P'\rel{S} Q'$.
+\item If $P\downarrow x$, then $Q\Downarrow x$.
 \end{enumerate}
-$P$ is ${\mathcal N}$-barbed bisimilar to $Q$, written
-$P \wbbisim_{\mathcal N} Q$, if $P \rel{S_{\mathcal N}} Q$ for some ${\mathcal N}$-barbed bisimulation ${\mathcal S}_{\mathcal N}$.
+$P$ is barbed bisimilar to $Q$, written
+$P \wbbisim Q$, if $P \rel{S} Q$ for some barbed bisimulation ${\mathcal S}$.
 \end{defn}
 
 \section{Categorical machinery}
@@ -805,22 +802,43 @@ The first point deserves a bit more explanation.  At the top level, we put the p
 	\end{pspicture}
 \end{center}
 
+\subsubsection{Bisimulation again}
+In this setting we can provide a direct interpretation of observation
+and bisimulation. Roughly speaking, $\meaningof{P}$ reduces to
+$\meaningof{Q}$ just when we can apply the 2-morphism to the former to
+produce that latter.
+
 \subsubsection{Full abstraction}
 
 \begin{thm}[full abstraction]
-  $P \wbbisim Q \iff \meaningof{P} = \meaningof{Q}$
+  $P \wbbisim Q \iff \meaningof{P} \wbbisim \meaningof{Q}$
 \end{thm}
 
 \section{Conclusions and future work}
-To model lazy lambda calculus, we use two unary contexts $T$ and $U$, mark the topmost context with $T$, and use two rules:
-\begin{itemize}
-  \item $T(App(l, r)) \Rightarrow U(App(T(l), r))$ for moving $T$ to the leftmost subterm, and
-  \item $U(App(T(Lam(x, M)), N) \Rightarrow T(M\{N / x\})$ for $\beta-$reduction.
-\end{itemize}
-TBD \\
+We presented a fully abstract higher categorical semantics for the
+{\pic}. Our semantics can be seen as a natural extension of
+Curry-Howard in the categorical setting: if terms are taken to be
+1-morphisms, then rewrites between terms should be 2-morphisms. Such
+an approach is natural from another perspective in that it makes
+comparison with operational semantics considerably simpler, at least
+conceptually. To that end, we have already applied the approach to
+models of other milestone computational calculi, such as the lazy
+$\lambda$-calculus, with some initial success and hope to report on
+that in subsequent papers. 
+
+Perhaps more importantly, establishing connections like this between
+two different computational frameworks should allow for transport of
+other key conceptual tools. Here, we were able to transport a version
+bisimulation to the categorical setting in a simple and
+straightforward manner. It would be quite interesting to be able to
+transport categorical notions of typing back to the process
+setting. For example, Mellies and Zeilberger's refinement types,
+expressed as functors, suggests an intriguing approach to a more
+categorical account of behavioral types.
 
 \paragraph{Acknowledgments.}
-TBD \\
+We would like to acknowledge Tom Hershowitz for asking some thoughtful
+and stimulating questions about earlier versions of this work.
 
 % ------------------------------------------------------------------------
 %GATHER{Xbib.bib}   % For Gather Purpose Only
