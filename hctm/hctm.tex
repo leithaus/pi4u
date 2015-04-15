@@ -361,8 +361,9 @@ L.G. Meredith\\
   Curry-Howard, interpreting terms as typed morphisms, while
   simultaneously providing an explicit interpretation of the rewrite
   rules of standard operational presentations as 2-morphisms. One of
-  the key contributions is a method of restricting rewrites to
-  specific contexts inspired by catalysis in chemical reactions.
+  the key contributions, inspired by catalysis in chemical reactions,
+  is a method of restricting the application of 2-morphisms
+  interpreting rewrites to specific contexts.
 
 }
 
@@ -523,6 +524,8 @@ external observer.
        \;\;\; \bm \; {P} \juxtap {Q} & \mbox{parallel} \\                                
 \end{grammar}
 
+Due to space limitations we do not treat replication, $!P$.
+
 \subsubsection{Free and bound names}
 
 \begin{equation*}
@@ -563,7 +566,7 @@ $( P, |, 0 )$ into commutative monoids and satisfying
 { |\vec{y}| = |\vec{z}| }
 %{P_1 + {{ x_{0}{?}{(}{\vec{y}}{)} \concat {P}}\juxtap {x_{1}}{!}{(}{\vec{z}}{)} + P_2}
 {{{ x{?}{(}{\vec{y}}{)} \concat {P}}\juxtap {x}{!}{(}{\vec{z}}{)}}
-\red {{P}{\{}\quotep{\vec{z}}{/}{\vec{y}}{\}}}}
+\red {{P}{\{}\vec{z}{/}{\vec{y}}{\}}}}
 
 In addition, we have the following context rules:
 
@@ -896,6 +899,15 @@ transport categorical notions of typing back to the process
 setting. For example, Mellies and Zeilberger's refinement types
 \cite{DBLP:conf/popl/MelliesZ15}, expressed as functors, suggest an
 intriguing approach to a more categorical account of behavioral types.
+
+Finally, the use of $COMM$ to control $comm_n$ based rewrites is
+strongly reminiscent of the distinction between logical, or virtual
+concurrency such as may be found in a threads package or operating
+system process abstraction, versus actual hardware resources. Allowing
+more than one $COMM$ resource provides, on the one hand a very natural
+account of so-called true concurrency semantics, and on the other the
+means to reason about these very practical situations which we hope to
+investigate in future work.
 
 \paragraph{Acknowledgments}
 We would like to acknowledge Tom Hirschowitz for asking some thoughtful
