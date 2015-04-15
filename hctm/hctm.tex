@@ -587,8 +587,8 @@ below.
 \infrule[Par-barb]{\mbox{$P\downarrow x$ or $Q\downarrow x$}}
       {{P} \juxtap {Q} \downarrow x}
 
-We write $P \Downarrow x$ if there is $Q$ such that 
-$P \wred Q$ and $Q \downarrow x$.
+% We write $P \Downarrow x$ if there is $Q$ such that 
+% $P \wred Q$ and $Q \downarrow x$.
 \end{defn}
 
 Notice that $\prefix{x}{y}{P}$ has no barb.  Indeed, in {\pic} as well
@@ -600,8 +600,8 @@ detect if a sent message has been received or not.
 An \emph{barbed bisimulation}, is a symmetric binary relation 
 ${\mathcal S}$ between agents such that $P\rel{S}Q$ implies:
 \begin{enumerate}
-\item If $P \red P'$ then $Q \wred Q'$ and $P'\rel{S} Q'$.
-\item If $P\downarrow x$, then $Q\Downarrow x$.
+\item If $P \red P'$ then $Q \red Q'$ and $P'\rel{S} Q'$.
+\item If $P\downarrow x$, then $Q\downarrow x$.
 \end{enumerate}
 $P$ is barbed bisimilar to $Q$, written
 $P \wbbisim Q$, if $P \rel{S} Q$ for some barbed bisimulation ${\mathcal S}$.
