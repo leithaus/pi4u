@@ -19,6 +19,7 @@
 \documentclass[]{acm_proc_article-sp}
 %\documentclass[]{llncs}
 
+
 %\documentclass[]{prentcsmacro}
 
 %\usepackage[active]{srcltx} % SRC Specials for DVI Searching
@@ -453,7 +454,7 @@ of bisimulation \cite{DBLP:conf/concur/LeiferM00}. While this work did
 not explicitly employ higher categorical techniques, it spawned a
 variety of 2-categorical investigations designed to capture and recast
 bisimulation equivalences in terms of 2-morphisms
-\cite{Sassone02derivingbisimulation}. Hershowitz has developed an even
+\cite{Sassone02derivingbisimulation}. Hirshowitz has developed an even
 more ambitious program of categorifying the whole of the operational
 semantics framework from the presentation of higher order syntax (or
 terms with binding constructors like {\pic} or $\lambda$-calculus), to
@@ -539,6 +540,7 @@ free. The set of names occurring in a process (bound or free) is
 denoted by $\names{P}$.
 
 \subsubsection{Structural congruence}
+\label{congruence}
 
 The {\em structural congruence} of processes, noted $\scong$, is the
 least congruence containing $\alpha$-equivalence, $\alphaeq$, making
@@ -609,48 +611,40 @@ We take our models in 2-categories with an underlying symmetric monoidal closed 
 
 Given the abstract syntax of a term calculus like that in section \ref{syntax}, we introduce an object in our 2-category for each parameter of the calculus.  We introduce 1-morphisms for each term constructor, 2-morphisms for each reduction relation, and equations for structural equivalence; we also add 1-morphisms to mark contexts in which reductions may occur.
 
-The {\pic} is parametric in a set of names and a set of processes, so we have objects $N$ and $P$.  Since names can be reused in the {\pic,} we also add 1-morphisms and equations to make $N$ be a cocommutative comonoid.  We denote comultiplication by $\Delta\maps N \to N \otimes N$ and counit by $\delta\maps N \to I.$  If the underlying category is cartesian, $I$ is the terminal object, $N$ is a comonoid in a unique way, and $\Delta$ and $\delta$ are duplication and deletion, respectively.  
+The {\pic} is parametric in a set of names and a set of processes, so we have objects $N$ and $P$.  Since names can be reused in the {\pic,} we also add 1-morphisms and equations to make $N$ be a cocommutative comonoid.  We denote comultiplication by $\Delta\maps N \to N \otimes N$ and counit by $\delta\maps N \to I.$  If the tensor product is the cartesian product, $I$ is the terminal object, $N$ is a comonoid in a unique way, and $\Delta$ and $\delta$ are duplication and deletion, respectively.
 
 In the {\pic,} all reductions occur at the topmost context, so we have one unary morphism from $P$ to $P$.  There are some benefits to constructing the top context marker out of the existing binary morphism $|\maps P \otimes P \to P$ and a unary morphism $COMM\maps I \to P;$ we'll talk about some of the benefits in the conclusion.
 
 The theory of the {\pic} is the free symmetric monoidal closed 2-category on
 \begin{itemize}
-  \item an objects $N$ for names,
-    \[\begin{pspicture}(0,0)(0,2)
+  \item objects $N$ for names and $P$ for processes,
+    \[\begin{pspicture}(-.5,0)(0.5,2)
       \pnode(0,2){A}
       \pnode(0,0){B}
       \nccurve{A}{B} \naput{$N$}
-    \end{pspicture}\]
-  \item an object $P$ for processes,
-    \[\begin{pspicture}(0,0)(0,2)
+    \end{pspicture}\quad
+    \begin{pspicture}(-.5,0)(0.5,2)
       \pnode(0,2){A}
       \pnode(0,0){B}
       \nccurve{A}{B} \naput{$P$}
     \end{pspicture}\]
-	\item a 1-morphism $\Delta\maps N \to N \otimes N,$
-    \[\begin{pspicture}(0,0)(0,4)
-			\pnode(1,4){A}
+  \item 1-morphisms $\Delta\maps N \to N \otimes N$ and $\delta\maps N \to I,$
+    \[\begin{pspicture}(0,0)(3,4)
+      \pnode(1,4){A}
       \pnode(1,2){B}
-			\nccurve{A}{B} \naput{$N$}
-			\pnode(0,0){C}
-			\pnode(2,0){D}
-			\nccurve[angleA=225]{B}{C} \naput{$N$}
-			\nccurve[angleA=315]{B}{D} \naput{$N$}
-    \end{pspicture}\]
-	\item a 1-morphism $\delta\maps N \to I,$
-    \[\begin{pspicture}(0,0)(0,2.5)
+      \nccurve{A}{B} \naput{$N$}
+      \pnode(0,0){C}
+      \pnode(2,0){D}
+      \nccurve[angleA=225]{B}{C} \naput{$N$}
+      \nccurve[angleA=315]{B}{D} \naput{$N$}
+    \end{pspicture}
+    \begin{pspicture}(-.5,-3)(0.5,1)
       \rput(0,0){\cnode*{2pt}{A}}
       \pnode(0,1){B}
       \nccurve{B}{A} \naput{$N$}
-    \end{pspicture}\]  
-  \item a 1-morphism $0\maps I \to P,$
-    \[\begin{pspicture}(0,0)(0,2.5)
-      \rput(0,2){\ovalnode{A}{$0$}}
-      \pnode(0,0){B}
-      \nccurve{A}{B} \naput{$P$}
-    \end{pspicture}\]  
-  \item a 1-morphism $|\maps P \otimes P \to P,$
-    \[\begin{pspicture}(0,0)(0,4)
+    \end{pspicture}\]
+  \item 1-morphisms $|\maps P \otimes P \to P$ and $0\maps I \to P,$
+    \[\begin{pspicture}(0,0)(3,4)
       \rput(1,2){\ovalnode{A}{$|$}}
       \pnode(1,0){B}
       \nccurve{A}{B} \naput{$P$}
@@ -658,9 +652,14 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
       \nccurve[angleB=135]{C}{A} \naput{$P$}
       \pnode(2,4){D}
       \nccurve[angleB=45]{D}{A} \naput{$P$}
+    \end{pspicture}
+    \begin{pspicture}(-.5,0)(0.5,4)
+      \rput(0,2){\ovalnode{A}{$0$}}
+      \pnode(0,0){B}
+      \nccurve{A}{B} \naput{$P$}
     \end{pspicture}\]
-  \item a 1-morphism $?_n\maps N \otimes (N^{\otimes n} \multimap P) \to P$ for each natural number $n \ge 0,$
-    \[\begin{pspicture}(0,0)(0,4)
+  \item 1-morphism $?_n\maps N \otimes (N^{\otimes n} \multimap P) \to P$ and $!_n\maps N \otimes N^{\otimes n} \to P$ for each natural number $n \ge 0,$
+    \[\begin{pspicture}(0,0)(6,4)
       \rput(1,2){\ovalnode{A}{$?_n$}}
       \pnode(1,0){B}
       \nccurve{A}{B} \naput{$P$}
@@ -671,9 +670,8 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
       \pnode(2.25,4){E}
       \nccurve[angleB=35]{E}{A} \naput{$N^{\otimes n}\multimap P$} \ncput[npos=.25]{\cnode{4pt}{clasp2}}
       \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
-    \end{pspicture}\]
-  \item a 1-morphism $!_n\maps N \otimes N^{\otimes n} \to P$ for each natural number $n \ge 0,$
-    \[\begin{pspicture}(0,0)(0,4)
+    \end{pspicture}
+    \begin{pspicture}(0,0)(2,4)
       \rput(1,2){\ovalnode{A}{$!_n$}}
       \pnode(1,0){B}
       \nccurve{A}{B} \naput{$P$}
@@ -682,12 +680,18 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
       \pnode(2,4){D}
       \nccurve[angleB=45]{D}{A} \naput{$N^{\otimes n}$}
     \end{pspicture}\]
-  \item a 1-morphism $COMM\maps I \to P,$
-    \[\begin{pspicture}(0,0)(0,2.5)
+  \item 1-morphisms $fresh\maps I \to P$ and $COMM\maps I \to P$
+    \[\begin{pspicture}(-.5,0)(3.5,2.5)
+      \rput(0,2){\ovalnode{A}{$fresh$}}
+      \pnode(0,0){B}
+      \nccurve{A}{B} \naput{$P$}
+    \end{pspicture}
+    \begin{pspicture}(-.5,0)(0.5,2.5)
       \rput(0,2){\ovalnode{A}{$COMM$}}
       \pnode(0,0){B}
       \nccurve{A}{B} \naput{$P$}
-    \end{pspicture}\]  
+    \end{pspicture}\]
+    (Note that the equations governing $\mathsf{new}$ in section \ref{congruence} are satisfied due to the naturality of the unitors and braiding in the symmetric monoidal 2-category.)
   \item equations making $(P, |, 0)$ into a commutative monoid,
   \item equations making $(N, \Delta, \delta)$ into a cocommutative comonoid, and
   \item a 2-morphism $comm_n$ encoding the COMM rule for each natural number $n \ge 0.$
@@ -742,7 +746,16 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
 \end{itemize}
 \subsection{Semantics}
 \begin{description}
-  \item $\meaningof{Q}_{top} \defneqls | \circ (\meaningof{Q} \otimes COMM) \circ \freenames{Q}$
+  \item $\meaningof{Q}_{top} \defneqls$
+    \[\begin{pspicture}(0,0)(3,3.5)
+      \rput(0,3){\ovalnode{A}{$\meaningof{Q}$}}
+      \rput(2.5,3){\ovalnode{B}{$COMM$}}
+      \rput(1,1.5){\ovalnode{C}{$|$}}
+      \pnode(1,0){D}
+      \nccurve[angleB=135]{A}{C} \nbput{$P$}
+      \nccurve[angleB=45]{B}{C} \naput{$P$}
+      \nccurve{C}{D} \naput{$P$}
+    \end{pspicture}\]
   \item $\meaningof{\pzero} \defneqls$
   \[\begin{pspicture}(0,0)(0,2)
     \rput(0,2){\ovalnode{A}{$0$}}
@@ -750,13 +763,13 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
     \nccurve{A}{B} \naput{$P$}
   \end{pspicture}\]
   \item $\meaningof{{x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}} \defneqls$
-		\[\begin{pspicture}(0,0)(0,4.5)
+    \[\begin{pspicture}(0,0)(0,4.5)
       \rput(1,2){\ovalnode{A}{$?_n$}}
       \pnode(1,0){B}
       \nccurve{A}{B} \naput{$P$}
       \pnode(0,4){C}
       \nccurve[angleB=135]{C}{A} \naput{$N$}
-			\rput(2.5,4){\ovalnode{D}{$curry(\meaningof{Q})$}}
+      \rput(2.5,4){\ovalnode{D}{$curry(\meaningof{Q})$}}
       \nccurve[angleA=65,angleB=-135]{A}{D} \ncput[npos=.65]{\pnode{clasp1}}
       \nccurve[angleA=-90,angleB=35]{D}{A} \naput{$N^{\otimes n}\multimap P$} \ncput[npos=.25]{\cnode{4pt}{clasp2}}
       \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
@@ -764,41 +777,53 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
   \item $\meaningof{{x}{!}{( y_1, \ldots, y_n )}} \defneqls$
   \[\begin{pspicture}(-1,0)(0,4.5)
     \rput(1,2){\ovalnode{A}{$!_n$}}
-		\pnode(1,0){B}
+    \pnode(1,0){B}
     \nccurve{A}{B} \naput{$P$}
     \pnode(0,4){C}
     \nccurve[angleB=135]{C}{A} \naput{$N$}
     \pnode(2,4){D}
     \nccurve[angleB=45]{D}{A} \naput{$N^{\otimes n}$}
   \end{pspicture}\]
+  \item $\meaningof{(\mathsf{new}\;x)Q} \defneqls$
+  \[\begin{pspicture}(-.5,0)(.5,4)
+    \rput(0,4){\ovalnode{A}{$fresh$}}
+    \rput(0,2){\ovalnode{B}{$\meaningof{Q}$}}
+    \pnode(0,0){C}
+    \nccurve{A}{B} \naput{$N$}
+    \nccurve{B}{C} \naput{$P$}
+  \end{pspicture}\]
   \item $\meaningof{\binpar{Q}{Q'}} \defneqls$
-	\[\begin{pspicture}(-1,0)(0,3.5)
-		\rput(0,3){\ovalnode{A}{$\meaningof{Q}$}}
-		\rput(2,3){\ovalnode{B}{$\meaningof{Q'}$}}
-		\rput(1,1.5){\ovalnode{C}{$|$}}
-		\pnode(1,0){D}
-		\nccurve[angleB=135]{A}{C} \nbput{$P$}
-		\nccurve[angleB=45]{B}{C} \naput{$P$}
-		\nccurve{C}{D} \naput{$P$}
-	\end{pspicture}\]
+  \[\begin{pspicture}(-1,0)(0,3.5)
+    \rput(0,3){\ovalnode{A}{$\meaningof{Q}$}}
+    \rput(2,3){\ovalnode{B}{$\meaningof{Q'}$}}
+    \rput(1,1.5){\ovalnode{C}{$|$}}
+    \pnode(1,0){D}
+    \nccurve[angleB=135]{A}{C} \nbput{$P$}
+    \nccurve[angleB=45]{B}{C} \naput{$P$}
+    \nccurve{C}{D} \naput{$P$}
+  \end{pspicture}\]
 \end{description}
-The first point deserves a bit more explanation.  At the top level, we put the process in parallel with COMM, since that's our context marker.  For terms at lower levels, all names are internal wires; only at the top level do we bind inputs to particular names.  For example, suppose that the top level term is ${x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}$ and that only $y_1, \ldots, y_n$ are free in $Q$; then only $x$ is free in ${{x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}}$ and the interpretation is
+For example, $\meaningof{(\mathsf{new}\;y)(\mathsf{new}\;x){x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}}_{top}$ is
 \begin{center}
-	\begin{pspicture}(2,-4)(2,5.5)
-	  \rput(1,2){\ovalnode{A}{$?_n$}}
-		\rput(1,-1){\ovalnode{B}{$|$}}
-	  \nccurve[angleB=135]{A}{B} \naput{$P$}
-		\rput(0,5){\ovalnode{C}{$x$}}
-	  \nccurve[angleB=135]{C}{A} \naput{$N$}
-		\rput(2.5,4){\ovalnode{D}{$curry(\meaningof{Q})$}}
-	  \nccurve[angleA=65,angleB=-135]{A}{D} \ncput[npos=.65]{\pnode{clasp1}}
-	  \nccurve[angleA=-90,angleB=35]{D}{A} \naput{$N^{\otimes n}\multimap P$} \ncput[npos=.25]{\cnode{4pt}{clasp2}}
-	  \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
-		\rput(3,1){\ovalnode{E}{$COMM$}}
-		\nccurve[angleB=45]{E}{B}
-		\pnode(1,-3){F}
-		\nccurve{B}{F} \naput{$P$}
-	\end{pspicture}
+  \begin{pspicture}(-2,-4)(2,5.5)
+    \rput(1,2){\ovalnode{A}{$?_n$}}
+    \rput(1,-1){\ovalnode{B}{$|$}}
+    \nccurve[angleB=135]{A}{B} \naput{$P$}
+    \rput(0,5){\ovalnode{C}{$fresh$}}
+    \nccurve[angleB=135]{C}{A} \naput{$N$}
+    \rput(2.5,4){\ovalnode{D}{$curry(\meaningof{Q})$}}
+    \nccurve[angleA=65,angleB=-135]{A}{D} \ncput[npos=.65]{\pnode{clasp1}}
+    \nccurve[angleA=-90,angleB=35]{D}{A} \naput{$N^{\otimes n}\multimap P$} \ncput[npos=.25]{\cnode{4pt}{clasp2}}
+    \nccurve[angleA=0,angleB=180,ArrowInside=]{clasp1}{clasp2}
+    \rput(3,1){\ovalnode{E}{$COMM$}}
+    \nccurve[angleB=45]{E}{B}
+    \pnode(1,-3){F}
+    \nccurve{B}{F} \naput{$P$}
+    \rput(-3,5){\ovalnode{F}{$fresh$}}
+    \rput(-3,3){\cnode*{2pt}{G}}
+    \nccurve{F}{G} \naput{$N$}
+    
+  \end{pspicture}
 \end{center}
 
 \subsubsection{Bisimulation again}
@@ -832,11 +857,11 @@ bisimulation to the categorical setting in a simple and
 straightforward manner. It would be quite interesting to be able to
 transport categorical notions of typing back to the process
 setting. For example, Mellies and Zeilberger's refinement types,
-expressed as functors, suggests an intriguing approach to a more
+expressed as functors, suggest an intriguing approach to a more
 categorical account of behavioral types.
 
-\paragraph{Acknowledgments.}
-We would like to acknowledge Tom Hershowitz for asking some thoughtful
+\paragraph{Acknowledgments}
+We would like to acknowledge Tom Hirshowitz for asking some thoughtful
 and stimulating questions about earlier versions of this work.
 
 % ------------------------------------------------------------------------
