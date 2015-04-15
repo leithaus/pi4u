@@ -159,6 +159,7 @@
 \newcommand{\wb}{\approx_b} %weak bisimilar
 \newcommand{\bbisim}{\stackrel{\centerdot}{\sim}} %barbed bisimilar
 \newcommand{\wbbisim}{\stackrel{\centerdot}{\approx}} %weak barbed bisimilar
+\newcommand{\wbbisimsem}{\approx} %weak barbed bisimilar
 \newcommand{\bxless}{\lesssim}  %expansion less (amssymb required)
 \newcommand{\bxgtr}{\gtrsim}  %expansion greater (amssymb required)
 \newcommand{\beq}{\sim}    %barbed congruent
@@ -454,7 +455,7 @@ of bisimulation \cite{DBLP:conf/concur/LeiferM00}. While this work did
 not explicitly employ higher categorical techniques, it spawned a
 variety of 2-categorical investigations designed to capture and recast
 bisimulation equivalences in terms of 2-morphisms
-\cite{Sassone02derivingbisimulation}. Hirshowitz has developed an even
+\cite{Sassone02derivingbisimulation}. Hirschowitz has developed an even
 more ambitious program of categorifying the whole of the operational
 semantics framework from the presentation of higher order syntax (or
 terms with binding constructors like {\pic} or $\lambda$-calculus), to
@@ -691,7 +692,14 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
       \pnode(0,0){B}
       \nccurve{A}{B} \naput{$\mathcal{P}$}
     \end{pspicture}\]
-    (Note that the equations governing $\mathsf{new}$ in section \ref{congruence} are satisfied due to the naturality of the unitors and braiding in the symmetric monoidal 2-category.)
+    (Note that the equations governing $\mathsf{new}$ in section \ref{congruence} are satisfied up to tensoring with a scalar due to the naturality of the unitors and braiding in the symmetric monoidal 2-category.)
+    For convenience we write $\meaningof{x}$ for
+     \[\begin{pspicture}(-.5,0)(3.5,2.5)
+      \rput(0,2){\ovalnode{A}{$x$}}
+      \pnode(0,0){B}
+      \nccurve{A}{B} \naput{$\mathcal{N}$}
+    \end{pspicture}\]
+    which picks out $x$ from $\mathcal{N}$.
   \item equations making $(\mathcal{P}, |, 0)$ into a commutative monoid,
   \item equations making $(N, \Delta, \delta)$ into a cocommutative comonoid, and
   \item a 2-morphism $comm_n$ encoding the COMM rule for each natural number $n \ge 0.$
@@ -833,14 +841,39 @@ For example, $\meaningof{(\mathsf{new}\;y)(\mathsf{new}\;x){x}{?}{( y_1, \ldots,
 \subsubsection{Bisimulation again}
 In this setting we can provide a direct interpretation of observation
 and bisimulation. Roughly speaking, $\meaningof{P}$ reduces to
-$\meaningof{Q}$ just when we can apply the 2-morphism $comm_n$ to the former to
-produce the latter.  More precisely, the interpretation of a term context $C[-]$ is a functor from one hom category to another: the functor takes an appropriate morphism $f$ to fill the hole and returns a new morphism $C[f]$; similarly, it takes a 2-morphism $\alpha\maps f \Rightarrow f'$ between appropriate morphisms and whiskers and/or tensors $\alpha$ with identity 2-morphisms to produce a new 2-morphism $C[\alpha]$.
+$\meaningof{Q}$ just when we can apply the 2-morphism $comm_n$ to the
+former to produce the latter. Since all non-trivial 2-morphisms are
+\emph{generated} by $comm_n$, single step reductions $\meaningof{P}
+\red \meaningof{Q}$ correspond precisely to the decomposion of a
+$\meaningof{P}$ into a ``context'' functor $C$, such that
+$\meaningof{P}=C[src(comm_n)]$, and $\meaningof{Q} =
+C[trgt(comm_n)]$. More generally, the interpretation of a term context
+$\meaningof{K}$ is a functor from one hom category to another: the
+functor takes an appropriate morphism $f$ to fill the hole and returns
+a new morphism $\meaningof{K}[f]$; similarly, it takes a 2-morphism
+$\alpha\maps f \Rightarrow f'$ between appropriate morphisms and
+whiskers and/or tensors $\alpha$ with identity 2-morphisms to produce
+a new 2-morphism $\meaningof{K}[\alpha]$.
+
+Likewise, we can transport the notion of observability to the
+categorical setting as a relation, $\Downarrow$, between 1-morphisms (not necessarily
+in the same hom-category). More precisely,
+
+\begin{itemize}
+  \item $\meaningof{x!(y_1,\ldots,y_n)} \Downarrow \meaningof{x}$
+  \item $\meaningof{P} \Downarrow \meaningof{x}$ or $\meaningof{Q} \Downarrow \meaningof{x}$ implies $\meaningof{P} \juxtap \meaningof{Q} \Downarrow \meaningof{x}$
+\end{itemize}
+
+Taken together these two notions provide an immediate lifting of the syntactic
+notion of bisimulation to a corresponding semantic notion, which we write, $\wbbisimsem$.
 
 \subsubsection{Full abstraction}
 
 \begin{thm}[full abstraction]
-  $P \wbbisim Q \iff \meaningof{P} \wbbisim \meaningof{Q}$
+  $P \wbbisim Q \iff \meaningof{P} \wbbisimsem \meaningof{Q}$     
 \end{thm}
+
+\emph{Proof}: immediate. \hfill $\square$
 
 \section{Conclusions and future work}
 We presented a fully abstract higher categorical semantics for the
@@ -865,7 +898,7 @@ expressed as functors, suggest an intriguing approach to a more
 categorical account of behavioral types.
 
 \paragraph{Acknowledgments}
-We would like to acknowledge Tom Hirshowitz for asking some thoughtful
+We would like to acknowledge Tom Hirschowitz for asking some thoughtful
 and stimulating questions about earlier versions of this work.
 
 % ------------------------------------------------------------------------
