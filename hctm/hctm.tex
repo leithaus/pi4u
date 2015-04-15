@@ -19,6 +19,7 @@
 \documentclass[]{acm_proc_article-sp}
 %\documentclass[]{llncs}
 
+
 %\documentclass[]{prentcsmacro}
 
 %\usepackage[active]{srcltx} % SRC Specials for DVI Searching
@@ -453,7 +454,7 @@ of bisimulation \cite{DBLP:conf/concur/LeiferM00}. While this work did
 not explicitly employ higher categorical techniques, it spawned a
 variety of 2-categorical investigations designed to capture and recast
 bisimulation equivalences in terms of 2-morphisms
-\cite{Sassone02derivingbisimulation}. Hershowitz has developed an even
+\cite{Sassone02derivingbisimulation}. Hirshowitz has developed an even
 more ambitious program of categorifying the whole of the operational
 semantics framework from the presentation of higher order syntax (or
 terms with binding constructors like {\pic} or $\lambda$-calculus), to
@@ -539,6 +540,7 @@ free. The set of names occurring in a process (bound or free) is
 denoted by $\names{P}$.
 
 \subsubsection{Structural congruence}
+\label{congruence}
 
 The {\em structural congruence} of processes, noted $\scong$, is the
 least congruence containing $\alpha$-equivalence, $\alphaeq$, making
@@ -767,7 +769,16 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
 \end{itemize}
 \subsection{Semantics}
 \begin{description}
-  \item $\meaningof{Q}_{top} \defneqls | \circ (\meaningof{Q} \otimes COMM) \circ \freenames{Q}$
+  \item $\meaningof{Q}_{top} \defneqls$
+    \[\begin{pspicture}(0,0)(3,3.5)
+      \rput(0,3){\ovalnode{A}{$\meaningof{Q}$}}
+      \rput(2.5,3){\ovalnode{B}{$COMM$}}
+      \rput(1,1.5){\ovalnode{C}{$|$}}
+      \pnode(1,0){D}
+      \nccurve[angleB=135]{A}{C} \nbput{$P$}
+      \nccurve[angleB=45]{B}{C} \naput{$P$}
+      \nccurve{C}{D} \naput{$P$}
+    \end{pspicture}\]
   \item $\meaningof{\pzero} \defneqls$
   \[\begin{pspicture}(0,0)(0,2)
     \rput(0,2){\ovalnode{A}{$0$}}
@@ -775,7 +786,7 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
     \nccurve{A}{B} \naput{$\mathcal{P}$}
   \end{pspicture}\]
   \item $\meaningof{{x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}} \defneqls$
-		\[\begin{pspicture}(0,0)(0,4.5)
+    \[\begin{pspicture}(0,0)(0,4.5)
       \rput(1,2){\ovalnode{A}{$?_n$}}
       \pnode(1,0){B}
       \nccurve{A}{B} \naput{$\mathcal{P}$}
@@ -791,10 +802,19 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
     \rput(1,2){\ovalnode{A}{$!_n$}}
 		\pnode(1,0){B}
     \nccurve{A}{B} \naput{$\mathcal{P}$}
+
     \pnode(0,4){C}
     \nccurve[angleB=135]{C}{A} \naput{$\mathcal{N}$}
     \pnode(2,4){D}
     \nccurve[angleB=45]{D}{A} \naput{$\mathcal{N}^{\otimes n}$}
+  \end{pspicture}\]
+  \item $\meaningof{(\mathsf{new}\;x)Q} \defneqls$
+  \[\begin{pspicture}(-.5,0)(.5,4)
+    \rput(0,4){\ovalnode{A}{$fresh$}}
+    \rput(0,2){\ovalnode{B}{$\meaningof{Q}$}}
+    \pnode(0,0){C}
+    \nccurve{A}{B} \naput{$N$}
+    \nccurve{B}{C} \naput{$P$}
   \end{pspicture}\]
   \item $\meaningof{\binpar{Q}{Q'}} \defneqls$
 	\[\begin{pspicture}(-1,0)(0,3.5)
@@ -807,7 +827,7 @@ The theory of the {\pic} is the free symmetric monoidal closed 2-category on
 		\nccurve{C}{D} \naput{$\mathcal{P}$}
 	\end{pspicture}\]
 \end{description}
-The first point deserves a bit more explanation.  At the top level, we put the process in parallel with COMM, since that's our context marker.  For terms at lower levels, all names are internal wires; only at the top level do we bind inputs to particular names.  For example, suppose that the top level term is ${x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}$ and that only $y_1, \ldots, y_n$ are free in $Q$; then only $x$ is free in ${{x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}}$ and the interpretation is
+For example, $\meaningof{(\mathsf{new}\;y)(\mathsf{new}\;x){x}{?}{( y_1, \ldots, y_n )} \Rightarrow {Q}}_{top}$ is
 \begin{center}
 	\begin{pspicture}(2,-4)(2,5.5)
 	  \rput(1,2){\ovalnode{A}{$?_n$}}
@@ -858,11 +878,11 @@ bisimulation to the categorical setting in a simple and
 straightforward manner. It would be quite interesting to be able to
 transport categorical notions of typing back to the process
 setting. For example, Mellies and Zeilberger's refinement types,
-expressed as functors, suggests an intriguing approach to a more
+expressed as functors, suggest an intriguing approach to a more
 categorical account of behavioral types.
 
-\paragraph{Acknowledgments.}
-We would like to acknowledge Tom Hershowitz for asking some thoughtful
+\paragraph{Acknowledgments}
+We would like to acknowledge Tom Hirshowitz for asking some thoughtful
 and stimulating questions about earlier versions of this work.
 
 % ------------------------------------------------------------------------
