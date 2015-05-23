@@ -16,7 +16,7 @@
 %\documentclass[twocolumn]{amsart}
 %\documentclass[]{amsart}
 %\documentclass[]{sig-alternate}
-\documentclass[]{acm_proc_article-sp}
+\documentclass[fleqn]{acm_proc_article-sp}
 %\documentclass[]{llncs}
 
 
@@ -395,7 +395,7 @@ are types (as in data types in a programming language), and that
 proofs are programs. This is a very broad and deep idea. In the 90's,
 for example, Abramsky extended it to proofs as processes, which Wadler
 was only very recently able to realize as a correspondence between
-linear proofs and π-calculus processes. In this context it means that
+linear proofs and {$\pi$}-calculus processes. In this context it means that
 linear proofs provide a representation of both data (blocks) and
 program (executable transactions) that gives several advantages over
 the current choices made by the blockchain.
@@ -421,15 +421,15 @@ to prove things about the structure of the heap which can, in turn, be
 used to guarantee that two threads can operate at the same time
 safely. The blockchain is like the heap. The Alice - Betty and Alfred
 - Bob transactions are like the two threads. A proof that the heap is
-of the form H1 * H2 together with a proof that T1 : H1 -> H1', T2 : H2
--> H2' constitutes a proof that T1 * T2 (thread T1 running
-concurrently with T2) operate effectively in isolation and thus
-safely. Likewise, a proof that the blockchain is of the form B1 * B2
-(none of the transactions in B1 connect to addresses in B2 and vice
-versa), together with a proof that AliceBettyTxn : B1 -> B1' (this txn
-uses only addresses in B1), and AlfredBobTxn : B2 -> B2' (this txn
-uses only addresses in B2) constitutes a proof that AliceBettyTxn *
-AlfredBobTxn can operate with isolated projections of the blockchain.
+of the form $H_1 \otimes H_2$ together with a proof that $T_1 : H_1 \rightarrow H_1'$, $T_2 : H_2
+\rightarrow H_2'$ constitutes a proof that $T_1 \otimes T_2$ (thread $T_1$ running
+concurrently with $T_2$) operate effectively in isolation and thus
+safely. Likewise, a proof that the blockchain is of the form $B_1 * B_2$
+(none of the transactions in $B_1$ connect to addresses in $B_2$ and vice
+versa), together with a proof that $AliceBettyTxn : B_1 \rightarrow B_1'$ (this txn
+uses only addresses in $B_1$), and $AlfredBobTxn : B_2 \rightarrow B_2'$ (this txn
+uses only addresses in $B_2$) constitutes a proof that $AliceBettyTxn \otimes
+AlfredBobTxn$ can operate with isolated projections of the blockchain.
 
 If the blockchain is built using the primitives of linear logic, it
 becomes easier and easier to construct these proofs, but also to
@@ -606,13 +606,13 @@ connective 'plus', $A + B$. In symbols,
 while 
 
 \begin{mathpar}
-  \inferrule* {\vdash G, t : A}{ inl( t ) : A + B }
+  \inferrule* {\vdash G, t : A}{ \vdash inl( t ) : A + B }
 \end{mathpar}
 
 and
 
 \begin{mathpar}
-  \inferrule* {G, u : B}{inr( u ) : A + B}
+  \inferrule* {G, u : B}{\vdash inr( u ) : A + B}
 \end{mathpar}
 
 If during a more complex transaction $t \with u$ gets tied to $inl( t'
@@ -683,6 +683,7 @@ notes.
 
 \begin{tabular}{c|c}
   proof term & blockchain meaning \\
+  \hline
   address & address \\
   $t * u$ & isolated concurrent transactions \\
   $t \parr u$ & interacting or linked concurrent transactions \\
@@ -726,8 +727,10 @@ counterexample is
 
 \begin{equation*}
   \begin{aligned}
-    C_1 = Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr \} \leftarrow Block\{ 1BobAddr \xrightarrow{7btc} 1BettyAddr \} \\
-    C_2 = Block\{ 1BobAddr \xrightarrow{7btc} 1BettyAddr \} \leftarrow Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr \}
+    C_1 = Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr \} \\
+    \leftarrow Block\{ 1BobAddr \xrightarrow{7btc} 1BettyAddr \} \\
+    C_2 = Block\{ 1BobAddr \xrightarrow{7btc} 1BettyAddr \} \\
+    \leftarrow Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr \}
   \end{aligned}
 \end{equation*}
 
@@ -746,8 +749,10 @@ using a glorified zip function. In this example,
 
 \begin{equation*}
   \begin{aligned} 
-    C_1 = Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr \} \leftarrow Block\{ 2BobAddr \xrightarrow{7btc} 2BettyAddr \}
-    C2 = Block\{ 1BobAddr \xrightarrow{7btc} 1BettyAddr \} \leftarrow Block\{ 2AliceAddr \xrightarrow{5btc} 2AllanAddr \}
+    C_1 = Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr \} \\
+    \leftarrow Block\{ 2BobAddr \xrightarrow{7btc} 2BettyAddr \} \\
+    C2 = Block\{ 1BobAddr \xrightarrow{7btc} 1BettyAddr \} \\
+    \leftarrow Block\{ 2AliceAddr \xrightarrow{5btc} 2AllanAddr \}
   \end{aligned}
 \end{equation*}
 
@@ -756,13 +761,14 @@ written $addresses( C_1 ) \# addresses( C_2 )$ ). We are free to calculate
 
 \begin{equation*}
   \begin{aligned} 
-    C_1 \otimes C_2 \\
-    & = \\
-    Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr \} \otimes Block\{ 1BobAddr \xrightarrow{7btc} 1BettyAddr \}  \\
-    & \leftarrow Block\{ 2BobAddr \xrightarrow{7btc} 2BettyAddr \} \otimes Block\{ 2AliceAddr \xrightarrow{5btc} 2AllanAddr \}
-    & = \\
-    Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr ; 1BobAddr \xrightarrow{7btc} 1BettyAddr \} \\
-    & \leftarrow Block\{ 2BobAddr \xrightarrow{7btc} 2BettyAddr ; 2AliceAddr \xrightarrow{5btc} 2AllanAddr \}
+    C_1 \otimes C_2  = Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr \} \\
+    \otimes Block\{ 1BobAddr \xrightarrow{7btc} 1BettyAddr \}  \\
+    \leftarrow Block\{ 2BobAddr \xrightarrow{7btc} 2BettyAddr \} \\
+    \otimes Block\{ 2AliceAddr \xrightarrow{5btc} 2AllanAddr \}\\
+    = Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr ; \\
+    1BobAddr \xrightarrow{7btc} 1BettyAddr \} \\
+    \leftarrow Block\{ 2BobAddr \xrightarrow{7btc} 2BettyAddr \\
+    ; 2AliceAddr \xrightarrow{5btc} 2AllanAddr \}
   \end{aligned}
 \end{equation*}
 
@@ -777,13 +783,14 @@ becomes safe
 
 \begin{equation*}
   \begin{aligned} 
-    C_1 \otimes C_2 \\
-    & = \\
-    Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr \} \otimes Block\{ 1BobAddr \xrightarrow{7btc} 1BettyAddr \} \\
-    & <- Block\{ 1BobAddr \xrightarrow{7btc} 01BettyAddr \} * Block\{ 1AliceAddr \xrightarrow{5btc} 11AllanAddr \} \\
-    & = \\
-    Block\{ 01AliceAddr \xrightarrow{5btc} 01AllanAddr ; 11BobAddr \xrightarrow{7btc} 11BettyAddr \} \\
-    & \leftarrow Block\{ 01BobAddr \xrightarrow{7btc} 01BettyAddr ; 11AliceAddr \xrightarrow{5btc} 11AllanAddr \}
+    C_1 \otimes C_2  =  Block\{ 1AliceAddr \xrightarrow{5btc} 1AllanAddr \} \\
+    \otimes Block\{ 1BobAddr \xrightarrow{7btc} 1BettyAddr \} \\
+    \leftarrow Block\{ 1BobAddr \xrightarrow{7btc} 01BettyAddr \} \\
+    \otimes Block\{ 1AliceAddr \xrightarrow{5btc} 11AllanAddr \} \\
+    = Block\{ 01AliceAddr \xrightarrow{5btc} 01AllanAddr ; \\
+    11BobAddr \xrightarrow{7btc} 11BettyAddr \} \\
+    \leftarrow Block\{ 01BobAddr \xrightarrow{7btc} 01BettyAddr ; \\
+    11AliceAddr \xrightarrow{5btc} 11AllanAddr \}
   \end{aligned}
 \end{equation*}
 
