@@ -379,16 +379,19 @@ L.G. Meredith\\
 
 \section{Background and Motivation}
 
-i've had a lot of time to think this week because i've been waiting on
-machines to synchronize with the blockchain. As a result, i've been
-more motivated than ever to find a scalable and reliable architecture
-for the blockchain. i believe i'm getting closer to a way to explain
-and test a hypothesis that linear proofs provide the basis for a much
-more scalable architecture for the blockchain. For background on what
-i mean by linear proofs, here's a paper that interprets them in terms
-of games \cite{DBLP:conf/lics/AbramskyM99}, and here's another that
-interprets them in terms of traditional computational calculi like the
-lambda calculus \cite{DBLP:journals/tcs/Abramsky93}.
+Anyone who understands the current economic, sociological, and
+technological situation is likely to be very excited by what the
+blockchain technology promises. Anyone who has actually had to work
+with the blockchain in real situations with mission-critical
+exchanges on the line is very likely to be motivated to find a
+more scalable and reliable architecture for the blockchain. This paper
+takes a few key steps towards finding a way to explain and test a
+hypothesis that linear proofs provide the basis for a much more
+scalable architecture for the blockchain. For background on what is
+meant here by linear proofs, \cite{DBLP:conf/lics/AbramskyM99}
+interprets them in terms of games , while
+\cite{DBLP:journals/tcs/Abramsky93} interprets them in terms of
+traditional computational calculi like the lambda calculus.
 
 A linear proof is a formal structure representing a proof of a formula
 in linear logic \cite{DBLP:journals/tcs/Girard87}.  The Curry-Howard
@@ -445,17 +448,17 @@ construct the blockchain, itself, in terms of smaller blockchains.
 Here's the most basic interpretation.
 
 \begin{mathpar}
-  \inferrule* {} {\vdash 1blkchnaddr : \underbrace{A \otimes \ldots \otimes A}_{N}} %( with N occurrences of A )
+  \inferrule* {} {\vdash 1blkchnaddr : \underbrace{A \otimes \ldots \otimes A}_{M}} %( with N occurrences of A )
 \end{mathpar}
 
-is a statement that there are $N$ $A$'s available at the address,
+is a statement that there are $M$ $A$'s available at the address,
 $1blkchnaddr$. $A$'s can be any resource, BTC's, AMP's, DogeCoin, etc.
 
 \begin{mathpar}
-  \inferrule* {} {\vdash txn : \underbrace{A \otimes \ldots \otimes A}_{N}  \multimap \underbrace{B \otimes \ldots \otimes B}_{M} } %( with N occurrences of A in A * ... * A and M occurrences of B in B * ... * B )
+  \inferrule* {} {\vdash txn : \underbrace{A \otimes \ldots \otimes A}_{M}  \multimap \underbrace{B \otimes \ldots \otimes B}_{N} } %( with N occurrences of A in A * ... * A and M occurrences of B in B * ... * B )
 \end{mathpar}
 
-is a statement that $txn$ will generate $M$ $B$'s if provided $N$ $A$'s.
+is a statement that $txn$ will generate $N$ $B$'s if provided $M$ $A$'s.
 
 Terminologically, we say that $1blkchnaddr$ is a \emph{witness} or a
 \emph{proof} of $A \otimes \ldots \otimes A$, and similarly, that $txn$
@@ -820,7 +823,7 @@ becomes safe
   \end{aligned}
 \end{equation*}
 
-There is much more to be said, but that must be left to a later revision!
+There is much more to be said, but that must be left to future work!
 
 \paragraph{Acknowledgments}
 We would like to acknowledge Vlad Zamfir for some thoughtful and
@@ -836,8 +839,11 @@ stimulating conversation about the blockchain protocol.
 
 \section{Appendix: a terminating scripting language}
 
-We follow Abramksy's proof expressions from
-\cite{DBLP:journals/tcs/Abramsky93} very closely.
+In the main body of the paper we presented what amounts to the high
+level intuitions. In this appendix we present enough of the details
+that a reader skilled in the art could implement the proposal to test
+it for themselves. This presentation follows Abramksy's proof
+expressions from \cite{DBLP:journals/tcs/Abramsky93} very closely.
 
 \subsection{Syntax}
 \begin{grammar}
@@ -873,7 +879,7 @@ reference we'll write $\mathsf{burn}$.
 
 Executing a transaction amounts to joining to expressions, $e_1$ and
 $e_2$ in $\mathsf{txn}\mathsf{(} e_1, e_2\mathsf{)}$. Thus, to send
-$X$ $\mathsf{satoshi}$ to $2blkchnaddr$, in the context of the genesis
+$M$ $\mathsf{satoshi}$ to $2blkchnaddr$, in the context of the genesis
 block, first we have to turn the genesis block into an expression.
 
 $\mathsf{choose}\mathsf{(} 1spndaddr \mathsf{)}\mathsf{\{} \mathsf{genesis}\mathsf{;}\; \mathsf{burn} \mathsf{\}}$
@@ -886,6 +892,14 @@ $\mathsf{txn}\mathsf{(} \mathsf{choose}\mathsf{(} 1spndaddr \mathsf{)}\mathsf{\{
 Using the operational semantics of the next section we see that this reduces
 
 $\mathsf{txn}\mathsf{(} 1blkchnaddr, 2blkchnaddr \mathsf{)} \mathsf{;} \; \mathsf{txn}\mathsf{(} 1blkchnaddr, M \cdot \mathsf{satoshi} \mathsf{)}$
+
+which then reduces
+
+$\mathsf{txn}\mathsf{(} 2blkchnaddr, M \cdot \mathsf{satoshi} \mathsf{)}$
+
+To spend a smaller amount than the entirety of the resources at
+$1blkchnaddr$ the reader can check that there is an input-style
+accounting that exactly mimics the current blockchain semantics.
 
 In what follows we use the notational conventions:
 \begin{itemize}
@@ -923,6 +937,16 @@ In what follows we use the notational conventions:
 \begin{mathpar}
   \inferrule* [lab=Copy] {}{\mathsf{txn}\mathsf{(} \mathsf{!}\mathsf{(} \vec{x} \mathsf{)}\mathsf{\{} p \mathsf{\}}, e_1 \mathsf{@} e_2 \mathsf{)} \\ \rightarrow \\ \and \mathsf{txn}\mathsf{(} \vec{x}, x^l \mathsf{@} x^r \mathsf{)} \mathsf{;} \; \mathsf{txn}\mathsf{(} \mathsf{!}\mathsf{(} \vec{x} \mathsf{)}\mathsf{\{} p \mathsf{\}}^l, e_1\mathsf{)} \mathsf{;} \; \mathsf{txn}\mathsf{(} \mathsf{!}\mathsf{(} \vec{x} \mathsf{)}\mathsf{\{} p \mathsf{\}}^r, e_2\mathsf{)}}
 \end{mathpar}
+
+\subsection{Type assignment}
+
+In the main body of the paper we wrote proof rules in terms of
+sequents. In point of fact, that formalism amounts to a typing
+discipline on the scripting language presented above. Here we present
+the details of that typing discipline along with the basic result that
+all well typed programs are terminating.
+
+TBD
 
 % ------------------------------------------------------------------------
 
