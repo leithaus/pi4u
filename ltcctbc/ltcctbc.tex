@@ -318,8 +318,8 @@
 %\numberofauthors{3}
 \author{
 L.G. Meredith\\
-  \affaddr{Biosimilarity, LLC}\\
-  \email{\fontsize{8}{8}\selectfont lgreg.meredith@biosimilarity.com}
+  \affaddr{CSO, Synereo}\\
+  \email{\fontsize{8}{8}\selectfont greg@synereo.com}
 }
 
 %\address{Systems Biology, Harvard Medical School, Boston, Massachussetts, USA}
@@ -386,25 +386,28 @@ for the blockchain. i believe i'm getting closer to a way to explain
 and test a hypothesis that linear proofs provide the basis for a much
 more scalable architecture for the blockchain. For background on what
 i mean by linear proofs, here's a paper that interprets them in terms
-of games \cite{DBLP:conf/lics/AbramskyM99}, and here's another that interprets them in terms of
-traditional computational calculi like the lambda calculus \cite{DBLP:journals/tcs/Abramsky93}.
+of games \cite{DBLP:conf/lics/AbramskyM99}, and here's another that
+interprets them in terms of traditional computational calculi like the
+lambda calculus \cite{DBLP:journals/tcs/Abramsky93}.
 
 A linear proof is a formal structure representing a proof of a formula
-in linear logic.  The Curry-Howard isomorphism tells us that formulae
-are types (as in data types in a programming language), and that
-proofs are programs. This is a very broad and deep idea. In the 90's,
-for example, Abramsky extended it to proofs as processes \cite{DBLP:journals/tcs/Abramsky94}, which Wadler
-was only very recently able to realize as a correspondence between
-linear proofs and {$\pi$}-calculus processes. In this context it means that
-linear proofs provide a representation of both data (blocks) and
-program (executable transactions) that gives several advantages over
-the current choices made by the blockchain.
+in linear logic \cite{DBLP:journals/tcs/Girard87}.  The Curry-Howard
+isomorphism \cite{Sorensen98lectureson} tells us that formulae are
+types (as in data types in a programming language), and that proofs
+are programs. This is a very broad and deep idea. In the 90's, for
+example, Abramsky extended it to proofs as processes
+\cite{DBLP:journals/tcs/Abramsky94}, which Wadler was only very
+recently able to realize as a correspondence between linear proofs and
+{$\pi$}-calculus processes \cite{DBLP:journals/jfp/Wadler14}. In this
+context it means that linear proofs provide a representation of both
+data (blocks) and program (executable transactions) that gives several
+advantages over the current choices made by the blockchain.
 
 The blockchain is a great example of data that is also program; it's a
 giant ledger spread out over the Internet, that's made of a bunch of
-distributed, but interacting servers. To become more scalable, and
-reliable, both ledger and servers will need certain characteristics of
-data/program that have to do with a property called
+distributed, but interacting servers \cite{Nakamoto2008}. To become
+more scalable, and reliable, both ledger and servers will need certain
+characteristics of data/program that have to do with a property called
 compositionality. Scalability is always all about being able to build
 composite systems from components. For example, if we can prove that
 sections of the blockchain can be safely isolated from other sections,
@@ -417,19 +420,22 @@ transactions, not only in isolation of each other, but without the
 onerous need to sync the entire blockchain.
 
 One analogy is the use of separation logic (a child of linear logic)
-to prove things about the structure of the heap which can, in turn, be
-used to guarantee that two threads can operate at the same time
-safely. The blockchain is like the heap. The Alice - Betty and Alfred
-- Bob transactions are like the two threads. A proof that the heap is
-of the form $H_1 \otimes H_2$ together with a proof that $T_1 : H_1 \rightarrow H_1'$, $T_2 : H_2
-\rightarrow H_2'$ constitutes a proof that $T_1 \otimes T_2$ (thread $T_1$ running
-concurrently with $T_2$) operate effectively in isolation and thus
-safely. Likewise, a proof that the blockchain is of the form $B_1 * B_2$
-(none of the transactions in $B_1$ connect to addresses in $B_2$ and vice
-versa), together with a proof that $AliceBettyTxn : B_1 \rightarrow B_1'$ (this txn
-uses only addresses in $B_1$), and $AlfredBobTxn : B_2 \rightarrow B_2'$ (this txn
-uses only addresses in $B_2$) constitutes a proof that $AliceBettyTxn \otimes
-AlfredBobTxn$ can operate with isolated projections of the blockchain.
+\cite{DBLP:conf/vstte/Reynolds05} to prove things about the structure
+of the heap which can, in turn, be used to guarantee that two threads
+can operate at the same time safely. The blockchain is like the
+heap. The Alice - Betty and Alfred - Bob transactions are like the two
+threads. A proof that the heap is of the form $H_1 \otimes H_2$
+together with a proof that $T_1 : H_1 \rightarrow H_1'$, $T_2 : H_2
+\rightarrow H_2'$ constitutes a proof that $T_1 \otimes T_2$ (thread
+$T_1$ running concurrently with $T_2$) operate effectively in
+isolation and thus safely. Likewise, a proof that the blockchain is of
+the form $B_1 * B_2$ (none of the transactions in $B_1$ connect to
+addresses in $B_2$ and vice versa), together with a proof that
+$AliceBettyTxn : B_1 \rightarrow B_1'$ (this txn uses only addresses
+in $B_1$), and $AlfredBobTxn : B_2 \rightarrow B_2'$ (this txn uses
+only addresses in $B_2$) constitutes a proof that $AliceBettyTxn
+\otimes AlfredBobTxn$ can operate with isolated projections of the
+blockchain.
 
 If the blockchain is built using the primitives of linear logic, it
 becomes easier and easier to construct these proofs, but also to
@@ -439,14 +445,14 @@ construct the blockchain, itself, in terms of smaller blockchains.
 Here's the most basic interpretation.
 
 \begin{mathpar}
-  \inferrule* {} {\vdash 1blkchnaddr : A \otimes \ldots \otimes A} %( with N occurrences of A )
+  \inferrule* {} {\vdash 1blkchnaddr : \underbrace{A \otimes \ldots \otimes A}_{N}} %( with N occurrences of A )
 \end{mathpar}
 
 is a statement that there are $N$ $A$'s available at the address,
 $1blkchnaddr$. $A$'s can be any resource, BTC's, AMP's, DogeCoin, etc.
 
 \begin{mathpar}
-  \inferrule* {} {\vdash txn : A \otimes \ldots \otimes A \multimap B \otimes \ldots \otimes B } %( with N occurrences of A in A * ... * A and M occurrences of B in B * ... * B )
+  \inferrule* {} {\vdash txn : \underbrace{A \otimes \ldots \otimes A}_{N}  \multimap \underbrace{B \otimes \ldots \otimes B}_{M} } %( with N occurrences of A in A * ... * A and M occurrences of B in B * ... * B )
 \end{mathpar}
 
 is a statement that $txn$ will generate $M$ $B$'s if provided $N$ $A$'s.
@@ -465,51 +471,45 @@ constructed from the information in txn together with
 $1blkchnaddr$. This should look remarkably like function application,
 because it is.
 
-Notice that now we can see, recursively, what a proof of a statement like 
+Notice that now we can see, recursively, what a proof of a statement
+like $\vdash 1blkchnaddr : A \otimes \ldots \otimes A$ looks like. In
+most cases it will be a proof made from a previous application of the
+cut rule.  This tree of cuts will trace all the way back to some
+genesis block -- which is the only other way to have a proof of a
+statement like $\vdash 1blkchnaddr : A \otimes \ldots \otimes A$.
 
-\begin{mathpar}
-  \inferrule* {} {\vdash 1blkchnaddr : A \otimes \ldots \otimes A}
-\end{mathpar}
-
-looks like. In most cases it will be a proof made from a previous
-application of the cut rule.  This tree of cuts will trace all the way
-back to some genesis block -- which is the only other way to have a
-proof of a statement like
-
-\begin{mathpar}
-  \inferrule* {} {\vdash 1blkchnaddr : A \otimes \ldots \otimes A}
-\end{mathpar}
-
-Now, where does the return address associated with $txn( 1blkchnaddr )$ come from?
-
-To see this we have to look into the mechanics of $\multimap$ (called
-linear implication or, more affectionately, lollipop).
+Now, where does the return address associated with $txn( 1blkchnaddr
+)$ come from? To see this we have to look into the mechanics of
+$\multimap$ (called linear implication or, more affectionately,
+lollipop).
 
 \begin{equation*}
   A \multimap B = A^{\perp} \parr B
 \end{equation*}
 
 Linear implication is decomposed much like classical implication in
-terms of a negation and a disjunctive connective. It is literally an
-expression capturing the sentiment we need $A$ to get $B$, or $B$
-comes with a cost of $A$. The use of a proof rule for these kinds of
-links looks like
+terms of a negation ($A^{\perp}$) and a disjunctive connective
+($A \parr B$). It is literally an expression capturing the sentiment
+we need $A$ to get $B$, or $B$ comes with a cost of $A$. The use of a
+proof rule for these kinds of links looks like
 
 \begin{mathpar}
-  \inferrule* {\vdash G, 1blkchnaddr : A^{\perp}, 2blkchnaddr : B}{\vdash G, txn( 1blkchnaddr, 2blkchnaddr ) : A^{\perp} \parr B}
+  \inferrule* {\vdash \Gamma, 1blkchnaddr : A^{\perp}, 2blkchnaddr : B}{\vdash \Gamma, 1blkchnaddr \parr 2blkchnaddr : A^{\perp} \parr B}
 \end{mathpar}
 
-where we snuck in the rest of the blockchain as $G$. As we saw above, $A^{\perp} \parr B = A \multimap B$; so, we can write
+where we snuck in the rest of the blockchain as $\Gamma$. As we saw above, $A^{\perp} \parr B = A \multimap B$; so, we can write
 
 \begin{mathpar}
-  \inferrule* {\vdash G, 1blkchnaddr : A^{\perp}, 2blkchnaddr : B}{\vdash G, txn( 1blkchnaddr, 2blkchnaddr ) : A \multimap B}
+  \inferrule* {\vdash \Gamma, 1blkchnaddr : A^{\perp}, 2blkchnaddr : B}{\vdash \Gamma, 1blkchnaddr \multimap 2blkchnaddr : A \multimap B}
 \end{mathpar}
 
-Now we see that forming a $txn$ comes with the requirement to provide an
-address where $A$'s will be sent and an address where $B$'s will be
-received. Expanding on these intuitions, we can see that the rules of
-classical linear logic correspond exactly to a specification of
-operations on the blockchain.
+Now we see that forming a $txn$ comes with the requirement to provide
+an address where $A$'s will be sent and an address where $B$'s will be
+received. To complete the picture, applying the cut rule will create
+the txn that links an address, say $3blkchnaddr$ with an $A$ in it, to
+$1blkchnaddr$, resulting in $\vdash \Gamma, 2blkchnaddr : B$. Expanding on these
+intuitions, we can see that the rules of classical linear logic
+correspond exactly to a specification of operations on the blockchain.
 
 \subsection{Linear Sequents}
 
@@ -524,7 +524,7 @@ taking \emph{sequent}s $S_1, \ldots, S_N$ to a \emph{sequent} $S$, where
 a sequent is of the form
 
 \begin{mathpar}
-  \inferrule* {} {\vdash G, t_1 : A_1, \ldots, t_N : A_N}
+  \inferrule* {} {\vdash \Gamma, t_1 : A_1, \ldots, t_N : A_N}
 \end{mathpar}
 
 A sequent is really just a statement about what is distributed where in an instance of the blockchain.
@@ -532,7 +532,7 @@ A sequent is really just a statement about what is distributed where in an insta
 \begin{itemize}
   \item $t_1, \ldots, t_N$ are either addresses or programs that take addresses as input; they constitute the "focus" of the proof rule, or where the action is going to happen.
   \item $A_1, \ldots, A_N$ are (types built from) the different types of coin
-  \item $G$ is the rest of the blockchain -- it is necessary to establish the distribution of resources we see at $t_1, \ldots, t_N$, but it's not the focus of the operation of the proof rule. 
+  \item $\Gamma$ is the rest of the blockchain -- it is necessary to establish the distribution of resources we see at $t_1, \ldots, t_N$, but it's not the focus of the operation of the proof rule. 
 \end{itemize}
 
 Putting it all together, a proof rule of the form
@@ -555,10 +555,10 @@ everything remains consistent. Here's an example. The proof rule for
 the tensor $A \otimes B$ looks like this
 
 \begin{mathpar}
-  \inferrule* {\vdash G, t : A,  \vdash H, u : B}{\vdash G, H, t \otimes u : A \otimes B}
+  \inferrule* {\vdash \Gamma, t : A,  \vdash H, u : B}{\vdash \Gamma, H, t \otimes u : A \otimes B}
 \end{mathpar}
 
-It says that if you have one blockchain, $\vdash G, t : A$, and
+It says that if you have one blockchain, $\vdash \Gamma, t : A$, and
 another completely independent blockchain, with a totally separate
 address space, $\vdash H, u : B$, then you can make a new one
 
@@ -574,10 +574,32 @@ the combined $A \otimes B$ resource.
 Now, comparison of the par ( $A \parr B$ ) rule, which establishes transaction links, is even more illuminating.
 
 \begin{mathpar}
-  \inferrule* {\vdash G, t : A, u : B}{ G, t \parr u : A \parr B }
+  \inferrule* {\vdash \Gamma, t : A, u : B}{ G, t \parr u : A \parr B }
 \end{mathpar}
 
-This rule insists that the transaction link,  $t \parr u$, is made in the same piece of the blockchain, $G$.
+This rule insists that the transaction link,  $t \parr u$, is made in the same piece of the blockchain, $\Gamma$.
+
+The piece of the puzzle that interprets commitment to and execution of
+transactions is the cut rule. If $1blkchnaddr \multimap 2blkchnaddr$
+is a transaction waiting to happen, so to speak, $txn( 3blkchnaddr,
+1blkchnaddr -o 2blkchnaddr )$ is the commitment to carry out the txn
+against the blockchain. Likewise, cut-elimination, also called
+proof-normalization, which corresponds to computation, via
+Curry-Howard, constitutes the execution of the transaction on the
+blockchain that results in the assignment $\vdash \Gamma, 2blkchnaddr
+: B$ after execution. Someone familiar with functional programming
+might interpret
+
+$txn( 3blkchnaddr, 1blkchnaddr \multimap 2blkchnaddr )$
+
+as
+
+$apply( 1blkchnaddr \multimap 2blkchnaddr, 3blkchnaddr )$
+
+making the correspondence to function application, and the
+correspondence between proof normalization and {$\beta$}-reduction
+explicit.
+
 
 The fragment of linear logic that includes, $A^{\perp}$, $A \otimes
 B$, $A \parr B$, $A \multimap B$, is called the multiplicative
@@ -600,13 +622,13 @@ selection by interaction with choices indicated by the linear
 connective 'plus', $A + B$. In symbols,
 
 \begin{mathpar}
-  \inferrule* {\vdash G, t : A, u : B}{\vdash G, t \with u : A \with B}
+  \inferrule* {\vdash \Gamma, t : A, u : B}{\vdash \Gamma, t \with u : A \with B}
 \end{mathpar}
 
 while 
 
 \begin{mathpar}
-  \inferrule* {\vdash G, t : A}{ \vdash inl( t ) : A + B }
+  \inferrule* {\vdash \Gamma, t : A}{ \vdash inl( t ) : A + B }
 \end{mathpar}
 
 and
@@ -626,11 +648,11 @@ u, u' )$.
 The fragment of linear logic that includes the multiplicative and
 additive connectives is called MALL. The remaining connectives are
 called the exponentials, $?A$, and $!A$. They denote copyable,
-non-conserved resources. When we write $\vdash G, t : !A$, we are
+non-conserved resources. When we write $\vdash \Gamma, t : !A$, we are
 saying that you can get as many $A$'s from the address (or program)
 $t$ as you want. Thus, unlike currency, that address is linked to a
 copyable resource like a document, or a jpeg, or audio file, or
-... that can be shared widely. When we write $\vdash G, t : ?A$, we
+... that can be shared widely. When we write $\vdash \Gamma, t : ?A$, we
 are saying that you can put as many $A$'s into the address (or
 program) $t$ as you want. You can think of it as a place to store
 $A$'s, or discard them.
@@ -659,7 +681,7 @@ that we focused mostly on the connectives governing $A$'s and $B$'s (the
 resources to be found at addresses or programs). We didn't really talk
 about the structure of $t$'s and $u$'s. These provide us with a simple and
 intuitive syntax for transactions. Of equal importance, these
-transactions are \emph{typed} programs. When we write $\vdash G, t : A$, we are
+transactions are \emph{typed} programs. When we write $\vdash \Gamma, t : A$, we are
 not only saying something about the resources produced or manipulated
 by $t$, we are saying something about how t can be used, and in what
 blockchain context we can expect t to perform correctly.
@@ -670,14 +692,14 @@ particular, it is well established that there is a natural notion of
 execution of $t$'s. That is, when thought of as programs, we know how
 to run them. When they are well typed, that is, if we have established
 $\vdash t : A$, then $t$ is \emph{terminating}. That's a theorem from
-Abramsky's computational interpretations of linear logic. What this
-means for the blockchain is that proof terms and their linear
-connectives provide a scripting language for transactions that, on the
-one hand, provides termination for all well typed scripts, and on the
-other is highly expressive. Further, if it turns out that this
-scripting language is not expressive enough, then there is a natural
-extension of proof terms via a correspondence between linear proof
-terms and {$\pi$}-calculus processes that we mentioned at the top of these
+\cite{DBLP:journals/tcs/Abramsky93}. What this means for the
+blockchain is that proof terms and their linear connectives provide a
+scripting language for transactions that, on the one hand, provides
+termination for all well typed scripts, and on the other is highly
+expressive. Further, if it turns out that this scripting language is
+not expressive enough, then there is a natural extension of proof
+terms via a correspondence between linear proof terms and
+{$\pi$}-calculus processes that we mentioned at the top of these
 notes.
 
 
@@ -685,7 +707,7 @@ notes.
   proof term & blockchain meaning \\
   \hline
   address & address \\
-  $t * u$ & isolated concurrent transactions \\
+  $t \otimes u$ & isolated concurrent transactions \\
   $t \parr u$ & interacting or linked concurrent transactions \\
   $t \with u$ & menu of transaction options \\
   $inl( t ), inr( u )$ & transaction option selection \\
@@ -697,10 +719,14 @@ notes.
 This correspondence is not just useful for extending a scripting
 language for blockchain transactions. It turns out the
 {$\pi$}-calculus the premier formalism for specifying, reasoning
-about, and executing protocols in distributed systems. Since one of
-the real values of the blockchain is the fact that it is a distributed
-means to conduct transactions, the need to tie this formalism to one
-for specifying protocols in distributed systems is plain.
+about, and executing protocols in distributed systems
+\cite{milner91polyadicpi} \cite{DBLP:journals/mscs/Milner92}
+\cite{DBLP:conf/aplas/AbadiCF06} \cite{DBLP:journals/tissec/AbadiBF07}
+\cite{DBLP:conf/lics/Gordon06} \cite{DBLP:conf/esop/KremerR05}. Since
+one of the real values of the blockchain is the fact that it is a
+distributed means to conduct transactions, the need to tie this
+formalism to one for specifying protocols in distributed systems is
+plain.
 
 \subsection{Proof-of-work}
 
@@ -718,7 +744,7 @@ are blockchains both of height $N$.
 We can define
 
 \begin{equation*}
-  C_1 \otimes C_2 = ( B_{1N} \otimes B_{2N} ) \leftarrow ( B_{1N-1} * B_{2N-1} ) \leftarrow \ldots \leftarrow ( B_{10} * B_{20} )
+  C_1 \otimes C_2 = ( B_{1N} \otimes B_{2N} ) \leftarrow ( B_{1N-1} \otimes B_{2N-1} ) \leftarrow \ldots \leftarrow ( B_{10} \otimes B_{20} )
 \end{equation*}
 
 Note that it is insufficient merely to guarantee for $B \otimes B'$ that all
@@ -797,8 +823,8 @@ becomes safe
 There is much more to be said, but that must be left to a later revision!
 
 \paragraph{Acknowledgments}
-We would like to acknowledge Vlad Zamfr for asking some thoughtful
-and stimulating conversation about the blockchain protocol.
+We would like to acknowledge Vlad Zamfir for some thoughtful and
+stimulating conversation about the blockchain protocol.
 
 % ------------------------------------------------------------------------
 %GATHER{Xbib.bib}   % For Gather Purpose Only
@@ -808,7 +834,95 @@ and stimulating conversation about the blockchain protocol.
 
 % ------------------------------------------------------------------------
 
+\section{Appendix: a terminating scripting language}
 
+We follow Abramksy's proof expressions from
+\cite{DBLP:journals/tcs/Abramsky93} very closely.
+
+\subsection{Syntax}
+\begin{grammar}
+{p,q} \bc \mathsf{(} e_1, \ldots, e_m \mathsf{)} \mathsf{\{} t_1 \mathsf{;} \; \ldots \mathsf{;} \; t_n \mathsf{\}} & \mbox{programs} \\
+{e} \bc \mathsf{satoshi} \; \bm \; \ldots \; \bm \; \mathsf{ampere} & \mbox{currency units} \\
+    \;\;\; \bm \; x & \mbox{address} \\
+    \;\;\; \bm \; e * e & \mbox{isolation} \\
+    \;\;\; \bm \; e \# e  & \mbox{connection} \\
+    \;\;\; \bm \; \mathsf{choose}\mathsf{(} x_1, \ldots, x_n \mathsf{)}\mathsf{\{} p \mathsf{;}\; q \mathsf{\}} & \mbox{menu} \\
+    \;\;\; \bm \; \mathsf{inl}\mathsf{(} e \mathsf{)} \; \bm \; \mathsf{inr}\mathsf{(} e \mathsf{)} & \mbox{selection} \\
+    \;\;\; \bm \; \mathsf{?}e \; \bm \; \mathsf{\_} & \mbox{storage, disposal} \\
+    \;\;\; \bm \; e \mathsf{@} e & \mbox{contraction} \\
+    \;\;\; \bm \; \mathsf{!}\mathsf{(} x_1, \ldots, x_n \mathsf{)}\mathsf{\{} p \mathsf{\}} & \mbox{replication} \\
+{t} \bc \mathsf{txn}\mathsf{(} e_1, e_2 \mathsf{)}
+\end{grammar}
+
+\subsubsection{Interpretation}
+Programs $p$ and $q$ represent blockchain states. For $p = \mathsf{(}
+e_1, \ldots, e_m \mathsf{)} \mathsf{\{} t_1 \mathsf{;} \; \ldots
+\mathsf{;} \; t_n \mathsf{\}}$, the $e$'s represent resources
+available on the blockchain $p$, while the $t$'s represent
+transactions in progress. For example, if we write $M \cdot \mathsf{satoshi}$ for $\underbrace{\mathsf{satoshi} * \ldots * \mathsf{satoshi}}_{M}$, then 
+
+$\mathsf{(} 1blkchnaddr {)} \mathsf{\{} \mathsf{txn}\mathsf{(} 1blkchnaddr, M \cdot \mathsf{satoshi} \mathsf{)} \mathsf{\}}$
+
+represents the genesis block where $1blkchnaddr$ has been assigned $M$
+$\mathsf{satoshi}$'s, which for future reference we'll write $\mathsf{genesis}$. At the other end of the spectrum,
+
+$\mathsf{(} 1blkchnaddr {)} \mathsf{\{} \mathsf{txn}\mathsf{(} 1blkchnaddr, \mathsf{\_} \mathsf{)} \mathsf{\}}$
+
+represents burning the assets sent to $1blkchnaddr$, which for future
+reference we'll write $\mathsf{burn}$.
+
+Executing a transaction amounts to joining to expressions, $e_1$ and
+$e_2$ in $\mathsf{txn}\mathsf{(} e_1, e_2\mathsf{)}$. Thus, to send
+$X$ $\mathsf{satoshi}$ to $2blkchnaddr$, in the context of the genesis
+block, first we have to turn the genesis block into an expression.
+
+$\mathsf{choose}\mathsf{(} 1spndaddr \mathsf{)}\mathsf{\{} \mathsf{genesis}\mathsf{;}\; \mathsf{burn} \mathsf{\}}$
+
+Now, we can create a transaction that select the genesis block from
+the menu of blockchain states via
+
+$\mathsf{txn}\mathsf{(} \mathsf{choose}\mathsf{(} 1spndaddr \mathsf{)}\mathsf{\{} \mathsf{genesis}\mathsf{;}\; \mathsf{burn} \mathsf{\}}, \mathsf{inl}\mathsf{(} 2blkchnaddr \mathsf{)} \mathsf{)}$
+
+Using the operational semantics of the next section we see that this reduces
+
+$\mathsf{txn}\mathsf{(} 1blkchnaddr, 2blkchnaddr \mathsf{)} \mathsf{;} \; \mathsf{txn}\mathsf{(} 1blkchnaddr, M \cdot \mathsf{satoshi} \mathsf{)}$
+
+In what follows we use the notational conventions:
+\begin{itemize}
+  \item $\vec{e}$ is a list of $e$'s of length $|\vec{e}|$; likewise $\vec{t}$ is list of $t$'s.
+  \item $\mathsf{txn}\mathsf{(} \vec{e}, \vec{e'} \mathsf{)} = \mathsf{txn}\mathsf{(} e_1, e_1' \mathsf{)}\mathsf{;}\; \ldots \mathsf{;} \; \mathsf{txn}\mathsf{(} e_n, e_n' \mathsf{)}$ assuming $|\vec{e}| = |\vec{e'}|$
+  \item we have operations, $( - )^l : \mathsf{Addr} \to \mathsf{Addr}$, $( - )^r : \mathsf{Addr} \to \mathsf{Addr}$ such that given an address $x$, $x^l$, $x^r$ are distinct from $x$ and each other; these operations extend uniquely to $p$, $e$, and $t$ in the obvious manner.
+\end{itemize}
+
+\subsection{Operational Semantics}
+
+\begin{mathpar}
+  \inferrule* [lab=Transaction] {}{\mathsf{txn}\mathsf{(} e_1, x \mathsf{)}\mathsf{;} \; \mathsf{txn}\mathsf{(} x, e_2 \mathsf{)} \rightarrow \mathsf{txn}\mathsf{(} e_1, e_2 \mathsf{)}}
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* [lab=Pair] {}{\mathsf{txn}\mathsf{(} e_1 * e_1', e_1 \# e_2' \mathsf{)} \rightarrow \mathsf{txn}\mathsf{(} e_1, e_2 \mathsf{)}\mathsf{;} \; \mathsf{txn}\mathsf{(} e_1', e_2' \mathsf{)}}
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* [lab=Left] {}{\mathsf{txn}\mathsf{(} \mathsf{choose}\mathsf{(} x, \vec{x} \mathsf{)}\mathsf{\{} \mathsf{(} e, \vec{e} \mathsf{)} \mathsf{\{} \vec{t} \mathsf{\}} \mathsf{;} \; q \mathsf{\}}, \mathsf{inl}\mathsf{(} e' \mathsf{)} \mathsf{)} \rightarrow \mathsf{txn}\mathsf{(} e, e' \mathsf{)}\mathsf{;} \; \vec{t} \mathsf{;} \; \mathsf{txn}\mathsf{(} \vec{x}, \vec{e} \mathsf{)}}
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* [lab=Right] {}{\mathsf{txn}\mathsf{(} \mathsf{choose}\mathsf{(} x, \vec{x} \mathsf{)}\mathsf{\{} p \mathsf{;}\; \mathsf{(} e, \vec{e} \mathsf{)} \mathsf{\{} \vec{t} \mathsf{\}} \mathsf{\}}, \mathsf{inr}\mathsf{(} e' \mathsf{)} \mathsf{)} \rightarrow \mathsf{txn}\mathsf{(} e, e' \mathsf{)}\mathsf{;} \; \vec{t} \mathsf{;} \; \mathsf{txn}\mathsf{(} \vec{x}, \vec{e} \mathsf{)}}
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* [lab=Read] {}{\mathsf{txn}\mathsf{(} \mathsf{!}\mathsf{(} \vec{x} \mathsf{)}\mathsf{\{} \mathsf{(} e, \vec{e} \mathsf{)} \mathsf{\{} \vec{t} \mathsf{\}} \mathsf{\}}, \mathsf{?}e' \mathsf{)} \rightarrow \mathsf{txn}\mathsf{(} e, e' \mathsf{)}\mathsf{;} \; \mathsf{txn}\mathsf{(} \vec{x}, \vec{e} \mathsf{)}}
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* [lab=Dispose] {}{\mathsf{txn}\mathsf{(} \mathsf{!}\mathsf{(} \vec{x} \mathsf{)}\mathsf{\{} p \mathsf{\}}, \mathsf{\_} \mathsf{)} \rightarrow \mathsf{txn}\mathsf{(} \vec{x}, \mathsf{\_} \mathsf{)}}
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* [lab=Copy] {}{\mathsf{txn}\mathsf{(} \mathsf{!}\mathsf{(} \vec{x} \mathsf{)}\mathsf{\{} p \mathsf{\}}, e_1 \mathsf{@} e_2 \mathsf{)} \\ \rightarrow \\ \and \mathsf{txn}\mathsf{(} \vec{x}, x^l \mathsf{@} x^r \mathsf{)} \mathsf{;} \; \mathsf{txn}\mathsf{(} \mathsf{!}\mathsf{(} \vec{x} \mathsf{)}\mathsf{\{} p \mathsf{\}}^l, e_1\mathsf{)} \mathsf{;} \; \mathsf{txn}\mathsf{(} \mathsf{!}\mathsf{(} \vec{x} \mathsf{)}\mathsf{\{} p \mathsf{\}}^r, e_2\mathsf{)}}
+\end{mathpar}
 
 % ------------------------------------------------------------------------
 
