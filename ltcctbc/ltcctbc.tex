@@ -436,10 +436,10 @@ $T_1$ running concurrently with $T_2$) operate effectively in
 isolation and thus safely. Likewise, a proof that the blockchain is of
 the form $B_1 * B_2$ (none of the transactions in $B_1$ connect to
 addresses in $B_2$ and vice versa), together with a proof that
-$AliceBettyTxn : B_1 \rightarrow B_1'$ (this txn uses only addresses
-in $B_1$), and $AlfredBobTxn : B_2 \rightarrow B_2'$ (this txn uses
-only addresses in $B_2$) constitutes a proof that $AliceBettyTxn
-\otimes AlfredBobTxn$ can operate with isolated projections of the
+$\mathsf{AliceBetty} : B_1 \rightarrow B_1'$ (this txn uses only addresses
+in $B_1$), and $\mathsf{AlfredBob} : B_2 \rightarrow B_2'$ (this txn uses
+only addresses in $B_2$) constitutes a proof that $\mathsf{AliceBetty}
+\otimes \mathsf{AlfredBob}$ can operate with isolated projections of the
 blockchain.
 
 If the blockchain is built using the primitives of linear logic, it
@@ -1059,40 +1059,52 @@ the details of that typing discipline along with the basic result that
 all well typed programs are terminating.
 
 \begin{mathpar}
-  \inferrule* {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} \\ \vdash \mathsf{(} u : B, \Delta \mathsf{)} \mathsf{\{} \vec{txn'} \mathsf{\}}}{\vdash \mathsf{(} t * u : A \otimes B, \Gamma, \Delta \mathsf{)} \mathsf{\{} \vec{txn}\mathsf{;} \; \vec{txn'} \mathsf{\}}}
+  \inferrule* [lab=Tensor] {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} \\ \vdash \mathsf{(} u : B, \Delta \mathsf{)} \mathsf{\{} \vec{txn'} \mathsf{\}}}{\vdash \mathsf{(} t * u : A \otimes B, \Gamma, \Delta \mathsf{)} \mathsf{\{} \vec{txn}\mathsf{;} \; \vec{txn'} \mathsf{\}}}
 \end{mathpar}
 
 \begin{mathpar}
-  \inferrule* {\vdash \mathsf{(} t : A, u : B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} t \# u : A \parr B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}
+  \inferrule* [lab=Par] {\vdash \mathsf{(} t : A, u : B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} t \# u : A \parr B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}
 \end{mathpar}
 
 \begin{mathpar}
-  \inferrule* {\vdash p \and \vdash q \\ p = \mathsf{(} t : A, \vec{t} : \vec{G} \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} \and q = \mathsf{(} u : B, \vec{u} : \vec{G} \mathsf{)} \mathsf{\{} \vec{txn'} \mathsf{\}}}{\vdash \mathsf{(} \mathsf{choose}\mathsf{(} \vec{x} : \vec{G} \mathsf{)}\mathsf{\{} p \mathsf{\}} \mathsf{\{} q \mathsf{\}} \mathsf{)} : A \with B, \vec{x} : \vec{G} \mathsf{)} \mathsf{\{} \mathsf{\}}}
+  \inferrule* [lab=With] {\vdash p \and \vdash q \\ p = \mathsf{(} t : A, \vec{t} : \vec{G} \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} \and q = \mathsf{(} u : B, \vec{u} : \vec{G} \mathsf{)} \mathsf{\{} \vec{txn'} \mathsf{\}}}{\vdash \mathsf{(} \mathsf{choose}\mathsf{(} \vec{x} : \vec{G} \mathsf{)}\mathsf{\{} p \mathsf{\}} \mathsf{\{} q \mathsf{\}} \mathsf{)} : A \with B, \vec{x} : \vec{G} \mathsf{)} \mathsf{\{} \mathsf{\}}}
 \end{mathpar}
 
 \begin{mathpar}
-  \inferrule* {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} inl( t ) : A + B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
+  \inferrule* [lab=Left] {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} inl( t ) : A + B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
 \end{mathpar}
 
 \begin{mathpar}
-  \inferrule* {\vdash \mathsf{(} u : B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} inr( u ) : A + B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
+  \inferrule* [lab=Right] {\vdash \mathsf{(} u : B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} inr( u ) : A + B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
 \end{mathpar}
 
 \begin{mathpar}
-  \inferrule* {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} ?t : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
+  \inferrule* [lab=Storage] {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} ?t : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
 \end{mathpar}
 
 \begin{mathpar}
-  \inferrule* {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} \_ : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
+  \inferrule* [lab=Disposal] {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} \_ : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
 \end{mathpar}
 
 \begin{mathpar}
-  \inferrule* {\vdash \mathsf{(} t : ?A, u : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} t @ u : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}
+  \inferrule* [lab=Contraction] {\vdash \mathsf{(} t : ?A, u : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} t @ u : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}
 \end{mathpar}
 
 \begin{mathpar}
-  \inferrule* {\vdash p \\ p = \mathsf{(} t : A, \vec{t} : ?\vec{G}, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} \mathsf{!} \mathsf{(} \vec{x} \mathsf{)} \mathsf{\{} p \mathsf{\}} : !A, \vec{x} : ?\vec{G} \mathsf{)} \mathsf{\{} \mathsf{\}}}
+  \inferrule* [lab=Replication] {\vdash p \\\\ p = \mathsf{(} t : A, \vec{t} : ?\vec{G}, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} \mathsf{!} \mathsf{(} \vec{x} \mathsf{)} \mathsf{\{} p \mathsf{\}} : !A, \vec{x} : ?\vec{G} \mathsf{)} \mathsf{\{} \mathsf{\}}}
 \end{mathpar}
+
+\paragraph{Discussion}
+As is easily seen, this is merely a transliteration of Abramsky's
+proof expressions from \cite{DBLP:journals/tcs/Abramsky93}, and as
+such the scripting language enjoys all the properties of proof
+expressions. In particular, theorem 7.18 pg 47 tells us that well
+typed programs terminate.
+
+In a discussion of ``smart contract'' the types play a specially
+important role. If programs in this language consitute financial
+contracts, then the types provide a means by which parties can probe
+the contracts for properties above and beyond termination.
 
 % ------------------------------------------------------------------------
 
