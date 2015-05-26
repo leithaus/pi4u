@@ -16,7 +16,8 @@
 %\documentclass[twocolumn]{amsart}
 %\documentclass[]{amsart}
 %\documentclass[]{sig-alternate}
-\documentclass[fleqn]{acm_proc_article-sp}
+%\documentclass[fleqn]{acm_proc_article-sp}
+\documentclass[]{acm_proc_article-sp}
 %\documentclass[]{llncs}
 
 
@@ -852,13 +853,19 @@ expressions from \cite{DBLP:journals/tcs/Abramsky93} very closely.
     \;\;\; \bm \; x & \mbox{address} \\
     \;\;\; \bm \; e * e & \mbox{isolation} \\
     \;\;\; \bm \; e \# e  & \mbox{connection} \\
+    \;\;\; \bm \; e \multimap e  & \mbox{obligation} \\
     \;\;\; \bm \; \mathsf{choose}\mathsf{(} x_1, \ldots, x_n \mathsf{)}\mathsf{\{} p \mathsf{;}\; q \mathsf{\}} & \mbox{menu} \\
     \;\;\; \bm \; \mathsf{inl}\mathsf{(} e \mathsf{)} \; \bm \; \mathsf{inr}\mathsf{(} e \mathsf{)} & \mbox{selection} \\
     \;\;\; \bm \; \mathsf{?}e \; \bm \; \mathsf{\_} & \mbox{storage, disposal} \\
     \;\;\; \bm \; e \mathsf{@} e & \mbox{contraction} \\
     \;\;\; \bm \; \mathsf{!}\mathsf{(} x_1, \ldots, x_n \mathsf{)}\mathsf{\{} p \mathsf{\}} & \mbox{replication} \\
-{t} \bc \mathsf{txn}\mathsf{(} e_1, e_2 \mathsf{)}
+{t} \bc \mathsf{txn}\mathsf{(} e_1, e_2 \mathsf{)} & \mbox{transaction}
 \end{grammar}
+
+\paragraph{Discussion}
+$e_1 \multimap e_2$ is really just convenient syntactic sugar for
+$e_1^{\perp} \# e_2$, where $e^{\perp}$ is identity on addresses, but
+changes the \emph{polarity} of the type.
 
 \subsubsection{Interpretation}
 Programs $p$ and $q$ represent blockchain states. For $p = \mathsf{(}
@@ -870,36 +877,138 @@ transactions in progress. For example, if we write $M \cdot \mathsf{satoshi}$ fo
 $\mathsf{(} 1blkchnaddr {)} \mathsf{\{} \mathsf{txn}\mathsf{(} 1blkchnaddr, M \cdot \mathsf{satoshi} \mathsf{)} \mathsf{\}}$
 
 represents the genesis block where $1blkchnaddr$ has been assigned $M$
-$\mathsf{satoshi}$'s, which for future reference we'll write $\mathsf{genesis}$. At the other end of the spectrum,
+$\mathsf{satoshi}$'s. At the other end of the spectrum,
 
 $\mathsf{(} 1blkchnaddr {)} \mathsf{\{} \mathsf{txn}\mathsf{(} 1blkchnaddr, \mathsf{\_} \mathsf{)} \mathsf{\}}$
 
-represents burning the assets sent to $1blkchnaddr$, which for future
-reference we'll write $\mathsf{burn}$.
+represents burning the assets sent to $1blkchnaddr$.
+
+At this level of abstraction modeled by the operational semantics in
+the next section, addresses are more closely aligned with transaction
+inputs in blockchain transactions. Thus, the genesis block is more
+accurately represented as 
+
+\begin{equation*}
+  \begin{aligned} 
+    \mathsf{(} addr_1 * \ldots * addr_M {)} \mathsf{\{} & \\
+    \mathsf{txn}\mathsf{(} addr_1, \mathsf{satoshi} \mathsf{)} \mathsf{;} \\
+    \ldots \mathsf{;} & \\
+    \mathsf{txn}\mathsf{(}addr_M, \mathsf{satoshi} \mathsf{)} \\
+    \mathsf{\}} &
+  \end{aligned} 
+\end{equation*}
+
+which for future reference we'll write $\mathsf{genesis}$. Similarly,
+the second example is more accurately written as
+
+\begin{equation*}
+  \begin{aligned} 
+    \mathsf{(} addr_1 * \ldots * addr_M {)} \mathsf{\{} \mathsf{txn}\mathsf{(} addr_1, \mathsf{\_} \mathsf{)} \mathsf{;} \ldots \mathsf{;} \; \mathsf{txn}\mathsf{(}addr_M, \mathsf{\_} \mathsf{)} \mathsf{\}}
+  \end{aligned} 
+\end{equation*}
+
+we'll write as $\mathsf{burn}$ in the sequel.
 
 Executing a transaction amounts to joining to expressions, $e_1$ and
 $e_2$ in $\mathsf{txn}\mathsf{(} e_1, e_2\mathsf{)}$. Thus, to send
-$M$ $\mathsf{satoshi}$ to $2blkchnaddr$, in the context of the genesis
+$I < M$ $\mathsf{satoshi}$ to $2blkchnaddr$, in the context of the genesis
 block, first we have to turn the genesis block into an expression.
 
 $\mathsf{choose}\mathsf{(} 1spndaddr \mathsf{)}\mathsf{\{} \mathsf{genesis}\mathsf{;}\; \mathsf{burn} \mathsf{\}}$
 
-Now, we can create a transaction that select the genesis block from
+Next, we form a spend expression $bddr_1 * \ldots * bddr_I \multimap addr_{I+1} \# addr_M$ which will consume $I$ $\mathsf{satoshi}$ from the genesis block addresses $addr_1$ through $addr_I$.
+
+Now, we can create a transaction that selects the genesis block from
 the menu of blockchain states via
 
-$\mathsf{txn}\mathsf{(} \mathsf{choose}\mathsf{(} 1spndaddr \mathsf{)}\mathsf{\{} \mathsf{genesis}\mathsf{;}\; \mathsf{burn} \mathsf{\}}, \mathsf{inl}\mathsf{(} 2blkchnaddr \mathsf{)} \mathsf{)}$
+\begin{equation*}
+  \begin{aligned} 
+    \mathsf{txn}\mathsf{(} \\
+    \mathsf{choose}\mathsf{(} 1spndaddr \mathsf{)}\mathsf{\{} \mathsf{genesis}\mathsf{;}\; \mathsf{burn} \mathsf{\}}, \\
+    \mathsf{inl}\mathsf{(} bddr_1 * \ldots * bddr_I \multimap addr_{I+1} \# addr_M \mathsf{)} \\
+    \mathsf{)}
+  \end{aligned}   
+\end{equation*}
 
-Using the operational semantics of the next section we see that this reduces
+Using the operational semantics of the next section we see that this reduces to
 
-$\mathsf{txn}\mathsf{(} 1blkchnaddr, 2blkchnaddr \mathsf{)} \mathsf{;} \; \mathsf{txn}\mathsf{(} 1blkchnaddr, M \cdot \mathsf{satoshi} \mathsf{)}$
+\begin{equation*}
+  \begin{aligned} 
+    \mathsf{txn}\mathsf{(} \\
+    addr_1 * \ldots * addr_M, \\
+    bddr_1 * \ldots * bddr_I \multimap addr_{I+1} \# addr_M \\
+    \mathsf{)} \mathsf{;}
+  \end{aligned} 
+\end{equation*}
 
-which then reduces
+which then reduces to
 
-$\mathsf{txn}\mathsf{(} 2blkchnaddr, M \cdot \mathsf{satoshi} \mathsf{)}$
+\begin{equation*}
+  \begin{aligned} 
+  \mathsf{txn}\mathsf{(} addr_1, bddr_1 \mathsf{)} \mathsf{;}\\
+  \ldots \mathsf{;} \\
+  \mathsf{txn}\mathsf{(} addr_I, bddr_I \mathsf{)} \mathsf{;} \\
+  \mathsf{txn}\mathsf{(} addr_{I+1}, addr_{I+1} \mathsf{)} \mathsf{;} \\
+  \ldots \mathsf{;} \\
+  \mathsf{txn}\mathsf{(} addr_M, addr_M \mathsf{)} \mathsf{;} \\
+  \mathsf{txn}\mathsf{(} addr_1, \mathsf{satoshi} \mathsf{)} \mathsf{;} \\
+  \ldots \mathsf{;} \\
+  \mathsf{txn}\mathsf{(} addr_M, \mathsf{satoshi} \mathsf{)} \mathsf{;}
+  \end{aligned} 
+\end{equation*}
 
-To spend a smaller amount than the entirety of the resources at
-$1blkchnaddr$ the reader can check that there is an input-style
-accounting that exactly mimics the current blockchain semantics.
+which then reduces to
+
+\begin{equation*}
+  \begin{aligned} 
+    \mathsf{txn}\mathsf{(} bddr_1, \mathsf{satoshi} \mathsf{)} \mathsf{;}\\
+    \ldots \mathsf{;} \\
+    \mathsf{txn}\mathsf{(} bddr_I, \mathsf{satoshi} \mathsf{)} \mathsf{;} \\
+    \mathsf{txn}\mathsf{(} addr_{I+1}, \mathsf{satoshi} \mathsf{)} \mathsf{;} \\
+    \ldots \mathsf{;} \\
+    \mathsf{txn}\mathsf{(} addr_M, \mathsf{satoshi} \mathsf{)} \mathsf{;}
+  \end{aligned} 
+\end{equation*}
+
+This can be seen as a ledger-like representation assigning
+$\mathsf{satoshi}$'s to addresses.
+
+Now, the final piece of the puzzle is that that spend transaction
+needs to be created in the context of a blockchain state, which
+constitutes the \emph{resulting} blockchain state. In point of fact,
+this is a piece of context we elided when we formed the transaction to
+focus on the reduction. A more complete picture of the execution looks like
+
+\begin{equation*}
+  \begin{aligned} 
+    \mathsf{(} bddr_1 * \ldots * bddr_I * addr_{I+1} * \ldots * addr_M  \mathsf{)} \mathsf{\{} \\
+    \mathsf{txn}\mathsf{(} \\
+    \mathsf{choose}\mathsf{(} 1spndaddr \mathsf{)}\mathsf{\{} \mathsf{genesis}\mathsf{;}\; \mathsf{burn} \mathsf{\}}, \\
+    \mathsf{inl}\mathsf{(} bddr_1 * \ldots * bddr_I \multimap addr_{I+1} \# addr_M \mathsf{)} \\
+    \mathsf{)} \\
+    \mathsf{\}} \\
+    \rightarrow \\
+    \mathsf{(} bddr_1 * \ldots * bddr_I * addr_{I+1} * \ldots * addr_M  \mathsf{)} \mathsf{\{} \\
+    \mathsf{txn}\mathsf{(} bddr_1, \mathsf{satoshi} \mathsf{)} \mathsf{;}\\
+    \ldots \mathsf{;} \\
+    \mathsf{txn}\mathsf{(} bddr_I, \mathsf{satoshi} \mathsf{)} \mathsf{;} \\
+    \mathsf{txn}\mathsf{(} addr_{I+1}, \mathsf{satoshi} \mathsf{)} \mathsf{;} \\
+    \ldots \mathsf{;} \\
+    \mathsf{txn}\mathsf{(} addr_M, \mathsf{satoshi} \mathsf{)} \mathsf{;} \\
+    \mathsf{\}}
+  \end{aligned}   
+\end{equation*}
+
+This brings us full circle. At the beginning of the paper we
+explicitly recognized the blockchain as data that is program. The
+reduction above provides an explicit model of just this phenomenon. A
+blockchain state, i.e. a representation of data, is a
+\emph{program}. The transition from one state to the next is the
+execution of the program. Any state of the program actually allows a
+``read back'' to a ledger-like representation capturing the
+distribution of resources to addresses.
+
+\subsection{Operational Semantics}
 
 In what follows we use the notational conventions:
 \begin{itemize}
@@ -907,8 +1016,6 @@ In what follows we use the notational conventions:
   \item $\mathsf{txn}\mathsf{(} \vec{e}, \vec{e'} \mathsf{)} = \mathsf{txn}\mathsf{(} e_1, e_1' \mathsf{)}\mathsf{;}\; \ldots \mathsf{;} \; \mathsf{txn}\mathsf{(} e_n, e_n' \mathsf{)}$ assuming $|\vec{e}| = |\vec{e'}|$
   \item we have operations, $( - )^l : \mathsf{Addr} \to \mathsf{Addr}$, $( - )^r : \mathsf{Addr} \to \mathsf{Addr}$ such that given an address $x$, $x^l$, $x^r$ are distinct from $x$ and each other; these operations extend uniquely to $p$, $e$, and $t$ in the obvious manner.
 \end{itemize}
-
-\subsection{Operational Semantics}
 
 \begin{mathpar}
   \inferrule* [lab=Transaction] {}{\mathsf{txn}\mathsf{(} e_1, x \mathsf{)}\mathsf{;} \; \mathsf{txn}\mathsf{(} x, e_2 \mathsf{)} \rightarrow \mathsf{txn}\mathsf{(} e_1, e_2 \mathsf{)}}
