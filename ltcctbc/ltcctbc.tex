@@ -1057,7 +1057,25 @@ discipline on the scripting language presented above. Here we present
 the details of that typing discipline along with the basic result that
 all well typed programs are terminating.
 
-TBD
+\begin{mathpar}
+  \inferrule* {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} \vdash \mathsf{(} u : B, \Delta \mathsf{)} \mathsf{\{} \vec{txn'} \mathsf{\}}}{\vdash \mathsf{(} t * u : A \otimes B, \Gamma, \Delta \mathsf{)} \mathsf{\{} \vec{txn}\mathsf{;} \; \vec{txn'} \mathsf{\}}}
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* {\vdash \mathsf{(} t : A, u : B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} t \# u : A \parr B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* {\vdash p \and \vdash q \\ p = \mathsf{(} t : A, \vec{t} : \vec{G} \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} \and q = \mathsf{(} u : B, \vec{u} : \vec{G} \mathsf{)} \mathsf{\{} \vec{txn'} \mathsf{\}}}{\vdash \mathsf{(} \mathsf{choose}\mathsf{(} \vec{x} : \vec{G} \mathsf{)}\mathsf{\{} p \mathsf{\}} \mathsf{\{} q \mathsf{\}} \mathsf{)} : A \with B, \vec{x} : \vec{G} \mathsf{)} \mathsf{\{} \mathsf{\}}}
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} inl( t ) : A + B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* {\vdash \mathsf{(} u : B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} inr( u ) : A + B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
+\end{mathpar}
 
 % ------------------------------------------------------------------------
 
