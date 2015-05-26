@@ -48,6 +48,7 @@
 \usepackage{caption}
 %\usepackage{multicol}
 
+
 % Math
 \newcommand{\maps}{\colon}
 \newcommand{\NN}{\mathbb{N}}
@@ -1058,7 +1059,7 @@ the details of that typing discipline along with the basic result that
 all well typed programs are terminating.
 
 \begin{mathpar}
-  \inferrule* {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} \vdash \mathsf{(} u : B, \Delta \mathsf{)} \mathsf{\{} \vec{txn'} \mathsf{\}}}{\vdash \mathsf{(} t * u : A \otimes B, \Gamma, \Delta \mathsf{)} \mathsf{\{} \vec{txn}\mathsf{;} \; \vec{txn'} \mathsf{\}}}
+  \inferrule* {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} \\ \vdash \mathsf{(} u : B, \Delta \mathsf{)} \mathsf{\{} \vec{txn'} \mathsf{\}}}{\vdash \mathsf{(} t * u : A \otimes B, \Gamma, \Delta \mathsf{)} \mathsf{\{} \vec{txn}\mathsf{;} \; \vec{txn'} \mathsf{\}}}
 \end{mathpar}
 
 \begin{mathpar}
@@ -1075,6 +1076,22 @@ all well typed programs are terminating.
 
 \begin{mathpar}
   \inferrule* {\vdash \mathsf{(} u : B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} inr( u ) : A + B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} ?t : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} \_ : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* {\vdash \mathsf{(} t : ?A, u : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} t @ u : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}
+\end{mathpar}
+
+\begin{mathpar}
+  \inferrule* {\vdash p \\ p = \mathsf{(} t : A, \vec{t} : ?\vec{G}, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} \mathsf{!} \mathsf{(} \vec{x} \mathsf{)} \mathsf{\{} p \mathsf{\}} : !A, \vec{x} : ?\vec{G} \mathsf{)} \mathsf{\{} \mathsf{\}}}
 \end{mathpar}
 
 % ------------------------------------------------------------------------
