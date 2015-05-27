@@ -434,7 +434,7 @@ together with a proof that $T_1 : H_1 \rightarrow H_1'$, $T_2 : H_2
 \rightarrow H_2'$ constitutes a proof that $T_1 \otimes T_2$ (thread
 $T_1$ running concurrently with $T_2$) operate effectively in
 isolation and thus safely. Likewise, a proof that the blockchain is of
-the form $B_1 * B_2$ (none of the transactions in $B_1$ connect to
+the form $B_1 \otimes B_2$ (none of the transactions in $B_1$ connect to
 addresses in $B_2$ and vice versa), together with a proof that
 $\mathsf{AliceBetty} : B_1 \rightarrow B_1'$ (this txn uses only addresses
 in $B_1$), and $\mathsf{AlfredBob} : B_2 \rightarrow B_2'$ (this txn uses
@@ -579,7 +579,7 @@ the combined $A \otimes B$ resource.
 Now, comparison of the par ( $A \parr B$ ) rule, which establishes transaction links, is even more illuminating.
 
 \begin{mathpar}
-  \inferrule* {\vdash \Gamma, t : A, u : B}{ G, t \parr u : A \parr B }
+  \inferrule* {\vdash \Gamma, t : A, u : B}{\vdash \Gamma, t \parr u : A \parr B }
 \end{mathpar}
 
 This rule insists that the transaction link,  $t \parr u$, is made in the same piece of the blockchain, $\Gamma$.
@@ -639,7 +639,7 @@ while
 and
 
 \begin{mathpar}
-  \inferrule* {G, u : B}{\vdash inr( u ) : A + B}
+  \inferrule* {\vdash \Gamma, u : B}{\vdash inr( u ) : A + B}
 \end{mathpar}
 
 If during a more complex transaction $t \with u$ gets tied to $inl( t'
@@ -1030,7 +1030,7 @@ focus on the reduction. A more complete picture of the execution looks like
   &\;\;\;\;\;\;\mathsf{inl}\mathsf{(} bddr_1 * \ldots * bddr_I \multimap addr_{I+1} \# addr_M \mathsf{)} && \\
   &\;\;\mathsf{)} && \\
   &\mathsf{\}} && \\
-  &\rightarrow && \\
+  &\rightarrow* && \\
   &\mathsf{(} bddr_1 * \ldots * bddr_I * addr_{I+1} * \ldots * addr_M  \mathsf{)} \mathsf{\{} && \\
   &\;\;\;\;\mathsf{txn}\mathsf{(} bddr_1, \mathsf{satoshi} \mathsf{)} \mathsf{;}&& \\
   &\;\;\;\;\ldots \mathsf{;} && \\
@@ -1072,17 +1072,13 @@ all well typed programs are terminating.
 
 \begin{mathpar}
   \inferrule* [lab=Left] {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} inl( t ) : A + B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
-\end{mathpar}
-
-\begin{mathpar}
+  \and
   \inferrule* [lab=Right] {\vdash \mathsf{(} u : B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} inr( u ) : A + B, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
 \end{mathpar}
 
 \begin{mathpar}
   \inferrule* [lab=Storage] {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} ?t : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
-\end{mathpar}
-
-\begin{mathpar}
+  \and
   \inferrule* [lab=Disposal] {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}}}{ \vdash \mathsf{(} \_ : ?A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} }
 \end{mathpar}
 
