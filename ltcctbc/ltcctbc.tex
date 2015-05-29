@@ -560,15 +560,15 @@ everything remains consistent. Here's an example. The proof rule for
 the tensor $A \otimes B$ looks like this
 
 \begin{mathpar}
-  \inferrule* {\vdash \Gamma, t : A,  \vdash H, u : B}{\vdash \Gamma, H, t \otimes u : A \otimes B}
+  \inferrule* {\vdash \Gamma, t : A,  \vdash \Delta, u : B}{\vdash \Gamma, \Delta, t \otimes u : A \otimes B}
 \end{mathpar}
 
 It says that if you have one blockchain, $\vdash \Gamma, t : A$, and
 another completely independent blockchain, with a totally separate
-address space, $\vdash H, u : B$, then you can make a new one
+address space, $\vdash \Delta, u : B$, then you can make a new one
 
 \begin{mathpar}
-  \inferrule* {} {|- G, H, t \otimes u : A \otimes B}
+  \inferrule* {} {\vdash \Gamma, \Delta, t \otimes u : A \otimes B}
 \end{mathpar}
 
 in which you just combine all the data of assignments of addresses to
@@ -931,7 +931,7 @@ In what follows we use the notational conventions:
 \end{mathpar}
 
 \begin{mathpar}
-  \inferrule* [lab=Pair] {}{\mathsf{txn}\mathsf{(} e_1 * e_1', e_1 \# e_2' \mathsf{)} \rightarrow \mathsf{txn}\mathsf{(} e_1, e_2 \mathsf{)}\mathsf{;} \; \mathsf{txn}\mathsf{(} e_1', e_2' \mathsf{)}}
+  \inferrule* [lab=Pair] {}{\mathsf{txn}\mathsf{(} e_1 * e_1', e_2 \# e_2' \mathsf{)} \rightarrow \mathsf{txn}\mathsf{(} e_1, e_2 \mathsf{)}\mathsf{;} \; \mathsf{txn}\mathsf{(} e_1', e_2' \mathsf{)}}
 \end{mathpar}
 
 \begin{mathpar}
@@ -1057,6 +1057,10 @@ sequents. In point of fact, that formalism amounts to a typing
 discipline on the scripting language presented above. Here we present
 the details of that typing discipline along with the basic result that
 all well typed programs are terminating.
+
+\begin{mathpar}
+  \inferrule* [lab=Axiom] {}{\vdash \mathsf{(} x : A^{\perp}, x : A \mathsf{)} \mathsf{\{} \mathsf{\}}}
+\end{mathpar}
 
 \begin{mathpar}
   \inferrule* [lab=Tensor] {\vdash \mathsf{(} t : A, \Gamma \mathsf{)} \mathsf{\{} \vec{txn} \mathsf{\}} \\ \vdash \mathsf{(} u : B, \Delta \mathsf{)} \mathsf{\{} \vec{txn'} \mathsf{\}}}{\vdash \mathsf{(} t * u : A \otimes B, \Gamma, \Delta \mathsf{)} \mathsf{\{} \vec{txn}\mathsf{;} \; \vec{txn'} \mathsf{\}}}
