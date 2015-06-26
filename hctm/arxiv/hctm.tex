@@ -288,7 +288,7 @@
 %\newcommand{\xml}{\textsc{xml}}
 \newcommand{\xml}{XML} 
 
-\newcommand{\papertitle}{Higher category models of mobile process calculi}
+\newcommand{\papertitle}{Higher category models of the pi-calculus}
 % use static date to preserve date of actual publication
  \newcommand{\paperversion}{Draft Version 0.1 - Jan 7, 2015}
 
@@ -361,8 +361,9 @@ L.G. Meredith\\
   Curry-Howard, interpreting terms as typed morphisms, while
   simultaneously providing an explicit interpretation of the rewrite
   rules of standard operational presentations as 2-morphisms. One of
-  the key contributions is a method of restricting rewrites to
-  specific contexts inspired by catalysis in chemical reactions.
+  the key contributions, inspired by catalysis in chemical reactions,
+  is a method of restricting the application of 2-morphisms
+  interpreting rewrites to specific contexts.
 
 }
 
@@ -421,7 +422,7 @@ modeling options typically associated with the {\pic}. For example, a
 significant bifurcation occurs in the treatment of names with Milner's
 original calculus hiding all internal structure of names
 \cite{milner91polyadicpi}, while the $\rho$-calculus variant provides
-a reflective version in which names are the codes or processes
+a reflective version in which names are the codes of processes
 \cite{DBLP:journals/entcs/MeredithR05}. The semantics presented here
 is capable of providing a categorical interpretation of both variants.
 
@@ -461,10 +462,12 @@ semantics framework from the presentation of higher order syntax (or
 terms with binding constructors like {\pic} or $\lambda$-calculus), to
 rewrite rules \cite{hirschowitzcc2c}.
 
-The present work, while presenting a modular semantics, and some tools
-that apply to a number of calculi, is focused on providing a direct
-account of the {\pic}, rather than providing a framework for
-interpreting a number of computational calculi. Moreover, our
+The present work is primarily focused on providing a direct account of
+the {\pic}. The modularity of the semantics arises from wanting to
+give a clean design and clear shape to the present account, rather
+than an attempt to provide a framework for interpreting a number of
+computational calculi. The fact that the techniques do apply to a
+number of calculi was a side effect of this process. Moreover, our
 particular reconciliation of operational laziness with categorical
 eagerness introduces an explicit resource sensitivity, which we have
 not seen before in the theoretical literature, yet is remarkably
@@ -523,6 +526,8 @@ external observer.
        \;\;\; \bm \; {P} \juxtap {Q} & \mbox{parallel} \\                                
 \end{grammar}
 
+Due to space limitations we do not treat replication, $!P$.
+
 \subsubsection{Free and bound names}
 
 \begin{equation*}
@@ -563,7 +568,7 @@ $( P, |, 0 )$ into commutative monoids and satisfying
 { |\vec{y}| = |\vec{z}| }
 %{P_1 + {{ x_{0}{?}{(}{\vec{y}}{)} \concat {P}}\juxtap {x_{1}}{!}{(}{\vec{z}}{)} + P_2}
 {{{ x{?}{(}{\vec{y}}{)} \concat {P}}\juxtap {x}{!}{(}{\vec{z}}{)}}
-\red {{P}{\{}\quotep{\vec{z}}{/}{\vec{y}}{\}}}}
+\red {{P}{\{}\vec{z}{/}{\vec{y}}{\}}}}
 
 In addition, we have the following context rules:
 
@@ -584,8 +589,8 @@ below.
 \infrule[Par-barb]{\mbox{$P\downarrow x$ or $Q\downarrow x$}}
       {{P} \juxtap {Q} \downarrow x}
 
-We write $P \Downarrow x$ if there is $Q$ such that 
-$P \wred Q$ and $Q \downarrow x$.
+% We write $P \Downarrow x$ if there is $Q$ such that 
+% $P \wred Q$ and $Q \downarrow x$.
 \end{defn}
 
 Notice that $\prefix{x}{y}{P}$ has no barb.  Indeed, in {\pic} as well
@@ -597,8 +602,8 @@ detect if a sent message has been received or not.
 An \emph{barbed bisimulation}, is a symmetric binary relation 
 ${\mathcal S}$ between agents such that $P\rel{S}Q$ implies:
 \begin{enumerate}
-\item If $P \red P'$ then $Q \wred Q'$ and $P'\rel{S} Q'$.
-\item If $P\downarrow x$, then $Q\Downarrow x$.
+\item If $P \red P'$ then $Q \red Q'$ and $P'\rel{S} Q'$.
+\item If $P\downarrow x$, then $Q\downarrow x$.
 \end{enumerate}
 $P$ is barbed bisimilar to $Q$, written
 $P \wbbisim Q$, if $P \rel{S} Q$ for some barbed bisimulation ${\mathcal S}$.
@@ -896,6 +901,15 @@ transport categorical notions of typing back to the process
 setting. For example, Mellies and Zeilberger's refinement types
 \cite{DBLP:conf/popl/MelliesZ15}, expressed as functors, suggest an
 intriguing approach to a more categorical account of behavioral types.
+
+Finally, the use of $COMM$ to control $comm_n$ based rewrites is
+strongly reminiscent of the distinction between logical, or virtual
+concurrency such as may be found in a threads package or operating
+system process abstraction, versus actual hardware resources. Allowing
+more than one $COMM$ resource provides, on the one hand a very natural
+account of so-called true concurrency semantics, and on the other the
+means to reason about these very practical situations which we hope to
+investigate in future work.
 
 \paragraph{Acknowledgments}
 We would like to acknowledge Tom Hirschowitz for asking some thoughtful
