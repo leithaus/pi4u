@@ -587,7 +587,9 @@ below.
 \infrule[Out-barb]{ }
       {{x}!(\vec{y}) \downarrow x}
 \infrule[Par-barb]{\mbox{$P\downarrow x$ or $Q\downarrow x$}}
-      {{P} \juxtap {Q} \downarrow x}
+      {\mbox{$P \juxtap Q \downarrow x$}}
+\infrule[New-barb]{\mbox{$P\downarrow x$, $x \neq u$}}
+      {\mbox{$(\mathsf{new}\; u){P} \downarrow x$}}
 
 % We write $P \Downarrow x$ if there is $Q$ such that 
 % $P \wred Q$ and $Q \downarrow x$.
@@ -867,6 +869,7 @@ in the same hom-category). More precisely,
 \begin{itemize}
   \item $\meaningof{x!(y_1,\ldots,y_n)} \Downarrow \meaningof{x}$
   \item $\meaningof{P} \Downarrow \meaningof{x}$ or $\meaningof{Q} \Downarrow \meaningof{x}$ implies $\meaningof{P} \juxtap \meaningof{Q} \Downarrow \meaningof{x}$
+  \item $\meaningof{P} \Downarrow \meaningof{x}$, $x \neq u$ implies $\meaningof{(\mathsf{new}\; u)P} \Downarrow \meaningof{x}$
 \end{itemize}
 
 Taken together these two notions provide an immediate lifting of the syntactic
@@ -912,8 +915,11 @@ means to reason about these very practical situations which we hope to
 investigate in future work.
 
 \paragraph{Acknowledgments}
-We would like to acknowledge Tom Hirschowitz for asking some thoughtful
-and stimulating questions about earlier versions of this work.
+We would like to acknowledge Jamie Vicary for some early conversations
+about a higher-category-based approach; Tom Hirschowitz for asking some
+thoughtful and stimulating questions about earlier versions of this
+work; and Marius Buliga for some initial conversations which prompted
+us to reconsider enzymatic-style solutions.
 
 % ------------------------------------------------------------------------
 %GATHER{Xbib.bib}   % For Gather Purpose Only
