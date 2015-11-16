@@ -1,0 +1,3 @@
+latex typcl
+dvips typcl.dvi
+ps2pdf typcl.ps

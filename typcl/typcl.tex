@@ -1,0 +1,695 @@
+% ------------------------------------------------------------------------
+% AMS-LaTeX Paper ********************************************************
+% ------------------------------------------------------------------------
+% Submitted:      Dec 15 2003
+% Final Version:  
+% Accepted:       
+% ------------------------------------------------------------------------
+% This is a journal top-matter template file for use with AMS-LaTeX.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TODO(mike): locating a closure at a name: how to translate a closure into a process that gets stuck into the cell
+
+
+
+%\documentclass{tran-l}
+%\documentclass[twocolumn]{amsart}
+%\documentclass[]{amsart}
+%\documentclass[]{sig-alternate}
+\documentclass[]{acm_proc_article-sp}
+%\documentclass[]{llncs}
+
+
+%\documentclass[]{prentcsmacro}
+
+%\usepackage[active]{srcltx} % SRC Specials for DVI Searching
+\usepackage{url}
+\usepackage[pdf]{pstricks}
+\usepackage{pstricks-add, pst-grad, pst-plot}
+\usepackage[tiling]{pst-fill}
+\psset{linewidth=0.3pt,dimen=middle}
+\psset{xunit=.70cm,yunit=0.70cm}
+\psset{angleA=-90,angleB=90,ArrowInside=->,arrowscale=2}
+
+
+% From Allen's stable.
+\usepackage{bigpage}
+\usepackage{bcprules}
+%\usepackage{code}
+\usepackage{mathpartir}
+\usepackage{listings}
+\usepackage{mathtools}
+%\usepackage[fleqn]{amsmath}
+\usepackage{amsfonts}
+\usepackage{latexsym}
+\usepackage{amssymb}
+\usepackage{caption}
+%\usepackage{multicol}
+
+% Math
+\newcommand{\maps}{\colon}
+\newcommand{\NN}{\mathbb{N}}
+% Double brackets
+\newcommand{\ldb}{[\![}
+\newcommand{\rdb}{]\!]}
+\newcommand{\ldrb}{(\!(}
+\newcommand{\rdrb}{)\!)}
+\newcommand{\lliftb}{\langle\!|}
+\newcommand{\rliftb}{|\!\rangle}
+% \newcommand{\lpquote}{\langle}
+% \newcommand{\rpquote}{\rangle}
+% \newcommand{\lpquote}{\lceil}
+% \newcommand{\rpquote}{\rceil}
+\newcommand{\lpquote}{\ulcorner}
+\newcommand{\rpquote}{\urcorner}
+\newcommand{\newkw}{\nu}
+
+% SYNTAX
+\newcommand{\id}[1]{\texttt{#1}}
+\newcommand{\none}{\emptyset}
+\newcommand{\eps}{\epsilon}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\rep}[2]{\id{\{$#1$,$#2$\}}}
+\newcommand{\elt}[2]{\id{$#1$[$#2$]}}
+\newcommand{\infinity}{$\infty$}
+
+\newcommand{\pzero}{\mathbin{0}}
+\newcommand{\seq}{\mathbin{\id{,}}}
+\newcommand{\all}{\mathbin{\id{\&}}}
+\newcommand{\choice}{\mathbin{\id{|}}}
+\newcommand{\altern}{\mathbin{\id{+}}}
+\newcommand{\juxtap}{\mathbin{\id{|}}}
+%\newcommand{\concat}{\mathbin{.}}
+\newcommand{\concat}{\Rightarrow}
+\newcommand{\punify}{\mathbin{\id{:=:}}}
+\newcommand{\fuse}{\mathbin{\id{=}}}
+\newcommand{\scong}{\mathbin{\equiv}}
+\newcommand{\nameeq}{\mathbin{\equiv_N}}
+\newcommand{\alphaeq}{\mathbin{\equiv_{\alpha}}}
+\newcommand{\names}[1]{\mathbin{\mathcal{N}(#1)}}
+\newcommand{\freenames}[1]{\mathbin{\mathcal{FN}(#1)}}
+\newcommand{\boundnames}[1]{\mathbin{\mathcal{BN}(#1)}}
+%\newcommand{\lift}[2]{\texttt{lift} \; #1 \concat #2}
+\newcommand{\binpar}[2]{#1 \juxtap #2}
+\newcommand{\outputp}[2]{#1 ! ( * #2 )}
+\newcommand{\prefix}[3]{#1 ? ( #2 ) \concat #3}
+\newcommand{\lift}[2]{#1 ! ( #2 )}
+%\newcommand{\quotep}[1]{\lpquote #1 \rpquote}
+\newcommand{\quotep}[1]{@#1}
+\newcommand{\dropn}[1]{*#1}
+
+\newcommand{\newp}[2]{\id{(}\newkw \; #1 \id{)} #2}
+\newcommand{\bangp}[1]{\int #1}
+\newcommand{\xbangp}[2]{\int_{#2} #1}
+\newcommand{\bangxp}[2]{\int^{#2} #1}
+
+\newcommand{\substp}[2]{\id{\{} \quotep{#1} / \quotep{#2} \id{\}}}
+\newcommand{\substn}[2]{\id{\{} #1 / #2 \id{\}}}
+
+\newcommand{\psubstp}[2]{\widehat{\substp{#1}{#2}}}
+\newcommand{\psubstn}[2]{\widehat{\substn{#1}{#2}}}
+
+\newcommand{\applyp}[2]{#1 \langle #2 \rangle}
+\newcommand{\absp}[2]{\id{(} #1 \id{)} #2}
+
+\newcommand{\transitions}[3]{\mathbin{#1 \stackrel{#2}{\longrightarrow} #3}}
+\newcommand{\meaningof}[1]{\ldb #1 \rdb}
+\newcommand{\pmeaningof}[1]{\ldb #1 \rdb}
+\newcommand{\nmeaningof}[1]{\ldrb #1 \rdrb}
+
+\newcommand{\Proc}{\mathbin{Proc}}
+\newcommand{\QProc}{\quotep{\mathbin{Proc}}}
+
+\newcommand{\entailm}{\mathbin{\vdash_{\mathfrak m}}} %matching
+\newcommand{\entailp}{\mathbin{\vdash_{\mathfrak p}}} %behavioral
+\newcommand{\entailv}{\mathbin{\vdash_{\mathfrak v}}} %validation
+\newcommand{\congd}{\mathbin{\equiv_{\mathfrak d}}}
+\newcommand{\congs}{\mathbin{\equiv_{\mathfrak s}}}
+\newcommand{\congp}{\mathbin{\equiv_{\mathfrak p}}}
+%\newcommand{\defneqls}{:\!=}
+\newcommand{\defneqls}{\coloneqq}
+%\newcommand{\logequiv}{\mathbin{\leftrightarrow}}
+
+\newcommand{\barb}[2]{\mathbin{#1 \downarrow_{#2}}}
+\newcommand{\dbarb}[2]{\mathbin{#1 \Downarrow_{#2}}}
+
+% From pi-duce paper
+\renewcommand{\red}{\rightarrow}
+\newcommand{\wred}{\Rightarrow}
+\newcommand{\redhat}{\hat{\longrightarrow}}
+\newcommand{\lred}[1]{\stackrel{#1}{\longrightarrow}} %transitions
+\newcommand{\wlred}[1]{\stackrel{#1}{\Longrightarrow}}
+
+\newcommand{\opm}[2]{\overline{#1} [ #2 ]} % monadic
+\newcommand{\ipm}[2]{{#1} ( #2 )} 
+\newcommand{\ipmv}[2]{{#1} ( #2 )} % monadic
+\newcommand{\parop}{\;|\;}    % parallel operator
+\newcommand{\patmatch}[3]{#2 \in #3 \Rightarrow #1}
+\newcommand{\sdot}{\, . \,}    % Space around '.'
+\newcommand{\bang}{!\,}
+%\newcommand{\fuse}[1]{\langle #1 \rangle}    
+\newcommand{\fusion}[2]{#1 = #2} % fusion prefix/action
+\newcommand{\rec}[2]{\mbox{\textsf{rec}} \, #1. \, #2}
+\newcommand{\match}[2]{\mbox{\textsf{match}} \; #1 \; \mbox{\textsf{with}} \; #2}
+\newcommand{\sep}{:}
+\newcommand{\val}[2]{\mbox{\textsf{val}} \; #1 \; \mbox{\textsf{as}} \; #2}
+
+\newcommand{\rel}[1]{\;{\mathcal #1}\;} %relation
+\newcommand{\bisim}{\stackrel{.}{\sim}_b} %bisimilar
+\newcommand{\wb}{\approx_b} %weak bisimilar
+\newcommand{\bbisim}{\stackrel{\centerdot}{\sim}} %barbed bisimilar
+\newcommand{\wbbisim}{\stackrel{\centerdot}{\approx}} %weak barbed bisimilar
+\newcommand{\wbbisimsem}{\approx} %weak barbed bisimilar
+\newcommand{\bxless}{\lesssim}  %expansion less (amssymb required)
+\newcommand{\bxgtr}{\gtrsim}  %expansion greater (amssymb required)
+\newcommand{\beq}{\sim}    %barbed congruent
+\newcommand{\fwbeq}{\stackrel{\circ}{\approx}}  %weak barbed congruent
+\newcommand{\wbeq}{\approx}  %weak barbed congruent
+\newcommand{\sheq}{\simeq}  %symbolic hypereq
+\newcommand{\wbc}{\approx_{cb}}
+
+% End piduce contribution
+
+% rho logic
+
+\newcommand{\ptrue}{\mathbin{true}}
+\newcommand{\psatisfies}[2]{#1 \models #2}
+\newcommand{\pdropf}[1]{\rpquote #1 \lpquote}
+\newcommand{\pquotep}[1]{\lpquote #1 \rpquote}
+\newcommand{\plift}[2]{#1 ! ( #2 )}
+\newcommand{\pprefix}[3]{\langle #1 ? #2 \rangle #3}
+\newcommand{\pgfp}[2]{\textsf{rec} \; #1 \mathbin{.} #2}
+\newcommand{\pquant}[3]{\forall #1 \mathbin{:} #2 \mathbin{.} #3}
+\newcommand{\pquantuntyped}[2]{\forall #1 \mathbin{.} #2}
+\newcommand{\riff}{\Leftrightarrow}
+
+\newcommand{\PFormula}{\mathbin{PForm}}
+\newcommand{\QFormula}{\mathbin{QForm}}
+\newcommand{\PropVar}{\mathbin{\mathcal{V}}}
+
+\newcommand{\typedby}{\mathbin{\:\colon}}
+\newcommand{\mixedgroup}[1]{\id{mixed($#1$)}}
+\newcommand{\cast}[2]{\id{CAST AS} \; #1 \; (#2)}
+\newcommand{\bslsh}{\mathbin{\id{\\}}}
+\newcommand{\bslshslsh}{\mathbin{\id{\\\\}}}
+\newcommand{\fslsh}{\mathbin{\id{/}}}
+\newcommand{\fslshslsh}{\mathbin{\id{//}}}
+\newcommand{\bb}[1]{\mbox{#1}}
+\newcommand{\bc}{\mathbin{\mathbf{::=}}}
+\newcommand{\bm}{\mathbin{\mathbf\mid}}
+\newcommand{\be}{\mathbin{=}}
+\newcommand{\bd}{\mathbin{\buildrel {\rm \scriptscriptstyle def} \over \be}}
+\newcommand{\ctcategory}[1]{\mbox{\bf #1}}
+
+%GRAMMAR
+\newlength{\ltext}
+\newlength{\lmath}
+\newlength{\cmath}
+\newlength{\rmath}
+\newlength{\rtext}
+
+\settowidth{\ltext}{complex type name}
+\settowidth{\lmath}{$xxx$}
+\settowidth{\cmath}{$::=$}
+\settowidth{\rmath}{\id{attributeGroup}}
+\settowidth{\rtext}{repetition of $g$ between $m$ and $n$ times}
+
+\newenvironment{grammar}{
+  \[
+  \begin{array}{l@{\quad}rcl@{\quad}l}
+  \hspace{\ltext} & \hspace{\lmath} & \hspace{\cmath} & \hspace{\rmath} & \hspace{\rtext} \\
+}{
+  \end{array}\]
+}
+
+% Over-full v-boxes on even pages are due to the \v{c} in author's name
+\vfuzz2pt % Don't report over-full v-boxes if over-edge is small
+
+% THEOREM Environments ---------------------------------------------------
+ \newtheorem{thm}{Theorem}[subsection]
+ \newtheorem{cor}[thm]{Corollary}
+ \newtheorem{lem}[thm]{Lemma}
+ \newtheorem{prop}[thm]{Proposition}
+% \theoremstyle{definition}
+ \newtheorem{defn}[thm]{Definition}
+% \theoremstyle{remark}
+ \newtheorem{rem}[thm]{Remark}
+ \newtheorem{example}[thm]{Example}
+ \numberwithin{equation}{subsection}
+% MATH -------------------------------------------------------------------
+ \DeclareMathOperator{\RE}{Re}
+ \DeclareMathOperator{\IM}{Im}
+ \DeclareMathOperator{\ess}{ess}
+ \newcommand{\veps}{\varepsilon}
+ \newcommand{\To}{\longrightarrow}
+ \newcommand{\h}{\mathcal{H}}
+ \newcommand{\s}{\mathcal{S}}
+ \newcommand{\A}{\mathcal{A}}
+ \newcommand{\J}{\mathcal{J}}
+ \newcommand{\M}{\mathcal{M}}
+ \newcommand{\W}{\mathcal{W}}
+ \newcommand{\X}{\mathcal{X}}
+ \newcommand{\BOP}{\mathbf{B}}
+ \newcommand{\BH}{\mathbf{B}(\mathcal{H})}
+ \newcommand{\KH}{\mathcal{K}(\mathcal{H})}
+ \newcommand{\Real}{\mathbb{R}}
+ \newcommand{\Complex}{\mathbb{C}}
+ \newcommand{\Field}{\mathbb{F}}
+ \newcommand{\RPlus}{\Real^{+}}
+ \renewcommand{\Polar}{\mathcal{P}_{\s}}
+ \newcommand{\Poly}{\mathcal{P}(E)}
+ \newcommand{\EssD}{\mathcal{D}}
+ \newcommand{\Lom}{\mathcal{L}}
+ \newcommand{\States}{\mathcal{T}}
+ \newcommand{\abs}[1]{\left\vert#1\right\vert}
+% \newcommand{\set}[1]{\left\{#1\right\}}
+%\newcommand{\seq}[1]{\left<#1\right>}
+ \newcommand{\norm}[1]{\left\Vert#1\right\Vert}
+ \newcommand{\essnorm}[1]{\norm{#1}_{\ess}}
+
+%%% NAMES
+\newcommand{\Names}{{\mathcal N}}
+\newcommand{\Channels}{{\sf X}}
+\newcommand{\Variables}{{\mathcal V}}
+\newcommand{\Enames}{{\mathcal E}}
+\newcommand{\Nonterminals}{{\mathcal S}}
+\newcommand{\Pnames}{{\mathcal P}}
+\newcommand{\Dnames}{{\mathcal D}}
+\newcommand{\Types}{{\mathcal T}}
+
+\newcommand{\fcalc}{fusion calculus}
+\newcommand{\xcalc}{${\mathfrak x}$-calculus}
+\newcommand{\lcalc}{$\lambda$-calculus}
+\newcommand{\pic}{$\pi$-calculus}
+\newcommand{\rhoc}{${\textsc{rho}}$-calculus}
+\newcommand{\hcalc}{highwire calculus}
+\newcommand{\dcalc}{data calculus}
+%XML should be all caps, not small caps. --cb
+%\newcommand{\xml}{\textsc{xml}}
+\newcommand{\xml}{XML} 
+
+\newcommand{\papertitle}{Higher category models of the pi-calculus}
+% use static date to preserve date of actual publication
+ \newcommand{\paperversion}{Draft Version 0.1 - Jan 7, 2015}
+
+\newenvironment{toc}
+{
+\begin{list}{}{
+   \setlength{\leftmargin}{0.4in}
+   \setlength{\rightmargin}{0.6in}
+   \setlength{\parskip}{0pt}
+ } \item }
+{\end{list}}
+
+\newenvironment{narrow}
+{
+\begin{list}{}{
+   \setlength{\leftmargin}{0.4in}
+   \setlength{\rightmargin}{0.6in}
+ } \item }
+{\end{list}}
+
+%%% ----------------------------------------------------------------------
+
+%\title{\huge{\papertitle}}
+\title{\papertitle}
+
+%\numberofauthors{3}
+\author{
+Michael Stay\\
+  \affaddr{Google}\\
+  \email{\fontsize{8}{8}\selectfont stay@google.com}
+\and
+L.G. Meredith\\
+  \affaddr{Biosimilarity, LLC}\\
+  \email{\fontsize{8}{8}\selectfont lgreg.meredith@biosimilarity.com}
+}
+
+%\address{Systems Biology, Harvard Medical School, Boston, Massachussetts, USA}
+
+%\email{lg_meredith@hms.harvard.edu}
+
+%\thanks{This work was completed during a visiting appointment at the Department of Systems Biology, Harvard Medical School.}
+
+%\subjclass{Primary 47A15; Secondary 46A32, 47D20}
+
+%\date{April 6, 2002.}
+
+%\dedicatory{}
+
+%\commby{Daniel J. Rudolph}
+
+%%% ----------------------------------------------------------------------
+
+\begin{document}
+%\lstset{language=erlang}
+\lstset{language=}
+
+%These margin values appear to be relative to the bigpage package settings. --cb
+\setlength{\topmargin}{0in}
+\setlength{\textheight}{8.5in}
+\setlength{\parskip}{6pt}
+
+\keywords{ higher category theory, concurrency, message-passing, types, Curry-Howard }
+
+\begin{abstract}
+\normalsize{ 
+
+  We present a realizability interpretation of logics as distributive
+  laws over monads. Roughly speaking, if formulae are to denote the
+  collection of individual computations that satisfy them, we must
+  provide three data to specify a logic: the language of individual
+  computations, which is typically captured by the algebras of a
+  monad, say T, for terms; the notion of collection, such as set, or
+  bag, or list, or ... used to gather the terms that satisfy a
+  particular formulae, which is typically captured by some monad, C,
+  for collection. Finally, given a distributive law, $l : TC
+  \rightarrow CT$, we find a logic whose formulae are isomorphic to
+  $TC$, the semantics of which are given in $CT$ by $l$. The logic
+  will enjoy three kinds of formulae: formulae corresponding to the
+  structure of collections unconstrained by either requirements on
+  term structure, or requirements on the evolution of computation;
+  formulae corresponding to the expression of constraints on term
+  structure; formulae corresponding to the expression of constraints
+  on computational evolution. We present several examples of the
+  logics so generated, including logics for monoids, the lambda
+  calculus, the {\pic}, as well as formulae illustrating the
+  expressive power of the logics so generated.
+
+}
+
+\end{abstract}
+
+% \noindent
+% {\large \textbf{Submission to arXiv}}\\
+% \rule{6.25in}{0.75pt}\\\\\\
+
+%%% ----------------------------------------------------------------------
+\maketitle
+%%% ----------------------------------------------------------------------
+
+% \begin{center}
+% \paperversion\\
+% \end{center}
+
+% \begin{toc}
+% \tableofcontents
+% \end{toc}
+
+% \newpage
+% ------------------------------------------------------------------------
+
+\section{Introduction}
+
+TBD
+
+\subsubsection{Related work}
+
+%Montanari, et al have considered double category models of the {\pic}.
+
+TBD
+
+\subsubsection{Organization of the rest of the paper}
+
+TBD
+
+%%% ----------------------------------------------------------------------
+
+\section{Some motivating examples}
+
+In this section we motivate the construction by way of a few examples
+familiar both to computer scientists and category theorists.
+
+\subsection{A logic for monoids}
+
+The notion of monoid captures fundamental, yet minimal structure in a
+wide variety of computational phenomena. Data structures, such as
+lists, enjoy monoidal structure; arithmetic phenomena, such as the
+natural numbers under addition, enjoy monoidal structure; executive or
+control flow phenomena, such as parallel composition of communicating
+processes enjoy monoidal structure. For this reason, they are widely
+studied and relatively well understood by the computing community.
+
+They also play a fundamental role in category theory. If category
+theory is a theory of composition, and monoids expose one of the most
+basic notions of composition, then categorical accounts of monoids and
+monoidal phenomena say as much about category theory as the other way
+around. Thus, the fact that the free monoid, $T[G]$, on a set of $n$
+generators, say $G = \{ g_i : 1 \leq i \leq n \}$, is a monad and that
+monads are monoid objects in a category of endofunctors says a great
+deal about the notions of composition at play in category theory. In
+particular, it illustrates the process of categorification raises the
+level of abstraction, revealing fundamental patterns in operators in a
+much broader range of phenomena.
+
+Where computer science and category theory come together to study
+these phenomena we see a new kind of language arise, one with the
+computer scientist's emphasis on effective presentations, yet with the
+category theorists view to higher and higher levels of abstraction and
+expressiveness. In this language, we can present the basic data of the
+free monoid on a set of $n$ generators in a manner that supports both
+computation and higher levels of abstraction.
+
+\label{syntax}
+\begin{grammar}
+{T[G]} \bc e & \mbox{identity} \\
+       \;\;\; \bm \; g_i & \mbox{generator in G} \\
+       \;\;\; \bm \; T[G] * T[G] & \mbox{composition} \\
+\end{grammar}
+
+This sort of notation follows the computer scientist's use of grammars
+to present abstract syntax to present and study algebraic and
+computational structure. It does so in two stages. Firstly, it
+recursively describes a set of purely syntactic entities, monoid
+expressions, if you will, in terms of a set of building blocks, namely
+the identity, $e$, and the generators $g_i \in G$. Secondly, it
+describes a structural equivalence relation, $\scong$, as the smallest
+equivalence relation on $T[G]$ satisfying
+
+\begin{equation*}
+  \begin{aligned}
+    t * e \scong t \scong e * t \\
+    t_1 * ( t_2 * t_3 ) \scong ( t_1 * t_2 ) * t_3
+  \end{aligned}
+\end{equation*}
+
+This presentation should also be somewhat familiar to the category
+theorist who is well acquainted with generators and relations style
+presentations of algebras. The notion of grammar generalizes the
+notion of generators, while the notion of structural equivalence
+generalizes the notion of relations.
+
+At a higher level of abstraction, the recursive specification of
+$T[G]$ makes it clear that $T[G]$ computes the transitive closure of
+some operator $T$ on $G$. Recalling that closure operators are monads,
+this presentation reveals the monadic structure of $T$
+immediately. Meanwhile, the structural equivalence relation can be
+seen as the data required to present an algebra of the monad, $T$,
+illustrating that an algebra of a monad, in this case $(T,\scong)$,
+can also be a monad, in this case the free monad on $n$ generators.
+
+To construct a logic where a formula, say $\phi$, denotes the
+collection of monoid expressions in $T[G]$ satisfying $\phi$, we need
+to specify what \emph{kind} of collection. This is a particular
+insistence on specificity arising from the computer scientist's desire
+for effective presentations. To turn specifications into computations,
+we need to know what kind of collection to use because different kinds
+of collections enjoy different constraints, which affect how we might
+recursively compute a particular collection from a specification of
+its elements.
+
+For instance lists are sensitive to order where sets are not. Bags are
+sensitive to multiplicity where sets are not. In some sense, sets are
+the most insensitive monadically presented notion of collection, and
+thus are ideal for erasing detail about collectivity that might
+distract when bootstrapping an understanding of what it means to
+collect or gather things together. It may be that this insensitivity
+is why sets have enjoyed such a central role in the foundations of
+mathematics.
+
+In this context, it is irrestible to observe that collectivity is a
+kind of composition, and thus, it is no accident that set theory and
+category theory enjoy the relationship that they do: both are
+presentations of mathematics as built up from a notion of
+composition. Set theory began with the most basic of notions, pure
+collection, erasing all other details or qualities of collecting
+components together into a composition. Category theory generalized
+the notion of composition, providing a simpler rubric for a much
+broader range of phenomena. To say more, however, would be too much of
+a digression.
+
+Instead, let's use this discussion to motivate the selection of the
+set monad as our notion of collection, not only because it is quite
+common for the semantics of formulae to be sets, but because set's
+insensitivty allow us to focus on more important aspects of the
+construction we are describing.
+
+\begin{itemize}
+\item collection constraints. The first block of formulae enjoy no
+  structural constraints, but only collection constraints. As such,
+  they should be quite familiar. They constitute the well known
+  relationship between boolean algebras and sets as their models.
+    \begin{equation*}
+      \begin{aligned}
+        \meaningof{\mathsf{true}} = T[G] \\
+        \meaningof{\mathsf{~}\phi} = T[G] \backslash \meaningof{\phi} \\
+        \meaningof{\phi \mathsf{\&} \psi} = \meaningof{\phi} \cap \meaningof{\psi} \\
+      \end{aligned}
+    \end{equation*}
+  \item structural constraints. The second block of formulae enjoy no
+    collection constraints, but only structural constraints. These
+    will be familiar to those who have worked with separation logic,
+    behavioral spatial logic, or linear logic.
+    \begin{equation*}
+      \begin{aligned}
+        \meaningof{\mathsf{e}} = \{ t \in T[G] : t \scong e \} \\
+        \meaningof{\mathsf{g}_i} = \{ t \in T[G] : t \scong g_i \} \\
+        \meaningof{\phi \mathsf{*} \psi} = \{ t \in T[G] : t \scong t_1 * t_2, t_1 \in \meaningof{\phi}, \meaningof{\psi} \} \\
+      \end{aligned}
+    \end{equation*}
+\end{itemize}
+
+
+\subsubsection{Some formulae in a logic for monoids}
+
+TBD
+
+\subsubsection{Varying the collection monad}
+
+TBD
+
+\subsection{A logic for lambda}
+
+TBD
+
+\subsubsection{Some formulae in a logic for lambda}
+
+TBD
+
+\subsection{A logic for {\pic}}
+
+\subsubsection{Our running process calculus}
+
+\subsubsection{Syntax}
+\label{syntax}
+\begin{grammar}
+{P} \bc \pzero & \mbox{stopped process} \\
+       \;\;\; \bm \; {x}{?}{( y_1, \ldots, y_n )} \Rightarrow {P} & \mbox{input} \\
+       \;\;\; \bm \; {x}{!}{( y_1, \ldots, y_n )} & \mbox{output} \\
+%       \;\;\; \bm \; {M}{+}{N} & \mbox{choice} \\
+%{ P, Q } \bc M & \mbox{include IO processes} \\                                
+       \;\;\; \bm \; (\mathsf{new}\; x){P} & \mbox{new channel} \\
+       \;\;\; \bm \; {P} \juxtap {Q} & \mbox{parallel} \\                                
+\end{grammar}
+
+Due to space limitations we do not treat replication, $!P$.
+
+\subsubsection{Free and bound names}
+
+\begin{equation*}
+  \begin{aligned}
+    & \freenames{\pzero} \defneqls \emptyset \\
+    & \freenames{{x}{?}{( y_1, \ldots, y_n )} \Rightarrow {P}} \defneqls \\
+    & \;\;\;\;\;\{ x \} \cup (\freenames{P} \setminus \{ y_1, \ldots y_n \}) \\
+    & \freenames{{x}{!}{( y_1, \ldots, y_n )}} \defneqls \{ x, y_1, \ldots, y_n \} \\
+    & \freenames{(\mathsf{new}\; x){P}} \defneqls \freenames{P} \setminus \{x\} \\    
+    & \freenames{{P} \juxtap {Q}} \defneqls \freenames{P} \cup \freenames{Q} \\
+  \end{aligned}
+\end{equation*}
+
+An occurrence of $x$ in a process $P$ is \textit{bound} if it is not
+free. The set of names occurring in a process (bound or free) is
+denoted by $\names{P}$.
+
+\subsubsection{Structural congruence}
+\label{congruence}
+
+The {\em structural congruence} of processes, noted $\scong$, is the
+least congruence containing $\alpha$-equivalence, $\alphaeq$, making
+$( P, |, 0 )$ into commutative monoids and satisfying
+
+\begin{equation*}  
+  (\mathsf{new}\; x)(\mathsf{new}\; x){P} \scong (\mathsf{new}\; x)P
+\end{equation*}
+\begin{equation*}  
+  (\mathsf{new}\; x)(\mathsf{new}\; y){P} \scong (\mathsf{new}\; y)(\mathsf{new}\; x)P
+\end{equation*}
+\begin{equation*}  
+  ((\mathsf{new}\; x){P}) \juxtap {Q} \scong (\mathsf{new}\; x)({P} \juxtap {Q})
+\end{equation*}
+
+\subsubsection{Operational Semantics}\label{section:opsem}
+ 
+\infrule[Comm]
+{ |\vec{y}| = |\vec{z}| }
+%{P_1 + {{ x_{0}{?}{(}{\vec{y}}{)} \concat {P}}\juxtap {x_{1}}{!}{(}{\vec{z}}{)} + P_2}
+{{{ x{?}{(}{\vec{y}}{)} \concat {P}}\juxtap {x}{!}{(}{\vec{z}}{)}}
+\red {{P}{\{}\vec{z}{/}{\vec{y}}{\}}}}
+
+In addition, we have the following context rules:
+
+\infrule[Par]{{P} \red {P}'}{{{P} \juxtap {Q}} \red {{P}' \juxtap {Q}}}
+
+\infrule[New]{{P} \red {P}'}{{(\mathsf{new}\; x){P}} \red {(\mathsf{new}\; x){P}'}}
+
+\infrule[Equiv]{{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
+
+\subsubsection{Bisimulation}
+
+\begin{defn}
+An \emph{observation relation}, $\downarrow$ is the smallest relation satisfying the rules
+below.
+
+\infrule[Out-barb]{ }
+      {{x}!(\vec{y}) \downarrow x}
+\infrule[Par-barb]{\mbox{$P\downarrow x$ or $Q\downarrow x$}}
+      {\mbox{$P \juxtap Q \downarrow x$}}
+\infrule[New-barb]{\mbox{$P\downarrow x$, $x \neq u$}}
+      {\mbox{$(\mathsf{new}\; u){P} \downarrow x$}}
+
+% We write $P \Downarrow x$ if there is $Q$ such that 
+% $P \wred Q$ and $Q \downarrow x$.
+\end{defn}
+
+Notice that $\prefix{x}{y}{P}$ has no barb.  Indeed, in {\pic} as well
+as other asynchronous calculi, an observer has no direct means to
+detect if a sent message has been received or not.
+
+\begin{defn}
+%\label{def.bbisim}
+An \emph{barbed bisimulation}, is a symmetric binary relation 
+${\mathcal S}$ between agents such that $P\rel{S}Q$ implies:
+\begin{enumerate}
+\item If $P \red P'$ then $Q \red Q'$ and $P'\rel{S} Q'$.
+\item If $P\downarrow x$, then $Q\downarrow x$.
+\end{enumerate}
+$P$ is barbed bisimilar to $Q$, written
+$P \wbbisim Q$, if $P \rel{S} Q$ for some barbed bisimulation ${\mathcal S}$.
+\end{defn}
+
+\section{Logic as distributive law}
+
+TBD
+
+\section{Conclusions and future work}
+
+TBD
+
+\paragraph{Acknowledgments}
+
+TBD
+
+% ------------------------------------------------------------------------
+%GATHER{Xbib.bib}   % For Gather Purpose Only
+%GATHER{Paper.bbl}  % For Gather Purpose Only
+\bibliographystyle{amsplain}
+\bibliography{typcl}
+
+% ------------------------------------------------------------------------
+
+
+
+% ------------------------------------------------------------------------
+
+\end{document}
+% ------------------------------------------------------------------------
