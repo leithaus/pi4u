@@ -458,13 +458,14 @@ computation and higher levels of abstraction.
 \end{grammar}
 
 This sort of notation follows the computer scientist's use of grammars
-to present abstract syntax to present and study algebraic and
-computational structure. It does so in two stages. Firstly, it
-recursively describes a set of purely syntactic entities, monoid
-expressions, if you will, in terms of a set of building blocks, namely
-the identity, $e$, and the generators $g_i \in G$. Secondly, it
-describes a structural equivalence relation, $\scong$, as the smallest
-equivalence relation on $T[G]$ satisfying
+to present abstract syntax. Such a presentation provides a natural and
+compact way to present and study algebraic and computational
+structure. It does so in two stages. Firstly, it recursively describes
+a set of purely syntactic entities, monoid expressions, if you will,
+in terms of a set of building blocks, namely the identity, $e$, and
+the generators $g_i \in G$. Secondly, it describes a structural
+equivalence relation, $\scong$, as the smallest equivalence relation
+on $T[G]$ satisfying
 
 \begin{equation*}
   \begin{aligned}
@@ -507,13 +508,13 @@ collect or gather things together. It may be that this insensitivity
 is why sets have enjoyed such a central role in the foundations of
 mathematics.
 
-In this context, it is irrestible to observe that collectivity is a
+In this context, it is irresistible to observe that collectivity is a
 kind of composition, and thus, it is no accident that set theory and
 category theory enjoy the relationship that they do: both are
 presentations of mathematics as built up from a notion of
-composition. Set theory began with the most basic of notions, pure
+composition. Set theory begins with the most basic of notions, pure
 collection, erasing all other details or qualities of collecting
-components together into a composition. Category theory generalized
+components together into a composition. Category theory generalizes
 the notion of composition, providing a simpler rubric for a much
 broader range of phenomena. To say more, however, would be too much of
 a digression.
@@ -521,7 +522,7 @@ a digression.
 Instead, let's use this discussion to motivate the selection of the
 set monad as our notion of collection, not only because it is quite
 common for the semantics of formulae to be sets, but because set's
-insensitivty allow us to focus on more important aspects of the
+insensitivity allow us to focus on more important aspects of the
 construction we are describing.
 
 \begin{itemize}
@@ -532,7 +533,7 @@ construction we are describing.
     \begin{equation*}
       \begin{aligned}
         \meaningof{\mathsf{true}} = T[G] \\
-        \meaningof{\mathsf{~}\phi} = T[G] \backslash \meaningof{\phi} \\
+        \meaningof{\mathsf{\neg}\phi} = T[G] \backslash \meaningof{\phi} \\
         \meaningof{\phi \mathsf{\&} \psi} = \meaningof{\phi} \cap \meaningof{\psi} \\
       \end{aligned}
     \end{equation*}
@@ -543,7 +544,7 @@ construction we are describing.
     \begin{equation*}
       \begin{aligned}
         \meaningof{\mathsf{e}} = \{ t \in T[G] : t \scong e \} \\
-        \meaningof{\mathsf{g}_i} = \{ t \in T[G] : t \scong g_i \} \\
+        \meaningof{\mathsf{g}_i} = \{ t \in T[G] : t \scong g_i \}  \\
         \meaningof{\phi \mathsf{*} \psi} = \{ t \in T[G] : t \scong t_1 * t_2, t_1 \in \meaningof{\phi}, \meaningof{\psi} \} \\
       \end{aligned}
     \end{equation*}
@@ -552,7 +553,19 @@ construction we are describing.
 
 \subsubsection{Some formulae in a logic for monoids}
 
-TBD
+While this might seem a regular construction, does it yield
+interesting logics? Indeed it does. Already in this simple logic we
+can write down a 1-line formula for primality.
+
+\begin{equation*}
+  prime = \mathsf{\neg}\mathsf{e} \mathsf{\&} \mathsf{\neg}(\mathsf{\neg}\mathsf{e} \mathsf{\&} \mathsf{\neg}\mathsf{e})
+\end{equation*}
+
+It is easy to verify that 
+
+\begin{equation*}
+  \meaningof{prime} = \bigcup_i \meaningof{g_i}
+\end{equation*}
 
 \subsubsection{Varying the collection monad}
 
@@ -565,6 +578,45 @@ TBD
 \subsubsection{Some formulae in a logic for lambda}
 
 TBD
+
+\subsection{A categorical rewrite}
+
+In the categorical presentation we have a sort $T$ for terms, and
+morphisms for the term constructors. 
+
+\begin{grammar}
+{T[G]} \bc e & \mbox{$e : 1 \to T$} \\
+\;\;\; \bm \; g_i & \mbox{$g_i : 1 \to T$} \\
+\;\;\; \bm \; T[G] * T[G] & \mbox{$m: T \times T \to T$} \\
+\end{grammar}
+
+The structural equivalence is interpreted as bi-directional morphisms,
+$T \to T$. To get closer to more standard computational we can expand
+the example to include unidirectional morphisms suggestive of the
+kinds of rewrites we see in $\lambda$-or-$\pi$-calculi.
+
+More specifically to compare terms, we need a normal form.  We pick a
+total order on $G$; without loss of generality, let $i < j$ imply $g_i
+< g_j$.  Our rewrite rules are
+$$\begin{array}{rll}
+a:& ((x\;y)\;z) \Rightarrow (x\;(y\;z))\\
+l:& (e()\;x) \Rightarrow x\\
+r:& (x\;e()) \Rightarrow x\\
+b_{ij}:& (g_j()\;g_i()) \Rightarrow (g_i()\; g_j()) & \mbox{when } i < j.
+\end{array}$$
+Finally, we impose relations on the rewrite rules.  The rewrites
+$a,l,r,$ and $b$ satisfy the pentagon, triangle, and hexagon equations
+from a braided monoidal category.  The resulting normal form of words
+has parentheses on the right, no occurrences of $e()$, and $g_i()$ to
+the left of $g_j()$ whenever $i < j$.
+
+We can take models in any 2-category with finite products; if we take
+models in the category Set thought of as a 2-caetgory, then the
+rewrite rules are identities, thus invertible, and we get commutative
+monoids generated by at least $G$. If instead we take models in Cat,
+we get a category $T$ of "processes" with rewrites between them. The
+multiplication term constructor becomes a "term context" functor whose
+inputs are "holes" we can fill in and get a new term.
 
 \subsection{A logic for {\pic}}
 
