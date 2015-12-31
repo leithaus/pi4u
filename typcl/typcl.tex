@@ -401,7 +401,65 @@ L.G. Meredith\\
 
 \section{Introduction}
 
-TBD
+So far, the picture looks like this.  A term calculus has three parts:
+\begin{itemize}
+  \item a BNF grammar describing the syntax of the terms
+  \item an equivalence, called "structural equivalence" that says what variations in the syntax we ignore; for example, changing the name of a dummy variable in a lambda term ("alpha equivalence"), or the commutativity of concurrent processes.
+  \item a reduction relation that captures what we mean by the process of computation; for example, beta reduction in lambda calculus or synchronization on a name in {\pic}.
+  \item a congruence on reduction that tells what computational processes we consider equivalent.
+\end{itemize}
+
+
+We encode this information as a Lawvere 2-theory Th.  We have
+\begin{itemize}
+  \item one sort for the terms,
+  \item a function symbol for each term constructor,
+  \item rewrites for both structural equivalence and the rewrite relation, and
+  \item relations on rewrites that say that structural equivalence rewrites are the same as the identity (e.g. we treat a lambda term as independent of the choice of dummy variable).
+\end{itemize}
+
+If reductions only occur in certain contexts, then we add function
+symbols to reify the contexts and use those in the rewrite rules.
+
+If reductions only occur in certain contexts, then we add function
+symbols to reify the contexts and use those in the rewrite rules.
+We take models in Cat; the 2-category of functors, transformations and
+modifications is equivalent to the 2-category Model(Th) of models of
+the calculus.
+
+There's a forgetful functor from Model(Th) to Cat with a left adjoint.
+Together they form a monad on Cat.
+
+
+If we assume that our 2-categories have coproducts, then the sum of
+the left hand sides of the term constructors gives an endofunctor on
+the theory.  LHS is a monad on Model(Th) by construction.
+
+
+The sum of the term constructors themselves, together with T, form an
+algebra.  The free model on no generators gives the initial algebra in
+the model 2-category.
+
+
+Next take another 2-theory of a data type, i.e. no unidirectional
+2-morphisms (in the simple version).  This time we interpret it in
+Model(Th).  Call the 2-category of functors, transformations, and
+modifications Collect(Th).  Then there's a forgetful functor from
+Collect(Th) to Model(Th) with a left adjoint.  Together they form the
+free collection monad on Model(Th).
+
+
+Next we need a "distributive law" LHS(C(T)) -> C(LHS(T)) in Model(Th).
+
+
+We define formulae with operations from C, spatial-behavioral types
+from LHS \& 2-morphisms of Th.  When considering normalization of data
+types, 2-morphisms from the data type will probably show up in the
+modalities.
+
+Need a proper accounting of the interpretation functor from formulae
+to collections of terms, and how modalities give properties like
+closedness.
 
 \subsubsection{Related work}
 
