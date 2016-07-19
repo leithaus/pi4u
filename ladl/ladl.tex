@@ -23,6 +23,7 @@
 \usepackage[pdf]{pstricks}
 \usepackage{pstricks-add, pst-grad, pst-plot}
 \usepackage[tiling]{pst-fill}
+\usepackage{verbatim}
 \psset{linewidth=0.3pt,dimen=middle}
 \psset{xunit=.70cm,yunit=0.70cm}
 \psset{angleA=-90,angleB=90,ArrowInside=->,arrowscale=2}
@@ -397,7 +398,85 @@ L.G. Meredith\\
 
 \section{Introduction}
 
+\begin{comment}
+  * 2-categories with finite products as presentations of configurations
 
+      * problem with 2-morphisms as rewrites
+
+          * normal order evaluation
+
+          * pi calculus
+
+      * reduction contexts as morphisms
+
+          * linear use of reduction contexts in rewrites = number of processors
+
+          * if reduction contexts are consumed, get a notion similar to Ethereum's gas
+
+      * models in Cat
+
+          * monad T
+
+          * free model in Cat on empty category gives a quiver of terms & rewrites
+
+  * Interpretation of formulae as sets of terms satisfying the formulae
+
+      * set aside what formulae are for the moment
+
+      * data structures have only invertible 2-morphisms
+
+          * e.g. sets are lists mod permutation and duplicate idempotence
+
+      * set comprehension as monad
+
+      * generalize from sets to arbitrary collection, so "sets of terms" is CT
+
+  * Formulae are (T+C)*
+
+  * distributive law
+
+      * (T+C)* -> CT
+
+          * T -> CT via unit of C
+
+          * C -> TC via unit of T
+
+          * TT->T, CC->C via multiplications
+
+          * TC -> CT via distributive law
+
+              * e.g. ({S, K} {a, b, c}) ↦ {(S a), (S b), (S c), (K a), (K b), (K c)}
+
+  * Add modal operators to formulae
+
+      * K is collection of 2-hole contexts using same collection monad
+
+          * A <K> B = { t | ∃u ∈ [| A |], v ∈ [| B |], ρ: K(t, u) -> v}
+
+              * e.g. in SKI or lambda, 
+                A => B = { t | ∃u ∈ [| A |], v ∈ [| B |], ρ: (t u) -> v} = A <( )> B
+
+                  * Need to think about reduction contexts here: are all t of the form Rt'?  I guess we can express sets of terms that do not involve R.
+
+              * e.g. in pi calc
+                A ▷ B = { t | ∃u ∈ [| A |], v ∈ [| B |], ρ: t | u -> v} = A <|> B
+
+                  * Ditto for COMM
+
+          * Stuff from LICS paper above
+
+  * Examples of interesting formulae
+
+      * primes in a monoid
+
+      * deadlock-free (both kinds)
+
+      * datalock-free? http://erights.org/elang/concurrency/epimenides.html
+
+      * deniability from paper with Drossopolou
+
+      * more?  
+\end{comment}
 
 So far, the picture looks like this.  A term calculus has three parts:
 \begin{itemize}
