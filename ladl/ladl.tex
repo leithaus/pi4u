@@ -434,6 +434,165 @@ including logics for monoids, the $S$,$K$,$I$ combinator calculus, the
 {\pic}, as well as formulae illustrating the expressive power of the
 logics so generated.
 
+\section{Motivation}
+
+\subsection{A logic for monoids}
+
+The notion of monoid captures fundamental, yet minimal structure in a
+wide variety of computational phenomena. Data structures, such as
+lists, enjoy monoidal structure; arithmetic phenomena, such as the
+natural numbers under addition, enjoy monoidal structure; executive or
+control flow phenomena, such as parallel composition of communicating
+processes enjoy monoidal structure. For this reason, they are widely
+studied and relatively well understood by the computing community.
+
+They also play a fundamental role in category theory. If category
+theory is a theory of composition, and monoids expose one of the most
+basic notions of composition, then categorical accounts of monoids and
+monoidal phenomena say as much about category theory as the other way
+around. Thus, the fact that the free monoid, $T[G]$, on a set of $n$
+generators, say $G = \{ g_i : 1 \leq i \leq n \}$, is a monad and that
+monads are monoid objects in a category of endofunctors says a great
+deal about the notions of composition at play in category theory. In
+particular, it illustrates the process of categorification raises the
+level of abstraction, revealing fundamental patterns in operators in a
+much broader range of phenomena.
+
+Where computer science and category theory come together to study
+these phenomena we see a new kind of language arise, one with the
+computer scientist's emphasis on effective presentations, yet with the
+category theorists view to higher and higher levels of abstraction and
+expressiveness. In this language, we can present the basic data of the
+free monoid on a set of $n$ generators in a manner that supports both
+computation and higher levels of abstraction.
+
+\label{syntax}
+\begin{grammar}
+{T[G]} \bc e & \mbox{identity} \\
+       \;\;\; \bm \; g_i & \mbox{generator in G} \\
+       \;\;\; \bm \; T[G] * T[G] & \mbox{composition} \\
+\end{grammar}
+
+This sort of notation follows the computer scientist's use of grammars
+to present abstract syntax. Such a presentation provides a natural and
+compact way to present and study algebraic and computational
+structure. It does so in two stages. Firstly, it recursively describes
+a set of purely syntactic entities, monoid expressions, if you will,
+in terms of a set of building blocks, namely the identity, $e$, and
+the generators $g_i \in G$. Secondly, it describes a structural
+equivalence relation, $\scong$, as the smallest equivalence relation
+on $T[G]$ satisfying
+
+\begin{equation*}
+  \begin{aligned}
+    t * e \scong t \scong e * t \\
+    t_1 * ( t_2 * t_3 ) \scong ( t_1 * t_2 ) * t_3
+  \end{aligned}
+\end{equation*}
+
+This presentation should also be somewhat familiar to the category
+theorist who is well acquainted with generators and relations style
+presentations of algebras. The notion of grammar generalizes the
+notion of generators, while the notion of structural equivalence
+generalizes the notion of relations.
+
+At a higher level of abstraction, the recursive specification of
+$T[G]$ makes it clear that $T[G]$ computes the transitive closure of
+some operator $T$ on $G$. Recalling that closure operators are monads,
+this presentation reveals the monadic structure of $T$
+immediately. Meanwhile, the structural equivalence relation can be
+seen as the data required to present an algebra of the monad, $T$,
+illustrating that an algebra of a monad, in this case $(T,\scong)$,
+can also be a monad, in this case the free monad on $n$ generators.
+
+To construct a logic where a formula, say $\phi$, denotes the
+collection of monoid expressions in $T[G]$ satisfying $\phi$, we need
+to specify what \emph{kind} of collection. This is a particular
+insistence on specificity arising from the computer scientist's desire
+for effective presentations. To turn specifications into computations,
+we need to know what kind of collection to use because different kinds
+of collections enjoy different constraints, which affect how we might
+recursively compute a particular collection from a specification of
+its elements.
+
+For instance lists are sensitive to order where sets are not. Bags are
+sensitive to multiplicity where sets are not. In some sense, sets are
+the most insensitive monadically presented notion of collection, and
+thus are ideal for erasing detail about collectivity that might
+distract when bootstrapping an understanding of what it means to
+collect or gather things together. It may be that this insensitivity
+is why sets have enjoyed such a central role in the foundations of
+mathematics.
+
+In this context, it is irresistible to observe that collectivity is a
+kind of composition, and thus, it is no accident that set theory and
+category theory enjoy the relationship that they do: both are
+presentations of mathematics as built up from a notion of
+composition. Set theory begins with the most basic of notions, pure
+collection, erasing all other details or qualities of collecting
+components together into a composition. Category theory generalizes
+the notion of composition, providing a simpler rubric for a much
+broader range of phenomena. To say more, however, would be too much of
+a digression.
+
+Instead, let's use this discussion to motivate the selection of the
+set monad as our notion of collection, not only because it is quite
+common for the semantics of formulae to be sets, but because set's
+insensitivity allow us to focus on more important aspects of the
+construction we are describing.
+
+\begin{itemize}
+\item collection constraints. The first block of formulae enjoy no
+  structural constraints, but only collection constraints. As such,
+  they should be quite familiar. They constitute the well known
+  relationship between boolean algebras and sets as their models.
+    \begin{equation*}
+      \begin{aligned}
+        \meaningof{\mathsf{true}} = T[G] \\
+        \meaningof{\mathsf{\neg}\phi} = T[G] \backslash \meaningof{\phi} \\
+        \meaningof{\phi \mathsf{\&} \psi} = \meaningof{\phi} \cap \meaningof{\psi} \\
+      \end{aligned}
+    \end{equation*}
+  \item structural constraints. The second block of formulae enjoy no
+    collection constraints, but only structural constraints. These
+    will be familiar to those who have worked with separation logic,
+    behavioral spatial logic, or linear logic.
+    \begin{equation*}
+      \begin{aligned}
+        \meaningof{\mathsf{e}} = \{ t \in T[G] : t \scong e \} \\
+        \meaningof{\mathsf{g}_i} = \{ t \in T[G] : t \scong g_i \}  \\
+        \meaningof{\phi \mathsf{*} \psi} = \{ t \in T[G] : t \scong t_1 * t_2, t_1 \in \meaningof{\phi}, \meaningof{\psi} \} \\
+      \end{aligned}
+    \end{equation*}
+\end{itemize}
+
+
+\subsubsection{Some formulae in a logic for monoids}
+
+While this might seem a regular construction, does it yield
+interesting logics? Indeed it does. Already in this simple logic we
+can write down a 1-line formula for primality.
+
+\begin{equation*}
+  prime = \mathsf{\neg}\mathsf{e} \mathsf{\&} \mathsf{\neg}(\mathsf{\neg}\mathsf{e} \mathsf{\&} \mathsf{\neg}\mathsf{e})
+\end{equation*}
+
+It is easy to verify that 
+
+\begin{equation*}
+  \meaningof{prime} = \bigcup_i \meaningof{g_i}
+\end{equation*}
+
+\subsection{A logic for combinatory algebras}
+
+Monoids enjoy only bidirection rewrites, which we represent as
+structural equivalence. This presentation corresponds to the standard
+generators and relations presentation used in modern abstract
+algebra. Computation adds a new element to this picture in terms of
+unidirection rewrites. An excellent example is the $SKI$-combinatory
+algebra, originally developed to provide a variable-free (aka
+point-free) presentation of the familiar $lambda$-calculus.
+
 The only solution in Set of $D \cong D^D$ is $D=1;$ for larger $D$
 there are too many functions.  Scott solved the problem topologically,
 by constructing a space $D$ isomorphic to the space of continuous
@@ -446,6 +605,10 @@ of intensional information is the term calculus itself, so we focus on
 that as the fundamental construction.
 
 [[ More history. ]]
+
+\subsection{Related work}
+
+TBD
 
 \section{2-theory for a term calculus}
 
@@ -650,152 +813,7 @@ TBD
 In this section we motivate the construction by way of a few examples
 familiar both to computer scientists and category theorists.
 
-\subsection{A logic for monoids}
 
-The notion of monoid captures fundamental, yet minimal structure in a
-wide variety of computational phenomena. Data structures, such as
-lists, enjoy monoidal structure; arithmetic phenomena, such as the
-natural numbers under addition, enjoy monoidal structure; executive or
-control flow phenomena, such as parallel composition of communicating
-processes enjoy monoidal structure. For this reason, they are widely
-studied and relatively well understood by the computing community.
-
-They also play a fundamental role in category theory. If category
-theory is a theory of composition, and monoids expose one of the most
-basic notions of composition, then categorical accounts of monoids and
-monoidal phenomena say as much about category theory as the other way
-around. Thus, the fact that the free monoid, $T[G]$, on a set of $n$
-generators, say $G = \{ g_i : 1 \leq i \leq n \}$, is a monad and that
-monads are monoid objects in a category of endofunctors says a great
-deal about the notions of composition at play in category theory. In
-particular, it illustrates the process of categorification raises the
-level of abstraction, revealing fundamental patterns in operators in a
-much broader range of phenomena.
-
-Where computer science and category theory come together to study
-these phenomena we see a new kind of language arise, one with the
-computer scientist's emphasis on effective presentations, yet with the
-category theorists view to higher and higher levels of abstraction and
-expressiveness. In this language, we can present the basic data of the
-free monoid on a set of $n$ generators in a manner that supports both
-computation and higher levels of abstraction.
-
-\label{syntax}
-\begin{grammar}
-{T[G]} \bc e & \mbox{identity} \\
-       \;\;\; \bm \; g_i & \mbox{generator in G} \\
-       \;\;\; \bm \; T[G] * T[G] & \mbox{composition} \\
-\end{grammar}
-
-This sort of notation follows the computer scientist's use of grammars
-to present abstract syntax. Such a presentation provides a natural and
-compact way to present and study algebraic and computational
-structure. It does so in two stages. Firstly, it recursively describes
-a set of purely syntactic entities, monoid expressions, if you will,
-in terms of a set of building blocks, namely the identity, $e$, and
-the generators $g_i \in G$. Secondly, it describes a structural
-equivalence relation, $\scong$, as the smallest equivalence relation
-on $T[G]$ satisfying
-
-\begin{equation*}
-  \begin{aligned}
-    t * e \scong t \scong e * t \\
-    t_1 * ( t_2 * t_3 ) \scong ( t_1 * t_2 ) * t_3
-  \end{aligned}
-\end{equation*}
-
-This presentation should also be somewhat familiar to the category
-theorist who is well acquainted with generators and relations style
-presentations of algebras. The notion of grammar generalizes the
-notion of generators, while the notion of structural equivalence
-generalizes the notion of relations.
-
-At a higher level of abstraction, the recursive specification of
-$T[G]$ makes it clear that $T[G]$ computes the transitive closure of
-some operator $T$ on $G$. Recalling that closure operators are monads,
-this presentation reveals the monadic structure of $T$
-immediately. Meanwhile, the structural equivalence relation can be
-seen as the data required to present an algebra of the monad, $T$,
-illustrating that an algebra of a monad, in this case $(T,\scong)$,
-can also be a monad, in this case the free monad on $n$ generators.
-
-To construct a logic where a formula, say $\phi$, denotes the
-collection of monoid expressions in $T[G]$ satisfying $\phi$, we need
-to specify what \emph{kind} of collection. This is a particular
-insistence on specificity arising from the computer scientist's desire
-for effective presentations. To turn specifications into computations,
-we need to know what kind of collection to use because different kinds
-of collections enjoy different constraints, which affect how we might
-recursively compute a particular collection from a specification of
-its elements.
-
-For instance lists are sensitive to order where sets are not. Bags are
-sensitive to multiplicity where sets are not. In some sense, sets are
-the most insensitive monadically presented notion of collection, and
-thus are ideal for erasing detail about collectivity that might
-distract when bootstrapping an understanding of what it means to
-collect or gather things together. It may be that this insensitivity
-is why sets have enjoyed such a central role in the foundations of
-mathematics.
-
-In this context, it is irresistible to observe that collectivity is a
-kind of composition, and thus, it is no accident that set theory and
-category theory enjoy the relationship that they do: both are
-presentations of mathematics as built up from a notion of
-composition. Set theory begins with the most basic of notions, pure
-collection, erasing all other details or qualities of collecting
-components together into a composition. Category theory generalizes
-the notion of composition, providing a simpler rubric for a much
-broader range of phenomena. To say more, however, would be too much of
-a digression.
-
-Instead, let's use this discussion to motivate the selection of the
-set monad as our notion of collection, not only because it is quite
-common for the semantics of formulae to be sets, but because set's
-insensitivity allow us to focus on more important aspects of the
-construction we are describing.
-
-\begin{itemize}
-\item collection constraints. The first block of formulae enjoy no
-  structural constraints, but only collection constraints. As such,
-  they should be quite familiar. They constitute the well known
-  relationship between boolean algebras and sets as their models.
-    \begin{equation*}
-      \begin{aligned}
-        \meaningof{\mathsf{true}} = T[G] \\
-        \meaningof{\mathsf{\neg}\phi} = T[G] \backslash \meaningof{\phi} \\
-        \meaningof{\phi \mathsf{\&} \psi} = \meaningof{\phi} \cap \meaningof{\psi} \\
-      \end{aligned}
-    \end{equation*}
-  \item structural constraints. The second block of formulae enjoy no
-    collection constraints, but only structural constraints. These
-    will be familiar to those who have worked with separation logic,
-    behavioral spatial logic, or linear logic.
-    \begin{equation*}
-      \begin{aligned}
-        \meaningof{\mathsf{e}} = \{ t \in T[G] : t \scong e \} \\
-        \meaningof{\mathsf{g}_i} = \{ t \in T[G] : t \scong g_i \}  \\
-        \meaningof{\phi \mathsf{*} \psi} = \{ t \in T[G] : t \scong t_1 * t_2, t_1 \in \meaningof{\phi}, \meaningof{\psi} \} \\
-      \end{aligned}
-    \end{equation*}
-\end{itemize}
-
-
-\subsubsection{Some formulae in a logic for monoids}
-
-While this might seem a regular construction, does it yield
-interesting logics? Indeed it does. Already in this simple logic we
-can write down a 1-line formula for primality.
-
-\begin{equation*}
-  prime = \mathsf{\neg}\mathsf{e} \mathsf{\&} \mathsf{\neg}(\mathsf{\neg}\mathsf{e} \mathsf{\&} \mathsf{\neg}\mathsf{e})
-\end{equation*}
-
-It is easy to verify that 
-
-\begin{equation*}
-  \meaningof{prime} = \bigcup_i \meaningof{g_i}
-\end{equation*}
 
 \subsubsection{Varying the collection monad}
 
