@@ -402,6 +402,8 @@ The only solution in Set of $D \cong D^D$ is $D=1;$ for larger $D$ there are too
 
 [[ More history. ]]
 
+\section{2-theory for a term calculus}
+
 \begin{comment}
   * 2-categories with finite products as presentations of configurations
 
@@ -423,8 +425,6 @@ The only solution in Set of $D \cong D^D$ is $D=1;$ for larger $D$ there are too
 
           * free model in Cat on empty category gives a quiver of terms & rewrites
 \end{comment}
-
-\section{2-theory for a term calculus}
 
 In this work, all 2-categories, functors between them, transformations, and modifications are strict.
 
@@ -491,6 +491,8 @@ of rewrites from the term calculus and morphisms from $K$. The
 free model on the empty category $T\emptyset$ has only the terms
 and rewrites from the term calculus as objects and morphisms.
 
+\section{Formulae}
+
 \begin{comment}
   * Interpretation of formulae as sets of terms satisfying the formulae
 
@@ -537,21 +539,7 @@ and rewrites from the term calculus as objects and morphisms.
                   * Ditto for COMM
 
           * Stuff from LICS paper above
-
-  * Examples of interesting formulae
-
-      * primes in a monoid
-
-      * deadlock-free (both kinds)
-
-      * datalock-free? http://erights.org/elang/concurrency/epimenides.html
-
-      * deniability from paper with Drossopolou
-
-      * more?  
 \end{comment}
-
-\section{Formulae}
 
 Our types are ``types à la Curry'', or in the language of Reynolds \cite{Reynolds}, ``extrinsic'' types.  They are propositions about terms in the language, and we interpret formulae as being collections of terms that satisfy the propositions.  Somebody \cite{whoever} showed that we can generalize set comprehensions to any monad whose algebras are monoids; we call such monads ``filterable''.  Given a monad $T$ for a term calculus and a filterable monad $C$ for a collection, we want the interpretation of our formulae to live in $CT\emptyset.$
 
@@ -569,14 +557,36 @@ Given a two-hole context $K[-, -],$ we can add modal operators to the formulae:
 \[ A \langle K\rangle B = \{ t \;|\; \forall \; u\in \meaningof{A}, \; \rho\colon K[t,u]\Rightarrow v\;.\;v \in \meaningof{B}\}.\]
 With this notation, the arrow type in the SKI combinator calculus is
 \[ A \Rightarrow B \;=\; A \langle (-\;-)\rangle B \]
-while Caires' adjunct of the composition operator of spatial logics \cite{Caires}
+while Caires' adjunct of the composition operator of spatial logics \cite{Caires} is
 \[ A \triangleright B \;=\; A \langle -|-\rangle B.\]
 
 \section{Interesting formulae}
 
-\section{Composing term calculi}
+\begin{comment}
+  * Examples of interesting formulae
 
-[[ Smash product ]]
+      * primes in a monoid
+
+      * deadlock-free (both kinds)
+
+      * datalock-free? http://erights.org/elang/concurrency/epimenides.html
+
+      * deniability from paper with Drossopolou
+
+      * more?  
+\end{comment}
+
+[[ Put formulae here. ]]
+
+\section{Combining term calculi}
+
+[[ Anecdote about pi calculus and ambient calculus. ]]
+
+Composing the term calculus monads is one way to combine the calculi; it, too, requires a distributive law.  Given monads $T$ and $T'$ and a distributive law transformation $\Delta\colon T'T \Rightarrow TT'$, we can form a monad $TT'$ where the monadic join is
+\[ \mu^{TT'}_X\colon TT'TT'X \xrightarrow{\mu^T_{T'X} \circ TT(\mu^{T'}_X) \circ \Delta_X} TT'X. \]
+However, there is often no natural way to produce such a distributive law.
+
+A different approach to combining term calculi is to combine the grammars.  Because our 2-theories have a distinguished object $G$ and homomorphisms of models preserve the distinguished object, the product in the 2-category of models is a smash product akin to that of pointed sets, monoids, and groups.
 
 \subsubsection{Related work}
 
