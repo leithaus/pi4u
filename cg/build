@@ -1,0 +1,3 @@
+latex cg
+dvips cg.dvi
+ps2pdf cg.ps

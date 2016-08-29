@@ -1,0 +1,3 @@
+latex ladl
+dvips ladl.dvi
+ps2pdf ladl.ps
