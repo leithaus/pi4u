@@ -39,6 +39,7 @@
 \usepackage{listings}
 \usepackage{mathtools}
 %\usepackage[fleqn]{amsmath}
+\usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{latexsym}
 \usepackage{amssymb}
@@ -570,15 +571,122 @@ information about the arrival order of bets at $r$.
 
 We can formalize the notion of redundancy-free bets using a notion of
 path. Since a bet is really just a labelled n-ary tree, we can talk
-about paths in a bet. We use $\sigma$ to range over paths in a bet,
-$|\sigma|$ to denote the length of $\sigma$ and 0-based indexing
-notation to denote positions in the path. Thus, for example,
-$\sigma(0)$ is the initial bet in the path, and $\sigma( |\sigma| -
-1)$ denotes the final bet in the path.
+about paths in a bet, which are simply sequences of bets,
+i.e. elements of $\mathsf{List}[B[P,C,F]]$. We denote the set of paths
+from $b$ with $\mathsf{paths}(b)$ and use $\sigma$ to range
+over $\mathsf{paths}(b)$, $|\sigma|$ to denote the length of $\sigma$ and
+0-based indexing notation to denote positions in the path. Thus, for
+example, $\sigma(0)$ is the initial bet in the path, and $\sigma(
+|\sigma| - 1)$ denotes the final bet in the path.
+
+\begin{defn}[redundancy-free]
+  A bet, $b$, is redundancy-free iff
+  \begin{flalign*}
+    b' \in \mathsf{justify}( b ) & \Rightarrow \\
+    & \forall \sigma \in List[B[P, C,F]]. \\
+    & \;\;\;\;\sigma( 0 ) \in \mathsf{justify}( b ) \;\&\; src( \sigma( | \sigma | - 1 ) ) = src( b ) \\
+    & \;\;\;\;\Rightarrow b’ \notin \mathsf{justify}( \sigma( | \sigma | - 1 ) )
+  \end{flalign*}
+\end{defn}
 
 \subsection{Strategies}
 
+A consensus game is determined, in part, by a move relation, $\vdash$,
+on pairs of sets of bets, $( M, N ) \in \mathcal{P}( B[P,C,F] ) \times
+\mathcal{P}( B[P,C,F] )$ indicating the legal moves. The statement $M
+\vdash N$ indicates that given the set of bets $M$, a player who plays
+by the rules produces a bet in $N$.
+
+\begin{defn}[strategy]
+  A strategy, $s$, is a map $s : \mathcal{P}( B[P,C,F] ) \to B[P,C,F]$, that produces
+  a new bet from the information contained in a set of bets given as
+  arguments to $s$. We use $S$ to range over sets of strategies, that is,
+  $S \subseteq \mathcal{P}( B[P,C,F] ) \to B[P,C,F]$.
+\end{defn}
+
+\begin{defn}
+  A strategy, $s$, is said to be legal w.r.t $\vdash$, alternatively, $\vdash$-legal,
+  iff
+
+  $M \subseteq B[P,C,F] \To \exists N \subseteq B[P,C,F]. s( M ) \in N \&  M \vdash N$.
+\end{defn}
+
+In the sequel we will want to associate players with strategies, and
+use $S$ to range over the set of partial maps $P \Rightarrow ( \mathcal{P}( B[P,C,F] ) \Rightarrow B[P,C,F] + 1 )$.
+
+\subsection{Relationship to traditional notions of consensus}
+
+Roughly speaking, a consensus protocol implies a legal move
+relation. N.b. illegal moves are evidence of Byzantine
+behavior. Traditionally, a consensus protocol also implies a strategy,
+and Byzantine behaviour in the canonical consensus literature includes
+playing any strategy that isn’t “protocol”. The framework of
+definitions above is more relaxed. There will be legal strategies that
+would be considered Byzantine in traditional consensus literature. For
+example, a Byzantine node, in the classical consensus literature,
+could delay publishing bets without making any illegal moves.
+
 \subsection{Games}
+
+We capture the dynamics of game play through the notion of a history of a game. 
+
+\begin{defn}
+  Given a move relation and a set of players, $P$, we can describe a
+  complete game history $H$ as a partial map
+  \begin{flalign*}
+    H : P \times \mathcal{List}[\mathcal{Set}[B[P,C,F]] + \mathcal{Set}[B[P,C,F]]] \\
+    & \to \mathcal{Set}[B[P,C,F]] + \mathcal{Set}[B[P,C,F]] + 1
+  \end{flalign*}
+  \begin{itemize}
+    \item $H( p, l ) \mapsto \mathcal{inr}( A' )$ indicates that $A'$ is the last set of bets p will see in this history, while
+    \item $H( p, l ) \mapsto \mathcal{inl}( A' )$ indicates that $p$ will receive bets after $A'$
+    \item $H( p, l ) \mapsto \bot$ indicates that $H$ is undefined, i.e. that $p$ will never see $l$ and so cannot see an extension of $l$.
+  \end{itemize}
+\end{defn}
+
+\begin{defn}
+  We define the $H$-messages of $l$ for $p$ from $p'$, $msgH( l, p, p’ )$, as
+
+  \begin{equation*}
+    msgH( l, p, p' ) = trgt( H( p', l ), p )
+  \end{equation*}
+\end{defn}
+
+This is under ideal network conditions where all messages sent
+arrive. It will be convenient to address network conditions separately
+from the choices of players to send messages. For this we will adopt a
+notation $msgH( l, p, p’; C )$, which we detail in a separate section.
+
+%% Defn. We define the H-extension of l for p, extH( l, p ) as
+
+%% extH( l, p ) = ∪p’≠p msgH( l, p, p’ )
+
+%% The next definition derives from the style of defining streams lazily from generators. For example, we can define the stream of counting numbers [ 0, 1, 2, … ] by
+
+%% N = 0 :: map( λn.n + 1, N )
+
+%% Defn. We define the H-stream, alternatively H-view, of p, H( p ), as
+
+%% H( p ) = map( λn. if 0?( n ) then [] else let l = take(n, H( p ) ) in l :: [ extH( p, l ) ], N )
+
+%% Defn. Given a map, S, taking players to their strategies, we say that H respects S at l iff for all p ∈ P, A ∈ msgH( l, S( p ) ), src( A, S( p’ ) ) ⊆ S( p’ )( l ). Likewise, H respects S iff for all p ∈ P, l ∈ H( s ), H respects S at l.
+
+%% Defn. Given a map, S, taking players to their strategies, we say that H is S-continuous iff
+%% exists n.H( S( p ) )( n ) match inr( A ) implies for all n’ > n H( S( p ) )( n’ ) = ⊥
+%% H respects S.
+
+%% Notice that this describes an actual history of message passing amongst the players, rather than enumerating possible plays. As long as we remain aware of the distinction between actual histories and possible histories, we can identify a game with a triple, G = ( S,  ⊢, H ), consisting of a map of players to strategies, S, a legal move relation, ⊢, and an S-continuous H; and as before avail ourselves of logical accessors, SG, ⊢G, HG, denoting the components of G, respectively.
+
+%% Defn. We say a set of bets, A ⊆ B[P,C,F], agrees on a value, v, and write A⇓v, when A = claim( A, v ).
+
+%% Defn. A game, G, computes a value, v, written G⇓v, when there is a set, A ⊆ B[P,C,F]), such that A⇓v and for each legal strategy s ∈ SG and A’ ⊆ A, s( A’ ) ∈ A. That is, A agrees on v, and is an attractor for the iterated function system generated by the legal strategies of SG. When G⇓v write attractor( G, v ) for A.
+
+%% Thm. G⇓v iff 
+%% for all p such that S( p ) is ⊢-legal there exists l such that H( p, l )⇓v
+%% ∪l ∈ { l | H( p, l )⇓v } H( p, l ) ⊆ attractor( G, v )
+%% Pf. Immediate.
+
+%% Intuitively, when a game computes a value, it represents message passing behavior amongst the players that results in consensus on the value. However, it is important to note that games, as defined, here, involve actual histories of message-passing behavior. They are a record or trace of a “machine” built out of message-passing behavior over a collection of agents. As such, the current description does not account for partial or incomplete knowledge which may represent the individual views of the players during the state of play, or of “clients” of this machine.
 
 \subsection{Composition of games}
 
