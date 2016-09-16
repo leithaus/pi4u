@@ -4,6 +4,7 @@
 
 
 * Required
+
     * arXiv (~30 pages)
 
         * Stuff from journal paper below except for history, deep dives into type refinement, modal formulae, & models of theories & quivers.
@@ -43,8 +44,7 @@
 
 ## Journal paper
 
-
-    * Either TAC or LMCS.  LMCS has 50 page limit, TAC has none.  Expect to submit at end of year after other papers are written.
+* Either TAC or LMCS.  LMCS has 50 page limit, TAC has none.  Expect to submit at end of year after other papers are written.
 
     * RAG Seely's suggestion of using 2-categories for modeling computation
 
