@@ -1,0 +1,133 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\newcommand{\interp}[1]{\llbracket #1 \rrbracket}
+\newcommand{\maps}{\colon}
+\newcommand{\gram}[1]{\mbox{\tt <#1>}}
+
+\title{Logic as a distributive law}
+\author{
+Michael Stay\\
+  {Pyrofex Corp.}\\
+  {\fontsize{8}{8}\selectfont stay@pyrofex.net}
+\and
+L.G. Meredith\\
+  {Biosimilarity, LLC}\\
+  {\fontsize{8}{8}\selectfont lgreg.meredith@biosimilarity.com}
+}
+\begin{document}
+\maketitle
+\begin{abstract}
+\noindent
+We present an algorithm that takes a formal presentation of a virtual machine and outputs a spatial-behavioral type system.  The presentation consists of a context-free grammar for the state of the machine together with a set of rewrite rules describing how the state changes---in category-theoretic terminology, a Lawvere 2-theory.  The types are ``types \`a la Curry'' or in Reynolds' terminology, ``extrinsic'' types: they are propositions about machine state and behavior.  We interpret a formula as a collection of terms of the grammar that satisfy the formula, and we interpret proofs as morphisms of collections.  A distributive law forms the core of this interpretation.
+
+In the simplest case, formulae and proofs are given by the sum of the 2-theory $T$ for the machine with a 2-theory $C$ for a collection.  Since each 2-theory corresponds to a finitary 2-monad, the interpretation of formulae is a natural transformation from $T+C$ to $CT$ built from the unit and multiplication transformations and a distributive law natural transformation $\delta\maps TC \Rightarrow CT$.
+
+We present several examples of the logics so generated and some interesting formulae in those logics.
+\end{abstract}
+
+\section{Introduction}
+[[ Expand this. ]]
+We present an algorithm that takes a formal presentation of a virtual machine and outputs a spatial-behavioral type system.  The presentation consists of a context-free grammar for the state of the machine together with a set of rewrite rules describing how the state changes---in category-theoretic terminology, a Lawvere 2-theory.  The types are ``types \`a la Curry'' or in Reynolds' terminology, ``extrinsic'' types: they are propositions about machine state and behavior.  We interpret a formula as a collection of terms of the grammar that satisfy the formula, and we interpret proofs as morphisms of collections.  A distributive law forms the core of this interpretation.
+
+In the simplest case, formulae and proofs are given by the sum of the 2-theory $T$ for the machine with a 2-theory $C$ for a collection.  Since each 2-theory corresponds to a finitary 2-monad, the interpretation of formulae is a natural transformation from $T+C$ to $CT$ built from the unit and multiplication transformations and a distributive law natural transformation $\delta\maps TC \Rightarrow CT$.
+
+We present several examples of the logics so generated and some interesting formulae in those logics.
+
+\subsection{A motivating example}
+
+Before considering the full 2-categorical machinery, it will be helpful to consider a 1-categorical example.
+
+Consider this BNF grammar on a set $G$ of generators.
+\begin{center}
+  \tt
+  \begin{tabular}{rll}
+    <monoid>[G] ::= & <G> &|\\
+    & 1 &|\\
+    & ( <monoid>[G] * <monoid>[G] )
+  \end{tabular}
+\end{center}
+The grammar describes a set of binary trees whose leaves are labeled either by 1 or the elements of $G.$  In order to describe the free monoid on $G,$ we need to impose associativity and unit laws:
+\begin{center}
+  \tt
+  \begin{tabular}{rl}
+    For all x, y, z in <monoid>[G], & ((x * y) * z) = (x * (y * z))\\
+    For all x in <monoid>[G], & (x * 1) = x\\
+    For all x in <monoid>[G], & (1 * x) = x
+  \end{tabular}
+\end{center}
+The grammar and the equations taken together are a presentation of the monad for the free monoid on the set $G$.
+
+To construct a logic where a formula, say $\phi$, denotes the
+collection of monoid expressions in {\tt <monoid>[G]} satisfying $\phi$, 
+we need to specify what \emph{kind} of collection, because different kinds
+of collections have different constraints that affect how we construct them.
+For instance, lists are sensitive to order where sets are not. Bags are
+sensitive to multiplicity where sets are not. In this sense, sets are
+the most insensitive monadically presented notion of collection, and
+thus are ideal for erasing detail about collectivity that might
+distract when bootstrapping an understanding of what it means to
+collect or gather things together.
+
+Given a set $G$ of generators, we can describe sets of elements from $G$ with the grammar
+\begin{center}
+  \tt
+  \begin{tabular}{rll}
+    <set>[G] ::= & <G> &|\\
+    & T &| \\
+    & F &| \\
+    & (<set>[G] $\land$ <set>[G]) &| \\
+    & (<set>[G] $\lor$ <set>[G]) &| \\
+    & $\neg$ <set>[G]
+  \end{tabular}
+\end{center}
+equipped with equations for associativity, unit laws, and commutativity of $\land$ and $\lor$, idempotence of $\neg,$ and de Morgan's laws.  The grammar and equations are a presentation of the monad for the free Boolean algebra on the set $G.$
+
+The sum of the two monads is a new monad whose terms are our formulae.  The sum is presented by taking the union of the grammars and the union of the equations.
+\begin{center}
+  \tt
+  \begin{tabular}{rll}
+    <formula>[G] ::= & <G> &| \\
+    & 1 &| \\
+    & ( <formula>[G] * <formula>[G] ) &|\\
+    & T &|\\
+    & F &| \\
+    & (<formula>[G] $\land$ <formula>[G]) &| \\
+    & (<formula>[G] $\lor$ <formula>[G]) &| \\
+    & $\neg$ <formula>[G]
+  \end{tabular}
+\end{center}
+Since the sum of two monads is the free product of the two, a general formula will be a term in an alternating composition of the two monads.  For example, suppose that $a, b, c, d, e \in G;$ then one formula is 
+\begin{center}
+  \tt ((a $\lor$ (b * e)) * (c $\lor$ d)),
+\end{center}
+which is a term in {\tt <monoid>[<set>[<monoid>[G]]]}.  
+
+The interpretation of this formula should be the set of monoid words
+\[ \{ ac, ad, bec, bed \}, \]
+or in other words, the term
+\begin{center}
+  \tt (a * c) $\lor$ (a * d) $\lor$ (b * e * c) $\lor$ (b * e * d)
+\end{center}
+in {\tt <set>[<monoid>[G]]}.  
+
+In order to move all the uses of {\tt <monoid>} to the right of the uses of {\tt <set>}, we need a distributive law natural transformation
+\[ \delta\maps \gram{monoid}\circ\gram{set} \Rightarrow \gram{set}\circ\gram{monoid}. \]
+Given $\delta$ and the monad units and multiplications, we can define an interpretation natural transformation
+\[ \interp{-}\maps \gram{formula}\Rightarrow\gram{set}\circ\gram{monoid} \]
+in the obvious way:
+\begin{align*}
+  \interp{T}_G &= \mbox{\tt monoid[G]}\\
+  \interp{F}_G &= \emptyset\\
+  \interp{{A}\lor{B}}_G &= \interp{A}_G \cup \interp{B}_G\\
+  \interp{{A}\land{B}}_G &= \interp{A}_G \cap \interp{B}_G\\
+  \interp{\neg A}_G &= \mbox{\tt monoid[G]} - \interp{A}_G\\
+  \interp{m \in \mbox{\tt monoid[G]}}_G &= \{m\}
+\end{align*}
+
+Even in this simple example, we have nontrivial formulae; for example,
+\[ prime = \neg 1 \land \neg(\neg 1 * \neg 1) \]
+is a 1-line formula for primality.  It is easy to verify that $\interp{prime}_G = G.$
+
+\section{Related work}
+\end{document}
