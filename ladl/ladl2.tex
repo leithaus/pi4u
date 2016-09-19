@@ -129,5 +129,11 @@ Even in this simple example, we have nontrivial formulae; for example,
 \[ prime = \neg 1 \land \neg(\neg 1 * \neg 1) \]
 is a 1-line formula for primality.  It is easy to verify that $\interp{prime}_G = G.$
 
+\subsection{Moving to 2-categories}
+
+Monoids are associative, but the grammar generated a tree; we only got associativity by modding out by a relation on the trees.  In a computational context, when a data structure has some symmetry we do not care about, we often test two instances of the structure for equality by computing a normal form for each instance and then comparing the normal forms.
+
+
+
 \section{Related work}
 \end{document}
