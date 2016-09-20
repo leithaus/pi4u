@@ -201,11 +201,11 @@ The original insight.
 
 Many algebraic gadgets can be presented as a set equipped with extra structure; for example, a group is a set of elements equipped with an associative multiplication, an inversion function, and an identity element.
 
-Let FinSet be a skeleton of the category of finite sets.  The {\bf Lawvere theory} of a mathematical gadget is a category Th(Gad) with finite products equipped with an identity-on-objects functor $\theta\maps \FinSet^\op \to \mathrm{Th}.$  The objects of category Th(Gad) are therefore products of a generating object $S,$ the {\bf sort}.  The morphisms of Th(Gad) are necessarily generated from a set of morphisms from finite powers of $S$ to $S$ by products and composition, so a Lawvere theory may be presented with a set of {\bf function symbols}
+Let FinSet be a skeleton of the category of finite sets.  The {\bf Lawvere theory} of a mathematical gadget is a category Th(Gad) with finite products equipped with an identity-on-objects functor $\theta\maps \FinSet^\op \to \mathrm{Th(Gad)}.$  The objects of category Th(Gad) are therefore products of a generating object $S,$ the {\bf sort}.  The morphisms of Th(Gad) are necessarily generated from a set of morphisms from finite powers of $S$ to $S$ by products and composition, so a Lawvere theory may be presented with a set of function symbols
 \[ f_i\maps S^{n_i} \to S, \]
-together with a set of equations, where $i$ ranges over some index set $I$ and $n_i \in \NN$.
+together with a set of equations, where $i$ ranges over some index set $I$ and $n_i \in \NN$.  The {\bf arity} of $f_i$ is $n_i.$
 
-A product-preserving functor from Th(Gad) to Set picks out a set and equips it with structure maps satisfying the equations.  The functor category Prod(Th(Gad), Set) of product-preserving functors and natural transformations between them is equivalent to the category Gad of gadgets and gadget homomorphisms.  There is a forgetful functor ${U\maps \Gad \to \Set}$ that forgets the extra structure.  When the theory has at least one nullary operation, the functor $U$ has a left adjoint ${L\maps Set \to Gad}$ that picks out the free gadget on a set.  The monad $UL\maps \Set \to \Set$ picks out the underlying set $ULX$ of the free gadget $LX$ on a set $X$.  Lawvere theories are in bijection with finitary monads; the qualifier ``finitary'' means that each function symbol has a finite number of inputs.
+A product-preserving functor from Th(Gad) to Set picks out a set and equips it with structure maps satisfying the equations.  The category Prod(Th(Gad), Set) of product-preserving functors and natural transformations between them is equivalent to the category Gad of gadgets and gadget homomorphisms.  There is a forgetful functor ${U\maps \Gad \to \Set}$ that forgets the extra structure.  The functor $U$ has a left adjoint ${L\maps \Set \to \Gad}$ that picks out the free gadget on a set.  The monad $UL\maps \Set \to \Set$ picks out the underlying set $ULX$ of the free gadget $LX$ on a set $X$.  Lawvere theories are in bijection with finitary monads; the qualifier ``finitary'' means that each function symbol has a finite arity.
 
 For example, the Lawvere theory of groups Th(Grp) may be presented by the function symbols
 \begin{itemize}
@@ -213,7 +213,7 @@ For example, the Lawvere theory of groups Th(Grp) may be presented by the functi
   \item $e\maps 1 \to S$
   \item $inv \maps S \to S$
 \end{itemize}
-and the equations
+and the equations (here given in point-free form)
 \begin{itemize}
   \item $m \circ (m \times S) = m \circ (S \times m)$ (associativity)
   \item $m \circ (e \times S) \circ \mathrm{left}_S = S$ (left unit law)
@@ -228,9 +228,22 @@ A product-preserving functor from Th(Grp) to Set maps $S$ to a set $G$ and equip
 
 The category Prod(Th(Grp), Set) of product-preserving functors and natural transformations between them is equivalent to the category Grp of groups and group homomorphisms.  There is a forgetful functor from Grp to Set that forgets the structure; this forgetful functor has a left adjoint from Set to Grp that picks out the free group on a set.  The composition of these two functors gives a monad on Set that maps a set $X$ to the underlying set of the free group on $X.$
 
-\subsection{Multi-sorted Lawvere theories}
-In the motivation section, each grammar had only one sort; practical grammars for virtual machines are multisorted.    Given a finite set of sorts $\Sigma,$ the category $\FinSet/\Sigma$ is the category whose objects are pairs $(S, s\maps S\to \Sigma),$ where $S$ is a finite set, and whose morphisms are morphisms $f\maps S \to S'$ such that the relevant triangle commutes.
+\subsection{Multisorted Lawvere theories}
+In the motivation section, each grammar had only one sort; practical grammars for virtual machines are usually multisorted.  Given a finite set of sorts $\Sigma,$ the category $\FinSet/\Sigma$ is the category whose objects are pairs $(S, s\maps S\to \Sigma),$ where $S$ is a finite set, and whose morphisms are morphisms $f\maps S \to S'$ such that the relevant triangle commutes.
 
-A {\bf multi-sorted Lawvere theory} is a category Th(Gad) equipped with an identity-on-objects functor $\theta\maps (\Finset/\Sigma)^\op \to \mathrm{Th(Gad)}.$  The category Prod(Th(Gad), Set) is equivalent to the category Gad of gadgets and gadget homomorphisms.  When there is at least one nullary morphism into each sort, there is a forgetful functor $U\maps Gad \to Set^\Sigma$ with a left adjoint $L\maps Set^\Sigma \to Gad$ that picks out the free gadget on a tuple of sets.
+A {\bf multisorted Lawvere theory} is a category Th(Gad) equipped with an identity-on-objects functor ${\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Gad)}.}$  The category Prod(\allowbreak Th(Gad), Set) is equivalent to the category Gad of gadgets and gadget homomorphisms.  There is a forgetful functor ${U\maps \Gad \to \Set^\Sigma}$ with a left adjoint ${L\maps \Set^\Sigma \to \Gad}$ that picks out the free gadget on a $|\Sigma|$-tuple of sets.  The monad ${UL\maps \Set^\Sigma \to \Set^\Sigma}$ picks out the underlying $|\Sigma|$-tuple of sets $ULX$ of the free gadget $LX$ on a $|\Sigma|$-tuple of sets $X$.
+
+An example of a multisorted Lawvere theory is that of a group action on a set, which involves a choice of both a group $G$ and a set $V$ to act on.  The presentation of Th(GrpAct) has a pair of sorts $S = (G, V)$, all the function symbols and equations as the theory of a group (replacing $S$ by $G$), together with a new function symbol
+\[ a\maps G \times V \to V \]
+and equations
+\begin{itemize}
+  \item $a \circ (e \times V) \circ \mathrm{left}_V = V$ (identity action)
+  \item $a \circ (m \times V) = a \circ (G \times a)$ (compatibility).
+\end{itemize}
+
+\subsection {Multisorted Lawvere 2-theories}
+In this paper, the {\bf multisorted Lawvere 2-theory} of a gadget is a 2-category Th(Gad) with strict finite products equipped with an identity-on-objects functor $\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Gad)},$ where we promote $(\FinSet/\Sigma)$ to a 2-category by adding identity 2-morphisms to every 1-morphism.  A multisorted Lawvere 2-theory may be presented by a finite set of sorts, a set of function symbols with finite arity, a set of rewrites, and a set of equations between rewrites.  The free unital magma on a set equipped with normalization from the introduction is an example of a single-sorted Lawvere 2-theory.  
+
+Another example of a single-sorted
 
 \end{document}
