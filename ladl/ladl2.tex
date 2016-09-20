@@ -5,10 +5,16 @@
 \usepackage{stmaryrd}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
-\newcommand{\gram}[1]{\mbox{\tt <#1>}}
 \newcommand{\FinSet}{\mathrm{FinSet}}
 \newcommand{\Set}{\mathrm{Set}}
 \newcommand{\Gad}{\mathrm{Gad}}
+\newcommand{\Mon}{\mathrm{Mon}}
+\newcommand{\BoolAlg}{\mathrm{BoolAlg}}
+\newcommand{\Form}{\mathrm{Form}}
+\renewcommand{\left}{\mathrm{left}}
+\renewcommand{\right}{\mathrm{right}}
+\newcommand{\mult}{\mathrm{mult}}
+\newcommand{\ident}{\mathrm{ident}}
 \newcommand{\op}{\mathrm{op}}
 \newcommand{\NN}{\mathbb{N}}
 
@@ -45,91 +51,115 @@ We present several examples of the logics so generated and some interesting form
 
 Before considering the full 2-categorical machinery, it will be helpful to consider a 1-categorical example.
 
-Consider this BNF grammar on a set $G$ of generators.
-\begin{center}
-  \tt
-  \begin{tabular}{rll}
-    <monoid>[G] ::= & <G> &|\\
-    & 1 &|\\
-    & ( <monoid>[G] * <monoid>[G] )
-  \end{tabular}
-\end{center}
-The grammar describes a set of binary trees whose leaves are labeled either by 1 or the elements of $G.$  In order to describe the free monoid on $G,$ we need to impose associativity and unit laws:
-\begin{center}
-  \tt
-  \begin{tabular}{rl}
-    For all x, y, z in <monoid>[G], & ((x * y) * z) = (x * (y * z))\\
-    For all x in <monoid>[G], & (x * 1) = x\\
-    For all x in <monoid>[G], & (1 * x) = x
-  \end{tabular}
-\end{center}
-The grammar and the equations taken together are a presentation of the monad for the free monoid on the set $G$.
+Consider this Java interface:
+\begin{verbatim}
+  interface Monoid<S> {
+    S mult(S a, S b);
+    S ident();
+  }
+\end{verbatim}
+This interface, despite its name, only enforces the structure of a binary tree whose leaves are labeled by elements of $S,$ one of which is special.  In order to guarantee that implementations of the interface are monoids, we need to impose associativity and unit laws.
 
-To construct a logic where a formula, say $\phi$, denotes the
-collection of monoid expressions in {\tt <monoid>[G]} satisfying $\phi$, 
-we need to specify what \emph{kind} of collection, because different kinds
-of collections have different constraints that affect how we construct them.
-For instance, lists are sensitive to order where sets are not. Bags are
-sensitive to multiplicity where sets are not.  In general, a collection
-is a ``shape'' in the sense of Someone \cite{someone}, labeled by elements of $G.$
+In what follows, rather than use a Java interface, we will present the same information in a format slightly more amenable to typesetting.  Here is a presentation of the ``Lawvere theory of a monoid'' Th(Mon):\\
+\begin{center}
+  \begin{itemize}
+    \item Sorts:
+    \begin{itemize}
+      \item $S$
+    \end{itemize}
+    \item Function symbols:
+    \begin{itemize}
+      \item $\mult\maps S^2 \to S$
+      \item $\ident\maps 1 \to S$
+    \end{itemize}
+    \item Equations:
+    \begin{itemize}
+      \item $\mult \circ (S \times \mult) = \mult \circ (\mult \times S)$ (associativity)
+      \item $\mult \circ (\ident \times S) \circ \left = S$ (left unit)
+      \item $\mult \circ (S \times \ident) \circ \right = S$ (right unit)        
+    \end{itemize}
+  \end{itemize}
+\end{center}
+An implementation of this specification will assign a set of values to the sort and functions to the function symbols such that the equations are satisfied; that is, it will be a monoid, and all monoids arise in this manner.  As we will explain later, from this theory we can derive the monad Mon for the free monoid on a set.
 
-Given a set $G$ of generators, we can describe sets of elements from $G$ with the grammar
-\begin{center}
-  \tt
-  \begin{tabular}{rll}
-    <set>[G] ::= & <G> &|\\
-    & T &| \\
-    & F &| \\
-    & (<set>[G] $\land$ <set>[G]) &| \\
-    & (<set>[G] $\lor$ <set>[G]) &| \\
-    & $\neg$ <set>[G]
-  \end{tabular}
-\end{center}
-equipped with equations for associativity, unit laws, and commutativity of $\land$ and $\lor$, idempotence of $\neg,$ and de Morgan's laws.  The grammar and equations are a presentation of the monad for the free Boolean algebra on the set $G.$
+To construct a logic where a formula, say $\phi$, denotes the collection of monoid words satisfying $\phi$, we need to specify what \emph{kind} of collection, because different kinds of collections have different constraints that affect how we construct them. For instance, lists are sensitive to order where sets are not. Bags are sensitive to multiplicity where sets are not.  In general, a collection is a ``shape'' in the sense of Someone \cite{someone}, labeled by elements of some set.
 
-The sum of the two monads above is a new monad whose terms are our formulae.  The sum is presented by taking the union of the grammars and the union of the equations.
+Since all our formulae about monoids will denote subsets of the elements of the monoid and subsets form a Boolean algebra, we will use Th(BoolAlg) to describe our collections.
 \begin{center}
-  \tt
-  \begin{tabular}{rll}
-    <formula>[G] ::= & <G> &| \\
-    & 1 &| \\
-    & ( <formula>[G] * <formula>[G] ) &|\\
-    & T &|\\
-    & F &| \\
-    & (<formula>[G] $\land$ <formula>[G]) &| \\
-    & (<formula>[G] $\lor$ <formula>[G]) &| \\
-    & $\neg$ <formula>[G]
-  \end{tabular}
+  \begin{itemize}
+    \item Sorts:
+    \begin{itemize}
+      \item $S$
+    \end{itemize}
+    \item Function symbols:
+    \begin{itemize}
+      \item $\land\maps S^2 \to S$
+      \item $\lor\maps S^2 \to S$
+      \item $T\maps 1 \to S$
+      \item $F\maps 1 \to S$
+      \item $\neg\maps S \to S$
+    \end{itemize}
+    \item Equations:
+    \begin{itemize}
+      \item associativity, commutativity and unit laws for $\land$ and $\lor$
+      \item involution for $\neg$
+      \item de Morgan's laws
+    \end{itemize}
+  \end{itemize}
 \end{center}
-Since the sum of two monads is the free product of the two, a general formula will be a term in an alternating composition of the two monads.  For example, suppose that $a, b, c, d, e \in G;$ then one formula is
+From this theory, we can derive the monad BoolAlg for the free Boolean algebra on a set.
+
+The sum of the two monads above is a new monad whose terms are our formulae.  The sum is presented by identifying the sorts and taking the union of the function symbols and the union of the equations.  The resulting theory Th(Form) describes our formulae.
 \begin{center}
-  \tt ((a $\lor$ (b * e)) * (c $\lor$ d)),
+  \begin{itemize}
+    \item Sorts:
+    \begin{itemize}
+      \item $S$
+    \end{itemize}
+    \item Function symbols:
+    \begin{itemize}
+      \item $\mult\maps S^2 \to S$
+      \item $\ident\maps 1 \to S$
+      \item $\land\maps S^2 \to S$
+      \item $\lor\maps S^2 \to S$
+      \item $T\maps 1 \to S$
+      \item $F\maps 1 \to S$
+      \item $\neg\maps S \to S$
+    \end{itemize}
+    \item Equations:
+    \begin{itemize}
+      \item associativity and unit laws for $\mult$
+      \item associativity, commutativity, and unit laws for $\land$ and $\lor$
+      \item involution for $\neg$
+      \item de Morgan's laws
+    \end{itemize}
+  \end{itemize}
 \end{center}
-which is a term in {\tt <monoid>[<set>[<monoid>[G]]]}.  The interpretation of this formula should be the set of monoid words
+Since the sum of two monads is the free product of the two, a general formula will be a term in an alternating composition of the two monads.  For example, suppose that $a, b, c, d, e \in X;$ then one formula is
+\[ (({a}\lor{(b \mult e)}) \mult ({c}\lor{d})) \]
+which is a term in Mon(BoolAlg(Mon($X$))).  The interpretation of this formula should be the set of monoid words
 \[ \{ ac, ad, bec, bed \}, \]
 or in other words, the term
-\begin{center}
-  \tt (a * c) $\lor$ (a * d) $\lor$ (b * e * c) $\lor$ (b * e * d)
-\end{center}
-in {\tt <set>[<monoid>[G]]}.  
+\[ (a \mult c) \lor (a \mult d) \lor (b \mult e \mult c) \lor (b \mult e \mult d) \]
+in BoolAlg(Mon(X)).
 
-In order to move all the uses of {\tt <monoid>} to the right of the uses of {\tt <set>}, we need a distributive law natural transformation
-\[ \delta\maps \gram{monoid}\circ\gram{set} \Rightarrow \gram{set}\circ\gram{monoid}. \]
+In order to move all the uses of Mon to the right of the uses of BoolAlg, we need a distributive law natural transformation
+\[ \delta\maps \Mon \circ \BoolAlg \Rightarrow \BoolAlg \circ \Mon. \]
 Given $\delta$ and the monad units and multiplications, we can define an interpretation natural transformation
-\[ \interp{-}\maps \gram{formula}\Rightarrow\gram{set}\circ\gram{monoid} \]
+\[ \interp{-}\maps \Form\Rightarrow \BoolAlg \circ \Mon \]
 in the obvious way:
 \begin{align*}
-  \interp{T}_G &= \mbox{\tt <monoid>[G]}\\
-  \interp{F}_G &= \emptyset\\
-  \interp{{A}\lor{B}}_G &= \interp{A}_G \cup \interp{B}_G\\
-  \interp{{A}\land{B}}_G &= \interp{A}_G \cap \interp{B}_G\\
-  \interp{\neg A}_G &= \mbox{\tt <monoid>[G]} - \interp{A}_G\\
-  \interp{m \in \mbox{\tt <monoid>[G]}}_G &= \{m\}
+  \interp{T}_X &= Mon(X)\\
+  \interp{F}_X &= \emptyset\\
+  \interp{{A}\lor{B}}_X &= \interp{A}_X \cup \interp{B}_X\\
+  \interp{{A}\land{B}}_X &= \interp{A}_X \cap \interp{B}_X\\
+  \interp{\neg A}_X &= Mon(X) - \interp{A}_X\\
+  \interp{m \in Mon(X)}_X &= \{m\}
 \end{align*}
 
 Even in this simple example, we have nontrivial formulae; for example,
 \[ prime = \neg 1 \land \neg(\neg 1 * \neg 1) \]
-is a 1-line formula for primality.  It is easy to verify that $\interp{prime}_G = G.$
+is a 1-line formula for primality.  It is easy to verify that $\interp{prime}_X = X.$
 
 \subsection{Moving to 2-categories}
 
@@ -244,6 +274,25 @@ and equations
 \subsection {Multisorted Lawvere 2-theories}
 In this paper, the {\bf multisorted Lawvere 2-theory} of a gadget is a 2-category Th(Gad) with strict finite products equipped with an identity-on-objects functor $\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Gad)},$ where we promote $(\FinSet/\Sigma)$ to a 2-category by adding identity 2-morphisms to every 1-morphism.  A multisorted Lawvere 2-theory may be presented by a finite set of sorts, a set of function symbols with finite arity, a set of rewrites, and a set of equations between rewrites.  The free unital magma on a set equipped with normalization from the introduction is an example of a single-sorted Lawvere 2-theory.  
 
-Another example of a single-sorted
+Another example of a single-sorted Lawvere 2-theory is the theory of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the lambda calculus.  Th(SKI) has one sort $T$, four function symbols
+\begin{itemize}
+  \item $S\maps 1 \to T$
+  \item $K\maps 1 \to T$
+  \item $I\maps 1 \to T$
+  \item $(-\;-)\maps T^2 \to T,$
+\end{itemize}
+three rewrites
+\begin{itemize}
+  \item $\forall x,y,z \in T, \quad \sigma \maps (((S\; x)\; y)\; z) \Rightarrow ((x\; z)\; (y\; z))$
+  \item $\forall y,z \in T, \quad \kappa \maps ((K\; y)\; z) \Rightarrow y$
+  \item $\forall z \in T, \quad \iota \maps (I\; z) \Rightarrow z$
+\end{itemize}
+and optionally equations between rewrites for computational equivalence.  The Church-Rosser theorem for the SKI calculus in this context says that any two terminating rewrites out of an SKI term have the same codomain; we need to add extra equations if we want to treat those two computations as equal.
+
+The free model of Th(SKI) on a category takes its objects as terms and its morphisms as rewrites, then freely adjoins $S,K,$ and $I$ and all applications of one object to another, as well as new morphisms generated by $\sigma,\kappa,$ and $\iota.$  The free model on the empty category will contain only terms and rewrites from the SKI calculus.
+
+\subsection{Derivatives}
+
+\subsection{Modal operators}
 
 \end{document}
