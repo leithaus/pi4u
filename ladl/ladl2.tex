@@ -13,7 +13,7 @@
 \newcommand{\Form}{\mathrm{Form}}
 \renewcommand{\left}{\mathrm{left}}
 \renewcommand{\right}{\mathrm{right}}
-\newcommand{\mult}{\mathrm{mult}}
+\newcommand{\mult}{\mathop{\mathrm{mult}}}
 \newcommand{\ident}{\mathrm{ident}}
 \newcommand{\op}{\mathrm{op}}
 \newcommand{\NN}{\mathbb{N}}
@@ -58,7 +58,7 @@ Consider this Java interface:
     S ident();
   }
 \end{verbatim}
-This interface, despite its name, only enforces the structure of a binary tree whose leaves are labeled by elements of $S,$ one of which is special.  In order to guarantee that implementations of the interface are monoids, we need to impose associativity and unit laws.
+The interface, despite its name, only enforces the structure of a binary tree whose leaves are labeled by elements of $S$, and picks one element out as special; that is, it defines pointed magmas, not monoids.  In order to guarantee that implementations of the interface are monoids, we need to impose associativity and unit laws.  Java programmers typically rely on tests to give some assurance that implementations conform to the intended semantics.  Other programming languages, like Agda, require implementations to provide proofs.
 
 In what follows, rather than use a Java interface, we will present the same information in a format slightly more amenable to typesetting.  Here is a presentation of the ``Lawvere theory of a monoid'' Th(Mon):\\
 \begin{center}
@@ -84,7 +84,7 @@ An implementation of this specification will assign a set of values to the sort 
 
 To construct a logic where a formula, say $\phi$, denotes the collection of monoid words satisfying $\phi$, we need to specify what \emph{kind} of collection, because different kinds of collections have different constraints that affect how we construct them. For instance, lists are sensitive to order where sets are not. Bags are sensitive to multiplicity where sets are not.  In general, a collection is a ``shape'' in the sense of Someone \cite{someone}, labeled by elements of some set.
 
-Since all our formulae about monoids will denote subsets of the elements of the monoid and subsets form a Boolean algebra, we will use Th(BoolAlg) to describe our collections.
+Since all our formulae about monoids will denote subsets of the elements of the monoid and subsets form a Boolean algebra, we can use Th(BoolAlg) to describe our collections.
 \begin{center}
   \begin{itemize}
     \item Sorts:
@@ -135,9 +135,9 @@ The sum of the two monads above is a new monad whose terms are our formulae.  Th
     \end{itemize}
   \end{itemize}
 \end{center}
-Since the sum of two monads is the free product of the two, a general formula will be a term in an alternating composition of the two monads.  For example, suppose that $a, b, c, d, e \in X;$ then one formula is
+Since the sum of two monads Form = Mon + BoolAlg is the free product of the two, a general formula will be a term in an alternating composition of the two monads.  For example, suppose that $a, b, c, d, e \in X;$ then one formula is
 \[ (({a}\lor{(b \mult e)}) \mult ({c}\lor{d})) \]
-which is a term in Mon(BoolAlg(Mon($X$))).  The interpretation of this formula should be the set of monoid words
+which is a term in Mon(BoolAlg(Mon($X$))).  The interpretation of this formula should be the set of monoid elements
 \[ \{ ac, ad, bec, bed \}, \]
 or in other words, the term
 \[ (a \mult c) \lor (a \mult d) \lor (b \mult e \mult c) \lor (b \mult e \mult d) \]
@@ -149,12 +149,12 @@ Given $\delta$ and the monad units and multiplications, we can define an interpr
 \[ \interp{-}\maps \Form\Rightarrow \BoolAlg \circ \Mon \]
 in the obvious way:
 \begin{align*}
-  \interp{T}_X &= Mon(X)\\
+  \interp{T}_X &= \Mon(X)\\
   \interp{F}_X &= \emptyset\\
   \interp{{A}\lor{B}}_X &= \interp{A}_X \cup \interp{B}_X\\
   \interp{{A}\land{B}}_X &= \interp{A}_X \cap \interp{B}_X\\
-  \interp{\neg A}_X &= Mon(X) - \interp{A}_X\\
-  \interp{m \in Mon(X)}_X &= \{m\}
+  \interp{\neg A}_X &= \Mon(X) - \interp{A}_X\\
+  \interp{m \in \Mon(X)}_X &= \{m\}
 \end{align*}
 
 Even in this simple example, we have nontrivial formulae; for example,
@@ -163,34 +163,38 @@ is a 1-line formula for primality.  It is easy to verify that $\interp{prime}_X 
 
 \subsection{Moving to 2-categories}
 
-Monoids are associative, but the grammar produced a magma, not a monoid; the words were trees of elements, not lists.  We only got associativity by modding out by a relation on the trees.  In a computational context, when a data structure has some symmetry we do not care about, we often test two instances of the structure for equality by computing a normal form for each instance and then comparing the normal forms.  For the case of a normal form for the trees, we can eliminate 1 in a product by rewriting {\tt (1 * x)} and {\tt (x * 1)} to {\tt x}, and we can shift all the parentheses to the right by rewriting {\tt ((x * y) * z)} to {\tt (x * (y * z))}.  
+Monoids are associative, but the interface produced a magma, not a monoid; the words were trees of elements, not lists.  We only got associativity by modding out by a relation on the trees.  In a computational context, when a data structure has some symmetry we do not care about, we often test two instances of the structure for equality by computing a normal form for each instance and then comparing the normal forms.  For the case of a normal form for the trees, we can eliminate 1 in a product by rewriting $(1 \mult x)$ and $(x \mult 1)$ to $x$, and we can shift all the parentheses to the right by rewriting $((x \mult y) \mult z)$ to $(x \mult (y \mult z)).$
 
-We use the same grammar as before.
-\begin{center}
-  \tt
-  \begin{tabular}{rll}
-    <monoid>[G] ::= & <G> &|\\
-    & 1 &|\\
-    & ( <monoid>[G] * <monoid>[G] )
-  \end{tabular}
-\end{center}
-Rather than equations, we give rewrites.
-\begin{center}
-  \tt \small
-  \begin{tabular}{rl}
-    For all x, y, z in <monoid>[G], & a:((x * y) * z) => (x * (y * z))\\
-    For all x in <monoid>[G], & r:(x * 1) => x\\
-    For all x in <monoid>[G], & l:(1 * x) => x
-  \end{tabular}
-\end{center}
-The rewrites in turn are subject to equations saying that when there are multiple ways to rewrite the word, we insist that they give the same answer.
+The Lawvere 2-theory Th(Mon) of an unnormalized monoid is much the same as the 1-theory, except for weakening some equations to rewrites and the addition of new equations between rewrites.
 
-The grammar, rewrites, and equations are a presentation of a 2-monad that is essentially the free monoid on $G,$ but keeps track of the ``internal representation'' of the monoid and accounts for the work needed to convert the internal representation to its normal form.  From this perspective, we can think of the terms in the grammar as programs for a simple virtual machine and the process of normalization as the execution of the program.
-
-When we follow the same procedure as in the last subsection, we get formulae like {\tt (1 * T)} denoting the set of trees whose leftmost child is the identity; because {\tt <monoid>} is a 2-monad, we also get proofs like 
 \begin{center}
-  \tt ((l $\circ$ r) $\lor$ y): ((1 * (x * 1)) $\lor$ y) -> (x $\lor$ y).
+  \begin{itemize}
+    \item Sorts:
+    \begin{itemize}
+      \item $S$
+    \end{itemize}
+    \item Function symbols:
+    \begin{itemize}
+      \item $\mult\maps S^2 \to S$
+      \item $\ident\maps 1 \to S$
+    \end{itemize}
+    \item Rewrites:
+    \begin{itemize}
+      \item $a\maps \mult \circ (S \times \mult) \Rightarrow \mult \circ (\mult \times S)$
+      \item $l\maps \mult \circ (\ident \times S) \circ \left \Rightarrow S$
+      \item $r\maps \mult \circ (S \times \ident) \circ \right \Rightarrow S$
+    \end{itemize}
+    \item Equations:
+    \begin{itemize}
+      \item $a \circ a = (S \times a) \circ a \circ (a \times S)$
+      \item $r \times S = (S \times l) \circ a$
+    \end{itemize}
+  \end{itemize}
 \end{center}
+From Th(Mon) we can derive a 2-monad Mon that essentially produces the free monoid on a set, but keeps track of the ``internal representation'' of the monoid---a binary tree---and accounts for the work needed to convert the internal representation to its normal form.  From this perspective, we can think of the trees as programs for a simple virtual machine and the process of normalization as the execution of the program.
+
+When we add the 2-monad BoolAlg, we get formulae like $(1 \mult T)$ denoting the set of trees whose leftmost child is the identity; because Mon is a 2-monad, we also get proofs like 
+\[ ((l \circ r) \lor y)\maps ((1 \mult (x \mult 1)) \lor y) \to (x \lor y). \]
 
 The formulae in these examples are propositions about the structure of terms.  Later in the paper, we will show how to add modal operators that are propositions about the behavior of terms.  For example, in the lambda calculus, the formula ${A \Rightarrow B}$ denotes the set of lambda terms $t$ that when applied to any $u \in \interp{A}$ eventually reduce to some $v \in \interp{B}.$
 
