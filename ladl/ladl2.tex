@@ -1,9 +1,16 @@
 \documentclass{article}
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{comment}
 \usepackage{stmaryrd}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
 \newcommand{\gram}[1]{\mbox{\tt <#1>}}
+\newcommand{\FinSet}{\mathrm{FinSet}}
+\newcommand{\Set}{\mathrm{Set}}
+\newcommand{\Gad}{\mathrm{Gad}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\NN}{\mathbb{N}}
 
 \title{Logic as a distributive law}
 \author{
@@ -63,11 +70,8 @@ collection of monoid expressions in {\tt <monoid>[G]} satisfying $\phi$,
 we need to specify what \emph{kind} of collection, because different kinds
 of collections have different constraints that affect how we construct them.
 For instance, lists are sensitive to order where sets are not. Bags are
-sensitive to multiplicity where sets are not. In this sense, sets are
-the most insensitive monadically presented notion of collection, and
-thus are ideal for erasing detail about collectivity that might
-distract when bootstrapping an understanding of what it means to
-collect or gather things together.
+sensitive to multiplicity where sets are not.  In general, a collection
+is a ``shape'' in the sense of Someone \cite{someone}, labeled by elements of $G.$
 
 Given a set $G$ of generators, we can describe sets of elements from $G$ with the grammar
 \begin{center}
@@ -83,7 +87,7 @@ Given a set $G$ of generators, we can describe sets of elements from $G$ with th
 \end{center}
 equipped with equations for associativity, unit laws, and commutativity of $\land$ and $\lor$, idempotence of $\neg,$ and de Morgan's laws.  The grammar and equations are a presentation of the monad for the free Boolean algebra on the set $G.$
 
-The sum of the two monads is a new monad whose terms are our formulae.  The sum is presented by taking the union of the grammars and the union of the equations.
+The sum of the two monads above is a new monad whose terms are our formulae.  The sum is presented by taking the union of the grammars and the union of the equations.
 \begin{center}
   \tt
   \begin{tabular}{rll}
@@ -97,13 +101,11 @@ The sum of the two monads is a new monad whose terms are our formulae.  The sum 
     & $\neg$ <formula>[G]
   \end{tabular}
 \end{center}
-Since the sum of two monads is the free product of the two, a general formula will be a term in an alternating composition of the two monads.  For example, suppose that $a, b, c, d, e \in G;$ then one formula is 
+Since the sum of two monads is the free product of the two, a general formula will be a term in an alternating composition of the two monads.  For example, suppose that $a, b, c, d, e \in G;$ then one formula is
 \begin{center}
   \tt ((a $\lor$ (b * e)) * (c $\lor$ d)),
 \end{center}
-which is a term in {\tt <monoid>[<set>[<monoid>[G]]]}.  
-
-The interpretation of this formula should be the set of monoid words
+which is a term in {\tt <monoid>[<set>[<monoid>[G]]]}.  The interpretation of this formula should be the set of monoid words
 \[ \{ ac, ad, bec, bed \}, \]
 or in other words, the term
 \begin{center}
@@ -117,12 +119,12 @@ Given $\delta$ and the monad units and multiplications, we can define an interpr
 \[ \interp{-}\maps \gram{formula}\Rightarrow\gram{set}\circ\gram{monoid} \]
 in the obvious way:
 \begin{align*}
-  \interp{T}_G &= \mbox{\tt monoid[G]}\\
+  \interp{T}_G &= \mbox{\tt <monoid>[G]}\\
   \interp{F}_G &= \emptyset\\
   \interp{{A}\lor{B}}_G &= \interp{A}_G \cup \interp{B}_G\\
   \interp{{A}\land{B}}_G &= \interp{A}_G \cap \interp{B}_G\\
-  \interp{\neg A}_G &= \mbox{\tt monoid[G]} - \interp{A}_G\\
-  \interp{m \in \mbox{\tt monoid[G]}}_G &= \{m\}
+  \interp{\neg A}_G &= \mbox{\tt <monoid>[G]} - \interp{A}_G\\
+  \interp{m \in \mbox{\tt <monoid>[G]}}_G &= \{m\}
 \end{align*}
 
 Even in this simple example, we have nontrivial formulae; for example,
@@ -131,9 +133,104 @@ is a 1-line formula for primality.  It is easy to verify that $\interp{prime}_G 
 
 \subsection{Moving to 2-categories}
 
-Monoids are associative, but the grammar generated a tree; we only got associativity by modding out by a relation on the trees.  In a computational context, when a data structure has some symmetry we do not care about, we often test two instances of the structure for equality by computing a normal form for each instance and then comparing the normal forms.
+Monoids are associative, but the grammar produced a magma, not a monoid; the words were trees of elements, not lists.  We only got associativity by modding out by a relation on the trees.  In a computational context, when a data structure has some symmetry we do not care about, we often test two instances of the structure for equality by computing a normal form for each instance and then comparing the normal forms.  For the case of a normal form for the trees, we can eliminate 1 in a product by rewriting {\tt (1 * x)} and {\tt (x * 1)} to {\tt x}, and we can shift all the parentheses to the right by rewriting {\tt ((x * y) * z)} to {\tt (x * (y * z))}.  
 
+We use the same grammar as before.
+\begin{center}
+  \tt
+  \begin{tabular}{rll}
+    <monoid>[G] ::= & <G> &|\\
+    & 1 &|\\
+    & ( <monoid>[G] * <monoid>[G] )
+  \end{tabular}
+\end{center}
+Rather than equations, we give rewrites.
+\begin{center}
+  \tt \small
+  \begin{tabular}{rl}
+    For all x, y, z in <monoid>[G], & a:((x * y) * z) => (x * (y * z))\\
+    For all x in <monoid>[G], & r:(x * 1) => x\\
+    For all x in <monoid>[G], & l:(1 * x) => x
+  \end{tabular}
+\end{center}
+The rewrites in turn are subject to equations saying that when there are multiple ways to rewrite the word, we insist that they give the same answer.
 
+The grammar, rewrites, and equations are a presentation of a 2-monad that is essentially the free monoid on $G,$ but keeps track of the ``internal representation'' of the monoid and accounts for the work needed to convert the internal representation to its normal form.  From this perspective, we can think of the terms in the grammar as programs for a simple virtual machine and the process of normalization as the execution of the program.
+
+When we follow the same procedure as in the last subsection, we get formulae like {\tt (1 * T)} denoting the set of trees whose leftmost child is the identity; because {\tt <monoid>} is a 2-monad, we also get proofs like 
+\begin{center}
+  \tt ((l $\circ$ r) $\lor$ y): ((1 * (x * 1)) $\lor$ y) -> (x $\lor$ y).
+\end{center}
+
+The formulae in these examples are propositions about the structure of terms.  Later in the paper, we will show how to add modal operators that are propositions about the behavior of terms.  For example, in the lambda calculus, the formula ${A \Rightarrow B}$ denotes the set of lambda terms $t$ that when applied to any $u \in \interp{A}$ eventually reduce to some $v \in \interp{B}.$
 
 \section{Related work}
+[[ Curry-Howard related work? ]]
+[[ Lots of stuff on Lawvere theories and generalizations.  
+
+- Lawvere, Functorial Semantics of Algebraic Theories
+
+The original insight.
+
+- Hyland \& Power, ``The Category Theoretic Understanding of Universal Algebra: Lawvere Theories and Monads''
+
+  Lawvere theories and monads have been the two main category theoretic formulations of universal algebra, Lawvere theories arising in 1963 and the connection with monads being established a few years later. Monads, although mathematically the less direct and less malleable formulation, rapidly gained precedence. A generation later, the definition of monad began to appear extensively in theoretical computer science in order to model computational effects, without reference to universal algebra. But since then, the relevance of universal algebra to computational effects has been recognised, leading to renewed prominence of the notion of Lawvere theory, now in a computational setting. This development has formed a major part of Gordon Plotkin’s mature work, and we study its history here, in particular asking why Lawvere theories were eclipsed by monads in the 1960’s, and how the renewed interest in them in a computer science setting might develop in future.
+
+- Lack \& Rosick\'y, ``Notions of Lawvere theory''
+
+  Categorical universal algebra can be developed either using Lawvere theories (single-sorted finite product theories) or using monads, and the category of Lawvere theories is equivalent to the category of finitary monads on Set. We show how this equivalence, and the basic results of universal algebra, can be generalized in three ways: replacing Set by another category, working in an enriched setting, and by working with another class of limits than finite products.
+  
+- Trimble, ``multisorted Lawvere theories''
+
+  Theorem 1. Let C be a category which admits general colimits and finite products that distribute over colimits. Then the forgetful functor ModC(Theta) to C\^Lambda is monadic.
+
+- Lack \& Power, ``Lawvere 2-theories''
+
+  http://www.mat.uc.pt/~categ/ct2007/slides/lack.pdf
+
+- Power, ``Enriched Lawvere theories''
+
+  We define the notion of enriched Lawvere theory, for enrichment over a monoidal biclosed category $V$ that is locally finitely presentable as a closed category. We prove that the category of enriched Lawvere theories is equivalent to the category of finitary monads on $V$. Moreover, the $V$-category of models of a Lawvere $V$-theory is equivalent to the $V$-category of algebras for the corresponding $V$-monad. This all extends routinely to local presentability with respect to any regular cardinal. We finally consider the special case where $V$ is $Cat$, and explain how the correspondence extends to pseudo maps of algebras.
+
+- more
+]]
+
+\section{Categorical constructions}
+
+\subsection{One-sorted Lawvere theories and finitary monads}
+
+Many algebraic gadgets can be presented as a set equipped with extra structure; for example, a group is a set of elements equipped with an associative multiplication, an inversion function, and an identity element.
+
+Let FinSet be a skeleton of the category of finite sets.  The {\bf Lawvere theory} of a mathematical gadget is a category Th(Gad) with finite products equipped with an identity-on-objects functor $\theta\maps \FinSet^\op \to \mathrm{Th}.$  The objects of category Th(Gad) are therefore products of a generating object $S,$ the {\bf sort}.  The morphisms of Th(Gad) are necessarily generated from a set of morphisms from finite powers of $S$ to $S$ by products and composition, so a Lawvere theory may be presented with a set of {\bf function symbols}
+\[ f_i\maps S^{n_i} \to S, \]
+together with a set of equations, where $i$ ranges over some index set $I$ and $n_i \in \NN$.
+
+A product-preserving functor from Th(Gad) to Set picks out a set and equips it with structure maps satisfying the equations.  The functor category Prod(Th(Gad), Set) of product-preserving functors and natural transformations between them is equivalent to the category Gad of gadgets and gadget homomorphisms.  There is a forgetful functor ${U\maps \Gad \to \Set}$ that forgets the extra structure.  When the theory has at least one nullary operation, the functor $U$ has a left adjoint ${L\maps Set \to Gad}$ that picks out the free gadget on a set.  The monad $UL\maps \Set \to \Set$ picks out the underlying set $ULX$ of the free gadget $LX$ on a set $X$.  Lawvere theories are in bijection with finitary monads; the qualifier ``finitary'' means that each function symbol has a finite number of inputs.
+
+For example, the Lawvere theory of groups Th(Grp) may be presented by the function symbols
+\begin{itemize}
+  \item $m\maps S^2 \to S$
+  \item $e\maps 1 \to S$
+  \item $inv \maps S \to S$
+\end{itemize}
+and the equations
+\begin{itemize}
+  \item $m \circ (m \times S) = m \circ (S \times m)$ (associativity)
+  \item $m \circ (e \times S) \circ \mathrm{left}_S = S$ (left unit law)
+  \item $m \circ (S \times e) \circ \mathrm{right}_S = S$ (right unit law)
+  \item $inv \circ inv = S$ (inverse is an involution)
+  \item $m \circ (S \times inv) \circ \Delta = e$ (right inverse)
+  \item $m \circ (inv \times S) \circ \Delta = e$ (left inverse)
+\end{itemize}
+where ${\Delta\maps S \to S^2}$ is the diagonal map, and ${\mathrm{left}_S\maps S \stackrel{\sim}{\to} 1 \times S}$ and ${\mathrm{right}_S\maps S \stackrel{\sim}{\to} S \times 1}$ are the canonical isomorphisms in any category with finite products.
+
+A product-preserving functor from Th(Grp) to Set maps $S$ to a set $G$ and equips it with the structure of a group: it maps $m$ to a binary multiplication function $G$, $e$ to a nullary function that picks out the identity element, and $inv$ to a unary function on $G$ such that $m, e,$ and $inv$ satisfy the given equations.
+
+The category Prod(Th(Grp), Set) of product-preserving functors and natural transformations between them is equivalent to the category Grp of groups and group homomorphisms.  There is a forgetful functor from Grp to Set that forgets the structure; this forgetful functor has a left adjoint from Set to Grp that picks out the free group on a set.  The composition of these two functors gives a monad on Set that maps a set $X$ to the underlying set of the free group on $X.$
+
+\subsection{Multi-sorted Lawvere theories}
+In the motivation section, each grammar had only one sort; practical grammars for virtual machines are multisorted.    Given a finite set of sorts $\Sigma,$ the category $\FinSet/\Sigma$ is the category whose objects are pairs $(S, s\maps S\to \Sigma),$ where $S$ is a finite set, and whose morphisms are morphisms $f\maps S \to S'$ such that the relevant triangle commutes.
+
+A {\bf multi-sorted Lawvere theory} is a category Th(Gad) equipped with an identity-on-objects functor $\theta\maps (\Finset/\Sigma)^\op \to \mathrm{Th(Gad)}.$  The category Prod(Th(Gad), Set) is equivalent to the category Gad of gadgets and gadget homomorphisms.  When there is at least one nullary morphism into each sort, there is a forgetful functor $U\maps Gad \to Set^\Sigma$ with a left adjoint $L\maps Set^\Sigma \to Gad$ that picks out the free gadget on a tuple of sets.
+
 \end{document}
