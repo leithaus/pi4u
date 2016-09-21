@@ -7,6 +7,7 @@
 \newcommand{\maps}{\colon}
 \newcommand{\FinSet}{\mathrm{FinSet}}
 \newcommand{\Set}{\mathrm{Set}}
+\newcommand{\Cat}{\mathrm{Cat}}
 \newcommand{\Gad}{\mathrm{Gad}}
 \newcommand{\Mon}{\mathrm{Mon}}
 \newcommand{\BoolAlg}{\mathrm{BoolAlg}}
@@ -15,6 +16,7 @@
 \renewcommand{\right}{\mathrm{right}}
 \newcommand{\op}{\mathrm{op}}
 \newcommand{\NN}{\mathbb{N}}
+\newcommand{\lhom}{\Rightarrow}
 
 \title{Logic as a distributive law}
 \author{
@@ -95,13 +97,14 @@ Since all our formulae about monoids will denote subsets of the elements of the 
     \begin{itemize}
       \item $\land\maps S^2 \to S$
       \item $\lor\maps S^2 \to S$
-      \item $T\maps 1 \to S$
-      \item $F\maps 1 \to S$
+      \item $\top\maps 1 \to S$
+      \item $\bot\maps 1 \to S$
       \item $\neg\maps S \to S$
     \end{itemize}
     \item Equations:
     \begin{itemize}
       \item associativity, commutativity and unit laws for $\land$ and $\lor$
+      \item distributivity of $\land$ over $\lor$
       \item involution for $\neg$
       \item de Morgan's laws
     \end{itemize}
@@ -122,8 +125,8 @@ The sum of the two monads above is a new monad Form = Mon + BoolAlg whose terms 
       \item $e\maps 1 \to S$
       \item $\land\maps S^2 \to S$
       \item $\lor\maps S^2 \to S$
-      \item $T\maps 1 \to S$
-      \item $F\maps 1 \to S$
+      \item $\top\maps 1 \to S$
+      \item $\bot\maps 1 \to S$
       \item $\neg\maps S \to S$
     \end{itemize}
     \item Equations:
@@ -149,8 +152,8 @@ Given $\delta$ and the monad units and multiplications, we can define an interpr
 \[ \interp{-}\maps \Form\Rightarrow \BoolAlg \circ \Mon \]
 in the obvious way:
 \begin{align*}
-  \interp{T}_X &= \Mon(X)\\
-  \interp{F}_X &= \emptyset\\
+  \interp{\top}_X &= \Mon(X)\\
+  \interp{\bot}_X &= \emptyset\\
   \interp{{A}\lor{B}}_X &= \interp{A}_X \cup \interp{B}_X\\
   \interp{{A}\land{B}}_X &= \interp{A}_X \cap \interp{B}_X\\
   \interp{\neg A}_X &= \Mon(X) - \interp{A}_X\\
@@ -196,7 +199,7 @@ From Th(Mon) we can derive a 2-monad Mon that essentially produces the free mono
 When we add the 2-monad BoolAlg, we get formulae like $(1 \cdot T)$ denoting the set of trees whose leftmost child is the identity; because Mon is a 2-monad, we also get proofs like 
 \[ ((r \circ l) \lor y)\maps ((e \cdot (x \cdot e)) \lor y) \to (x \lor y). \]
 
-The formulae in these examples are propositions about the structure of terms.  Later in the paper, we will show how to add modal operators that are propositions about the behavior of terms.  For example, in the lambda calculus, the formula ${A \Rightarrow B}$ denotes the set of lambda terms $t$ that when applied to any $u \in \interp{A}$ eventually reduce to some $v \in \interp{B}.$
+The formulae in these examples are propositions about the structure of terms.  Later in the paper, we will show how to add modal operators that are propositions about the behavior of terms.
 
 \section{Related work}
 [[ Curry-Howard related work? ]]
@@ -269,7 +272,7 @@ For example, the Lawvere theory of groups Th(Grp) has a presentation
 
 A product-preserving functor from Th(Grp) to Set maps $S$ to a set $G$ and equips it with the structure of a group: it maps $\cdot$ to a binary multiplication function $G$, $e$ to a nullary function that picks out the identity element, and $inv$ to a unary function on $G$ such that $\cdot, e,$ and $inv$ satisfy the given equations.
 
-The category Prod(Th(Grp), Set) of product-preserving functors and natural transformations between them is equivalent to the category Grp of groups and group homomorphisms.  There is a forgetful functor from Grp to Set that forgets the structure; this forgetful functor has a left adjoint from Set to Grp that picks out the free group on a set.  The composition of these two functors gives a monad on Set that maps a set $X$ to the underlying set of the free group on $X.$
+The category Prod(Th(Grp), Set) of product-preserving functors and natural transformations between them is equivalent to the category Grp of groups and group homomorphisms.  For a functor $F$ to ``preserve products'' means that $F$ is equipped with a natural isomorphism from $F(T^n)$ to $F(T)^n.$  There is a forgetful functor from Grp to Set that forgets the structure; this forgetful functor has a left adjoint from Set to Grp that picks out the free group on a set.  The composition of these two functors gives a monad on Set that maps a set $X$ to the underlying set of the free group on $X.$
 
 \subsection{Multisorted Lawvere theories}
 In the motivation section, each grammar had only one sort; practical grammars for virtual machines are usually multisorted.  Given a finite set of sorts $\Sigma,$ the category $\FinSet/\Sigma$ is the category whose objects are pairs $(S, s\maps S\to \Sigma),$ where $S$ is a finite set, and whose morphisms are morphisms $f\maps S \to S'$ such that the relevant triangle commutes.
@@ -287,9 +290,11 @@ and equations
 \end{itemize}
 
 \subsection {Multisorted Lawvere 2-theories}
-In this paper, the {\bf multisorted Lawvere 2-theory} of a gadget is a 2-category Th(Gad) with strict finite products equipped with an identity-on-objects functor $\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Gad)},$ where we promote $(\FinSet/\Sigma)$ to a 2-category by adding identity 2-morphisms to every 1-morphism.  A multisorted Lawvere 2-theory may be presented by a finite set of sorts, a set of function symbols with finite arity, a set of rewrites, and a set of equations between rewrites.  The ``free pointed magma on a set equipped with normalization'' from the introduction is an example of a single-sorted Lawvere 2-theory.  
+In this paper, the {\bf multisorted Lawvere 2-theory} of a gadget is a 2-category Th(Gad) with strict finite products equipped with an identity-on-objects functor $\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Gad)},$ where we promote $(\FinSet/\Sigma)$ to a 2-category by adding identity 2-morphisms to every 1-morphism.  As noted in the related work section, other authors have considered much more powerful notions of 2-theory, but we will not need the extra features.  A multisorted Lawvere 2-theory may be presented by a finite set of sorts, a set of function symbols with finite arity, a set of rewrites, and a set of equations between rewrites.  
 
-Another example of a single-sorted Lawvere 2-theory is the theory of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the lambda calculus.  Th(SKI) has a presentation
+Multisorted Lawvere 2-theories have models in $\Cat^\Sigma.$  As with 1-theories, the 2-category of product-preserving functors from Th(Gad) to $\Cat^\Sigma$, natural transformations, and modifications is equivalent to the 2-category of gadgets, gadget homomorphisms, and gadget transformations.  [[ Get the details right on just what kind of strictness for gadgets, homs, and nts. ]] For a functor $F$ to preserve products means that it is equipped with a natural equivalence between $F(T^n)$ and $F(T)^n.$
+
+The ``free pointed magma on a set equipped with normalization'' from the introduction is an example of a single-sorted Lawvere 2-theory; another example of a single-sorted Lawvere 2-theory is the theory of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the lambda calculus.  Th(SKI) has a presentation
 \begin{center}
   \begin{itemize}
     \item Sorts:
@@ -309,13 +314,10 @@ Another example of a single-sorted Lawvere 2-theory is the theory of the SKI com
       \item $\forall y,z \in T, \quad \kappa \maps ((K\; y)\; z) \Rightarrow y$
       \item $\forall z \in T, \quad \iota \maps (I\; z) \Rightarrow z$
     \end{itemize}
-    \item Equations
-    \begin{itemize}
-      \item compuational equivalence
-    \end{itemize}
+    \item No equations.
   \end{itemize}
 \end{center}
-The Church-Rosser theorem for the SKI calculus in this context says that any two terminating rewrites out of an SKI term have the same codomain; we need to add extra equations if we want to treat those two computations as equal.
+The Church-Rosser theorem for the SKI calculus in this context says that any two terminating rewrites out of an SKI term have the same codomain; however, we do not want to impose equality on the rewrites, since they can differ greatly in computational complexity.  For example, suppose that we have the term $((K\; I)\; x),$ where $x$ is some term that takes a long time to reduce to its normal form; a rewrite that reduces $x$ first and then uses $\kappa$ takes much longer than just doing $\kappa$ first, though both rewrites begin and end at the same term.
 
 The free model of Th(SKI) on a category takes its objects as terms and its morphisms as rewrites, then freely adjoins $S,K,$ and $I$ and all applications of one object to another, as well as new morphisms generated by $\sigma,\kappa,$ and $\iota.$  The free model on the empty category will contain only terms and rewrites from the SKI calculus.
 
@@ -333,36 +335,67 @@ Lawvere 2-theories encode nondeterminism by means of multiple possible rewrites 
       \item $request\maps N \to T$
       \item $acquired\maps N \to T$
       \item $|\maps T^2 \to T$
+      \item $0 \maps 1 \to T$
     \end{itemize}
     \item Rewrites:
     \begin{itemize}
+      \item $\forall x \in T, \quad u\maps 0|x \Rightarrow x$
+      \item $\forall x,y \in T,\quad c\maps x|y \stackrel{\sim}{\Rightarrow} y|x$
       \item $\forall x,y,z \in T,\quad a\maps (x|y)|z \stackrel{\sim}{\Rightarrow} x|(y|z)$
-      \item $\forall x,y \in T,\quad swap\maps x|y \stackrel{\sim}{\Rightarrow} y|x$
       \item $\forall n \in N,\quad get\maps lock | request(n) \stackrel{\sim}{\Rightarrow} acquired(n)$
     \end{itemize}
     \item Equations:
     \begin{itemize}
-      \item $a \circ a = (S \times a) \circ a \circ (a \times S)$ (pentagon)
-      \item $a \circ swap \circ a = (S \times swap) \circ a \circ (swap \times S)$ (hexagon 1)
-      \item $a^{-1} \circ swap \circ a^{-1} = (swap \times S) \circ a^{-1} \circ (S \times swap)$ (hexagon 2)
+      \item $u = T$ (| is unital)
+      \item $c = T^2$ (| is commutative)
+      \item $a = T^3$ (| is associative)
     \end{itemize}
   \end{itemize}
 \end{center}
-In the free model of this theory on $(T, N) = (\emptyset, \{ a,b\})$, there are two different rewrites out of
+In the free model of this theory on $(T, N) = (\emptyset, \{ a,b\})$, there are two different non-identity rewrites out of
 \[ lock \;|\; request(a) \;|\; request(b). \]
 One rewrite is to
 \[ acquired(a) \;|\; request(b), \]
 and the other to
 \[ request(a) \;|\; acquired(b). \]
 
-\subsection{Derivatives}
+\section{Categories of formulae and proofs}
 
-[[ Zippers, Conor McBride's derivative of a datatype.  Give construction for Lawvere theory. ]]
+Any 1-theory of collections can be promoted to a 2-theory by turning each equation into a rewrite, then adding an equation asserting that the rewrite is equal to the identity rewrite.  Therefore as before, given a single-sorted Lawvere 2-theory Th(Gad), we get a 2-theory of formulae Th(Form) by adding a 2-theory of collections Th(Coll).  The models of Th(Form) are categories of formulae and proofs.
 
-\subsection{Modal operators}
+For multisorted Lawvere 2-theories, there is no canonical choice of sorts to identify between the theory of the machine and the theory of the collection, but in practical applications, there is often an obvious choice; for example, given the theory of a lock from the previous section, we probably want our formulae to talk about $T$ more than about $N$.  With that choice, the formula for those terms where the lock is available is $lock\;|\;\top,$ and $\neg(lock \;|\;\top)$ is the formula for those terms where the lock has been acquired.
 
-So far, all the examples of formulae have dealt with the structure of the term.  Far more interesting are sets of terms that all share some behavior.
+\section{Modal operators}
 
+So far, all the examples of formulae have dealt with the structure of the term.  Far more interesting are sets of terms that all share some behavior.  For example, in the SKI calculus, we want to add the idea of an arrow type to our formulae, and have the interpretation of $A \lhom B$ be the set of terms $t$ such that given a term $u\in\interp{A}$, the term eventually evolves to a term $v\in\interp{B}.$
 
+This notion of eventuality is an example of a modal operator.  Possibility is another, and possibility is to eventuality as ``there exists'' is to ``for all''.  Many interesting properties can be stated in terms of eventual and possible states, like
+\begin{itemize}
+  \item Security: it is not the case that my banking service will evolve to a state in which someone other than the bank and me has the ability to withdraw money from my account.
+  \item Liveness: this process will always eventually handle another message.
+  \item Termination: this computation will always halt.
+  \item Structure: at the end of sorting, the data will be ordered.
+\end{itemize}
+
+\subsection{Arrow types in the SKI calculus}
+
+The Lawvere 2-theory of the arrow type Th(Arrow) has one function symbol, no rewrites, and no equations.  The lack of rewrites and equations are because the arrow is a purely formal type, and it is only in our choice of semantics that it acquires its customary interpretation.
+\begin{itemize}
+  \item Sorts:
+  \begin{itemize}
+    \item $T$
+  \end{itemize}
+  \item Function symbols:
+    \begin{itemize}
+      \item $\lhom\maps T \to T$
+    \end{itemize}
+  \item No rewrites.
+  \item No equations.
+\end{itemize}
+
+We get the theory of SKI with arrow Th(SKIArr) by adding the two theories.  We get our formulae by adding Th(BoolAlg) to Th(SKIArr).
+
+((a^b)(cvd)) = ((a^b) c) v ((a^b) d) = ((a c) ^ (b c)) v ((a d) ^ (b d))
+((a^b)(cvd)) = (a (cvd)) ^ (b (cvd)) = ((a c) v (a d)) ^ ((b c) v (b d))
 
 \end{document}
