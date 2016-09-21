@@ -13,8 +13,6 @@
 \newcommand{\Form}{\mathrm{Form}}
 \renewcommand{\left}{\mathrm{left}}
 \renewcommand{\right}{\mathrm{right}}
-\newcommand{\mult}{\mathop{\mathrm{mult}}}
-\newcommand{\ident}{\mathrm{ident}}
 \newcommand{\op}{\mathrm{op}}
 \newcommand{\NN}{\mathbb{N}}
 
@@ -69,17 +67,19 @@ In what follows, rather than use a Java interface, we will present the same info
     \end{itemize}
     \item Function symbols:
     \begin{itemize}
-      \item $\mult\maps S^2 \to S$
-      \item $\ident\maps 1 \to S$
+      \item $\cdot\maps S^2 \to S$
+      \item $e\maps 1 \to S$
     \end{itemize}
     \item Equations:
     \begin{itemize}
-      \item $\mult \circ (S \times \mult) = \mult \circ (\mult \times S)$ (associativity)
-      \item $\mult \circ (\ident \times S) \circ \left = S$ (left unit)
-      \item $\mult \circ (S \times \ident) \circ \right = S$ (right unit)        
+      \item $\cdot \circ (S \times \cdot) = \cdot \circ (\cdot \times S)$ (associativity)
+      \item $\cdot \circ (e \times S) \circ \left^{-1} = S$ (left unit)
+      \item $\cdot \circ (S \times e) \circ \right^{-1} = S$ (right unit)        
     \end{itemize}
   \end{itemize}
 \end{center}
+where ${\left\maps 1 \times S \stackrel{\sim}{\to} S}$ and ${\right\maps S \times 1 \stackrel{\sim}{\to} S}$ are the canonical isomorphisms.
+
 An implementation of this specification will assign a set of values to the sort and functions to the function symbols such that the equations are satisfied; that is, it will be a monoid, and all monoids arise in this manner.  As we will explain later, from this theory we can derive the monad Mon for the free monoid on a set.
 
 To construct a logic where a formula, say $\phi$, denotes the collection of monoid words satisfying $\phi$, we need to specify what \emph{kind} of collection, because different kinds of collections have different constraints that affect how we construct them. For instance, lists are sensitive to order where sets are not. Bags are sensitive to multiplicity where sets are not.  In general, a collection is a ``shape'' in the sense of Someone \cite{someone}, labeled by elements of some set.
@@ -109,7 +109,7 @@ Since all our formulae about monoids will denote subsets of the elements of the 
 \end{center}
 From this theory, we can derive the monad BoolAlg for the free Boolean algebra on a set.
 
-The sum of the two monads above is a new monad whose terms are our formulae.  The sum is presented by identifying the sorts and taking the union of the function symbols and the union of the equations.  The resulting theory Th(Form) describes our formulae.
+The sum of the two monads above is a new monad Form = Mon + BoolAlg whose terms are our formulae.  The sum is presented by identifying the sorts and taking the union of the function symbols and the union of the equations.
 \begin{center}
   \begin{itemize}
     \item Sorts:
@@ -118,8 +118,8 @@ The sum of the two monads above is a new monad whose terms are our formulae.  Th
     \end{itemize}
     \item Function symbols:
     \begin{itemize}
-      \item $\mult\maps S^2 \to S$
-      \item $\ident\maps 1 \to S$
+      \item $\cdot\maps S^2 \to S$
+      \item $e\maps 1 \to S$
       \item $\land\maps S^2 \to S$
       \item $\lor\maps S^2 \to S$
       \item $T\maps 1 \to S$
@@ -128,19 +128,19 @@ The sum of the two monads above is a new monad whose terms are our formulae.  Th
     \end{itemize}
     \item Equations:
     \begin{itemize}
-      \item associativity and unit laws for $\mult$
+      \item associativity and unit laws for $\cdot$
       \item associativity, commutativity, and unit laws for $\land$ and $\lor$
       \item involution for $\neg$
       \item de Morgan's laws
     \end{itemize}
   \end{itemize}
 \end{center}
-Since the sum of two monads Form = Mon + BoolAlg is the free product of the two, a general formula will be a term in an alternating composition of the two monads.  For example, suppose that $a, b, c, d, e \in X;$ then one formula is
-\[ (({a}\lor{(b \mult e)}) \mult ({c}\lor{d})) \]
+Since the sum of two monads is the free product of the two, a general formula will be a term in an alternating composition of the two monads.  For example, suppose that $a, b, c, d \in X;$ then one formula is
+\[ (({a}\lor{(b \cdot d)}) \cdot ({c}\lor{d})), \]
 which is a term in Mon(BoolAlg(Mon($X$))).  The interpretation of this formula should be the set of monoid elements
-\[ \{ ac, ad, bec, bed \}, \]
+\[ \{ ac, ad, bdc, bdd \}, \]
 or in other words, the term
-\[ (a \mult c) \lor (a \mult d) \lor (b \mult e \mult c) \lor (b \mult e \mult d) \]
+\[ (a \cdot c) \lor (a \cdot d) \lor ((b \cdot d) \cdot c) \lor ((b \cdot d) \cdot d) \]
 in BoolAlg(Mon(X)).
 
 In order to move all the uses of Mon to the right of the uses of BoolAlg, we need a distributive law natural transformation
@@ -158,12 +158,12 @@ in the obvious way:
 \end{align*}
 
 Even in this simple example, we have nontrivial formulae; for example,
-\[ prime = \neg 1 \land \neg(\neg 1 * \neg 1) \]
+\[ prime = \neg e \land \neg(\neg e \cdot \neg e) \]
 is a 1-line formula for primality.  It is easy to verify that $\interp{prime}_X = X.$
 
 \subsection{Moving to 2-categories}
 
-Monoids are associative, but the interface produced a magma, not a monoid; the words were trees of elements, not lists.  We only got associativity by modding out by a relation on the trees.  In a computational context, when a data structure has some symmetry we do not care about, we often test two instances of the structure for equality by computing a normal form for each instance and then comparing the normal forms.  For the case of a normal form for the trees, we can eliminate 1 in a product by rewriting $(1 \mult x)$ and $(x \mult 1)$ to $x$, and we can shift all the parentheses to the right by rewriting $((x \mult y) \mult z)$ to $(x \mult (y \mult z)).$
+Monoids are associative, but the interface produced a magma, not a monoid; the words were trees of elements, not lists.  We only got associativity by modding out by a relation on the trees.  In a computational context, when a data structure has some symmetry we do not care about, we often test two instances of the structure for equality by computing a normal form for each instance and then comparing the normal forms.  For the case of a normal form for the trees, we can eliminate 1 in a product by rewriting $(1 \cdot x)$ and $(x \cdot 1)$ to $x$, and we can shift all the parentheses to the right by rewriting $((x \cdot y) \cdot z)$ to $(x \cdot (y \cdot z)).$
 
 The Lawvere 2-theory Th(Mon) of an unnormalized monoid is much the same as the 1-theory, except for weakening some equations to rewrites and the addition of new equations between rewrites.
 
@@ -175,26 +175,26 @@ The Lawvere 2-theory Th(Mon) of an unnormalized monoid is much the same as the 1
     \end{itemize}
     \item Function symbols:
     \begin{itemize}
-      \item $\mult\maps S^2 \to S$
-      \item $\ident\maps 1 \to S$
+      \item $\cdot\maps S^2 \to S$
+      \item $e\maps 1 \to S$
     \end{itemize}
     \item Rewrites:
     \begin{itemize}
-      \item $a\maps \mult \circ (S \times \mult) \Rightarrow \mult \circ (\mult \times S)$
-      \item $l\maps \mult \circ (\ident \times S) \circ \left \Rightarrow S$
-      \item $r\maps \mult \circ (S \times \ident) \circ \right \Rightarrow S$
+      \item $a\maps \cdot \circ (S \times \cdot) \Rightarrow \cdot \circ (\cdot \times S)$
+      \item $l\maps \cdot \circ (e \times S) \circ \left \Rightarrow S$
+      \item $r\maps \cdot \circ (S \times e) \circ \right \Rightarrow S$
     \end{itemize}
     \item Equations:
     \begin{itemize}
-      \item $a \circ a = (S \times a) \circ a \circ (a \times S)$
-      \item $r \times S = (S \times l) \circ a$
+      \item $a \circ a = (S \times a) \circ a \circ (a \times S)$ (pentagon equation)
+      \item $r \times S = (S \times l) \circ a$ (triangle equation)
     \end{itemize}
   \end{itemize}
 \end{center}
 From Th(Mon) we can derive a 2-monad Mon that essentially produces the free monoid on a set, but keeps track of the ``internal representation'' of the monoid---a binary tree---and accounts for the work needed to convert the internal representation to its normal form.  From this perspective, we can think of the trees as programs for a simple virtual machine and the process of normalization as the execution of the program.
 
-When we add the 2-monad BoolAlg, we get formulae like $(1 \mult T)$ denoting the set of trees whose leftmost child is the identity; because Mon is a 2-monad, we also get proofs like 
-\[ ((l \circ r) \lor y)\maps ((1 \mult (x \mult 1)) \lor y) \to (x \lor y). \]
+When we add the 2-monad BoolAlg, we get formulae like $(1 \cdot T)$ denoting the set of trees whose leftmost child is the identity; because Mon is a 2-monad, we also get proofs like 
+\[ ((r \circ l) \lor y)\maps ((e \cdot (x \cdot e)) \lor y) \to (x \lor y). \]
 
 The formulae in these examples are propositions about the structure of terms.  Later in the paper, we will show how to add modal operators that are propositions about the behavior of terms.  For example, in the lambda calculus, the formula ${A \Rightarrow B}$ denotes the set of lambda terms $t$ that when applied to any $u \in \interp{A}$ eventually reduce to some $v \in \interp{B}.$
 
@@ -241,24 +241,33 @@ together with a set of equations, where $i$ ranges over some index set $I$ and $
 
 A product-preserving functor from Th(Gad) to Set picks out a set and equips it with structure maps satisfying the equations.  The category Prod(Th(Gad), Set) of product-preserving functors and natural transformations between them is equivalent to the category Gad of gadgets and gadget homomorphisms.  There is a forgetful functor ${U\maps \Gad \to \Set}$ that forgets the extra structure.  The functor $U$ has a left adjoint ${L\maps \Set \to \Gad}$ that picks out the free gadget on a set.  The monad $UL\maps \Set \to \Set$ picks out the underlying set $ULX$ of the free gadget $LX$ on a set $X$.  Lawvere theories are in bijection with finitary monads; the qualifier ``finitary'' means that each function symbol has a finite arity.
 
-For example, the Lawvere theory of groups Th(Grp) may be presented by the function symbols
-\begin{itemize}
-  \item $m\maps S^2 \to S$
-  \item $e\maps 1 \to S$
-  \item $inv \maps S \to S$
-\end{itemize}
-and the equations (here given in point-free form)
-\begin{itemize}
-  \item $m \circ (m \times S) = m \circ (S \times m)$ (associativity)
-  \item $m \circ (e \times S) \circ \mathrm{left}_S = S$ (left unit law)
-  \item $m \circ (S \times e) \circ \mathrm{right}_S = S$ (right unit law)
-  \item $inv \circ inv = S$ (inverse is an involution)
-  \item $m \circ (S \times inv) \circ \Delta = e$ (right inverse)
-  \item $m \circ (inv \times S) \circ \Delta = e$ (left inverse)
-\end{itemize}
-where ${\Delta\maps S \to S^2}$ is the diagonal map, and ${\mathrm{left}_S\maps S \stackrel{\sim}{\to} 1 \times S}$ and ${\mathrm{right}_S\maps S \stackrel{\sim}{\to} S \times 1}$ are the canonical isomorphisms in any category with finite products.
+For example, the Lawvere theory of groups Th(Grp) has a presentation
+\begin{center}
+  \begin{itemize}
+    \item Sorts:
+    \begin{itemize}
+      \item $S$
+    \end{itemize}
+    \item Function symbols:
+    \begin{itemize}
+      \item $\cdot\maps S^2 \to S$
+      \item $e\maps 1 \to S$
+      \item $inv \maps S \to S$
+    \end{itemize}
+    \item Equations:
+    \begin{itemize}
+      \item $\cdot \circ (\cdot \times S) = \cdot \circ (S \times \cdot)$ (associativity)
+      \item $\cdot \circ (e \times S) \circ \mathrm{left}^{-1}_S = S$ (left unit law)
+      \item $\cdot \circ (S \times e) \circ \mathrm{right}^{-1}_S = S$ (right unit law)
+      \item $inv \circ inv = S$ (inverse is an involution)
+      \item $\cdot \circ (S \times inv) \circ \Delta = e$ (right inverse)
+      \item $\cdot \circ (inv \times S) \circ \Delta = e$ (left inverse)
+    \end{itemize}
+    where ${\Delta\maps S \to S^2}$ is the diagonal map.
+  \end{itemize}
+\end{center}
 
-A product-preserving functor from Th(Grp) to Set maps $S$ to a set $G$ and equips it with the structure of a group: it maps $m$ to a binary multiplication function $G$, $e$ to a nullary function that picks out the identity element, and $inv$ to a unary function on $G$ such that $m, e,$ and $inv$ satisfy the given equations.
+A product-preserving functor from Th(Grp) to Set maps $S$ to a set $G$ and equips it with the structure of a group: it maps $\cdot$ to a binary multiplication function $G$, $e$ to a nullary function that picks out the identity element, and $inv$ to a unary function on $G$ such that $\cdot, e,$ and $inv$ satisfy the given equations.
 
 The category Prod(Th(Grp), Set) of product-preserving functors and natural transformations between them is equivalent to the category Grp of groups and group homomorphisms.  There is a forgetful functor from Grp to Set that forgets the structure; this forgetful functor has a left adjoint from Set to Grp that picks out the free group on a set.  The composition of these two functors gives a monad on Set that maps a set $X$ to the underlying set of the free group on $X.$
 
@@ -268,7 +277,9 @@ In the motivation section, each grammar had only one sort; practical grammars fo
 A {\bf multisorted Lawvere theory} is a category Th(Gad) equipped with an identity-on-objects functor ${\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Gad)}.}$  The category Prod(\allowbreak Th(Gad), Set) is equivalent to the category Gad of gadgets and gadget homomorphisms.  There is a forgetful functor ${U\maps \Gad \to \Set^\Sigma}$ with a left adjoint ${L\maps \Set^\Sigma \to \Gad}$ that picks out the free gadget on a $|\Sigma|$-tuple of sets.  The monad ${UL\maps \Set^\Sigma \to \Set^\Sigma}$ picks out the underlying $|\Sigma|$-tuple of sets $ULX$ of the free gadget $LX$ on a $|\Sigma|$-tuple of sets $X$.
 
 An example of a multisorted Lawvere theory is that of a group action on a set, which involves a choice of both a group $G$ and a set $V$ to act on.  The presentation of Th(GrpAct) has a pair of sorts $S = (G, V)$, all the function symbols and equations as the theory of a group (replacing $S$ by $G$), together with a new function symbol
-\[ a\maps G \times V \to V \]
+\begin{itemize}
+  \item $a\maps G \times V \to V$
+\end{itemize}
 and equations
 \begin{itemize}
   \item $a \circ (e \times V) \circ \mathrm{left}_V = V$ (identity action)
@@ -276,27 +287,82 @@ and equations
 \end{itemize}
 
 \subsection {Multisorted Lawvere 2-theories}
-In this paper, the {\bf multisorted Lawvere 2-theory} of a gadget is a 2-category Th(Gad) with strict finite products equipped with an identity-on-objects functor $\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Gad)},$ where we promote $(\FinSet/\Sigma)$ to a 2-category by adding identity 2-morphisms to every 1-morphism.  A multisorted Lawvere 2-theory may be presented by a finite set of sorts, a set of function symbols with finite arity, a set of rewrites, and a set of equations between rewrites.  The free unital magma on a set equipped with normalization from the introduction is an example of a single-sorted Lawvere 2-theory.  
+In this paper, the {\bf multisorted Lawvere 2-theory} of a gadget is a 2-category Th(Gad) with strict finite products equipped with an identity-on-objects functor $\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Gad)},$ where we promote $(\FinSet/\Sigma)$ to a 2-category by adding identity 2-morphisms to every 1-morphism.  A multisorted Lawvere 2-theory may be presented by a finite set of sorts, a set of function symbols with finite arity, a set of rewrites, and a set of equations between rewrites.  The ``free pointed magma on a set equipped with normalization'' from the introduction is an example of a single-sorted Lawvere 2-theory.  
 
-Another example of a single-sorted Lawvere 2-theory is the theory of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the lambda calculus.  Th(SKI) has one sort $T$, four function symbols
-\begin{itemize}
-  \item $S\maps 1 \to T$
-  \item $K\maps 1 \to T$
-  \item $I\maps 1 \to T$
-  \item $(-\;-)\maps T^2 \to T,$
-\end{itemize}
-three rewrites
-\begin{itemize}
-  \item $\forall x,y,z \in T, \quad \sigma \maps (((S\; x)\; y)\; z) \Rightarrow ((x\; z)\; (y\; z))$
-  \item $\forall y,z \in T, \quad \kappa \maps ((K\; y)\; z) \Rightarrow y$
-  \item $\forall z \in T, \quad \iota \maps (I\; z) \Rightarrow z$
-\end{itemize}
-and optionally equations between rewrites for computational equivalence.  The Church-Rosser theorem for the SKI calculus in this context says that any two terminating rewrites out of an SKI term have the same codomain; we need to add extra equations if we want to treat those two computations as equal.
+Another example of a single-sorted Lawvere 2-theory is the theory of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the lambda calculus.  Th(SKI) has a presentation
+\begin{center}
+  \begin{itemize}
+    \item Sorts:
+    \begin{itemize}
+      \item $T$
+    \end{itemize}
+    \item Function symbols:
+    \begin{itemize}
+      \item $S\maps 1 \to T$
+      \item $K\maps 1 \to T$
+      \item $I\maps 1 \to T$
+      \item $(-\;-)\maps T^2 \to T,$
+    \end{itemize}
+    \item Rewrites:
+    \begin{itemize}
+      \item $\forall x,y,z \in T, \quad \sigma \maps (((S\; x)\; y)\; z) \Rightarrow ((x\; z)\; (y\; z))$
+      \item $\forall y,z \in T, \quad \kappa \maps ((K\; y)\; z) \Rightarrow y$
+      \item $\forall z \in T, \quad \iota \maps (I\; z) \Rightarrow z$
+    \end{itemize}
+    \item Equations
+    \begin{itemize}
+      \item compuational equivalence
+    \end{itemize}
+  \end{itemize}
+\end{center}
+The Church-Rosser theorem for the SKI calculus in this context says that any two terminating rewrites out of an SKI term have the same codomain; we need to add extra equations if we want to treat those two computations as equal.
 
 The free model of Th(SKI) on a category takes its objects as terms and its morphisms as rewrites, then freely adjoins $S,K,$ and $I$ and all applications of one object to another, as well as new morphisms generated by $\sigma,\kappa,$ and $\iota.$  The free model on the empty category will contain only terms and rewrites from the SKI calculus.
 
+Lawvere 2-theories encode nondeterminism by means of multiple possible rewrites between function symbols.  Here's a presentation of a toy theory Th(Lock) for acquiring a mutex.
+\begin{center}
+  \begin{itemize}
+    \item Sorts:
+    \begin{itemize}
+      \item $T$ for terms
+      \item $N$ for names
+    \end{itemize}
+    \item Function symbols:
+    \begin{itemize}
+      \item $lock\maps 1 \to T$
+      \item $request\maps N \to T$
+      \item $acquired\maps N \to T$
+      \item $|\maps T^2 \to T$
+    \end{itemize}
+    \item Rewrites:
+    \begin{itemize}
+      \item $\forall x,y,z \in T,\quad a\maps (x|y)|z \stackrel{\sim}{\Rightarrow} x|(y|z)$
+      \item $\forall x,y \in T,\quad swap\maps x|y \stackrel{\sim}{\Rightarrow} y|x$
+      \item $\forall n \in N,\quad get\maps lock | request(n) \stackrel{\sim}{\Rightarrow} acquired(n)$
+    \end{itemize}
+    \item Equations:
+    \begin{itemize}
+      \item $a \circ a = (S \times a) \circ a \circ (a \times S)$ (pentagon)
+      \item $a \circ swap \circ a = (S \times swap) \circ a \circ (swap \times S)$ (hexagon 1)
+      \item $a^{-1} \circ swap \circ a^{-1} = (swap \times S) \circ a^{-1} \circ (S \times swap)$ (hexagon 2)
+    \end{itemize}
+  \end{itemize}
+\end{center}
+In the free model of this theory on $(T, N) = (\emptyset, \{ a,b\})$, there are two different rewrites out of
+\[ lock \;|\; request(a) \;|\; request(b). \]
+One rewrite is to
+\[ acquired(a) \;|\; request(b), \]
+and the other to
+\[ request(a) \;|\; acquired(b). \]
+
 \subsection{Derivatives}
 
+[[ Zippers, Conor McBride's derivative of a datatype.  Give construction for Lawvere theory. ]]
+
 \subsection{Modal operators}
+
+So far, all the examples of formulae have dealt with the structure of the term.  Far more interesting are sets of terms that all share some behavior.
+
+
 
 \end{document}
