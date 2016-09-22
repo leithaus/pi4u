@@ -86,7 +86,7 @@ An implementation of this specification will assign a set of values to the sort 
 
 To construct a logic where a formula, say $\phi$, denotes the collection of monoid words satisfying $\phi$, we need to specify what \emph{kind} of collection, because different kinds of collections have different constraints that affect how we construct them. For instance, lists are sensitive to order where sets are not. Bags are sensitive to multiplicity where sets are not.  In general, a collection is a ``shape'' in the sense of Someone \cite{someone}, labeled by elements of some set.
 
-Since all our formulae about monoids will denote subsets of the elements of the monoid and subsets form a Boolean algebra, we can use Th(BoolAlg) to describe our collections.
+Since all our formulae about monoids will denote subsets of the elements of the monoid and subsets form a Boolean algebra, we can use Th(BoolAlg) to describe our collections. [[ Note here or below about the model: it's not all subsets, it's just the constructible ones. ]]
 \begin{center}
   \begin{itemize}
     \item Sorts:
@@ -150,14 +150,16 @@ In order to move all the uses of Mon to the right of the uses of BoolAlg, we nee
 \[ \delta\maps \Mon \circ \BoolAlg \Rightarrow \BoolAlg \circ \Mon. \]
 Given $\delta$ and the monad units and multiplications, we can define an interpretation natural transformation
 \[ \interp{-}\maps \Form\Rightarrow \BoolAlg \circ \Mon \]
-in the obvious way:
+in the obvious way.  Below, we write subsets of Mon($X$) using set notation:
 \begin{align*}
   \interp{\top}_X &= \Mon(X)\\
   \interp{\bot}_X &= \emptyset\\
   \interp{{A}\lor{B}}_X &= \interp{A}_X \cup \interp{B}_X\\
   \interp{{A}\land{B}}_X &= \interp{A}_X \cap \interp{B}_X\\
   \interp{\neg A}_X &= \Mon(X) - \interp{A}_X\\
-  \interp{m \in \Mon(X)}_X &= \{m\}
+  \interp{{A} \cdot {B}} &= \Mon(\cdot)(\interp{A} \times \interp{B})\\
+  \interp{e} &= \{e\}\\
+  \interp{x \in X}_X &= \{x\}
 \end{align*}
 
 Even in this simple example, we have nontrivial formulae; for example,
@@ -365,6 +367,12 @@ Any 1-theory of collections can be promoted to a 2-theory by turning each equati
 
 For multisorted Lawvere 2-theories, there is no canonical choice of sorts to identify between the theory of the machine and the theory of the collection, but in practical applications, there is often an obvious choice; for example, given the theory of a lock from the previous section, we probably want our formulae to talk about $T$ more than about $N$.  With that choice, the formula for those terms where the lock is available is $lock\;|\;\top,$ and $\neg(lock \;|\;\top)$ is the formula for those terms where the lock has been acquired.
 
+\section{Interpretation}
+
+[[ Thm: defining and as intersect, or as union, top as the whole set, bot as the empty set, neg as complement, and terms over collections as mapping the term constructor over the cartesian product of the collections always works. ]]
+
+[[ Thm: sound & complete ]]
+
 \section{Modal operators}
 
 So far, all the examples of formulae have dealt with the structure of the term.  Far more interesting are sets of terms that all share some behavior.  For example, in the SKI calculus, we want to add the idea of an arrow type to our formulae, and have the interpretation of $A \lhom B$ be the set of terms $t$ such that given a term $u\in\interp{A}$, the term eventually evolves to a term $v\in\interp{B}.$
@@ -377,7 +385,11 @@ This notion of eventuality is an example of a modal operator.  Possibility is an
   \item Structure: at the end of sorting, the data will be ordered.
 \end{itemize}
 
-\subsection{Arrow types in the SKI calculus}
+To add a modal operator to a formula language, first add it formally a function symbol to the term theory, then add the collection theory as before.  
+
+To interpret the modal operator, first interpret the formulae as above, then interpret modal terms as collections of terms, then use the join from the collection monad.
+
+\subsection{Example: Arrow types in the SKI calculus}
 
 The Lawvere 2-theory of the arrow type Th(Arrow) has one function symbol, no rewrites, and no equations.  The lack of rewrites and equations are because the arrow is a purely formal type, and it is only in our choice of semantics that it acquires its customary interpretation.
 \begin{itemize}
@@ -393,9 +405,15 @@ The Lawvere 2-theory of the arrow type Th(Arrow) has one function symbol, no rew
   \item No equations.
 \end{itemize}
 
-We get the theory of SKI with arrow Th(SKIArr) by adding the two theories.  We get our formulae by adding Th(BoolAlg) to Th(SKIArr).
+We get the theory of SKI with arrow Th(SKIArr) by adding Th(SKI) to Th(Arrow), and we get the theory of formulae Th(Form) by adding Th(SKIArr) to Th(BoolAlg).
 
-((a^b)(cvd)) = ((a^b) c) v ((a^b) d) = ((a c) ^ (b c)) v ((a d) ^ (b d))
-((a^b)(cvd)) = (a (cvd)) ^ (b (cvd)) = ((a c) v (a d)) ^ ((b c) v (b d))
+To interpret terms from Th(Form), we compose the interpretation natural transformation above with another natural transformation $\alpha\maps SKIArr \to BoolAlg \circ SKI,$ followed by the join from the collection monad.  In particular, 
+\begin{align*}
+  \alpha(u \lhom v) &= \{ t | \exists \rho\maps (t\; u) \Rightarrow v \}\\
+  \alpha(t \in \mathrm{Th(SKI)}) &= \{ t \}.\\
+\end{align*}
 
+\begin{align*}
+  \interp{}
+\end{align*}
 \end{document}
