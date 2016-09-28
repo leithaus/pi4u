@@ -421,19 +421,30 @@ The Lawvere 2-theory of the arrow type Th(Arrow) has one term constructor, no re
 We get the theory of SKI with arrow Th(SKIArr) by adding Th(SKI) to Th(Arrow), and we get the theory of formulae Th(Form) by adding Th(SKIArr) to Th(BoolAlg).
 
 To interpret terms from Th(Form), we compose the interpretation natural transformation above with another natural transformation $\alpha\maps \mathrm{SKIArr} \Rightarrow \mathrm{BoolAlg} \circ \mathrm{SKI},$ followed by the join from the collection monad.  In particular, 
-\[ \alpha(t) = \left\{
-  \begin{array}{rl}
-    \{ w \;|\; \exists \rho\maps (w\; u) \Rightarrow v \} & \text{if } t = u \lhom v\\
-    \{ t \} & \text{otherwise.}
-  \end{array}\right. \]
+\[ \alpha(u \lhom v) = \{ t \;|\; \exists \rho\maps (t\; u) \Rightarrow v \}. \]
 
-[[ Note in future work that arrow extends to a profunctor on Lambek construction. ]]
+In Lambek's 1980 paper on the denotational semantics of the lambda calculus, he defined a category whose objects were types and whose morphisms were equivalence classes of lambda terms with one free variable.  In a future paper, we will show how Mellies and Zeilberger's approach to type refinement lets us recapitulate Lambek's construction and extend the arrow to a profunctor.
+
+\subsection{Modal operators parametric in a term constructor}
+
+A term context is a term with a ``hole'' that can be filled by some other term.  Given a Lawvere theory with a sort $S$ for terms, one can derive a new theory of term contexts by replacing each term constructor $f\maps S^n \to S$ with $n$ term constructors $f_i\maps S^{n-1} \to S$ where $1 \le i \le n$.  We think of $f_i$ as being $f$ with the $i$th input being a hole.  Equivalently, if we have a theory with coproducts, we can replace each occurrence of $S$ on the left-hand side of a term constructor with $S+1,$ where the new point represents the hole.
+
+The arrow type is a special case of a general modal operator parametrized by a two-hole term context $C.$  We denote the operator itself with angle brackets as a reminder of the diamond ``possibly'' modality: $u \langle C \rangle v.$  The interpretation is similar to that of the arrow:
+\[ \alpha(u \langle C\rangle v) = \{ t \;|\; \exists \rho\maps C[t, u] \Rightarrow v \}. \]
 
 \section{Recursion}
 
+As with modal operators, we add Suppose that we have a single-sorted Lawvere 2-theory of a virtual machine with sort $S$.  We add recursion to our formulae by introducing a new sort $V$ for type variables and new term constructors 
+\begin{itemize}
+  \item $- \maps V \to S$ to let us use type variables in formulae and
+  \item $\mu\maps V\times S \to S$ to express fixed points.
+\end{itemize}
+
+We interpret terms of the form $\mu X.P[X]$ as [[ ... ]]
+
 \subsection{The reflective higher-order pi calculus}
 
-Lawvere theories are limited in that they only talk about products of sorts.  A lambda theory is a generalization of a Lawvere theory that has the ability to talk about function sorts like $A \Rrightarrow B$ and sums like $A+B$ or $1 + A + A^2 + \cdots,$ more commonly denoted with the Kleene star $A^*.$  A lambda theory Th(Mach) is a bicartesian closed 2-category equipped with an identity-on-objects functor from $(\FinSet/\Sigma)^{\op}$ to Th(Mach).  Models of Th(Mach) are functors to Cat that preserve all the structure.
+Lawvere theories are limited in that they only talk about products of sorts.  A lambda theory is a generalization of a Lawvere theory that has the ability to talk about function sorts like $A \Rrightarrow B$ and sums like $A+B$ or $1 + A + A^2 + \cdots,$ more commonly denoted with the Kleene star $A^*.$  One can think of lambda theories as having access to a ``library'' that takes care of the details of bound variables and substitution for us so we do not have to implement all that machinery.  A lambda theory Th(Mach) is a bicartesian closed 2-category equipped with an identity-on-objects functor from $(\FinSet/\Sigma)^{\op}$ to Th(Mach).  Models of Th(Mach) are functors to Cat that preserve all the structure.
 
 The pi calculus was invented in the early 1990s by Robin Milner as a model of asynchronous networks of processes with a dynamically changing topology; two processes initially unaware of each other can be introduced by a third process.  The reflective higher order pi calculus uses quoted processes as names; the term constructors for quote and eval replace the more traditional nu and replicate constructors.  We also add a ``comm'' term to restrict the contexts in which reduction can occur.
 
@@ -469,19 +480,28 @@ Here is a presentation of the multisorted lambda theory Th(RHOpi) for the reflec
   \end{itemize}
 \end{itemize}
 
-In the free RHOpi on the empty category, all names are quoted processes.  The simplest name is $\quote{0};$ a more complicated name is $\quote(send(\quote{0}, 0)).$
+The simplest RHOpi processes are 0, the ``do nothing'' process; and comm, a ``catalyst'' process that enables communication on a channel.  In the theory above, comm is preserved by the rewrites; one can think of each comm instance as representing a processor.  An alternative would be to consume comm in the $\chi$ rewrite; then comm would track usage of a processor.  [[ Formal verification of billing for using resources. ]]
+
+[[ Unguessable (quoted processes with no unforgeable names) vs unforgeable (quoted processes with names from the category of generators) ]]
+
+Replication of processes, and therefore general recursion, can be encoded via
+\[D(x) = \recv(x, y\mapsto \send(x, \deref{y}) | \deref{y})\]
+\[!P = \send(x, D(x) | P) | D(x).\]
+
+Caires' adjunct to | is an instance of our generic modal operator, where $u \triangleright v = u \langle - | - \rangle v:$
+\[ \alpha(u \triangleright v) = \{ t \;|\; \exists \rho\maps (t\;|\;u) \Rightarrow v\} \]
 
 \subsubsection{namespaces}
 
 When we add a copy of BoolAlg to RHOpi for both $N$ and $P,$ we can write down formulae that talk about sets of names.  The formula $\top$ denotes the set of all names; the formula $\quote{\top}$ denotes the set of names that are quoted processes.  These two sets differ when we have a nonempty set of generating names.
 
-[[ formula for firewall ]]
-
 [[ formula for liveness ]]
-
+\[ \mu X. \recv(\quote{\phi}, x \mapsto X) \]
+[[ formula for firewall ]]
+\[ \mu X. \recv(\quote{\phi}, x \mapsto X) \land \neg \recv(\quote{\neg\phi}, x \mapsto X) \]
 [[ other easy ones? ]]
 
-\begin{bibliography}
-  
-\end{bibliography}
+%\begin{bibliography}
+%\bibitem{Graetzer} Gr\"atzer, George. {\em Universal Algebra}, Van Nostrand Co., Inc. (1968) v.
+%\end{bibliography}
 \end{document}
