@@ -1,8 +1,8 @@
-\documentclass{article}
-% [[ Use right style. ]]
+\documentclass{llncs}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{comment}
+\usepackage{hyperref}
 \usepackage{stmaryrd}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
@@ -12,7 +12,7 @@
 \newcommand{\Mach}{\mathrm{Mach}}
 \newcommand{\Mon}{\mathrm{Mon}}
 \newcommand{\BoolAlg}{\mathrm{BoolAlg}}
-\newcommand{\Form}{\mathrm{Form}}
+\renewcommand{\Form}{\mathrm{Form}}
 \newcommand{\leftu}{\mathrm{left}}
 \newcommand{\rightu}{\mathrm{right}}
 \newcommand{\send}{\mathrm{send}}
@@ -41,7 +41,7 @@ L.G. Meredith\\
 
   The interpretation of formulae is a natural transformation $\interp{-} \maps \Form \Rightarrow \BoolAlg \circ \Mach$ defined by the units and multiplications of the monads and a distributive law transformation $\delta\maps \Mach \circ \BoolAlg \Rightarrow \BoolAlg \circ \Mach.$  This interpretation is consistent both with the Curry-Howard isomorphism and with realizability.
 
-  We give an implementation of the ``possibly'' modal operator parametrized by a two-hole term context and show that, surprisingly, the arrow type constructor in lambda calculus is a specific case.  We also exhibit nontrivial formulae encoding confinement and liveness properties for a reflective higher-order variant of the $\pi$-calculus.
+  We give an implementation of the ``possibly'' modal operator parametrized by a two-hole term context and show that, surprisingly, the arrow type constructor in the $\lambda$-calculus is a specific case.  We also exhibit nontrivial formulae encoding confinement and liveness properties for a reflective higher-order variant of the $\pi$-calculus.
 
 \end{abstract}
 \section{Introduction}
@@ -76,7 +76,7 @@ L.G. Meredith\\
 
   The obvious way to interpret formulae is then a natural transformation $\interp{-} \maps \Form \Rightarrow \BoolAlg \circ \Mach$ defined by the units and multiplications of the monads and a distributive law transformation $\delta\maps \Mach \circ \BoolAlg \Rightarrow \BoolAlg \circ \Mach.$  Soundness and completeness follow easily.
 
-  We can extend this naive type system with fixed points and with modal operators that denote sets of terms that all exhibit a particular behavior; for an example of the latter, the arrow type $A \Rightarrow B$ in lambda calculus is the type of terms that when applied to a term of type $A$ eventually rewrite to a term of type $B$.  Other formulae can capture eventual properties like
+  We can extend this naive type system with fixed points and with modal operators that denote sets of terms that all exhibit a particular behavior; for an example of the latter, the arrow type $A \Rightarrow B$ in the $\lambda$-calculus is the type of terms that when applied to a term of type $A$ eventually rewrite to a term of type $B$.  Other formulae can capture eventual properties like
 \begin{itemize}
   \item Authority: it is the case that if my banking service eventually evolves to a state in which Alice has the ability to withdraw money from my account, then the banking service both sent an email to my address requesting confirmation and received the confirmation email in response.
   \item Confinement: this process will only ever send a messages on channels in this set.
@@ -87,34 +87,8 @@ L.G. Meredith\\
 
 \section{Related work}
 [[ Greg: Curry-Howard related work? ]]
-[[ Lots of stuff on Lawvere theories and generalizations.  
 
-- Lawvere, Functorial Semantics of Algebraic Theories
-
-The original insight.
-
-- Hyland \& Power, ``The Category Theoretic Understanding of Universal Algebra: Lawvere Theories and Monads''
-
-  Lawvere theories and monads have been the two main category theoretic formulations of universal algebra, Lawvere theories arising in 1963 and the connection with monads being established a few years later. Monads, although mathematically the less direct and less malleable formulation, rapidly gained precedence. A generation later, the definition of monad began to appear extensively in theoretical computer science in order to model computational effects, without reference to universal algebra. But since then, the relevance of universal algebra to computational effects has been recognised, leading to renewed prominence of the notion of Lawvere theory, now in a computational setting. This development has formed a major part of Gordon Plotkin’s mature work, and we study its history here, in particular asking why Lawvere theories were eclipsed by monads in the 1960’s, and how the renewed interest in them in a computer science setting might develop in future.
-
-- Lack \& Rosick\'y, ``Notions of Lawvere theory''
-
-  Categorical universal algebra can be developed either using Lawvere theories (single-sorted finite product theories) or using monads, and the category of Lawvere theories is equivalent to the category of finitary monads on Set. We show how this equivalence, and the basic results of universal algebra, can be generalized in three ways: replacing Set by another category, working in an enriched setting, and by working with another class of limits than finite products.
-  
-- Trimble, ``multisorted Lawvere theories''
-
-  Theorem 1. Let C be a category which admits general colimits and finite products that distribute over colimits. Then the forgetful functor ModC(Theta) to C\^Lambda is monadic.
-
-- Lack \& Power, ``Lawvere 2-theories''
-
-  http://www.mat.uc.pt/~categ/ct2007/slides/lack.pdf
-
-- Power, ``Enriched Lawvere theories''
-
-  We define the notion of enriched Lawvere theory, for enrichment over a monoidal biclosed category $V$ that is locally finitely presentable as a closed category. We prove that the category of enriched Lawvere theories is equivalent to the category of finitary monads on $V$. Moreover, the $V$-category of models of a Lawvere $V$-theory is equivalent to the $V$-category of algebras for the corresponding $V$-monad. This all extends routinely to local presentability with respect to any regular cardinal. We finally consider the special case where $V$ is $Cat$, and explain how the correspondence extends to pseudo maps of algebras.
-
-- more
-]]
+There is a very large body of work on Lawvere theories, and we cannot give a proper review here; instead we list a few key papers with many references.  Hyland and Power \cite{HylandPower} reviewed the history of both Lawvere theories and monads as an approach to universal algebra, how monads came to the fore, Plotkin's work, and the renewed interest in Lawvere theories in a computer science setting.  Trimble \cite{Trimble} constructed multisorted Lawvere theories.  Lack and Rosick\'y \cite{LackRosicky} unified the work of several earlier authors by considering models in categories other than Set, extending the notion of Lawvere theory to enriched categories, and using all limits rather than just products all at once.
 
 \section{A 1-categorical example}
 
@@ -264,13 +238,13 @@ The Lawvere 2-theory Th(Mon) is much the same as the 1-theory, except for the we
     \end{itemize}
   \end{itemize}
 \end{center}
-From Th(Mon) we can derive a 2-monad Mon that essentially produces the free monoid on a set, but keeps track of the internal representation of the monoid---a binary tree---and accounts for the work needed to convert the internal representation to its normal form.  From this perspective, we can think of the trees as programs for a simple virtual machine and the process of normalization as the execution of the program.  Later in the paper, we will examine the case of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the lambda calculus; it, too, uses binary trees as programs, and execution of the program is a normalization process.
+From Th(Mon) we can derive a 2-monad Mon that essentially produces the free monoid on a set, but keeps track of the internal representation of the monoid---a binary tree---and accounts for the work needed to convert the internal representation to its normal form.  From this perspective, we can think of the trees as programs for a simple virtual machine and the process of normalization as the execution of the program.  Later in the paper, we will examine the case of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the $\lambda$-calculus; it, too, uses binary trees as programs, and execution of the program is a normalization process.
 
 When we add the 2-monad BoolAlg to Mon, we get formulae like $(1 \cdot \top)$ denoting the set of trees whose leftmost child is the identity; because Mon is a 2-monad, we also get proofs like 
 \[ ((r \circ l) \lor y)\maps ((e \cdot (x \cdot e)) \lor y) \to (x \lor y) \]
 whose interpretations are homomorphisms of Boolean algebras.
 
-The formulae in these examples have been propositions about the structure of terms.  Later in the paper, we will also show how to add modal operators that are propositions about the behavior of terms; the arrow type constructor from lambda calculus is a prominent example.
+The formulae in these examples have been propositions about the structure of terms.  Later in the paper, we will also show how to add modal operators that are propositions about the behavior of terms; the arrow type constructor from the $\lambda$-calculus is a prominent example.
 
 \section{Multisorted Lawvere theories}
 In the motivation section, each theory had only one sort; practical theories for virtual machines are usually multisorted.  Given a finite set of sorts $\Sigma,$ the category $\FinSet/\Sigma$ is the category whose objects are pairs $(S, s\maps S\to \Sigma),$ where $S$ is a finite set, and whose morphisms are functions $f\maps S \to S'$ such that the relevant triangle commutes.
@@ -294,7 +268,7 @@ In this paper, the multisorted Lawvere 2-theory of a machine is a 2-category Th(
 
 Our models of multisorted Lawvere 2-theories are functors into $\Cat^\Sigma$ that preserve products up to isomorphism, not merely up to equivalence; that is, the 2-functor has an underlying functor that preserves products.  As with 1-theories, the 2-category of product-preserving functors from Th(Mach) to $\Cat^\Sigma$, natural transformations, and modifications is equivalent to the 2-category of machines, machine homomorphisms, and machine transformations.
 
-As mentioned above, the SKI combinator calculus is a Turing-complete language; it was invented by Moses Schoenfinkel and Haskell Curry in the 1920s as a way to clarify the role of quantified variables in logic, essentially by eliminating them.  The single-sorted Lawvere 2-theory Th(SKI) has a presentation
+As mentioned above, the SKI combinator calculus is a Turing-complete language; it was invented by Sch\"onfinkel \cite{Schonfinkel} and Curry \cite{Curry} in the 1920s as a way to clarify the role of quantified variables in logic, essentially by eliminating them.  The single-sorted Lawvere 2-theory Th(SKI) has a presentation
 \begin{center}
   \begin{itemize}
     \item Sorts:
@@ -321,15 +295,13 @@ In this context, the Church-Rosser theorem for the SKI calculus says that any tw
 
 The free model of Th(SKI) on a category takes its objects as terms and its morphisms as rewrites, then freely adjoins $S,K,$ and $I$ and all applications of one object to another, as well as new morphisms generated by $\sigma,\kappa,$ and $\iota.$  The free model on the empty category will contain only terms and rewrites from the SKI calculus.
 
-[[ Concluding comment. ]]
+
 
 \section{Categories of formulae and proofs}
 
 Any 1-theory can be promoted to a 2-theory by turning each equation into a rewrite, then adding an equation asserting that the rewrite is equal to the identity rewrite.  Therefore as before, given a single-sorted Lawvere 2-theory Th(Mach), we get a 2-theory of formulae Th(Form) by adding the 2-theory of Boolean algebras Th(BoolAlg).  The models of Th(Form) are categories of formulae and proofs.
 
-For multisorted Lawvere 2-theories, there is no canonical choice of sorts to identify between the theory of the machine and the theory of Boolean algebras, but in practical applications, there is often an obvious choice. [[ Add example. ]]
-
-That said, one may also choose to add two different copies of Th(BoolAlg) and identify each single sort with different sorts in the theory of the machine; [[ example ]].  Later in the paper, we will see how we can use formulae involving names to create namespaces that enforce containment on processes in the $\pi$-calculus.
+For multisorted Lawvere 1- and 2-theories, there is no canonical choice of sorts to identify between the theory of the machine and the theory of Boolean algebras; one may choose to add one or more different copies of Th(BoolAlg) and identify each single sort with different sorts in the theory of the machine.  For example, given the theory of a group action, one could add a copy of Th(BoolAlg) for both $G$ and $V$ and write formulae involving subsets of the group and of the set it acts on.  Later in the paper, we will see how we can use formulae involving names to create namespaces that enforce confinement on processes in the $\pi$-calculus.
 
 \section{Interpretation}
 
@@ -368,7 +340,7 @@ We get the theory of SKI with arrow Th(SKIArr) by adding Th(SKI) to Th(Arrow), a
 To interpret terms from Th(Form), we compose the interpretation natural transformation above with another natural transformation $\alpha\maps \mathrm{SKIArr} \Rightarrow \mathrm{BoolAlg} \circ \mathrm{SKI},$ followed by the join from the collection monad.  In particular, 
 \[ \alpha(u \Rrightarrow v) = \{ t \;|\; \exists \rho\maps (t\; u) \Rightarrow v \}. \]
 
-In Lambek's 1980 paper \cite{Lambek} on the denotational semantics of the lambda calculus, he defined a category whose objects were types and whose morphisms were equivalence classes of lambda terms with one free variable.  In a future paper, we will show how Mellies and Zeilberger's approach to type refinement lets us recapitulate Lambek's construction and extend the arrow to a profunctor.
+In Lambek's 1980 paper \cite{Lambek} on the denotational semantics of the $\lambda$-calculus, he defined a category whose objects were types and whose morphisms were equivalence classes of lambda terms with one free variable.  In a future paper, we will show how Mellies and Zeilberger's approach to type refinement lets us recapitulate Lambek's construction and extend the arrow to a profunctor.
 
 \subsection{Modal operators parametric in a term constructor}
 
@@ -461,7 +433,22 @@ When we add a copy of BoolAlg to RHOpi for both $N$ and $P,$ we can write down f
 [[ Greg ]]
 
 \begin{thebibliography}{99}
-\bibitem{Graetzer} Gr\"atzer, George. {\em Universal Algebra}, Van Nostrand Co., Inc. (1968) v.
+\bibitem{Curry} H.\ Curry, Grundlagen der Kombinatorischen Logik, {\em American Journal of Mathematics} {\bf 52 (3)} (1930) 509--536.
+
+\bibitem{Graetzer} G.\ Gr\"atzer, {\em Universal Algebra}, Van Nostrand Co., Inc. (1968) v.
+
+\bibitem{HylandPower} M.\ Hyland and J.\ Power, The Category Theoretic Understanding of Universal Algebra: Lawvere Theories and Monads, {\em Electronic Notes in Theoretical Computer Science} {\bf 172} (2007) 437--458.  Also available at \href{http://www.dpmms.cam.ac.uk/~martin/Research/Publications/2007/hp07.pdf}{http://www.dpmms.cam.ac.uk/$\sim$martin/Research/Publications/2007/hp07.pdf}
+
+\bibitem{LackRosicky} S.\ Lack and J.\ Rosick\'y, Notions of Lawvere theory, {\em Applied Categorical Structures}, {\bf 19 (1)} (2011), 363--391.
+
+\bibitem{Lawvere} F.\ W.\ Lawvere, {\sl Functorial Semantics of Algebraic Theories}, Ph.D.\ Dissertation, Columbia University, 1963. Also available at 
+  \href{http://www.tac.mta.ca/tac/reprints/articles/5/tr5abs.html}
+  {http://www.tac.mta.ca/tac/reprints/articles/5/tr5abs.html}.
+
+\bibitem{Schonfinkel}M.\ Sch\"onfinkel, \"Uber die Bausteine der mathematischen Logik, {\em Mathematische Annalen} {\bf 92} (1924) 305--316. Translated by S.\ Bauer-Mengelberg as ``On the building blocks of mathematical logic'' in J.\ van Heijenoort, {\em A Source Book in Mathematical Logic 1879–1931} (1967) 355--66.
+
+\bibitem{Trimble} T.\ Trimble, Multisorted Lawvere theories, \href{https://ncatlab.org/toddtrimble/published/multisorted+Lawvere+theories}{https://ncatlab.org/toddtrimble/published/multisorted+Lawvere+theories}.
+
 [[ Greg: add refs ]]
 \end{thebibliography}
 \end{document}
