@@ -27,7 +27,7 @@
 \author{
 Michael Stay\\
   {Pyrofex Corp.}\\
-  {\fontsize{8}{8}\selectfont stay@pyrofex.net}
+  {\fontsize{8}{8}\selectfont stay@pyrofex.net}\\
 \and
 L.G. Meredith\\
   {Biosimilarity, LLC}\\
@@ -37,6 +37,7 @@ L.G. Meredith\\
 \maketitle
 \begin{abstract}
 \noindent
+  [[Greg: fix up author block]]\\
   We present an algorithm for deriving a spatial-behavioral type system from a formal presentation of a computational calculus.  Given a 2-monad $\Calc\maps \Cat \to \Cat$ for the free calculus on a category of terms and rewrites and a 2-monad BoolAlg for the free Boolean algebra on a category, we get a 2-monad Form = BoolAlg + Calc for the free category of formulae and proofs.  We also get the 2-monad $\BoolAlg \circ \Calc$ for subsets of terms.
 
   The interpretation of formulae is a natural transformation $\interp{-} \maps \Form \Rightarrow \BoolAlg \circ \Calc$ defined by the units and multiplications of the monads and a distributive law transformation $\delta\maps \Calc \circ \BoolAlg \Rightarrow \BoolAlg \circ \Calc.$  This interpretation is consistent both with the Curry-Howard isomorphism and with realizability.
@@ -199,8 +200,8 @@ in the obvious way.  Below, we write subsets of Mon($X$) using set notation:
   \interp{{A}\lor{B}}_X &= \interp{A}_X \cup \interp{B}_X\\
   \interp{{A}\land{B}}_X &= \interp{A}_X \cap \interp{B}_X\\
   \interp{\neg A}_X &= \Mon(X) - \interp{A}_X\\
-  \interp{{A} \cdot {B}} &= \Mon(\cdot)(\interp{A} \times \interp{B})\\
-  \interp{e} &= \{e\}\\
+  \interp{{A} \cdot {B}}_X &= \Mon(\cdot)(\interp{A}_X \times \interp{B}_X)\\
+  \interp{e}_X &= \{e\}\\
   \interp{x \in X}_X &= \{x\}
 \end{align*}
 
