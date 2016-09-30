@@ -229,8 +229,8 @@ The Lawvere 2-theory Th(Mon) is much the same as the 1-theory, except for the we
     \item Rewrites:
     \begin{itemize}
       \item $a\maps \cdot \circ (S \times \cdot) \Rightarrow \cdot \circ (\cdot \times S)$
-      \item $l\maps \cdot \circ (e \times S) \circ \leftu \Rightarrow S$
-      \item $r\maps \cdot \circ (S \times e) \circ \rightu \Rightarrow S$
+      \item $l\maps \cdot \circ (e \times S) \circ \leftu^{-1} \Rightarrow S$
+      \item $r\maps \cdot \circ (S \times e) \circ \rightu^{-1} \Rightarrow S$
     \end{itemize}
     \item Equations:
     \begin{itemize}
@@ -258,7 +258,7 @@ An example of a multisorted Lawvere theory is that of a group action on a set, w
 \end{itemize}
 and equations
 \begin{itemize}
-  \item $a \circ (e \times V) \circ \mathrm{left}_V = V$ (identity action)
+  \item $a \circ (e \times V) \circ \leftu^{-1}_V = V$ (identity action)
   \item $a \circ (m \times V) = a \circ (G \times a)$ (compatibility).
 \end{itemize}
 
