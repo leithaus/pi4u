@@ -9,7 +9,7 @@
 \newcommand{\FinSet}{\mathrm{FinSet}}
 \newcommand{\Set}{\mathrm{Set}}
 \newcommand{\Cat}{\mathrm{Cat}}
-\newcommand{\Mach}{\mathrm{Mach}}
+\newcommand{\Calc}{\mathrm{Calc}}
 \newcommand{\Mon}{\mathrm{Mon}}
 \newcommand{\BoolAlg}{\mathrm{BoolAlg}}
 \renewcommand{\Form}{\mathrm{Form}}
@@ -37,9 +37,9 @@ L.G. Meredith\\
 \maketitle
 \begin{abstract}
 \noindent
-  We present an algorithm for deriving a spatial-behavioral type system from a formal presentation of a virtual machine.  Given a 2-monad $\Mach\maps \Cat \to \Cat$ for the free machine on a category of states and rewrites and a 2-monad BoolAlg for the free Boolean algebra on a category, we get a 2-monad Form = BoolAlg + Mach for the free category of formulae and proofs.  We also get the 2-monad $\BoolAlg \circ \Mach$ for subsets of machine states. 
+  We present an algorithm for deriving a spatial-behavioral type system from a formal presentation of a computational calculus.  Given a 2-monad $\Calc\maps \Cat \to \Cat$ for the free calculus on a category of terms and rewrites and a 2-monad BoolAlg for the free Boolean algebra on a category, we get a 2-monad Form = BoolAlg + Calc for the free category of formulae and proofs.  We also get the 2-monad $\BoolAlg \circ \Calc$ for subsets of terms.
 
-  The interpretation of formulae is a natural transformation $\interp{-} \maps \Form \Rightarrow \BoolAlg \circ \Mach$ defined by the units and multiplications of the monads and a distributive law transformation $\delta\maps \Mach \circ \BoolAlg \Rightarrow \BoolAlg \circ \Mach.$  This interpretation is consistent both with the Curry-Howard isomorphism and with realizability.
+  The interpretation of formulae is a natural transformation $\interp{-} \maps \Form \Rightarrow \BoolAlg \circ \Calc$ defined by the units and multiplications of the monads and a distributive law transformation $\delta\maps \Calc \circ \BoolAlg \Rightarrow \BoolAlg \circ \Calc.$  This interpretation is consistent both with the Curry-Howard isomorphism and with realizability.
 
   We give an implementation of the ``possibly'' modal operator parametrized by a two-hole term context and show that, surprisingly, the arrow type constructor in the $\lambda$-calculus is a specific case.  We also exhibit nontrivial formulae encoding confinement and liveness properties for a reflective higher-order variant of the $\pi$-calculus.
 
@@ -66,15 +66,15 @@ L.G. Meredith\\
 
   Lawvere theories can be generalized from 1-categories to 2-categories.  As one might expect, the corresponding notion of equational theory involves one more level of structure; we have sorts, term constructors, {\em rewrites} instead of equations between term constructors, and equations between rewrites.  We typically interpret such a theory in Cat, the 2-category of categories, functors and natural transformations.
 
-  We can use Lawvere 2-theories to describe the state of a virtual machine and the permissible rewrites.  We have a sort for machine states; since our examples are necessarily simple term calculi due to space constraints, we will also refer to machine states as ``terms''.  We also have term constructors for building up specific states, rewrites between term constructors for running the machine, and equations between rewrites to preserve invariants.  The Lawvere 2-theory captures the syntax of a virtual machine; a 2-functor from the theory into Cat assigns operational semantics.
+  We can use Lawvere 2-theories to describe terms in a computational calculus and the permissible rewrites.  We have a sort for terms; our examples are necessarily simple calculi due to space constraints, but our approach should work with any formalization of a computational model such as the K framework \cite{KFramework}, the ``kiama'' Scala package \cite{Kiama}, and so forth [[ Greg: more? ]].  We also have term constructors for building up specific terms, rewrites between term constructors for running programs, and equations between rewrites to preserve invariants.  The Lawvere 2-theory captures the syntax of a computational calculus; a 2-functor from the theory into Cat assigns operational semantics.
 
-  A spatial-behavioral type system is a language in which one can describe both the structure and future behavior of virtual machine states.  The interpretation of a formula should be a set of terms satisfying the formula.  The interpretation of a proof should be a function that maps a set of assumptions to a set of consequents.  This is consistent both with the Curry-Howard isomorphism and with realizability.
+  A spatial-behavioral type system is a language in which one can describe both the structure and future behavior of terms.  The interpretation of a formula should be a set of terms satisfying the formula.  The interpretation of a proof should be a function that maps a set of assumptions to a set of consequents.  This is consistent both with the Curry-Howard isomorphism and with realizability.
 
-  The obvious language for describing the structure of a machine state is the 2-theory Th(Mach) of the machine itself, equipped with extra term constructors for true, false, disjunction, conjunction, and negation.  This suggests adding the 2-monad Mach to the 2-monad BoolAlg for Boolean algebras to get Form, the 2-monad for formulae.
+  The obvious language for describing the structure of a term is the 2-theory Th(Calc) of the calculus itself, equipped with extra term constructors for true, false, disjunction, conjunction, and negation.  This suggests adding the 2-monad Calc to the 2-monad BoolAlg for Boolean algebras to get Form, the 2-monad for formulae.
 
-  The obvious language for interpreting formulae is the 2-category of subsets of machine states with pointwise rewrites between them.  This suggests composing the monad BoolAlg with the monad Mach.
+  The obvious language for interpreting formulae is the 2-category of subsets of terms with pointwise rewrites between them.  This suggests composing the monad BoolAlg with the monad Calc.
 
-  The obvious way to interpret formulae is then a natural transformation $\interp{-} \maps \Form \Rightarrow \BoolAlg \circ \Mach$ defined by the units and multiplications of the monads and a distributive law transformation $\delta\maps \Mach \circ \BoolAlg \Rightarrow \BoolAlg \circ \Mach.$  Soundness and completeness follow easily.
+  The obvious way to interpret formulae is then a natural transformation $\interp{-} \maps \Form \Rightarrow \BoolAlg \circ \Calc$ defined by the units and multiplications of the monads and a distributive law transformation $\delta\maps \Calc \circ \BoolAlg \Rightarrow \BoolAlg \circ \Calc.$  Soundness and completeness follow easily.
 
   We can extend this naive type system with fixed points and with modal operators that denote sets of terms that all exhibit a particular behavior; for an example of the latter, the arrow type $A \Rightarrow B$ in the $\lambda$-calculus is the type of terms that when applied to a term of type $A$ eventually rewrite to a term of type $B$.  Other formulae can capture eventual properties like
 \begin{itemize}
@@ -92,9 +92,9 @@ There is a very large body of work on Lawvere theories and their generalizations
 
 \section{A 1-categorical example}
 
-Here we return in slightly greater detail to the example of the logic for the language of monoids.  Because we are working with categories instead of 2-categories, the ``virtual machine'' is particularly bland; it only has states (the elements of the monoid), not rewrites.
+Here we return in slightly greater detail to the example of the logic for the language of monoids.  Because we are working with categories instead of 2-categories, the ``virtual machine'' is particularly bland; it only has terms (the elements of the monoid), not rewrites.
 
-Let FinSet be a skeleton of the category of finite sets.  The Lawvere theory of a machine is a category Th(Mach) with finite products equipped with an identity-on-objects functor $\theta\maps \FinSet^\op \to \mathrm{Th(Mach)}.$  Because the objects of FinSet are coproducts of the one-element set, the objects of category Th(Mach) are therefore products of a generating object we will write as $S,$ for ``sort''.  The morphisms of Th(Mach) are generated from a set of morphisms from finite powers of $S$ to $S$ by products and composition, so Th(Mach) may be presented by 
+Let FinSet be a skeleton of the category of finite sets.  The Lawvere theory of a computational calculus is a category Th(Calc) with finite products equipped with an identity-on-objects functor $\theta\maps \FinSet^\op \to \mathrm{Th(Calc)}.$  Because the objects of FinSet are coproducts of the one-element set, the objects of category Th(Calc) are therefore products of a generating object we will write as $S,$ for ``sort''.  The morphisms of Th(Calc) are generated from a set of morphisms from finite powers of $S$ to $S$ by products and composition, so Th(Calc) may be presented by 
 \begin{itemize}
   \item a sort $S$,
   \item a set of term constructors $f_i\maps S^{n_i} \to S,$ where $i$ ranges over some index set $I$ and $n_i \in \NN,$
@@ -102,7 +102,7 @@ Let FinSet be a skeleton of the category of finite sets.  The Lawvere theory of 
 \end{itemize}
 We say the arity of $f_i$ is $n_i.$
 
-A product-preserving functor from Th(Mach) to Set picks out a set and equips it with structure maps satisfying the equations.  The category Prod(Th(Mach), Set) of product-preserving functors and natural transformations between them is equivalent to the category Mach of machines and machine homomorphisms.  There is a forgetful functor ${U\maps \Mach \to \Set}$ that forgets the extra structure.  The functor $U$ has a left adjoint ${L\maps \Set \to \Mach}$ that picks out the free machine on a set of base states.  The monad $\Mach = UL\maps \Set \to \Set$ picks out the underlying set $ULX$ of the free machine $LX$ on a set $X$.  Lawvere theories are in bijection with finitary monads; the qualifier ``finitary'' means that each term constructor has a finite arity.
+A product-preserving functor from Th(Calc) to Set picks out a set and equips it with structure maps satisfying the equations.  The category Prod(Th(Calc), Set) of product-preserving functors and natural transformations between them is equivalent to the category Calc of calculi and calculus homomorphisms.  There is a forgetful functor ${U\maps \Calc \to \Set}$ that forgets the extra structure.  The functor $U$ has a left adjoint ${L\maps \Set \to \Calc}$ that picks out the free calculus on a set of base terms.  The monad $\Calc = UL\maps \Set \to \Set$ picks out the underlying set $ULX$ of the free calculus $LX$ on a set $X$.  Lawvere theories are in bijection with finitary monads; the qualifier ``finitary'' means that each term constructor has a finite arity.
 
 Here is a presentation of the ``Lawvere theory of a monoid'' Th(Mon):\\
 \begin{center}
@@ -238,7 +238,7 @@ The Lawvere 2-theory Th(Mon) is much the same as the 1-theory, except for the we
     \end{itemize}
   \end{itemize}
 \end{center}
-From Th(Mon) we can derive a 2-monad Mon that essentially produces the free monoid on a set, but keeps track of the internal representation of the monoid---a binary tree---and accounts for the work needed to convert the internal representation to its normal form.  From this perspective, we can think of the trees as programs for a simple virtual machine and the process of normalization as the execution of the program.  Later in the paper, we will examine the case of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the $\lambda$-calculus; it, too, uses binary trees as programs, and execution of the program is a normalization process.
+From Th(Mon) we can derive a 2-monad Mon that essentially produces the free monoid on a set, but keeps track of the internal representation of the monoid---a binary tree---and accounts for the work needed to convert the internal representation to its normal form.  From this perspective, we can think of the trees as programs for a simple computational calculus and the process of normalization as the execution of the program.  Later in the paper, we will examine the case of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the $\lambda$-calculus; it, too, uses binary trees as programs, and execution of the program is a normalization process.
 
 When we add the 2-monad BoolAlg to Mon, we get formulae like $(1 \cdot \top)$ denoting the set of trees whose leftmost child is the identity; because Mon is a 2-monad, we also get proofs like 
 \[ ((r \circ l) \lor y)\maps ((e \cdot (x \cdot e)) \lor y) \to (x \lor y) \]
@@ -249,7 +249,7 @@ The formulae in these examples have been propositions about the structure of ter
 \section{Multisorted Lawvere theories}
 In the motivation section, each theory had only one sort; practical theories for virtual machines are usually multisorted.  Given a finite set of sorts $\Sigma,$ the category $\FinSet/\Sigma$ is the category whose objects are pairs $(S, s\maps S\to \Sigma),$ where $S$ is a finite set, and whose morphisms are functions $f\maps S \to S'$ such that the relevant triangle commutes.
 
-A multisorted Lawvere theory is a category Th(Mach) with finite products equipped with an identity-on-objects functor ${\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Mach)}.}$  The category Prod(Th(Mach), $\Set^\Sigma$) is equivalent to the category Mach of machines and machine homomorphisms.  There is a forgetful functor ${U\maps \Mach \to \Set^\Sigma}$ with a left adjoint ${L\maps \Set^\Sigma \to \Mach}$ that picks out the free machine on a $|\Sigma|$-tuple of sets.  The monad ${UL\maps \Set^\Sigma \to \Set^\Sigma}$ picks out the underlying $|\Sigma|$-tuple of sets $ULX$ of the free machine $LX$ on a $|\Sigma|$-tuple of sets $X$.
+A multisorted Lawvere theory is a category Th(Calc) with finite products equipped with an identity-on-objects functor ${\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Calc)}.}$  The category Prod(Th(Calc), $\Set^\Sigma$) is equivalent to the category Calc of calculi and calculus homomorphisms.  There is a forgetful functor ${U\maps \Calc \to \Set^\Sigma}$ with a left adjoint ${L\maps \Set^\Sigma \to \Calc}$ that picks out the free calculus on a $|\Sigma|$-tuple of sets.  The monad ${UL\maps \Set^\Sigma \to \Set^\Sigma}$ picks out the underlying $|\Sigma|$-tuple of sets $ULX$ of the free calculus $LX$ on a $|\Sigma|$-tuple of sets $X$.
 
 An example of a multisorted Lawvere theory is that of a group action on a set, which involves a choice of both a group $G$ and a set $V$ to act on.  The presentation of Th(GrpAct) has a pair of sorts $(G, V)$, all the term constructors and equations as the theory of a group (where we replace $S$ by $G$), together with a new term constructor
 \begin{itemize}
@@ -264,9 +264,9 @@ and equations
 Another example is the theory of a directed graph, with one sort for vertices and another for edges, with source and target maps for term constructors.
 
 \section {Lawvere 2-theories}
-In this paper, the multisorted Lawvere 2-theory of a machine is a 2-category Th(Mach) with strict finite products (that is, its underlying category has products) equipped with an identity-on-objects functor $\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Mach)},$ where we promote $(\FinSet/\Sigma)$ to a 2-category by adding identity 2-morphisms to every 1-morphism.  As noted in the related work section, other authors have considered much more powerful notions of 2-theory, but we will not need the extra features.  Our notion of a multisorted Lawvere 2-theory may be presented by a finite set of sorts, a set of term constructors with finite arity, a set of rewrites, and a set of equations between rewrites.  
+In this paper, the multisorted Lawvere 2-theory of a calculus is a 2-category Th(Calc) with strict finite products (that is, its underlying category has products) equipped with an identity-on-objects functor $\theta\maps (\FinSet/\Sigma)^\op \to \mathrm{Th(Calc)},$ where we promote $(\FinSet/\Sigma)$ to a 2-category by adding identity 2-morphisms to every 1-morphism.  As noted in the related work section, other authors have considered much more powerful notions of 2-theory, but we will not need the extra features.  Our notion of a multisorted Lawvere 2-theory may be presented by a finite set of sorts, a set of term constructors with finite arity, a set of rewrites, and a set of equations between rewrites.  
 
-Our models of multisorted Lawvere 2-theories are functors into $\Cat^\Sigma$ that preserve products up to isomorphism, not merely up to equivalence; that is, the 2-functor has an underlying functor that preserves products.  As with 1-theories, the 2-category of product-preserving functors from Th(Mach) to $\Cat^\Sigma$, natural transformations, and modifications is equivalent to the 2-category of machines, machine homomorphisms, and machine transformations.
+Our models of multisorted Lawvere 2-theories are functors into $\Cat^\Sigma$ that preserve products up to isomorphism, not merely up to equivalence; that is, the 2-functor has an underlying functor that preserves products.  As with 1-theories, the 2-category of product-preserving functors from Th(Calc) to $\Cat^\Sigma$, natural transformations, and modifications is equivalent to the 2-category of calculi, calculus homomorphisms, and calculus transformations.
 
 As mentioned above, the SKI combinator calculus is a Turing-complete language; it was invented by Sch\"onfinkel \cite{Schonfinkel} and Curry \cite{Curry} in the 1920s as a way to clarify the role of quantified variables in logic, essentially by eliminating them.  The single-sorted Lawvere 2-theory Th(SKI) has a presentation
 \begin{center}
@@ -299,9 +299,9 @@ The free model of Th(SKI) on a category takes its objects as terms and its morph
 
 \section{Categories of formulae and proofs}
 
-Any 1-theory can be promoted to a 2-theory by turning each equation into a rewrite, then adding an equation asserting that the rewrite is equal to the identity rewrite.  Therefore as before, given a single-sorted Lawvere 2-theory Th(Mach), we get a 2-theory of formulae Th(Form) by adding the 2-theory of Boolean algebras Th(BoolAlg).  The models of Th(Form) are categories of formulae and proofs.
+Any 1-theory can be promoted to a 2-theory by turning each equation into a rewrite, then adding an equation asserting that the rewrite is equal to the identity rewrite.  Therefore as before, given a single-sorted Lawvere 2-theory Th(Calc), we get a 2-theory of formulae Th(Form) by adding the 2-theory of Boolean algebras Th(BoolAlg).  The models of Th(Form) are categories of formulae and proofs.
 
-For multisorted Lawvere 1- and 2-theories, there is no canonical choice of sorts to identify between the theory of the machine and the theory of Boolean algebras; one may choose to add one or more different copies of Th(BoolAlg) and identify each single sort with different sorts in the theory of the machine.  For example, given the theory of a group action, one could add a copy of Th(BoolAlg) for both $G$ and $V$ and write formulae involving subsets of the group and of the set it acts on.  Later in the paper, we will see how we can use formulae involving names to create namespaces that enforce confinement on processes in the $\pi$-calculus.
+For multisorted Lawvere 1- and 2-theories, there is no canonical choice of sorts to identify between the theory of the calculus and the theory of Boolean algebras; one may choose to add one or more different copies of Th(BoolAlg) and identify each single sort with different sorts in the theory of the calculus.  For example, given the theory of a group action, one could add a copy of Th(BoolAlg) for both $G$ and $V$ and write formulae involving subsets of the group and of the set it acts on.  Later in the paper, we will see how we can use formulae involving names to create namespaces that enforce confinement on processes in the $\pi$-calculus.
 
 \section{Interpretation}
 
@@ -354,7 +354,7 @@ that is, $u \langle C\rangle v$ denotes those terms $t$ that when put in the con
 
 \section{Recursion}
 
-Suppose that we have a single-sorted Lawvere 2-theory of a virtual machine with sort $S$.  We add recursion to our formulae by introducing a new sort $V$ for type variables and new term constructors 
+Suppose that we have a single-sorted Lawvere 2-theory of a calculus with sort $S$.  We add recursion to our formulae by introducing a new sort $V$ for type variables and new term constructors 
 \begin{itemize}
   \item $- \maps V \to S$ to let us use type variables in formulae and
   \item $\mu\maps V\times S \to S$ to express fixed points.
@@ -364,7 +364,7 @@ We interpret terms of the form $\mu X.P[X]$ as the greatest fixed point of $P[X]
 
 \subsection{The reflective higher-order $\pi$-calculus}
 
-[[ Contradicting earlier assertion. ]] Lawvere theories are limited in that they only talk about products of sorts.  A lambda theory is a generalization of a Lawvere theory that has the ability to talk about function sorts like $A \Rightarrow B$ and sums like $A+B$ or $1 + A + A^2 + \cdots,$ more commonly denoted with the Kleene star $A^*.$  One can think of lambda theories as having access to a ``library'' that takes care of the details of bound variables and substitution for us so we do not have to implement all that machinery.  Much of the work on nominal logics has been about exactly this factorization.  A lambda theory Th(Mach) is a bicartesian closed 2-category equipped with an identity-on-objects functor from $(\FinSet/\Sigma)^{\op}$ to Th(Mach).  Models of Th(Mach) are functors to Cat that preserve all the structure.
+[[ Contradicting earlier assertion. ]] Lawvere theories are limited in that they only talk about products of sorts.  A lambda theory is a generalization of a Lawvere theory that has the ability to talk about function sorts like $A \Rightarrow B$ and sums like $A+B$ or $1 + A + A^2 + \cdots,$ more commonly denoted with the Kleene star $A^*.$  One can think of lambda theories as having access to a ``library'' that takes care of the details of bound variables and substitution for us so we do not have to implement all that machinery.  Much of the work on nominal logics has been about exactly this factorization [[ Greg: add citations ]].  A lambda theory Th(Calc) is a bicartesian closed 2-category equipped with an identity-on-objects functor from $(\FinSet/\Sigma)^{\op}$ to Th(Calc).  Models of Th(Calc) are functors to Cat that preserve all the structure.
 
 The $\pi$-calculus was invented in the early 1990s by Robin Milner as a model of networks of processes with a dynamically changing topology; two processes initially unaware of each other can be introduced by a third process.  The reflective higher order $\pi$-calculus uses quoted processes as names; the term constructors for quote and eval replace the more traditional nu and replicate constructors.  We also add a ``comm'' term to restrict the contexts in which reduction can occur \cite{HDRA}.
 
@@ -452,6 +452,10 @@ When we add a copy of BoolAlg to RHOpi for both $N$ and $P,$ we can write down f
 \bibitem{Schonfinkel} M.\ Sch\"onfinkel, \"Uber die Bausteine der mathematischen Logik, {\em Mathematische Annalen} {\bf 92} (1924) 305--316. Translated by S.\ Bauer-Mengelberg as ``On the building blocks of mathematical logic'' in J.\ van Heijenoort, {\em A Source Book in Mathematical Logic 1879–1931} (1967) 355--66.
 
 \bibitem{HDRA} M.\ Stay and Lucius Gregory Meredith, Higher category models of the $\pi$-calculus, {\em Proceedings of Higher-Dimensional Rewriting and Applications} (2015).  Available at \arxiv{1504.04311}.
+
+\bibitem{KFramework} \href{http://www.kframework.org/index.php/Main_Page}{http://www.kframework.org/index.php/Main_Page}.
+
+\bibitem{Kiama} \href{https://bitbucket.org/inkytonik/kiama}{https://bitbucket.org/inkytonik/kiama}
 
 \bibitem{Trimble} T.\ Trimble, Multisorted Lawvere theories,\\ \href{https://ncatlab.org/toddtrimble/published/multisorted+Lawvere+theories}{\nolinkurl https://ncatlab.org/toddtrimble/published/multisorted+Lawvere+theories}.
 
