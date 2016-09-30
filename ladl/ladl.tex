@@ -428,7 +428,7 @@ When we add a copy of BoolAlg to RHOpi for both $N$ and $P,$ we can write down f
 
 An application of namespace logic is a formula for a ``firewall'': any process satisfying this formula receives no messages except on a name in $\interp{\quote{\phi}}.$
 \[ \mu X. \recv(\quote{\phi}, x \mapsto (X \lor 0)\;|\;\neg\recv(\quote{\neg \phi}, \top))\;|\;\neg\recv(\quote{\neg \phi}, \top) \]
-It is, perhaps, surprising that this can be accomplished with a ``compile-time'' check rather than a run-time check.  An application of namespaces to statically proving security properties of object capabilities systems can be found in \cite{MeredithStayDrossopolou}.
+It is, perhaps, surprising that this can be accomplished with a compile-time check, since we usually think of firewalls as a dynamic check.  An application of namespaces to statically proving security properties of object capabilities can be found in \cite{MeredithStayDrossopolou}.
 
 \section{Conclusion and future work}
 [[ Greg ]]
