@@ -514,7 +514,15 @@ We interpret terms of the form $\mu X.P[X]$ as the greatest fixed point of $P[X]
 
 \subsection{The reflective higher-order $\pi$-calculus}
 
-Lawvere theories are limited in that they only talk about products of sorts.  A lambda theory is a generalization of a Lawvere theory that has the ability to talk about function sorts like $A \Rightarrow B$ and sums like $A+B$ or $1 + A + A^2 + \cdots,$ more commonly denoted with the Kleene star $A^*.$  One can think of lambda theories as having access to a ``library'' that takes care of the details of bound variables and substitution for us so we do not have to implement all that machinery.  Much of the work on nominal logics has been about exactly this factorization [[ Greg: add citations ]].  A lambda theory Th(Calc) is a bicartesian closed 2-category equipped with an identity-on-objects functor from $(\FinSet/\Sigma)^{\op}$ to Th(Calc).  Models of Th(Calc) are functors to Cat that preserve all the structure.
+Lawvere theories are limited in that they only talk about products of
+sorts.  A lambda theory is a generalization of a Lawvere theory that
+has the ability to talk about function sorts like $A \Rightarrow B$
+and sums like $A+B$ or $1 + A + A^2 + \cdots,$ more commonly denoted
+with the Kleene star $A^*.$  One can think of lambda theories as
+having access to a ``library'' that takes care of the details of bound
+variables and substitution for us so we do not have to implement all
+that machinery.  Much of the work on nominal logics has been about
+exactly this factorization \cite{GabbayMJ:picfm}.  A lambda theory Th(Calc) is a bicartesian closed 2-category equipped with an identity-on-objects functor from $(\FinSet/\Sigma)^{\op}$ to Th(Calc).  Models of Th(Calc) are functors to Cat that preserve all the structure.
 
 The $\pi$-calculus was invented in the early 1990s by Robin Milner as a model of networks of processes with a dynamically changing topology; two processes initially unaware of each other can be introduced by a third process.  The reflective higher order $\pi$-calculus uses quoted processes as names; the term constructors for quote and eval replace the more traditional nu and replicate constructors.  We also add a ``comm'' term to restrict the contexts in which reduction can occur \cite{DBLP:journals/corr/StayM15}.
 
