@@ -183,9 +183,27 @@ L.G. Meredith\\
 \end{itemize}
 
 \section{Related work}
-[[ Greg: Curry-Howard related work? ]]
 
-There is a very large body of work on Lawvere theories and their generalizations, and we cannot give a proper review here; instead we list a few key papers with many references.  Hyland and Power \cite{DBLP:journals/entcs/HylandP07} reviewed the history of both Lawvere theories and monads as an approach to universal algebra, how monads came to the fore, Plotkin's work, and the renewed interest in Lawvere theories in a computer science setting.  Trimble \cite{Trimble} constructed multisorted Lawvere theories.  Lack and Rosick\'y \cite{DBLP:journals/acs/LackR11} unified the work of several earlier authors by considering models in categories other than Set, extending the notion of Lawvere theory to enriched categories, and using all limits rather than just products all at once.
+There is a very large body of work on Lawvere theories and their
+generalizations, and we cannot give a proper review here; instead we
+list a few key papers with many references.  Hyland and Power
+\cite{DBLP:journals/entcs/HylandP07} reviewed the history of both
+Lawvere theories and monads as an approach to universal algebra, how
+monads came to the fore, Plotkin's work, and the renewed interest in
+Lawvere theories in a computer science setting.  Trimble
+\cite{Trimble} constructed multisorted Lawvere theories.  Lack and
+Rosick\'y \cite{DBLP:journals/acs/LackR11} unified the work of several
+earlier authors by considering models in categories other than Set,
+extending the notion of Lawvere theory to enriched categories, and
+using all limits rather than just products all at once.
+
+Turning the telescope around and working from the application toward
+the abstraction, the results can be seen as a natural consequence of
+Abramsky's programme: Domain theory in Logical Form
+\cite{DBLP:journals/apal/Abramsky91}, and expanded in Proofs as
+Processes \cite{Abramsky:1992:PP:194588.194591}. Moreover, they can be
+seen as bringing the seminal work of Caires \cite{Caires} under the
+rubric of that programme.
 
 \section{A 1-categorical example}
 
@@ -410,7 +428,10 @@ For multisorted Lawvere 1- and 2-theories, there is no canonical choice of sorts
 When describing the semantics of a logic questions of soundness and
 completeness are natural. The whole point of the approach is that it
 is correct by construction. Soundness and completeness for the
-modal-free fragment follow directly from the definitions. The term
+modal-free fragment follow directly from the definitions. Soundness,
+in particular, is a direct consequence of the way realizability is
+incorporated into the approach. For the formulae, the intuitions
+underlying the completeness argument amount to the fact that the term
 language for the logical operators associated with the collections are
 extractions of a term language for the collection monad. Thus, they
 are in perfect correspondence with the model. In the case of $\Set$,
@@ -420,7 +441,12 @@ $\Set$, the semantics that maps formulae to the composition of the
 collection monad with the monad for the term language supporting
 computation is nothing more than a pointwise lifting of the powerset
 semantics. The categorical presentation provides an appropriately
-abstracted form of this simple observation.
+abstracted form of this simple observation. Thus, for example, if the
+collection were sets of sequences of terms, instead of sets of terms,
+the term language extracted for the collection monad would be the
+familiar operators of classical linear logic and this would correspond
+to the well-known fact that quantales provide full and faithfull
+models of the \emph{formulae} of linear logic.
 
 \section{Modal operators}
 
@@ -545,6 +571,26 @@ An application of namespace logic is a formula for a ``firewall'': any process s
 It is, perhaps, surprising that this can be accomplished with a compile-time check, since we usually think of firewalls as a dynamic check.  An application of namespaces to statically proving security properties of code in an object capabilities language can be found in \cite{DBLP:journals/corr/MeredithSD13}.
 
 \section{Conclusion and future work}
+We have presented an algorithm for generating a logic from three data:
+a 2-Lawvere theory describing a notion of computation; a monad for
+describing a notion of collection; and a distributive law. The picture
+of emerging from this view of logic is that logically useful
+collections of individuals look like nothing so much as the
+individuals that represent the formulae that collect them. The range
+of applications of this algorithm is quite broad. Any of the languages
+given semantics in the K Framework, including, C/C++, Java,
+Javascript, and many others can automatically be equipped with logics
+that serve as a basis for of program specification and automatically
+checked verification, and simultaneously as a basis equipping these
+languages with new and powerful type systems. This considerably lowers
+the barrier to embuing popular untyped languages with type
+systems. Likewise, the algorithmic nature of the approach also serves as an aid
+in future language design. For example, Synereo is designing a
+language for the smart contracts on the blockchain based on the
+$\mathsf{RHO}$-calculus. Equipping this language with a type system
+amounts to nothing more than deciding on the type of collection one
+wants to collect type inhabitants in.
+
 \bibliographystyle{amsplain}
 \bibliography{ladl}
 \end{document}
