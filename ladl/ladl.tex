@@ -92,16 +92,16 @@ L.G. Meredith\\
   corresponds to a finitary monad on Set and vice-versa
   \cite{DBLP:journals/entcs/HylandP07}.
 
-  Often modules or interfaces are used to model structured data, aka
-  data structures. For example, monoidal structure underlies the
-  familiar data type of strings, the inhabitants of which include such
-  famous examples as ``colorless green ideas sleep furiously'', and
-  ``the quick brown fox'', the composition of which is string
-  concatenation, and the identity of which is the empty string. In
-  computing, however, we consider a wider range of phenomena than
-  simply structural phenomena. Specifically, our primary focus is
-  computation, which -- though it utilizes structured data -- is of a
-  different order.
+  Returning to our example, often modules or interfaces are used to
+  model structured data, aka data structures. For example, monoidal
+  structure underlies the familiar data type of strings, the
+  inhabitants of which include such famous examples as ``colorless
+  green ideas sleep furiously'', and ``the quick brown fox'', the
+  composition of which is string concatenation, and the identity of
+  which is the empty string. In computing, however, we consider a
+  wider range of phenomena than simply structural
+  phenomena. Specifically, our primary focus is computation, which --
+  though it utilizes structured data -- is of a different order.
 
   This is recognized in most formal representations of
   computation. The $\lambda$-calculus, the paradigmatic model of
@@ -121,13 +121,17 @@ L.G. Meredith\\
   erase syntactic differences in inhabitants of the data structure
   that are irrelevant to computation, and a set of rewrite rules
   describing how computation is realized through operations on the
-  data structures. This presentation maps quite well onto Plotkin's
-  SOS format for operational semantics \cite{Plotkin04theorigins};
-  but, the scope is much larger. Even the presentation of the Java VM
-  can be seen as essentially a rewrite system with the state of the
-  virtual machine as the inhabitants of a data type over which
-  computation is carried out, and the transitions of the virtual
-  machine as the rewrite rules
+  data structures. On the one hand, this generalizes universal
+  algebra's generators and relations presentation, with the grammar
+  replacing the generators, as the free construction, and the
+  structural equivalence replacing the relations, and the rewrites
+  providing the computational semantics. On the other hand, this
+  presentation maps quite well onto Plotkin's SOS format for
+  operational semantics \cite{Plotkin04theorigins}; but, the scope is
+  much larger. Even the presentation of the Java VM can be seen as
+  essentially a rewrite system with the state of the virtual machine
+  as the inhabitants of a data type over which computation is carried
+  out, and the transitions of the virtual machine as the rewrite rules
   \cite{DBLP:conf/oopsla/IgarashiPW99}. Capturing this higher order
   computational phenomena, expressed as generalized rewrites, is what
   motivates our movement to higher categorical semantics.
@@ -398,7 +402,25 @@ For multisorted Lawvere 1- and 2-theories, there is no canonical choice of sorts
 
 \section{Interpretation}
 
-[[ Greg: Thm defining $\land$ as intersect, $\lor$ as union, $\top$ as the whole set, $\bot$ as the empty set, $\neg$ as complement, and terms over collections as mapping the term constructor over the cartesian product of the collections is sound and complete. ]]
+[[ Greg: Thm defining $\land$ as intersect, $\lor$ as union, $\top$ as
+    the whole set, $\bot$ as the empty set, $\neg$ as complement, and
+    terms over collections as mapping the term constructor over the
+    cartesian product of the collections is sound and complete. ]]
+
+When describing the semantics of a logic questions of soundness and
+completeness are natural. The whole point of the approach is that it
+is correct by construction. Soundness and completeness for the
+modal-free fragment follow directly from the definitions. The term
+language for the logical operators associated with the collections are
+extractions of a term language for the collection monad. Thus, they
+are in perfect correspondence with the model. In the case of $\Set$,
+this is equivalent to the well-known fact that boolean algebras are
+effectively realized by the powerset lattice. Likewise, in the case of
+$\Set$, the semantics that maps formulae to the composition of the
+collection monad with the monad for the term language supporting
+computation is nothing more than a pointwise lifting of the powerset
+semantics. The categorical presentation provides an appropriately
+abstracted form of this simple observation.
 
 \section{Modal operators}
 
@@ -514,7 +536,7 @@ The logic is generated as above, adding modal operators and recursion to the ter
 \[ \mu X. \recv(\top, x \mapsto X)\;|\;\top. \]
 It says that the process must factor into a piece that is waiting for a message on some channel, and when it receives that message, the continuation will have the same form.
 
-\subsubsection{Namespaces.}
+\subsubsection{Namespaces}
 
 When we add a copy of BoolAlg to RHOpi for both $N$ and $P,$ we can write down formulae that talk about sets of names.  The formula $\top$ denotes the set of all names; the formula $\quote{\top}$ denotes the set of names that are quoted processes.  These two sets differ when we have a nonempty set of generating names.
 
