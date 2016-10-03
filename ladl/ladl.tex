@@ -491,9 +491,16 @@ A term context is a term with a ``hole'' that can be filled by some other term. 
 
 The arrow type is a special case of a more general modal operator parametrized by a two-hole term context $C.$  We denote the operator itself with angle brackets as a reminder of the diamond ``possibly'' modality: $u \langle C \rangle v.$  The interpretation is similar to that of the arrow:
 \[ \interp{u \langle C\rangle v} = \{ t \;|\; \exists \rho\maps C[t, u] \Rightarrow v \}; \]
-that is, $u \langle C\rangle v$ denotes those terms $t$ that when put in the context $u$ may possibly evolve to $v.$
+that is, $u \langle C\rangle v$ denotes those terms $t$ that when put
+in the context $u$ may possibly evolve to $v.$
 
-[[ Greg: ref to Sewell Milner Leifer.  Very close to labelling transitions with contexts. ]]
+This definition is inspired by the work of Sewell, Leifer, and Milner
+in which they formalize the notion of a context-labelled transition
+\cite{DBLP:conf/concur/LeiferM00}. Given the now standard
+Hennessy-Milner interpretation of modal logics which interpret
+possibility in terms of actions labelling transitions, when Sewell, et
+al, gave a notion of context-labelled transitions, it was only natural
+to consider modal operators based on contexts.
 
 \section{Recursion}
 
