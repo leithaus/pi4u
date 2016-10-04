@@ -1,3 +1,4 @@
-latex ladl
-dvips ladl.dvi
-ps2pdf ladl.ps
+pdflatex ladl.tex
+bibtex ladl
+pdflatex ladl.tex
+pdflatex ladl.tex
