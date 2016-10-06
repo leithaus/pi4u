@@ -211,7 +211,16 @@ rubric of that programme.
 
 Here we return in slightly greater detail to the example of the logic for the language of monoids.  Because we are working with categories instead of 2-categories, the ``virtual machine'' is particularly bland; it only has terms (the elements of the monoid), not rewrites.
 
-Let FinSet be a skeleton of the category of finite sets.  The Lawvere theory of a computational calculus is a category Th(Calc) with finite products equipped with an identity-on-objects functor $\theta\maps \FinSet^\op \to \mathrm{Th(Calc)}.$  Because the objects of FinSet are coproducts of the one-element set, the objects of category Th(Calc) are therefore products of a generating object we will write as $S,$ for ``sort''.  The morphisms of Th(Calc) are generated from a set of morphisms from finite powers of $S$ to $S$ by products and composition, so Th(Calc) may be presented by 
+Let FinSet be a skeleton of the category of finite sets.  The Lawvere
+theory of a computational calculus is a category Th(Calc) with finite
+products equipped with an identity-on-objects functor $\theta\maps
+\FinSet^\op \to \mathrm{Th(Calc)}.$  Because the objects of FinSet are
+coproducts of the one-element set, the objects of category Th(Calc)
+are therefore products of a generating object we will write as $S,$
+for ``sort''.  The morphisms of Th(Calc) are generated from a set of
+morphisms from finite powers of $S$ to $S$ by products and
+composition, so Th(Calc) may be presented by
+
 \begin{itemize}
   \item a sort $S$,
   \item a set of term constructors $f_i\maps S^{n_i} \to S,$ where $i$ ranges over some index set $I$ and $n_i \in \NN,$
