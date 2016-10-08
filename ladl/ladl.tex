@@ -3,6 +3,7 @@
 \usepackage{amssymb}
 \usepackage{comment}
 \usepackage{hyperref}
+\usepackage{longtable}
 \usepackage{stmaryrd}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
@@ -172,7 +173,7 @@ L.G. Meredith\inst{2}\\
 
   The obvious language for interpreting formulae is the 2-category of subsets of terms with pointwise rewrites between them.  This suggests composing the monad BoolAlg with the monad Calc.
 
-  The obvious way to interpret formulae is then a natural transformation $\interp{-} \maps \Form \Rightarrow \BoolAlg \circ \Calc$ defined by the units and multiplications of the monads and a distributive law transformation $\delta\maps \Calc \circ \BoolAlg \Rightarrow \BoolAlg \circ \Calc.$  Soundness and completeness follow easily.
+  The obvious way to interpret formulae is then a natural transformation $\interp{-} \maps \Form \Rightarrow \BoolAlg \circ \Calc$ defined by the units and multiplications of the monads and a distributive law transformation $\delta\maps \Calc \circ \BoolAlg \Rightarrow \BoolAlg \circ \Calc.$
 
   We can extend this naive type system with fixed points and with modal operators that denote sets of terms that all exhibit a particular behavior; for an example of the latter, the arrow type $A \Rightarrow B$ in the $\lambda$-calculus is the type of terms that when applied to a term of type $A$ eventually rewrite to a term of type $B$.  Other formulae can capture eventual properties like
 \begin{itemize}
@@ -253,12 +254,12 @@ A product-preserving functor from Th(Calc) to Set picks out a set and equips it 
 
 Here is a presentation of the ``Lawvere theory of a monoid'' Th(Mon):
 \begin{center}
-  \begin{tabular}{|p{0.3\linewidth}|p{0.7\linewidth}|}
+  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
     \hline
       Sorts:
       \begin{itemize}
         \item $S$
-      \end{itemize}
+      \end{itemize}\bigskip
       Term constructors:
       \begin{itemize}
         \item $\cdot\maps S^2 \to S$
@@ -272,15 +273,14 @@ Here is a presentation of the ``Lawvere theory of a monoid'' Th(Mon):
         \item $\cdot \circ (S \times e) \circ \rightu^{-1} = S$ (right unit)        
       \end{itemize}\\
     \hline
-  \end{tabular}
+  \end{longtable}
 \end{center}
 where ${\leftu\maps 1 \times S \stackrel{\sim}{\to} S}$ and ${\rightu\maps S \times 1 \stackrel{\sim}{\to} S}$ are the canonical isomorphisms.
 
 An implementation of this specification is a product-preserving functor from Th(Mon) to Set; such a functor will assign a set of values to the sort and functions to the term constructors such that the equations are satisfied, {\em i.e.} it will pick out a monoid.  The category of product-preserving functors from Th(Mon) to Set and natural transformations between them is equivalent to the category of monoids and monoid homomorphisms.  There is a forgetful functor $U\maps \Mon \to \Set$ that forgets the multiplication and unit, and outputs the underlying set of elements.  The functor $U$ has a left adjoint $L\maps \Set \to \Mon$ that outputs the free monoid on a set.  The composite functor $\Mon = UL\maps \Set \to \Set$ is the corresponding monad.
 
-All our formulae about monoids will denote subsets of the elements of the monoid; we use Th(BoolAlg) to describe them.  We take as our universe of subsets those describable with a finite formula, so that the logic is complete by construction. 
-\begin{center}
-  \begin{tabular}{|p{0.3\linewidth}|p{0.7\linewidth}|}
+All our formulae about monoids will denote subsets of the elements of the monoid; we use Th(BoolAlg) to describe them.  \begin{center}
+  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
     \hline
     Sorts:
     \begin{itemize}
@@ -288,10 +288,8 @@ All our formulae about monoids will denote subsets of the elements of the monoid
     \end{itemize}
     Term constructors:
     \begin{itemize}
-      \item $\land\maps S^2 \to S$
-      \item $\lor\maps S^2 \to S$
-      \item $\top\maps 1 \to S$
-      \item $\bot\maps 1 \to S$
+      \item $\land, \lor\maps S^2 \to S$
+      \item $\top, \bot\maps 1 \to S$
       \item $\neg\maps S \to S$
     \end{itemize}
     &
@@ -303,13 +301,13 @@ All our formulae about monoids will denote subsets of the elements of the monoid
       \item de Morgan's laws
     \end{itemize}\\
     \hline
-  \end{tabular}
+  \end{longtable}
 \end{center}
 From this theory, we can derive the monad BoolAlg for the free Boolean algebra on a set.
 
 The sum of the two theories above is a new theory Th(Form) = Th(Mon) + Th(BoolAlg) whose terms are our formulae.  Th(Form) is presented by identifying the sorts and taking the union of the term constructors and the union of the equations.
-\begin{center}
-  \begin{tabular}{|p{0.3\linewidth}|p{0.7\linewidth}|}
+\begin{comment}
+  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
     \hline
     Sorts:
     \begin{itemize}
@@ -319,10 +317,8 @@ The sum of the two theories above is a new theory Th(Form) = Th(Mon) + Th(BoolAl
     \begin{itemize}
       \item $\cdot\maps S^2 \to S$
       \item $e\maps 1 \to S$
-      \item $\land\maps S^2 \to S$
-      \item $\lor\maps S^2 \to S$
-      \item $\top\maps 1 \to S$
-      \item $\bot\maps 1 \to S$
+      \item $\land, \lor\maps S^2 \to S$
+      \item $\top, \bot\maps 1 \to S$
       \item $\neg\maps S \to S$
     \end{itemize}
     &
@@ -334,8 +330,9 @@ The sum of the two theories above is a new theory Th(Form) = Th(Mon) + Th(BoolAl
       \item de Morgan's laws
     \end{itemize}\\
     \hline
-  \end{tabular}
-\end{center}
+  \end{longtable}
+\end{comment}
+
 The process of deriving a monad from a theory preserves sums.  Since the sum of two monads is the free product of the two, a general formula will be a term in an alternating composition of the two monads.  For example, suppose that $a, b, c, d \in X;$ then one formula is
 \[ (({a}\lor{(b \cdot d)}) \cdot ({c}\lor{d})), \]
 which is a term in Mon(BoolAlg(Mon($X$))).  The interpretation of this formula should be the set of monoid elements
@@ -349,16 +346,20 @@ In order to move all the uses of Mon to the right of the uses of BoolAlg in the 
 Given $\delta$ and the monad units and multiplications, we can define an interpretation natural transformation
 \[ \interp{-}\maps \Form\Rightarrow \BoolAlg \circ \Mon \]
 in the obvious way.  Below, we write subsets of Mon($X$) using set notation:
-\begin{align*}
-  \interp{\top}_X &= \Mon(X)\\
-  \interp{\bot}_X &= \emptyset\\
-  \interp{{A}\lor{B}}_X &= \interp{A}_X \cup \interp{B}_X\\
-  \interp{{A}\land{B}}_X &= \interp{A}_X \cap \interp{B}_X\\
-  \interp{\neg A}_X &= \Mon(X) - \interp{A}_X\\
-  \interp{{A} \cdot {B}}_X &= \Mon(\cdot)(\interp{A}_X \times \interp{B}_X)\\
-  \interp{e}_X &= \{e\}\\
-  \interp{x \in X}_X &= \{x\}
-\end{align*}
+\begin{center}
+  \begin{longtable}{|rl|rl|}
+    \hline
+    $\interp{\top}_X$ &= $\Mon(X)$ &
+    $\interp{\bot}_X$ &= $\emptyset$ \\
+    $\interp{{A}\lor{B}}_X$ &= $\interp{A}_X \cup \interp{B}_X$ &
+    $\interp{{A}\land{B}}_X$ &= $\interp{A}_X \cap \interp{B}_X$\\
+    $\interp{\neg A}_X$ &= $\Mon(X) - \interp{A}_X$ &
+    $\interp{{A} \cdot {B}}_X$ &= $\Mon(\cdot)(\interp{A}_X \times \interp{B}_X)$\\
+    $\interp{e}_X$ &= $\{ e\}$ &
+    $\interp{x \in X}_X$ &= $\{ x\}$\\
+    \hline
+  \end{longtable}
+\end{center}
 
 Even in this simple example, we have nontrivial formulae; for example,
 \[ prime = \neg e \land \neg(\neg e \cdot \neg e) \]
@@ -371,7 +372,7 @@ In a computational context, when a data structure has some symmetry we do not ca
 The Lawvere 2-theory Th(Mon) is much the same as the 1-theory, except for the weakening of some equations to rewrites and the addition of new equations between the rewrites.
 
 \begin{center}
-  \begin{tabular}{|p{0.3\linewidth}|p{0.7\linewidth}|}
+  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
     \hline
     Sorts:
     \begin{itemize}
@@ -395,7 +396,7 @@ The Lawvere 2-theory Th(Mon) is much the same as the 1-theory, except for the we
       \item $r \times S = (S \times l) \circ a$ (triangle equation)
     \end{itemize}\\
     \hline
-  \end{tabular}
+  \end{longtable}
 \end{center}
 From Th(Mon) we can derive a 2-monad Mon that essentially produces the free monoid on a set, but keeps track of the internal representation of the monoid---a binary tree---and accounts for the work needed to convert the internal representation to its normal form.  From this perspective, we can think of the trees as programs for a simple computational calculus and the process of normalization as the execution of the program.  Later in the paper, we will examine the case of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the $\lambda$-calculus; it, too, uses binary trees as programs, and execution of the program is a normalization process.
 
@@ -429,7 +430,7 @@ Our models of multisorted Lawvere 2-theories are functors into $\Cat^\Sigma$ tha
 
 As mentioned above, the SKI combinator calculus is a Turing-complete language; it was invented by Sch\"onfinkel \cite{Schonfinkel} and Curry \cite{Curry} in the 1920s as a way to clarify the role of quantified variables in logic, essentially by eliminating them.  The single-sorted Lawvere 2-theory Th(SKI) has a presentation
 \begin{center}
-  \begin{tabular}{|p{0.3\linewidth}|p{0.7\linewidth}|}
+  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
     \hline
     Sorts:
     \begin{itemize}
@@ -437,9 +438,7 @@ As mentioned above, the SKI combinator calculus is a Turing-complete language; i
     \end{itemize}
     Term constructors:
     \begin{itemize}
-      \item $S\maps 1 \to T$
-      \item $K\maps 1 \to T$
-      \item $I\maps 1 \to T$
+      \item $S, K, I\maps 1 \to T$
       \item $(-\;-)\maps T^2 \to T,$
     \end{itemize}
     &
@@ -451,7 +450,7 @@ As mentioned above, the SKI combinator calculus is a Turing-complete language; i
     \end{itemize}
     No equations.\\
     \hline
-  \end{tabular}
+  \end{longtable}
 \end{center}
 In this context, the Church-Rosser theorem for the SKI calculus says that any two terminating rewrites out of an SKI term have the same codomain.  We do not usually want to impose equality on the rewrites, since they can differ greatly in computational complexity.  For example, suppose that we have the term $((K\; I)\; x),$ where $x$ is some term that takes a long time to reduce to its normal form; a rewrite that reduces $x$ first and then uses $\kappa$ takes much longer than just doing $\kappa$ first, though both rewrites begin and end at the same term.
 
@@ -486,6 +485,12 @@ language supporting computation is nothing more than a pointwise
 lifting of the powerset semantics.  The categorical presentation
 provides an appropriately abstracted form of this simple observation.
 
+In particular, interpretation is a natural transformation between 2-monads on Cat; it assigns to each category $X$ a functor 
+\[\interp{-}_X\maps (\BoolAlg + \Calc)(X) \to (\BoolAlg \circ \Calc)(X).\]
+Functoriality means that the interpretation is sound; if the functor is full, the interpretation is complete. Since we define interpretation in terms of the monad laws and BoolAlg + Calc is the free product on the two monads, $\interp{-}_X$ is the identity when restricted to $(\BoolAlg \circ \Calc)(X)$ and thus full.
+
+
+
 \section{Modal operators}
 
 So far, all the examples of formulae have dealt with the structure of the term.  Far more interesting are sets of terms that all share some behavior.  For example, in the SKI calculus, we want to add the idea of an arrow type to our formulae, and have the interpretation of $A \Rightarrow B$ be the subset of terms $t$ such that given a term $u\in\interp{A}$, the term $(t\; u)$ eventually evolves to a term $v\in\interp{B}.$
@@ -502,7 +507,7 @@ The Lawvere 2-theory of the arrow type Th(Arrow) has one term constructor, no re
 
 In order to avoid notational confusion between the arrow type constructor and 2-morphisms, we will use a triple-arrow in the theory.
 \begin{center}
-  \begin{tabular}{|p{0.3\linewidth}|p{0.7\linewidth}|}
+  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
     \hline
     Sorts:
     \begin{itemize}
@@ -515,7 +520,7 @@ In order to avoid notational confusion between the arrow type constructor and 2-
     &
     No rewrites; no equations.\\
     \hline
-  \end{tabular}
+  \end{longtable}
 \end{center}
 
 We get the theory of SKI with arrow Th(SKIArr) by adding Th(SKI) to Th(Arrow), and we get the theory of formulae Th(Form) by adding Th(SKIArr) to Th(BoolAlg).
@@ -555,14 +560,14 @@ The $\pi$-calculus was invented in the early 1990s by Robin Milner as a model of
 
 Here is a presentation of the multisorted lambda theory Th(RHOpi) for the reflective higher-order $\pi$-calculus:
 \begin{center}
-  \begin{tabular}{|p{0.3\linewidth}|p{0.7\linewidth}|}
+  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
     \hline
     Sorts:
     \begin{itemize}
       \item $N$ for names
       \item $P$ for processes
-    \end{itemize}
-    Term constructors
+    \end{itemize}\bigskip
+    Term constructors:
     \begin{itemize}
       \item $\send\maps N \times P^* \to P$
       \item \raggedright $\recv\maps N \times (N^* \Rightarrow P) \to P$
@@ -587,7 +592,7 @@ Here is a presentation of the multisorted lambda theory Th(RHOpi) for the reflec
       \item \tshortstack[l]{$\epsilon = P$ (evaluating a quoted process is the \\ same as the process itself)}
     \end{itemize}\\
     \hline
-  \end{tabular}
+  \end{longtable}
 \end{center}
 The simplest RHOpi processes are 0, the ``do nothing'' process; and comm, a ``catalyst'' process that enables communication on a channel.  The only rewrite that is not an identity is $\chi,$ the communication event.  The $\chi$ rewrite is neither confluent nor deterministic.  For example, we can model contention for resources with the term
 \[ \recv(x, P)\;|\;\recv(x, Q)\;|\;\send(x,R)\;|\;\comm \]
