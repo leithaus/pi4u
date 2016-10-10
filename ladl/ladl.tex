@@ -489,7 +489,11 @@ In particular, interpretation is a natural transformation between 2-monads on Ca
 \[\interp{-}_X\maps (\BoolAlg + \Calc)(X) \to (\BoolAlg \circ \Calc)(X).\]
 Functoriality means that the interpretation is sound; if the functor is full, the interpretation is complete. Since we define interpretation in terms of the monad laws and BoolAlg + Calc is the free product on the two monads, $\interp{-}_X$ is the identity when restricted to $(\BoolAlg \circ \Calc)(X)$ and thus full.
 
-
+Notice we have said nothing about the faithfulness of this functor. In
+particular, if we consider rewrites as equalities then proofs (and
+therefore homsets) collapse, recovering the usual situation in models
+of classical logic. On the other hand, when they are not treated as
+equalities, we are able to distinguish proofs, even in the classical setting.
 
 \section{Modal operators}
 
