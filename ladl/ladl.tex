@@ -85,7 +85,8 @@ L.G. Meredith\inst{2}\\
         (_*_ : M -> M -> M)
         (leftId : LeftIdentity Eq z _+_)
         (rightId : RightIdentity Eq z _+_)
-        (assoc : Associative Eq _+_)
+        (assoc : Associative Eq _+_) ->
+           Monoid M Eq
   \end{verbatim}
   The code defines a sort $M$, a nullary term constructor $e$, and a
   binary term constructor $*,$ subject to three equations. In
