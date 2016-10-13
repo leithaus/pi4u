@@ -484,9 +484,9 @@ Likewise, in the case of $\Set$, the semantics that maps formulae to
 the composition of the collection monad with the monad for the term
 language supporting computation is nothing more than a pointwise
 lifting of the powerset semantics.  The categorical presentation
-provides an appropriately abstracted form of this simple observation.
-
-In particular, interpretation is a natural transformation between 2-monads on Cat; it assigns to each category $X$ a functor 
+provides an appropriately abstracted form of this simple
+observation. In particular, interpretation is a natural transformation
+between 2-monads on Cat; it assigns to each category $X$ a functor
 \[\interp{-}_X\maps (\BoolAlg + \Calc)(X) \to (\BoolAlg \circ \Calc)(X).\]
 Functoriality means that the interpretation is sound; if the functor is full, the interpretation is complete. Since we define interpretation in terms of the monad laws and BoolAlg + Calc is the free product on the two monads, $\interp{-}_X$ is the identity when restricted to $(\BoolAlg \circ \Calc)(X)$ and thus full.
 
@@ -646,7 +646,7 @@ embuing popular untyped languages with type systems.  Likewise, the
 algorithmic nature of the approach also serves as an aid in future
 language design.  For example, Synereo is designing a language for the
 smart contracts on the blockchain based on the
-$\mathsf{RHO}$-calculus.  Equipping this language with a type system
+$\mathsf{RHO}$-calculus \cite{rholang}.  Equipping this language with a type system
 amounts to nothing more than deciding on the type of collection one
 wants to collect type inhabitants in.
 
