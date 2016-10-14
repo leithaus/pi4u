@@ -610,8 +610,6 @@ which has two similar rewrites out of it, one where the continuation $P$ is invo
 
 In the theory above, comm is preserved by the rewrites; one can think of each comm instance as representing a processor.  An alternative would be to consume comm in the $\chi$ rewrite; then comm would track clock ticks; an application of a consumable comm is the formal verification of billing code for tracking compute resources.
 
-The free RHOpi calculus $R$ on the pair of empty categories has only {\em unguessable} names, since they can be enumerated; the free RHOpi calculus on a category of generating names and a category of generating terms has extra names that are {\em unforgeable}.  For more on this distinction, see \cite{MillerYeeShapiro}.
-
 Replication of processes, and therefore general recursion, can be encoded \cite{DBLP:journals/entcs/MeredithR05} via
 \[D(x) = \recv(x, y\mapsto \send(x, \deref{y}) | \deref{y})\]
 \[!P = \send(x, D(x) | P) | D(x).\]
@@ -640,7 +638,7 @@ logic is that logically useful collections of individuals look like
 nothing so much as the individuals that represent the formulae that
 collect them.  The range of applications of this algorithm is quite
 broad.  Any of the languages given semantics in the K Framework,
-including, C/C++, Java, Javascript, and many others can automatically
+including C/C++, Java, Javascript, and many others can automatically
 be equipped with logics that serve as a basis for of program
 specification and automatically checked verification, and
 simultaneously as a basis equipping these languages with new and
