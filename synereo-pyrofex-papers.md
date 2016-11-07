@@ -27,7 +27,7 @@
         * Obvious formulae
 
     * LICS 2017 (Jan 2017 deadline, present in Reykjavik in June, 10 pages)
-    http://lics.rwth-aachen.de/lics17/preview/
+    http://lics.rwth-aachen.de/lics17/cfp.html
 
         * Modal formulae
 
