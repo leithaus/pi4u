@@ -1,4 +1,4 @@
-pdflatex ladl.tex
-bibtex ladl
-pdflatex ladl.tex
-pdflatex ladl.tex
+pdflatex modalics.tex
+bibtex modalics
+pdflatex modalics.tex
+pdflatex modalics.tex
