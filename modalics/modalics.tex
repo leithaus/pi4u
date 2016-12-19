@@ -23,6 +23,9 @@
 \newcommand{\deref}[1]{\mathrm{eval}(#1)}
 \newcommand{\op}{\mathrm{op}}
 \newcommand{\NN}{\mathbb{N}}
+\newcommand{\lpquote}{\ulcorner}
+\newcommand{\rpquote}{\urcorner}
+\newcommand{\quotep}[1]{\lpquote #1 \rpquote}
 \makeatletter
 \gdef\tshortstack{\@ifnextchar[\@tshortstack{\@tshortstack[c]}}
 \gdef\@tshortstack[#1]{%
@@ -59,7 +62,7 @@ L.G. Meredith\inst{2}\\
 \subsection{Three useful kinds of formulae}
 \subsubsection{Responsiveness}
 Always responsive to outside, but may contain internal deadlocks:
-\[ \mbox{resp}(``\phi\mbox{''}) = \exists x \in ``\phi\mbox{''} . \langle x\rangle(\top).\mbox{resp}(``\phi\mbox{''}) \]
+\[ \mbox{resp}(\quotep{\phi}) = \exists x \in \quotep{\phi} . \langle x\rangle(\top).\mbox{resp}(\quotep{\phi}) \]
 
 
 Attempt to say ``no deadlocks anywhere'':
@@ -67,13 +70,15 @@ Attempt to say ``no deadlocks anywhere'':
 \[\begin{array}{rl}
   \mbox{Responsive}( N_1, N_2 ) = & \\
   & \mbox{prime} \land \exists x \in N_1.\langle x \rangle(\top).\mbox{Responsive}(N_1, N_2) \\
-  & \lor \mbox{outputOnly}(N_1) | \mbox{Responsive}(N_1, N_2) \\
-  & \lor ( ( \mbox{Responsive}( N_2, ``\bot\mbox{''}) | \mbox{Responsive}( N_2, ``\bot\mbox{''} )  ) \Rightarrow \langle\rangle\mbox{Responsive}( N_1, N_2 ) ) )
+  & \lor\; \mbox{outputOnly}(N_1)\; | \;\mbox{Responsive}(N_1, N_2) \\
+  & \lor\; \exists N_{21},N_{22}. N_2 = N_{21} \sqcup N_{22} \\
+  & \;\;\;\; \land ( ( \mbox{Responsive}( N_{21}, N_{22})\; | \; \mbox{Responsive}( N_{21}, N_{22})  ) \Rightarrow \langle\rangle\mbox{Responsive}( N_1, N_2 ) ) )
 \end{array}\]
 where
-\[ \mbox{outputOnly}( N_1 ) = \exists x \in N_1 . x!( \top ) | ( \mbox{outputOnly}( x ) \lor 0 ) \]
+\[ \mbox{outputOnly}( N_1 ) = \exists x \in N_1 . x!( \top )\; |\; ( \mbox{outputOnly}( x ) \lor 0 ) \]
 
 \subsubsection{Containment}
+\[ \mu X. \langle \quotep{\phi} \rangle ((X \lor 0)\;|\;\neg\langle\quotep{\neg \phi}\rangle\top)\;|\;\neg\langle\quotep{\neg \phi}\rangle\top \]
 \subsubsection{Fuel}
   
 
