@@ -68,19 +68,23 @@ Always responsive to outside, but may contain internal deadlocks:
 Attempt to say ``no deadlocks anywhere'':
 
 \[\begin{array}{rl}
-  \mbox{Responsive}( N_1, N_2 ) = & \\
-  & \mbox{prime} \land \exists x \in N_1.\langle x \rangle(\top).\mbox{Responsive}(N_1, N_2) \\
-  & \lor\; \mbox{outputOnly}(N_1)\; | \;\mbox{Responsive}(N_1, N_2) \\
-  & \lor\; \exists N_{21},N_{22}. N_2 = N_{21} \sqcup N_{22} \\
-  & \;\;\;\; \land ( ( \mbox{Responsive}( N_{21}, N_{22})\; | \; \mbox{Responsive}( N_{21}, N_{22})  ) \Rightarrow \langle\rangle\mbox{Responsive}( N_1, N_2 ) ) )
+  \mbox{Responsive}( \quotep{\phi} ) = & \\
+  & \langle \quotep{\phi} \rangle \mbox{Responsive}(\quotep{\phi}) \\
+  & \lor\; \mbox{Responsive}(\quotep{\phi}) \; | \;\mbox{Responsive}(\quotep{\phi}) \\
+  & \lor\; \mbox{outputOnly}\; | \;\mbox{Responsive}(\quotep{\phi}) \\
+  & \lor\; \exists x. x?\top.\top \;|\; x!\top \;|\; \top \implies \langle\rangle \mbox{Responsive}(\quotep{\phi})\\
 \end{array}\]
 where
-\[ \mbox{outputOnly}( N_1 ) = \exists x \in N_1 . x!( \top )\; |\; ( \mbox{outputOnly}( x ) \lor 0 ) \]
+\[ \mbox{outputOnly} = 0 \lor ( \quotep{\top} ! \top \;|\; \mbox{outputOnly} ) \]
+
+Note that there can be infinite prefixes and liveness is undecidable.  E.g. for every exchange in the last line check some finitely refutable conjecture like Riemann's hypothesis or Goldbach conjecture and return to the first line only if a counterexample is found.
 
 \subsubsection{Containment}
 \[ \mu X. \langle \quotep{\phi} \rangle ((X \lor 0)\;|\;\neg\langle\quotep{\neg \phi}\rangle\top)\;|\;\neg\langle\quotep{\neg \phi}\rangle\top \]
 \subsubsection{Fuel}
-  
+Revisit liveness: prove there's enough fuel to get back to first line.
+
+Computational complexity.
 
 \bibliographystyle{amsplain}
 \bibliography{ladl}
