@@ -59,6 +59,72 @@ L.G. Meredith\inst{2}\\
 \end{abstract}
 \section{Introduction}
 
+\subsection{The reflective higher-order $\pi$-calculus}
+
+Lawvere theories are limited in that they only talk about products of sorts.  A lambda theory is a generalization of a Lawvere theory that has the ability to talk about function sorts like $A \Rightarrow B$ and sums like $A+B$ or $1 + A + A^2 + \cdots,$ more commonly denoted with the Kleene star $A^*.$  One can think of lambda theories as having access to a ``library'' that takes care of the details of bound variables and substitution for us so we do not have to implement all that machinery.  Much of the work on nominal logics has been about exactly this factorization \cite{GabbayMJ:picfm}.  A lambda theory Th(Calc) is a bicartesian closed 2-category equipped with an identity-on-objects functor from $(\FinSet/\Sigma)^{\op}$ to Th(Calc).  Models of Th(Calc) are functors to Cat that preserve all the structure.
+
+The $\pi$-calculus was invented in the early 1990s by Robin Milner as a model of networks of processes with a dynamically changing topology; two processes initially unaware of each other can be introduced by a third process.  The reflective higher order $\pi$-calculus uses quoted processes as names; the term constructors for quote and eval replace the more traditional nu and replicate constructors.  We also add a ``comm'' term to restrict the contexts in which reduction can occur \cite{DBLP:journals/corr/StayM15}.
+
+Here is a presentation of the multisorted lambda theory Th(RHOpi) for the reflective higher-order $\pi$-calculus:
+\begin{center}
+  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
+    \hline
+    Sorts:
+    \begin{itemize}
+      \item $N$ for names
+      \item $P$ for processes
+    \end{itemize}\bigskip
+    Term constructors:
+    \begin{itemize}
+      \item $\send\maps N \times P^* \to P$
+      \item \raggedright $\recv\maps N \times (N^* \Rightarrow P) \to P$
+      \item $|\maps P^2 \to P$
+      \item $0\maps 1 \to P$
+      \item $\comm\maps 1 \to P$
+      \item $\quote{-}\maps P \to N$
+      \item $\deref{-}\maps N \to P$
+    \end{itemize}
+    &
+    Rewrites:
+    \begin{itemize}
+      \item $\alpha\maps (p_1 | p_2) | p_3 \Rightarrow p_1 | (p_2 | p_3)$
+      \item $\beta\maps p_1 | p_2 \Rightarrow p_2 | p_1$
+      \item $\iota\maps 0 | p \Rightarrow p$
+      \item \raggedright $\chi\maps \send(x, p_1, \ldots, p_n) \;|\; \recv(x, q) \;|\; \comm \Rightarrow q(\quote{p_1}, \ldots, \quote{p_n}) \;|\; \comm$
+      \item $\epsilon\maps \deref{\quote{p}} \Rightarrow p$
+    \end{itemize}
+    Equations:
+    \begin{itemize}
+      \item \tshortstack[l]{$\alpha = P^3, \beta = P^2, \iota = P$ ($|$ and 0 form a \\ commutative monoid)}
+      \item \tshortstack[l]{$\epsilon = P$ (evaluating a quoted process is the \\ same as the process itself)}
+    \end{itemize}\\
+    \hline
+  \end{longtable}
+\end{center}
+The simplest RHOpi processes are 0, the ``do nothing'' process; and comm, a ``catalyst'' process that enables communication on a channel.  The only rewrite that is not an identity is $\chi,$ the communication event.  The $\chi$ rewrite is neither confluent nor deterministic.  For example, we can model contention for resources with the term
+\[ \recv(x, P)\;|\;\recv(x, Q)\;|\;\send(x,R)\;|\;\comm \]
+which has two rewrites out of it, one where the continuation $P$ is invoked on the name $\quote{R}$ and the other where the continuation $Q$ is invoked on it.  We can model message arrival order nondeterminism with the term
+\[ \send(x, P)\;|\;\send(x, Q)\;|\;\recv(x,R)\;|\;\comm \]
+which has two similar rewrites out of it, one where the continuation $P$ is invoked on the name $\quote{R}$ and one where $P$ is invoked on the name $\quote{Q}$.
+
+In the theory above, comm is preserved by the rewrites; one can think of each comm instance as representing a processor.  An alternative would be to consume comm in the $\chi$ rewrite; then comm would track clock ticks; an application of a consumable comm is the formal verification of billing code for tracking compute resources.
+
+Replication of processes, and therefore general recursion, can be encoded \cite{DBLP:journals/entcs/MeredithR05} via
+\[D(x) = \recv(x, y\mapsto \send(x, \deref{y}) | \deref{y})\]
+\[!P = \send(x, D(x) | P) | D(x).\]
+
+
+\[ \interp{u \langle C\rangle v} = \{ t \;|\; \exists \rho\maps C[t, u] \Rightarrow v \}; \]
+
+Caires' \cite{Caires} operator $\triangleright$ for rely-guarantee properties, the adjunct to $|,$ is an instance of our generic modal operator, where $u \triangleright v = u \langle - | - \rangle v:$
+\[ \interp{u \triangleright v} = \{ t \;|\; \exists \rho\maps (t\;|\;u) \Rightarrow v\} \]
+
+\[\interp{ \langle \quotep{\phi} \rangle \psi } = \{ t | \exists x\in\interp{\quotep{\phi}} \rho : x!(\top) | t \Rightarrow \psi \}\]
+
+Then we have that $\langle x \rangle \psi$ is merely restricting $\quotep{\phi}$ to the singleton namespace consisting of $x$.
+
+\[ \langle \rangle \psi = \interp{ 0 \langle -|- \rangle \psi } \]
+
 \subsection{Three useful kinds of formulae}
 \subsubsection{Responsiveness}
 Always responsive to outside, but may contain internal deadlocks:
