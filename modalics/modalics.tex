@@ -70,14 +70,36 @@ Attempt to say ``no deadlocks anywhere'':
 \[\begin{array}{rl}
   \mbox{Responsive}( \quotep{\phi} ) = & \\
   & \langle \quotep{\phi} \rangle \mbox{Responsive}(\quotep{\phi}) \\
-  & \lor\; \mbox{Responsive}(\quotep{\phi}) \; | \;\mbox{Responsive}(\quotep{\phi}) \\
   & \lor\; \mbox{outputOnly}\; | \;\mbox{Responsive}(\quotep{\phi}) \\
   & \lor\; \exists x. x?\top.\top \;|\; x!\top \;|\; \top \implies \langle\rangle \mbox{Responsive}(\quotep{\phi})\\
+  & \lor\; \mbox{Responsive}(\quotep{\phi}) \; | \;\mbox{Responsive}(\quotep{\phi}) \\  
 \end{array}\]
 where
 \[ \mbox{outputOnly} = 0 \lor ( \quotep{\top} ! \top \;|\; \mbox{outputOnly} ) \]
 
 Note that there can be infinite prefixes and liveness is undecidable.  E.g. for every exchange in the last line check some finitely refutable conjecture like Riemann's hypothesis or Goldbach conjecture and return to the first line only if a counterexample is found.
+
+It is easy to see that a process that satisfies $\mbox{Responsive}$ will have a shape that
+looks like
+
+\[\Pi\mathsf{for}( v \leftarrow u )P \;|\; \Pi x!(Q) \;|\; \Pi I\]
+
+where $u, x \in \quotep{\phi}$, but $\neg u \bot x$, $P \models \mbox{Responsive}(\quotep{\phi})$ and $\Pi I$ is communicates internally before becoming
+$\mbox{Responsive}$. Building on this observation we can adapt the
+formula to be parametric in a formula $\psi$, and in this way enforce
+a property on the components that eventually communicate with the environment.
+
+\[\begin{array}{rl}
+\mbox{ResponsiveP}( \quotep{\phi}, \psi ) = \psi \land \mbox{RecResponsiveP}( \quotep{\phi}, \psi ) \\
+\end{array}\]
+
+\[\begin{array}{rl}
+\mbox{RecResponsiveP}( \quotep{\phi}, \psi ) = & \\
+  & \langle \quotep{\phi} \rangle \mbox{ResponsiveP}( \quotep{\phi}, \psi ) \\
+  & \lor\; \mbox{outputOnly}\; | \;\mbox{ResponsiveP}( \quotep{\phi}, \psi ) \\
+  & \lor\; \exists x. x?\top.\top \;|\; x!\top \;|\; \top \implies \langle\rangle \mbox{ResponsiveP}( \quotep{\phi}, \psi )\\
+  & \lor\; \mbox{ResponsiveP}( \quotep{\phi}, \psi ) \; | \;\mbox{ResponsiveP}( \quotep{\phi}, \psi ) \\
+\end{array}\]
 
 \subsubsection{Containment}
 \[ \mu X. \langle \quotep{\phi} \rangle ((X \lor 0)\;|\;\neg\langle\quotep{\neg \phi}\rangle\top)\;|\;\neg\langle\quotep{\neg \phi}\rangle\top \]
