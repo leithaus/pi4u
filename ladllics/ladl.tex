@@ -7,6 +7,7 @@
 \usepackage{stmaryrd}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
+\renewcommand{\:}{\colon}
 \newcommand{\FinSet}{\mathrm{FinSet}}
 \newcommand{\Set}{\mathrm{Set}}
 \newcommand{\Cat}{\mathrm{Cat}}
@@ -75,6 +76,28 @@ L.G. Meredith\inst{2}\\
   $\pi$-calculus.  
 
 \end{abstract}
+
+\section{Formalism}
+
+We use Cat-enriched Lawvere theories, which we will call Lawvere 2-theories, as laid out by Power \cite{PowerEnriched}.  We are concerned only with strict algebras, not pseudoalgebras.
+
+We model term calculi as 2-categories of sorts, terms, and rewrites described by the Lawvere 2-theories.  [[See e.g. K-framework.]]
+
+\section{The algorithm}
+
+Let $T$ be the finitary 2-monad for the term calculus, $M$ be the finitary 2-modad for the modalities, and $B$ be the finitary 2-monad for Boolean algebras.
+
+By the sum of 
+
+Let $\delta\: (T+M)B \Rightarrow B(T+M)$ be the canonical natural transformation taking a function symbol $f:S^n \to S$ over sets $s_1, \ldots, s_n$ to the set $s = \bigcup_{t \in s_1 \times \cdots \times s_n} f(t)$ and a rewrite over collections to the rewrite applied pointwise.  We call $\delta$ the distributive law. [[ We need to prove the hexagon coherence law; YB follows from the hexagon equations and naturality. ]]
+
+Let $\gamma\: MT \Rightarrow BT$ be the natural transformation assigning meaning to modalities.  This is not canonical, since it depends on the modality being chosen.  [[ What coherence laws does $\gamma$ need to satisfy? ]]
+
+We build the interpretation natural transformation $\interp\: (T+M+B)\Rightarrow BT$ out of $\delta, \gamma,$ and the monadic joins and units.  
+
+
+
+
 \section{Introduction}
   
   Sylvester coined the term ``universal algebra'' to describe the idea of expressing a mathematical structure as set equipped with functions satisfying equations; the idea itself was first developed by Hamilton and de Morgan \cite{Graetzer}.  Most modern programming languages have a notion of a ``module'' or an ``interface'' with this same information; for example, consider this Agda definition of a monoid.

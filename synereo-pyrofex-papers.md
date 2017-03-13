@@ -33,7 +33,9 @@
 
 * Nice to have
 
-    * CONCUR 2017 (No venue/date yet? 13 pages)
+    * CONCUR 2017
+      https://www.concur2017.tu-berlin.de 13p Apr 24, 2017
+      https://www.concur2017.tu-berlin.de/express_sos.html 15p
 
         * Type refinement
 
