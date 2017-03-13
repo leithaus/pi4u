@@ -1,0 +1,6 @@
+matrix {
+\\
+unit(u)[a,d=b]\\
+text(d)[l,t=#$N$#]\\
+\\
+}

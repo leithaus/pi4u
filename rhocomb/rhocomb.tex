@@ -1,0 +1,185 @@
+\documentclass{llncs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{comment}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{stmaryrd}
+\newcommand{\interp}[1]{\llbracket #1 \rrbracket}
+\newcommand{\maps}{\colon}
+\newcommand{\FinSet}{\mathrm{FinSet}}
+\newcommand{\Set}{\mathrm{Set}}
+\newcommand{\Cat}{\mathrm{Cat}}
+\newcommand{\Calc}{\mathrm{Calc}}
+\newcommand{\Mon}{\mathrm{Mon}}
+\newcommand{\BoolAlg}{\mathrm{BoolAlg}}
+\renewcommand{\Form}{\mathrm{Form}}
+\newcommand{\leftu}{\mathrm{left}}
+\newcommand{\rightu}{\mathrm{right}}
+\newcommand{\send}{\mathrm{send}}
+\newcommand{\recv}{\mathrm{recv}}
+\newcommand{\comm}{\mathrm{comm}}
+\renewcommand{\quote}[1]{``#1"}
+\newcommand{\deref}[1]{\mathrm{eval}(#1)}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\NN}{\mathbb{N}}
+\makeatletter
+\gdef\tshortstack{\@ifnextchar[\@tshortstack{\@tshortstack[c]}}
+\gdef\@tshortstack[#1]{%
+  \leavevmode
+  \vtop\bgroup
+    \baselineskip-\p@\lineskip 3\p@
+    \let\mb@l\hss\let\mb@r\hss
+    \expandafter\let\csname mb@#1\endcsname\relax
+    \let\\\@stackcr
+    \@ishortstack}
+\makeatother
+
+\title{Logic as a distributive law}
+\author{
+Michael Stay\inst{1}\\
+\and
+L.G. Meredith\inst{2}\\
+}
+\institute{
+  {Pyrofex Corp.}\\
+  \email{\fontsize{8}{8}\selectfont stay@pyrofex.net}\\
+  \and
+  {RChain Cooperative}\\
+  \email{\fontsize{8}{8}\selectfont greg@rchain.coop}
+}
+\begin{document}
+\maketitle
+\begin{abstract}
+\noindent
+  Building on the work of Meredith and Radestock
+  \cite{DBLP:journals/entcs/MeredithR05} defining a reflective higher
+  order mobile process calculus, we present two different systems of
+  concurrent combinators into which we can give a full and faithful
+  encoding of the rho-calculus. Unlike Yoshida's concurrent
+  combinators, which endure a dependency on names, the new operator,
+  and replication, both presentations are name-free and can encode a
+  $\mathsf{Y}$-combinator-like term that serves in the role of
+  replication, and thus have more in common with traditional
+  applicative algebra presentations such as the famous $\mathsf{SKI}$
+  presentations of the $\lambda$-calculus.
+
+\end{abstract}
+\section{Introduction}
+  
+  The {\pic} (\cite{milner91polyadicpi}) is not a closed theory, but
+rather a theory dependent upon some theory of names. Taking an
+operational view, one may think of the {\pic} as a procedure that when
+handed a theory of names provides a theory of processes that
+communicate over those names. This openness of the theory has been
+exploited in {\pic} implementations, like the execution engine in
+Microsoft's Biztalk \cite{biztalk}, where an ancillary binding
+language providing a means of specifying a `theory' of names; e.g.,
+names may be tcp/ip ports or urls or object references, etc. But,
+foundationally, one might ask if there is a closed theory of
+processes, i.e. one in which the theory of names arises from and is
+wholly determined by the theory of processes. Behind this question
+lurk a whole host of other exciting and potentially enlightening
+questions regarding the role of names with structure in calculi of
+interaction and the relationship between the structure of names and
+the structure of processes.
+
+\subsection{The reflective higher-order $\pi$-calculus}
+
+The $\pi$-calculus was invented in the early 1990s by Robin Milner as
+a model of networks of processes with a dynamically changing topology;
+two processes initially unaware of each other can be introduced by a
+third process.  The reflective higher order $\pi$-calculus uses quoted
+processes as names; the term constructors for quote and eval replace
+the more traditional nu and replicate constructors.  We also add a
+``comm'' term to restrict the contexts in which reduction can occur
+\cite{DBLP:journals/corr/StayM15}.
+
+Here is a presentation of the multisorted lambda theory Th(RHOpi) for the reflective higher-order $\pi$-calculus:
+\begin{center}
+  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
+    \hline
+    Sorts:
+    \begin{itemize}
+      \item $N$ for names
+      \item $P$ for processes
+    \end{itemize}\bigskip
+    Term constructors:
+    \begin{itemize}
+      \item $\send\maps N \times P^* \to P$
+      \item \raggedright $\recv\maps N \times (N^* \Rightarrow P) \to P$
+      \item $|\maps P^2 \to P$
+      \item $0\maps 1 \to P$
+      \item $\comm\maps 1 \to P$
+      \item $\quote{-}\maps P \to N$
+      \item $\deref{-}\maps N \to P$
+    \end{itemize}
+    &
+    Rewrites:
+    \begin{itemize}
+      \item $\alpha\maps (p_1 | p_2) | p_3 \Rightarrow p_1 | (p_2 | p_3)$
+      \item $\beta\maps p_1 | p_2 \Rightarrow p_2 | p_1$
+      \item $\iota\maps 0 | p \Rightarrow p$
+      \item \raggedright $\chi\maps \send(x, p_1, \ldots, p_n) \;|\; \recv(x, q) \;|\; \comm \Rightarrow q(\quote{p_1}, \ldots, \quote{p_n}) \;|\; \comm$
+      \item $\epsilon\maps \deref{\quote{p}} \Rightarrow p$
+    \end{itemize}
+    Equations:
+    \begin{itemize}
+      \item \tshortstack[l]{$\alpha = P^3, \beta = P^2, \iota = P$ ($|$ and 0 form a \\ commutative monoid)}
+      \item \tshortstack[l]{$\epsilon = P$ (evaluating a quoted process is the \\ same as the process itself)}
+    \end{itemize}\\
+    \hline
+  \end{longtable}
+\end{center}
+The simplest RHOpi processes are 0, the ``do nothing'' process; and comm, a ``catalyst'' process that enables communication on a channel.  The only rewrite that is not an identity is $\chi,$ the communication event.  The $\chi$ rewrite is neither confluent nor deterministic.  For example, we can model contention for resources with the term
+\[ \recv(x, P)\;|\;\recv(x, Q)\;|\;\send(x,R)\;|\;\comm \]
+which has two rewrites out of it, one where the continuation $P$ is invoked on the name $\quote{R}$ and the other where the continuation $Q$ is invoked on it.  We can model message arrival order nondeterminism with the term
+\[ \send(x, P)\;|\;\send(x, Q)\;|\;\recv(x,R)\;|\;\comm \]
+which has two similar rewrites out of it, one where the continuation $P$ is invoked on the name $\quote{R}$ and one where $P$ is invoked on the name $\quote{Q}$.
+
+In the theory above, comm is preserved by the rewrites; one can think of each comm instance as representing a processor.  An alternative would be to consume comm in the $\chi$ rewrite; then comm would track clock ticks; an application of a consumable comm is the formal verification of billing code for tracking compute resources.
+
+Replication of processes, and therefore general recursion, can be encoded \cite{DBLP:journals/entcs/MeredithR05} via
+\[D(x) = \recv(x, y\mapsto \send(x, \deref{y}) | \deref{y})\]
+\[!P = \send(x, D(x) | P) | D(x).\]
+
+Caires' \cite{Caires} operator $\triangleright$ for rely-guarantee properties, the adjunct to $|,$ is an instance of our generic modal operator, where $u \triangleright v = u \langle - | - \rangle v:$
+\[ \interp{u \triangleright v} = \{ t \;|\; \exists \rho\maps (t\;|\;u) \Rightarrow v\} \]
+
+The logic is generated as above, adding modal operators and recursion to the term language, then adding the Boolean algebra; it is equivalent to the logic we generated by hand in \cite{DBLP:conf/tgc/MeredithR05}.  As an example of a formula in this logic, here is a one-line formula for a process that will always be able to handle another message:
+\[ \mu X. \recv(\top, x \mapsto X)\;|\;\top. \]
+It says that the process must factor into a piece that is waiting for a message on some channel, and when it receives that message, the continuation will have the same form.
+
+\subsubsection{Namespaces}
+
+When we add a copy of BoolAlg to RHOpi for both $N$ and $P,$ we can write down formulae that talk about sets of names.  The formula $\top$ denotes the set of all names; the formula $\quote{\top}$ denotes the set of names that are quoted processes.  These two sets differ when we have a nonempty set of generating names.
+
+An application of namespace logic is a formula for a ``firewall'': any process satisfying this formula receives no messages except on a name in $\quote{\phi}.$
+\[ \mu X. \recv(\quote{\phi}, x \mapsto (X \lor 0)\;|\;\neg\recv(\quote{\neg \phi}, \top))\;|\;\neg\recv(\quote{\neg \phi}, \top) \]
+It is, perhaps, surprising that this can be accomplished with a compile-time check, since we usually think of firewalls as a dynamic check.  An application of namespaces to statically proving security properties of code in an object capabilities language can be found in \cite{DBLP:journals/corr/MeredithSD13}.
+
+\section{Conclusion and future work}
+We have presented an algorithm for generating a logic from three data:
+a 2-Lawvere theory describing a notion of computation, a monad for
+describing a notion of collection, and a distributive law. As
+mentioned in the introduction, the picture emerging from this view of
+logic is that logically useful collections of individuals look like
+nothing so much as the individuals that represent the formulae that
+collect them.  The range of applications of this algorithm is quite
+broad.  Any of the languages given semantics in the K Framework,
+including C/C++, Java, Javascript, and many others can automatically
+be equipped with logics that serve as a basis for of program
+specification and automatically checked verification, and
+simultaneously as a basis equipping these languages with new and
+powerful type systems.  This considerably lowers the barrier to
+embuing popular untyped languages with type systems.  Likewise, the
+algorithmic nature of the approach also serves as an aid in future
+language design.  For example, Synereo is designing a language for the
+smart contracts on the blockchain based on the
+$\mathsf{RHO}$-calculus \cite{rholang}.  Equipping this language with a type system
+amounts to nothing more than deciding on the type of collection one
+wants to collect type inhabitants in.
+
+\bibliographystyle{amsplain}
+\bibliography{ladl}
+\end{document}

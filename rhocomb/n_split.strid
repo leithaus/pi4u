@@ -1,0 +1,7 @@
+matrix {
+text(d)[l,t=#$$#]&text(u)[l,t=#$$#]&text(d)[l,t=#$$#]\\
+\\
+&&2box1(u,dl,dr)\\
+\\
+text(d)[l,t=#$$#]&text(d)[l,t=#$$#]\\
+}
