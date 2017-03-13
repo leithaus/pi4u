@@ -401,9 +401,15 @@ The Lawvere 2-theory Th(Mon) is much the same as the 1-theory, except for the we
 \end{center}
 From Th(Mon) we can derive a 2-monad Mon that essentially produces the free monoid on a set, but keeps track of the internal representation of the monoid---a binary tree---and accounts for the work needed to convert the internal representation to its normal form.  From this perspective, we can think of the trees as programs for a simple computational calculus and the process of normalization as the execution of the program.  Later in the paper, we will examine the case of the SKI combinator calculus, a Turing-complete programming language that was a predecessor to the $\lambda$-calculus; it, too, uses binary trees as programs, and execution of the program is a normalization process.
 
-When we add the 2-monad BoolAlg to Mon, we get formulae like $(1 \cdot \top)$ denoting the set of trees whose leftmost child is the identity; because Mon is a 2-monad, we also get proofs like 
+When we add the 2-monad BoolAlg to Mon, we get formulae like $(1 \cdot
+\top)$ denoting the set of trees whose leftmost child is the identity;
+because Mon is a 2-monad, we also get formula rewrites like
 \[ ((r \circ l) \lor y)\maps ((e \cdot (x \cdot e)) \lor y) \to (x \lor y) \]
-whose interpretations are homomorphisms of Boolean algebras.
+whose interpretations are homomorphisms of Boolean algebras. Note that
+given a term rewrite like $f \maps x \to y$ we get a formula rewrite
+$\neg f \maps \neg x \to \neg y$. While $\top, \bot, \lor, \land$ have
+pointwise interpretations, $\neg$ is purely formal, i.e. the rewrite
+substitutes $\neg y$ for $\neg x$ in a formula.
 
 The formulae in these examples have been propositions about the structure of terms.  Later in the paper, we will also show how to add modal operators that are propositions about the behavior of terms; the arrow type constructor from the $\lambda$-calculus is a prominent example.
 

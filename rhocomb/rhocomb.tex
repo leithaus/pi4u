@@ -1,10 +1,13 @@
 \documentclass{llncs}
+\usepackage{mathpartir}
+\usepackage{bcprules}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{comment}
 \usepackage{hyperref}
 \usepackage{longtable}
 \usepackage{stmaryrd}
+
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
 \newcommand{\FinSet}{\mathrm{FinSet}}
@@ -23,6 +26,94 @@
 \newcommand{\deref}[1]{\mathrm{eval}(#1)}
 \newcommand{\op}{\mathrm{op}}
 \newcommand{\NN}{\mathbb{N}}
+\newcommand{\pic}{$\pi$-calculus}
+
+% Double brackets
+\newcommand{\ldb}{[\![}
+\newcommand{\rdb}{]\!]}
+\newcommand{\ldrb}{(\!(}
+\newcommand{\rdrb}{)\!)}
+\newcommand{\lrbb}{(\!|}
+\newcommand{\rrbb}{|\!)}
+\newcommand{\lliftb}{\langle\!|}
+\newcommand{\rliftb}{|\!\rangle}
+%\newcommand{\plogp}{:\!-}
+\newcommand{\plogp}{\leftarrow}
+%\newcommand{\plogp}{\coloneq}
+% \newcommand{\lpquote}{\langle}
+% \newcommand{\rpquote}{\rangle}
+% \newcommand{\lpquote}{\lceil}
+% \newcommand{\rpquote}{\rceil}
+\newcommand{\lpquote}{\ulcorner}
+\newcommand{\rpquote}{\urcorner}
+\newcommand{\newkw}{\nu}
+
+% SYNTAX
+\newcommand{\id}[1]{\texttt{#1}}
+\newcommand{\none}{\emptyset}
+\newcommand{\eps}{\epsilon}
+\newcommand{\set}[1]{\{#1\}}
+\newcommand{\rep}[2]{\id{\{$#1$,$#2$\}}}
+\newcommand{\elt}[2]{\id{$#1$[$#2$]}}
+\newcommand{\infinity}{$\infty$}
+
+\newcommand{\pzero}{\mathbin{0}}
+\newcommand{\seq}{\mathbin{\id{,}}}
+\newcommand{\all}{\mathbin{\id{\&}}}
+\newcommand{\choice}{\mathbin{\id{|}}}
+\newcommand{\altern}{\mathbin{\id{+}}}
+\newcommand{\juxtap}{\mathbin{\id{|}}}
+\newcommand{\concat}{\mathbin{.}}
+\newcommand{\punify}{\mathbin{\id{:=:}}}
+\newcommand{\fuse}{\mathbin{\id{=}}}
+\newcommand{\scong}{\mathbin{\equiv}}
+\newcommand{\nameeq}{\mathbin{\equiv_N}}
+\newcommand{\alphaeq}{\mathbin{\equiv_{\alpha}}}
+\newcommand{\names}[1]{\mathbin{\mathcal{N}(#1)}}
+\newcommand{\freenames}[1]{\mathbin{\mathcal{FN}(#1)}}
+\newcommand{\boundnames}[1]{\mathbin{\mathcal{BN}(#1)}}
+%\newcommand{\lift}[2]{\texttt{lift} \; #1 \concat #2}
+\newcommand{\binpar}[2]{#1 | #2}
+\newcommand{\outputp}[2]{#1!(#2)}
+\newcommand{\prefix}[3]{#1?(#2) . #3}
+\newcommand{\lift}[2]{#1 \lliftb #2 \rliftb}
+\newcommand{\clift}[1]{\lliftb #1 \rliftb}
+\newcommand{\quotep}[1]{\lpquote #1 \rpquote}
+\newcommand{\dropn}[1]{\rpquote #1 \lpquote}
+\newcommand{\procn}[1]{\stackrel{\vee}{x}}
+
+\newcommand{\newp}[2]{(\newkw \; #1 ) #2}
+\newcommand{\bangp}[1]{! #1}
+
+\newcommand{\substp}[2]{\{ \quotep{#1} / \quotep{#2} \}}
+\newcommand{\substn}[2]{\{ #1 / #2 \}}
+
+\newcommand{\psubstp}[2]{\widehat{\substp{#1}{#2}}}
+\newcommand{\psubstn}[2]{\widehat{\substn{#1}{#2}}}
+
+\newcommand{\applyp}[2]{#1 \langle #2 \rangle}
+\newcommand{\absp}[2]{( #1 ) #2}
+\newcommand{\annihilate}[1]{#1^{\times}}
+\newcommand{\dualize}[1]{#1^{\bullet}}
+
+\newcommand{\transitions}[3]{\mathbin{#1 \stackrel{#2}{\longrightarrow} #3}}
+\newcommand{\meaningof}[1]{\ldb #1 \rdb}
+\newcommand{\pmeaningof}[1]{\ldb #1 \rdb}
+\newcommand{\nmeaningof}[1]{\lrbb #1 \rrbb}
+
+\newcommand{\Proc}{\mathbin{Proc}}
+\newcommand{\QProc}{\quotep{\mathbin{Proc}}}
+
+\newcommand{\bc}{\mathbin{\mathbf{::=}}}
+
+\newcommand{\red}{\rightarrow}
+\newcommand{\wred}{\Rightarrow}
+\newcommand{\redhat}{\hat{\longrightarrow}}
+\newcommand{\lred}[1]{\stackrel{#1}{\longrightarrow}} %transitions
+\newcommand{\wlred}[1]{\stackrel{#1}{\Longrightarrow}}
+
+\newcommand{\rhoc}{$\rho$-calculus}
+
 \makeatletter
 \gdef\tshortstack{\@ifnextchar[\@tshortstack{\@tshortstack[c]}}
 \gdef\@tshortstack[#1]{%
@@ -86,99 +177,302 @@ the structure of processes.
 
 \subsection{The reflective higher-order $\pi$-calculus}
 
-The $\pi$-calculus was invented in the early 1990s by Robin Milner as
-a model of networks of processes with a dynamically changing topology;
-two processes initially unaware of each other can be introduced by a
-third process.  The reflective higher order $\pi$-calculus uses quoted
-processes as names; the term constructors for quote and eval replace
-the more traditional nu and replicate constructors.  We also add a
-``comm'' term to restrict the contexts in which reduction can occur
-\cite{DBLP:journals/corr/StayM15}.
+\subsubsection{Process grammar}\label{subsub:process_grammar}
 
-Here is a presentation of the multisorted lambda theory Th(RHOpi) for the reflective higher-order $\pi$-calculus:
-\begin{center}
-  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
-    \hline
-    Sorts:
-    \begin{itemize}
-      \item $N$ for names
-      \item $P$ for processes
-    \end{itemize}\bigskip
-    Term constructors:
-    \begin{itemize}
-      \item $\send\maps N \times P^* \to P$
-      \item \raggedright $\recv\maps N \times (N^* \Rightarrow P) \to P$
-      \item $|\maps P^2 \to P$
-      \item $0\maps 1 \to P$
-      \item $\comm\maps 1 \to P$
-      \item $\quote{-}\maps P \to N$
-      \item $\deref{-}\maps N \to P$
-    \end{itemize}
-    &
-    Rewrites:
-    \begin{itemize}
-      \item $\alpha\maps (p_1 | p_2) | p_3 \Rightarrow p_1 | (p_2 | p_3)$
-      \item $\beta\maps p_1 | p_2 \Rightarrow p_2 | p_1$
-      \item $\iota\maps 0 | p \Rightarrow p$
-      \item \raggedright $\chi\maps \send(x, p_1, \ldots, p_n) \;|\; \recv(x, q) \;|\; \comm \Rightarrow q(\quote{p_1}, \ldots, \quote{p_n}) \;|\; \comm$
-      \item $\epsilon\maps \deref{\quote{p}} \Rightarrow p$
-    \end{itemize}
-    Equations:
-    \begin{itemize}
-      \item \tshortstack[l]{$\alpha = P^3, \beta = P^2, \iota = P$ ($|$ and 0 form a \\ commutative monoid)}
-      \item \tshortstack[l]{$\epsilon = P$ (evaluating a quoted process is the \\ same as the process itself)}
-    \end{itemize}\\
-    \hline
-  \end{longtable}
-\end{center}
-The simplest RHOpi processes are 0, the ``do nothing'' process; and comm, a ``catalyst'' process that enables communication on a channel.  The only rewrite that is not an identity is $\chi,$ the communication event.  The $\chi$ rewrite is neither confluent nor deterministic.  For example, we can model contention for resources with the term
-\[ \recv(x, P)\;|\;\recv(x, Q)\;|\;\send(x,R)\;|\;\comm \]
-which has two rewrites out of it, one where the continuation $P$ is invoked on the name $\quote{R}$ and the other where the continuation $Q$ is invoked on it.  We can model message arrival order nondeterminism with the term
-\[ \send(x, P)\;|\;\send(x, Q)\;|\;\recv(x,R)\;|\;\comm \]
-which has two similar rewrites out of it, one where the continuation $P$ is invoked on the name $\quote{R}$ and one where $P$ is invoked on the name $\quote{Q}$.
+\begin{mathpar}
+  \inferrule* [lab=summation] {} {{M,N} \bc \pzero \;|\; x.A \;|\; M+N }
+  \and
+  \inferrule* [lab=agent] {} {{A} \bc (\vec{x})P \;| \; \clift{\vec{P}}}
+  \and
+  \inferrule* [lab=process] {} {{P,Q} \bc N \;| \;P|Q \;|\; \dropn{x}}
+  \and
+  \inferrule* [lab=name] {} {{x,y} \bc \quotep{P}}
+\end{mathpar} 
 
-In the theory above, comm is preserved by the rewrites; one can think of each comm instance as representing a processor.  An alternative would be to consume comm in the $\chi$ rewrite; then comm would track clock ticks; an application of a consumable comm is the formal verification of billing code for tracking compute resources.
+Note that $\vec{x}$ (resp. $\vec{P}$) denotes a vector of names
+(resp. processes) of length $|\vec{x}|$ (resp. $|\vec{P}|$). We adopt
+the following useful abbreviations.
 
-Replication of processes, and therefore general recursion, can be encoded \cite{DBLP:journals/entcs/MeredithR05} via
-\[D(x) = \recv(x, y\mapsto \send(x, \deref{y}) | \deref{y})\]
-\[!P = \send(x, D(x) | P) | D(x).\]
+\begin{mathpar}
+   x?(\vec{y}).P := x.(\vec{y})P \and  x\clift{\vec{P}} := x.\clift{\vec{P}}
+   \and x!(y) := \lift{x}{\dropn{y}}
+   \and \Pi_{i=0}^{n-1}P_i := P_0 | \ldots | P_{n-1}
+\end{mathpar}
 
-Caires' \cite{Caires} operator $\triangleright$ for rely-guarantee properties, the adjunct to $|,$ is an instance of our generic modal operator, where $u \triangleright v = u \langle - | - \rangle v:$
-\[ \interp{u \triangleright v} = \{ t \;|\; \exists \rho\maps (t\;|\;u) \Rightarrow v\} \]
+\subsubsection{Structural congruence}
 
-The logic is generated as above, adding modal operators and recursion to the term language, then adding the Boolean algebra; it is equivalent to the logic we generated by hand in \cite{DBLP:conf/tgc/MeredithR05}.  As an example of a formula in this logic, here is a one-line formula for a process that will always be able to handle another message:
-\[ \mu X. \recv(\top, x \mapsto X)\;|\;\top. \]
-It says that the process must factor into a piece that is waiting for a message on some channel, and when it receives that message, the continuation will have the same form.
+\paragraph{Free and bound names and alpha-equivalence.} At the
+core of structural equivalence is alpha-equivalence which identifies
+process that are the same up to a change of variable. Formally, we
+recognize the distinction between free and bound names. The free names
+of a process, $\freenames{P}$, may be calculated recursively as
+follows:
 
-\subsubsection{Namespaces}
+\begin{mathpar}
+  \freenames{\pzero} := \emptyset
+  \and \\
+  \freenames{x?(\vec{y}).P} := \{ x \} \cup (\freenames{P} \setminus \{ \vec{y} \})
+  \and 
+  \freenames{x \clift{\vec{P}}} := \{ x \} \cup \{ \vec{P} \} 
+  \and \\
+  \freenames{P|Q} := \freenames{P} \cup \freenames{Q}
+  \and
+  \freenames{P + Q} := \freenames{P} \cup \freenames{Q}
+  \and \\
+  \freenames{\dropn{x}} := \{ x \}
+\end{mathpar}
 
-When we add a copy of BoolAlg to RHOpi for both $N$ and $P,$ we can write down formulae that talk about sets of names.  The formula $\top$ denotes the set of all names; the formula $\quote{\top}$ denotes the set of names that are quoted processes.  These two sets differ when we have a nonempty set of generating names.
+The bound names of a process, $\boundnames{P}$, are those names occurring in $P$
+that are not free. For example, in $x?(y).0$, the name $x$ is free, while $y$ is bound.
 
-An application of namespace logic is a formula for a ``firewall'': any process satisfying this formula receives no messages except on a name in $\quote{\phi}.$
-\[ \mu X. \recv(\quote{\phi}, x \mapsto (X \lor 0)\;|\;\neg\recv(\quote{\neg \phi}, \top))\;|\;\neg\recv(\quote{\neg \phi}, \top) \]
-It is, perhaps, surprising that this can be accomplished with a compile-time check, since we usually think of firewalls as a dynamic check.  An application of namespaces to statically proving security properties of code in an object capabilities language can be found in \cite{DBLP:journals/corr/MeredithSD13}.
+\begin{definition}
+Then two processes, $P,Q$, are alpha-equivalent if $P = Q\{\vec{y}/\vec{x}\}$ for
+some $\vec{x} \in \boundnames{Q},\vec{y} \in \boundnames{P}$, where $Q\{\vec{y}/\vec{x}\}$
+denotes the capture-avoiding substitution of $\vec{y}$ for $\vec{x}$ in $Q$.
+\end{definition}
+
+\begin{definition}
+  The {\em structural congruence} \cite{SangiorgiWalker} , $\equiv$,
+  between processes is the least congruence containing
+  alpha-equivalence, satisfying the abelian monoid laws
+  (associativity, commutativity and $\pzero$ as identity) for parallel
+  composition $|$ and for summation $+$.
+\end{definition}
+
+\subsection{Name equivalence}
+
+We take name equivalence, written $\nameeq$, to be the smallest
+equivalence relation generated by the following rules.
+
+\begin{mathpar}
+\inferrule*[left=Quote-drop]
+{ }
+{ \quotep{\dropn{x}} \nameeq x }
+
+\inferrule*[right=Struct-equiv]
+{ P \scong Q }
+{ \quotep{P} \nameeq \quotep{Q} }
+\end{mathpar}
+
+The astute reader will have noticed that the mutual recursion of names
+and processes imposes a mutual recursion on alpha-equivalence and
+structural equivalence via name-equivalence. Fortunately, all of this
+works out pleasantly and we may calculate in the natural way, free of
+concern. The reader interested in the details is referred to the
+appendix \ref{appendix:rho_details}.
+
+\subsection{Substitution}
+
+We use $\Proc$ for the set of processes, $\QProc$ for the set of
+names, and $\id{\{}\vec{y} / \vec{x} \id{\}}$ to denote partial maps,
+$s : \QProc \rightarrow \QProc$. A map, $s$ lifts, uniquely, to a map
+on process terms, $\widehat{s} : \Proc \rightarrow \Proc$ by the
+following equations.
+
+\begin{mathpar}
+  (0) \psubstp{Q}{P} := 0 \\
+  (R \juxtap S) \psubstp{Q}{P}
+  :=    
+  (R)\psubstp{Q}{P} \juxtap (S) \psubstp{Q}{P} \\
+  (x?(y).R) \psubstp{Q}{P}    
+  :=    
+  (x)\substp{Q}{P} (z)\concat( (R \psubstn{z}{y}) \psubstp{Q}{P} ) \\
+  (\lift{x}{R}) \psubstp{Q}{P}  
+  :=
+  \lift{(x)\substp{Q}{P}}{ R \psubstp{Q}{P} } \\
+%   (\dropn{x})  \psubstp{Q}{P}       
+%   := 
+%   \left\{ 
+%     \begin{array}{ccc} 
+%       \dropn{\quotep{Q}} & & x \nameeq \quotep{P} \\
+%       \dropn{x} & & otherwise \\
+%     \end{array}
+%   \right. 
+  (\dropn{x})  \psubstp{Q}{P}       
+  := 
+  \left\{ 
+    \begin{array}{ccc} 
+      Q & & x \nameeq \quotep{P} \\
+      \dropn{x} & & otherwise \\
+    \end{array}
+  \right.
+\end{mathpar}
+ 
+
+where
+
+\begin{eqnarray}
+  (x)\id{\{} \lpquote Q \rpquote / \lpquote P \rpquote \id{\}}            = 
+  \left\{ 
+    \begin{array}{ccc}
+      \lpquote Q \rpquote & & x \nameeq \lpquote P \rpquote \\
+      x & & otherwise \\
+    \end{array}
+  \right. \nonumber
+\end{eqnarray}
+
+and $z$ is chosen distinct from $\quotep{P}$, $\quotep{Q}$, the free
+names in $Q$, and all the names in $R$. Our $\alpha$-equivalence will
+be built in the standard way from this substitution.
+
+\begin{remark}\label{rem:no_self_referential_names}
+  One consequence of these definitions is that $\forall P. \quotep{P}
+  \not\in \freenames{P}$.
+\end{remark}
+
+\subsection{ Dynamic quote: an example }
+
+Anticipating something of what's to come, consider applying the
+substitution, $\widehat{\id{\{}u / z \id{\}}}$, to the following pair
+of processes, $\lift{w}{y!(z)}$ and $w[ \lpquote y!(z) \rpquote ]$.
+
+\begin{eqnarray}
+	\lift{w}{y!(z)}\widehat{\id{\{}u / z \id{\}}}
+		& = &
+		\lift{w}{y!(u)} \nonumber\\
+	w[ \lpquote y!(z) \rpquote ] \widehat{ \id{\{}u / z \id{\}} }
+		& = &
+		w[ \lpquote y!(z) \rpquote ] \nonumber
+\end{eqnarray}
+
+Because the body of the process between quotes is impervious to
+substitution, we get radically different answers. In fact, by
+examining the first process in an input context,
+e.g. $x?(z).\lift{w}{y!(z)}$, we see that the process under the lift
+operator may be shaped by prefixed inputs binding a name inside it. In
+this sense, the lift operator will be seen as a way to dynamically
+construct processes before reifying them as names.
+
+Finally equipped with these standard features we can present the
+dynamics of the calculus.
+
+\subsubsection{Operational semantics} 
+
+Finally, we introduce the computational dynamics. What marks these
+algebras as distinct from other more traditionally studied algebraic
+structures, e.g. vector spaces or polynomial rings, is the manner in
+which dynamics is captured. In traditional structures, dynamics is typically
+expressed through morphisms between such structures, as in linear maps
+between vector spaces or morphisms between rings. In algebras
+associated with the semantics of computation, the dynamics is
+expressed as part of the algebraic structure itself, through a
+reduction reduction relation typically denoted by $\red$. Below, we
+give a recursive presentation of this relation for the calculus used
+in the encoding.
+
+\begin{mathpar}
+  \inferrule* [lab=Comm] { x_{src} \nameeq x_{trgt} \\ \vec{y} \cap \vec{v} = \emptyset \\ |\vec{y}| = |\vec{z}|} { R_{L} + x_{trgt}?(\vec{y})P \; | \; x_{src}\clift{\vec{Q}} + R_{R} \red P\{\vec{\quotep{Q}}/\vec{y}\} }
+  \and \\
+  \inferrule* [lab=Par] {{P} \red {P}'} {{{P} | {Q}} \red {{P}' | {Q}}}
+  \and
+  \inferrule* [lab=Equiv]{{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
+\end{mathpar}
+
+%We write $\wred$ for $\red^*$, and $P\red$ if $\exists Q $ such that $ P \red Q$.
+We write $P\red$ if $\exists Q $ such that $ P \red Q$ and $P\not\red$, otherwise.
+
+\section{Replication}
+
+As mentioned before, it is known that replication (and hence
+recursion) can be implemented in a higher-order process algebra
+\cite{SangiorgiWalker}. As our first example of calculation with the
+machinery thus far presented we give the construction explicitly in
+the {\rhoc}.
+
+\begin{eqnarray}
+	D_{x} & := & \prefix{x}{y}{(\binpar{\outputp{x}{y}}{\dropn{y}})} \nonumber\\
+	\bangp_{x}{P} & := & \binpar{\lift{x}{\binpar{D_{x}}{P}}}{D_{x}} \nonumber
+\end{eqnarray}
+
+\begin{eqnarray}
+	\bangp_{x}{P} & & \nonumber\\
+	=
+	& \lift{x}{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} 
+	      | \prefix{x}{y}{(\outputp{x}{y} | \dropn{y})} & \nonumber\\
+	\red
+	& (\outputp{x}{y} | \dropn{y})\substn{\quotep{(\prefix{x}{y}{(\dropn{y} | \outputp{x}{y})) | P}}}{y} & \nonumber\\
+	=
+	& \outputp{x}{\quotep{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}}}
+	  | {(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} & \nonumber\\
+	\red
+	& \ldots & \nonumber\\
+	\red^*
+	& P | P | \ldots & \nonumber
+\end{eqnarray}
+
+Of course, this encoding, as an implementation, runs away, unfolding
+$\bangp{P}$ eagerly. A lazier and more implementable replication
+operator, restricted to input-guarded processes, may be obtained as follows.
+
+\begin{eqnarray}
+\bangp{\prefix{u}{v}{P}} 
+	:= 
+	\binpar{\lift{x}{\prefix{u}{v}{(\binpar{D(x)}{P})}}}{D(x)} \nonumber
+\end{eqnarray}
+
+\begin{remark}
+  Note that the lazier definition still does not deal with summation
+  or mixed summation (i.e. sums over input and output). The reader is
+  invited to construct definitions of replication that deal with these
+  features. 
+
+  Further, the definitions are parameterized in a name, $x$. Can you,
+  gentle reader, make a definition that eliminates this parameter and
+  guarantees no accidental interaction between the replication
+  machinery and the process being replicated -- i.e. no accidental
+  sharing of names used by the process to get its work done and the
+  name(s) used by the replication to effect copying. This latter
+  revision of the definition of replication is crucial to obtaining
+  the expected identity $!!P \sim !P$.
+\end{remark}
+
+\begin{remark}\label{rem:paradoxical_combinator}
+  The reader familiar with the lambda calculus will have noticed the
+  similarity between $D$ and the paradoxical combinator.
+
+  [Ed. note: the existence of this seems to suggest we have to be more
+  restrictive on the set of processes and names we admit if we are to
+  support no-cloning.]
+\end{remark}
+
+Yoshida-style rho combinators: gets rid of prefixing,
+abstraction/substitution and new names
+
+\[\begin{array}{rl}
+  m(a,P) &= a!(P) \\
+  d(a,b,c) &= for(x \leftarrow a).(b!(*x) | c!(*x)) \\
+  k(a) &= for(x \leftarrow a).0 \\ 
+  fw(a,b) &= for(x \leftarrow a).b!(*x) \\
+  br(a,b) &= for(r \leftarrow a).fw(b,r) \\
+  bl(a,b) &= for(l \leftarrow a).fw(l,b) \\
+  s(a,b,c) &= for(x \leftarrow a).fw(b,c) \\
+  *(x) &= *x \\
+\end{array}\]
+
+Term constructors
+\[\begin{array}{rl}
+  k &: N \to T \\
+  m &: N \times T \to T \\
+  fw,br,bl &: N^2 \to T \\
+  s &: N^3 \to T \\
+  | &: T^2 \to T \\
+  * &: N \to T \\
+\end{array}\]
+
+Rewrite rules
+\[\begin{array}{rl}
+  d(abc) | m(aP) & \to m(bP) | m(cP) \\
+  k(a) | m(aP) & \to 0 \\
+  fw(ab) | m(aP) & \to m(bP) \\
+  br(ab) | m(a*(e)) & \to fw(be) \\
+  bl(ab) | m(a*(e)) & \to fw(eb) \\
+  s(abc) | m(aP) & \to fw(bc) \\
+\end{array}\]
+
+%!P = for( y \leftarrow x ){ *y | x!( *y ) }   |   x!( for( y \leftarrow x ){ *y | x!( *y ) } | P )
 
 \section{Conclusion and future work}
-We have presented an algorithm for generating a logic from three data:
-a 2-Lawvere theory describing a notion of computation, a monad for
-describing a notion of collection, and a distributive law. As
-mentioned in the introduction, the picture emerging from this view of
-logic is that logically useful collections of individuals look like
-nothing so much as the individuals that represent the formulae that
-collect them.  The range of applications of this algorithm is quite
-broad.  Any of the languages given semantics in the K Framework,
-including C/C++, Java, Javascript, and many others can automatically
-be equipped with logics that serve as a basis for of program
-specification and automatically checked verification, and
-simultaneously as a basis equipping these languages with new and
-powerful type systems.  This considerably lowers the barrier to
-embuing popular untyped languages with type systems.  Likewise, the
-algorithmic nature of the approach also serves as an aid in future
-language design.  For example, Synereo is designing a language for the
-smart contracts on the blockchain based on the
-$\mathsf{RHO}$-calculus \cite{rholang}.  Equipping this language with a type system
-amounts to nothing more than deciding on the type of collection one
-wants to collect type inhabitants in.
+TBD
 
 \bibliographystyle{amsplain}
 \bibliography{ladl}
