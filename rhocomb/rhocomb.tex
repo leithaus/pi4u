@@ -10,6 +10,7 @@
 
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
+\newcommand{\Th}{\mathrm{Th}}
 \newcommand{\FinSet}{\mathrm{FinSet}}
 \newcommand{\Set}{\mathrm{Set}}
 \newcommand{\Cat}{\mathrm{Cat}}
@@ -39,7 +40,7 @@
 \newcommand{\rliftb}{|\!\rangle}
 %\newcommand{\plogp}{:\!-}
 \newcommand{\plogp}{\leftarrow}
-%\newcommand{\plogp}{\coloneq}
+%\newcommand{\plogp}{\mapseq}
 % \newcommand{\lpquote}{\langle}
 % \newcommand{\rpquote}{\rangle}
 % \newcommand{\lpquote}{\lceil}
@@ -441,6 +442,29 @@ operator, restricted to input-guarded processes, may be obtained as follows.
   support no-cloning.]
 \end{remark}
 
+\section{Gph-enriched categories}
+Here we give standard definitions of various concepts in enriched category theory; see \cite{Kelly},
+% www.tac.mta.ca/tac/reprints/articles/10/tr10.pdf
+\cite{Power},
+% www.tac.mta.ca/tac/volumes/6/n7/6-07abs.html
+\cite{LackRosicky},
+% https://arxiv.org/abs/0810.2578
+and \cite{Trimble} for more details.
+% https://ncatlab.org/toddtrimble/published/multisorted+Lawvere+theories
+
+A {\bf directed multigraph}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, and two functions $s,t\maps E \to V$ picking out the source and target of each edge.  There are no constraints on $E, V, s,$ or $t$, so a graph may have infinitely many vertices, infinitely many edges between any two vertices, and loops.  A {\bf graph homomorphism} from $(E, V, s, t)$ to $(E', V', s', t')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon$ and $\upsilon\circ t = t' \circ \epsilon$.  Given two graph homomorphisms $F, G\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph shift} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = G(v).$  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t) \times (E', V', s', t')$ is $(E \times E', V \times V', s \times s', t\times t').$
+
+A {\bf Gph-enriched category} is a category where each hom set $\hom(x,y)$ is equipped with a set $E_{x,y}$ and functions $s_{x,y}, t_{x,y}\maps E_{x,y} \to \hom(x,y);$ that is, each hom set is thought of as a set of vertices and is equipped with a set of edges making it into a graph.  A Gph-enriched category has finite products if the underlying category does.
+
+Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  The category Gph is nontrivially Gph-enriched, making it a cartesian closed category: the objects are graphs, and for any pair of graphs $(G, G')$ we get a graph whose vertices are graph homomorphisms from $G$ to $G'$ and whose edges are graph shifts.
+
+A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the maps between hom sets are graph homomorphisms.
+
+Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.
+
+\section{Gph-theories as models of computation}
+
+\section{Gph-theories for the RHO combinators}
 Yoshida-style rho combinators: gets rid of prefixing,
 abstraction/substitution and new names
 
