@@ -166,14 +166,20 @@ communicate over those names. This openness of the theory has been
 exploited in {\pic} implementations, like the execution engine in
 Microsoft's Biztalk \cite{biztalk}, where an ancillary binding
 language providing a means of specifying a `theory' of names; e.g.,
-names may be tcp/ip ports or urls or object references, etc. But,
+names may be tcp/ip ports or urls or object references, etc. But
 foundationally, one might ask if there is a closed theory of
-processes, i.e. one in which the theory of names arises from and is
+processes, {\em i.e.} one in which the theory of names arises from and is
 wholly determined by the theory of processes. Behind this question
 lurk a whole host of other exciting and potentially enlightening
 questions regarding the role of names with structure in calculi of
 interaction and the relationship between the structure of names and
 the structure of processes.
+
+In lambda calculus, abstraction both introduces a new bound variable, and in a closed term is the only way to introduce variables.  In pi calculus, the input prefix introduces a new bound name, but in a closed term, the nu operator can also introduce new names.  Both lambda calculus and pi calculus have a notion of abstraction elimination.  In lambda calculus, it gives rise to the SKI combinators, which do not use variables at all;  Yoshida \cite{Yoshida} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names.
+
+Semantically, pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: it binds a name and prevents reduction of the term underneath it.  There is an equivalent notion of the weak head normal form for SKI combinators.  Yoshida prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder is introduced.
+
+[[ Reason why you'd want to eliminate names.  (Why did Schönfinkel and Curry eliminate variables?)  Replace nu operator with reflection \& types.  Graph-enriched Lawvere theories for operational semantics.  Existence of transitions under lambda and under input prefix forced by category structure.  COMM as a resource.]]
 
 \subsection{The reflective higher-order $\pi$-calculus}
 
@@ -446,7 +452,7 @@ abstraction/substitution and new names
   br(a,b) &= for(r \leftarrow a).fw(b,r) \\
   bl(a,b) &= for(l \leftarrow a).fw(l,b) \\
   s(a,b,c) &= for(x \leftarrow a).fw(b,c) \\
-  *(x) &= *x \\
+  *(x) &= *x \\  
 \end{array}\]
 
 Term constructors
@@ -455,21 +461,63 @@ Term constructors
   m &: N \times T \to T \\
   fw,br,bl &: N^2 \to T \\
   s &: N^3 \to T \\
+\end{array} \quad \quad
+\begin{array}{rl}
   | &: T^2 \to T \\
   * &: N \to T \\
+  @ &: T \to N \\
 \end{array}\]
 
 Rewrite rules
 \[\begin{array}{rl}
-  d(abc) | m(aP) & \to m(bP) | m(cP) \\
-  k(a) | m(aP) & \to 0 \\
-  fw(ab) | m(aP) & \to m(bP) \\
-  br(ab) | m(a*(e)) & \to fw(be) \\
-  bl(ab) | m(a*(e)) & \to fw(eb) \\
-  s(abc) | m(aP) & \to fw(bc) \\
+  d(abc) | m(aP) & \Rightarrow m(bP) | m(cP) \\
+  k(a) | m(aP) & \Rightarrow 0 \\
+  fw(ab) | m(aP) & \Rightarrow m(bP) \\
+\end{array} \quad \quad
+\begin{array}{rl}
+  br(ab) | m(aP) & \Rightarrow fw(b@(P)) \\
+  bl(ab) | m(aP) & \Rightarrow fw(@(P)b) \\
+  s(abc) | m(aP) & \Rightarrow fw(bc) \\
+  *(@P) & \Rightarrow P \\
 \end{array}\]
 
 %!P = for( y \leftarrow x ){ *y | x!( *y ) }   |   x!( for( y \leftarrow x ){ *y | x!( *y ) } | P )
+
+
+SKI-style rho combinators
+
+
+Term constructors:
+\[\begin{array}{rl}
+  C &: 1 \to T \\
+  0 &: 1 \to T \\
+  | &: 1 \to T \\
+  ? &: 1 \to T \\
+  ! &: 1 \to T \\
+\end{array} \quad \quad
+\begin{array}{rl}
+  @ &: T \to N \\
+  * &: 1 \to T \\
+  S &: 1 \to T \\
+  K &: 1 \to T \\
+  I &: 1 \to T \\
+  () &: T \times T \to T \\
+\end{array}\]
+
+Rewrite rules
+\[\begin{array}{rl}
+  \sigma &: Sxyz \Rightarrow xz(yz) \\
+  \kappa &: Kyz \Rightarrow y \\
+  \iota &: Iz \Rightarrow z \\
+  \upsilon &: |0x \Rightarrow x \\
+\end{array} \quad \quad
+\begin{array}{rl}
+  \alpha &: |(|xy)z \Rightarrow |x(|yz) \\
+  \chi &: |xy \Rightarrow |yx \\
+  \xi &: |C(|(?(@x)y)(!(@x)z)) \Rightarrow |C(y(@z)) \\
+  \theta &: *@x \Rightarrow x \\
+\end{array}\]
+
 
 \section{Conclusion and future work}
 TBD
