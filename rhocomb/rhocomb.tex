@@ -40,7 +40,7 @@
 \newcommand{\rliftb}{|\!\rangle}
 %\newcommand{\plogp}{:\!-}
 \newcommand{\plogp}{\leftarrow}
-%\newcommand{\plogp}{\mapseq}
+%\newcommand{\plogp}{\coloneq}
 % \newcommand{\lpquote}{\langle}
 % \newcommand{\rpquote}{\rangle}
 % \newcommand{\lpquote}{\lceil}
@@ -176,7 +176,7 @@ questions regarding the role of names with structure in calculi of
 interaction and the relationship between the structure of names and
 the structure of processes.
 
-The mathematics of bound variable names is subtle.  Sch\:onfinkel introduced the SKI combinator calculus in 1924 to clarify the role of quantified variables in intuitionistic logic by eliminating them; Curry developed his ideas much further.  The recent work by Andrew Pitts \cite{Pitts} and others \cite{Etc} on nominal set theory has put the study of bound names and substitution on a much nicer foundation, but there is still value in eliminating bound variables because of the clear connection between combinators and the axioms of logic.  As concurrency becomes more important to computer science, it is worth attempting to eliminate bound variables or names to study the resulting logics.
+The mathematics of bound variable names is subtle.  Sch\:onfinkel introduced the SKI combinator calculus in 1924 to clarify the role of quantified variables in intuitionistic logic by eliminating them; Curry developed his ideas much further.  The recent work by Andrew Pitts \cite{Pitts} and others \cite{Etc} on nominal set theory has put the study of bound names and substitution on a much nicer foundation, but there is still value in eliminating bound variables because of the clear connection between combinators and logical axioms.  As concurrency becomes more important to computer science, it is worth attempting to eliminate bound variables or names to study the resulting logics.
 
 Pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: both bind a variable or name and prevent the reduction of the term underneath it.  There is an equivalent notion of the weak head normal form for SKI combinators, where only the leftmost application of a combinator may be reduced.  Yoshida \cite{Yoshida} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names. She prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder is introduced.
 
