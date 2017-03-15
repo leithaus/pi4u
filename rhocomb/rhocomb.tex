@@ -12,6 +12,7 @@
 \newcommand{\maps}{\colon}
 \newcommand{\Th}{\mathrm{Th}}
 \newcommand{\FinSet}{\mathrm{FinSet}}
+\newcommand{\FPGphCat}{\mathrm{FPGphCat}}
 \newcommand{\Set}{\mathrm{Set}}
 \newcommand{\Cat}{\mathrm{Cat}}
 \newcommand{\Calc}{\mathrm{Calc}}
@@ -482,12 +483,12 @@ For example, here is a presentation of the SKI combinator calculus as a Gph-theo
   \end{array}\]
   \item rewrites
   \[\begin{array}{rl}
-    \sigma:(((S x) y) z) &\Rightarrow ((x z) (y z))\\
-    \kappa:((K y) z) &\Rightarrow y\\
-    \iota:(I z) &\Rightarrow z\\
-  \end{array}
+    \sigma:(((S\; x)\; y)\; z) &\Rightarrow ((x\; z)\; (y\; z))\\
+    \kappa:((K\; y)\; z) &\Rightarrow y\\
+    \iota:(I\; z) &\Rightarrow z\\
+  \end{array}\]
 \end{itemize}
-A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$ with loops, and equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v)$ in $M(T),$ there is a vertex $(u\;v)$, and similarly for edges.  The functor $M$ also equips $M(T)$ with graph shifts asserting the existence of an edge out of a reducible expression to the term it reduces to.  Note that because application is a graph homomorphism, there must be rewrites of subterms that are not in head position: given that $(I K)$ rewrites to $K,$ it must be the case that $(S (I K))$ rewrites to $(S K).$
+A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$ with loops, and equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v)$ in $M(T),$ there is a vertex $(u\;v)$, and similarly for edges.  The functor $M$ also equips $M(T)$ with graph shifts asserting the existence of an edge out of a reducible expression to the term it reduces to.  Note that because application is a graph homomorphism, there must be rewrites of subterms that are not in head position: given that $(I\; K)$ rewrites to $K,$ it must be the case that $(S\; (I\; K))$ rewrites to $(S\; K).$
 
 In order to enforce the weak head normal form evaluation strategy in a Gph-theory, we have to introduce a context marker for reduction contexts and modify the rewrite rules to apply only in those contexts:
 \begin{itemize}
@@ -506,7 +507,7 @@ In order to enforce the weak head normal form evaluation strategy in a Gph-theor
     \kappa:((RK\; y)\; z) &\Rightarrow Ry\\
     \iota:(RI\; z) &\Rightarrow Rz\\
     \rho:R(x\;y) &\Rightarrow (Rx\;y)\\
-  \end{array}
+  \end{array}\]
 \end{itemize}
 [[Theorem: for any term N in the SKI calculus, RN reduces to weak head normal form.]]
 
