@@ -176,11 +176,11 @@ questions regarding the role of names with structure in calculi of
 interaction and the relationship between the structure of names and
 the structure of processes.
 
-In lambda calculus, abstraction both introduces a new bound variable, and in a closed term is the only way to introduce variables.  In pi calculus, the input prefix introduces a new bound name, but in a closed term, the nu operator can also introduce new names.  Both lambda calculus and pi calculus have a notion of abstraction elimination.  In lambda calculus, it gives rise to the SKI combinators, which do not use variables at all;  Yoshida \cite{Yoshida} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names.
+The mathematics of bound variable names is subtle.  Sch\:onfinkel introduced the SKI combinator calculus in 1924 to clarify the role of quantified variables in intuitionistic logic by eliminating them; Curry developed his ideas much further.  The recent work by Andrew Pitts \cite{Pitts} and others \cite{Etc} on nominal set theory has put the study of bound names and substitution on a much nicer foundation, but there is still value in eliminating bound variables because of the clear connection between combinators and the axioms of logic.  As concurrency becomes more important to computer science, it is worth attempting to eliminate bound variables or names to study the resulting logics.
 
-Semantically, pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: it binds a name and prevents reduction of the term underneath it.  There is an equivalent notion of the weak head normal form for SKI combinators.  Yoshida prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder is introduced.
+Semantically, pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: it binds a name and prevents reduction of the term underneath it.  There is an equivalent notion of the weak head normal form for SKI combinators.  Yoshida \cite{Yoshida} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names. She prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder is introduced.
 
-[[ Reason why you'd want to eliminate names.  (Why did Schönfinkel and Curry eliminate variables?)  Replace nu operator with reflection \& types.  Graph-enriched Lawvere theories for operational semantics.  Existence of transitions under lambda and under input prefix forced by category structure.  COMM as a resource.]]
+[[ Replace nu operator with reflection \& types.]]
 
 \subsection{The reflective higher-order $\pi$-calculus}
 
@@ -442,6 +442,8 @@ operator, restricted to input-guarded processes, may be obtained as follows.
   support no-cloning.]
 \end{remark}
 
+\section{Yoshida's input prefix elimination applied to RHO}
+
 \section{Gph-enriched categories}
 Here we give standard definitions of various concepts in enriched category theory; see \cite{Kelly},
 % www.tac.mta.ca/tac/reprints/articles/10/tr10.pdf
@@ -460,9 +462,53 @@ Any category is trivially Gph-enriched by taking the all the sets of edges to be
 
 A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the graph structure on each hom set is preserved, {\em i.e.} the functions between hom sets extend to graph homomorhisms between the hom graphs.
 
-Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.
+Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  The set $S$ is called the set of {\bf sorts}.  Any Gph-theory has an underlying multisorted Lawvere theory given by forgetting the edges of each hom graph.
+
+A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[Th, Gph] \to Gph$ that picks out the underlying graph of a model has a left adjoint $L$ that picks out the free model on a graph.
 
 \section{Gph-theories as models of computation}
+
+We can think of the underlying multisorted Lawvere theory of a Gph-theory as a grammar for a term calculus: we choose one of the sorts to play the role of a terminal, and the others become nonterminals.  We think of morphisms into the terminal sort as term constructors.  The edges in the hom graphs encode the reduction relation.
+
+For example, here is a presentation of the SKI combinator calculus as a Gph-theory:
+\begin{itemize}
+  \item one sort $T$, for terms
+  \item term constructors
+  \[\begin{array}{rl}
+    S&:1 \to T\\
+    K&:1 \to T\\
+    I&:1 \to T\\
+    (-\; -)&: T^2 \to T\\
+  \end{array}\]
+  \item rewrites
+  \[\begin{array}{rl}
+    \sigma:(((S x) y) z) &\Rightarrow ((x z) (y z))\\
+    \kappa:((K y) z) &\Rightarrow y\\
+    \iota:(I z) &\Rightarrow z\\
+  \end{array}
+\end{itemize}
+A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$ with loops, and equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v)$ in $M(T),$ there is a vertex $(u\;v)$, and similarly for edges.  The functor $M$ also equips $M(T)$ with graph shifts asserting the existence of an edge out of a reducible expression to the term it reduces to.  Note that because application is a graph homomorphism, there must be rewrites of subterms that are not in head position: given that $(I K)$ rewrites to $K,$ it must be the case that $(S (I K))$ rewrites to $(S K).$
+
+In order to enforce the weak head normal form evaluation strategy in a Gph-theory, we have to introduce a context marker for reduction contexts and modify the rewrite rules to apply only in those contexts:
+\begin{itemize}
+  \item one sort $T$, for terms
+  \item term constructors
+  \[\begin{array}{rl}
+    S&:1 \to T\\
+    K&:1 \to T\\
+    I&:1 \to T\\
+    (-\; -)&: T^2 \to T\\
+    R&:T \to T
+  \end{array}\]
+  \item rewrites
+  \[\begin{array}{rl}
+    \sigma:(((RS\; x)\; y)\; z) &\Rightarrow ((Rx\; z)\; (y\; z))\\
+    \kappa:((RK\; y)\; z) &\Rightarrow Ry\\
+    \iota:(RI\; z) &\Rightarrow Rz\\
+    \rho:R(x\;y) &\Rightarrow (Rx\;y)\\
+  \end{array}
+\end{itemize}
+[[Theorem: for any term N in the SKI calculus, RN reduces to weak head normal form.]]
 
 \section{Gph-theories for the RHO combinators}
 Yoshida-style rho combinators: gets rid of prefixing,
@@ -476,8 +522,11 @@ abstraction/substitution and new names
   br(a,b) &= for(r \leftarrow a).fw(b,r) \\
   bl(a,b) &= for(l \leftarrow a).fw(l,b) \\
   s(a,b,c) &= for(x \leftarrow a).fw(b,c) \\
+  @(P) &= @P \\
   *(x) &= *x \\  
 \end{array}\]
+
+Sorts $N, T$
 
 Term constructors
 \[\begin{array}{rl}
@@ -510,6 +559,7 @@ Rewrite rules
 
 SKI-style rho combinators
 
+One sort $T$
 
 Term constructors:
 \[\begin{array}{rl}
@@ -542,6 +592,7 @@ Rewrite rules
   \theta &: *@x \Rightarrow x \\
 \end{array}\]
 
+\section{Faithfulness}
 
 \section{Conclusion and future work}
 TBD
