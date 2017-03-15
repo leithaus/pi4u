@@ -11,6 +11,7 @@
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
 \newcommand{\Th}{\mathrm{Th}}
+\newcommand{\Gph}{\mathrm{Gph}}
 \newcommand{\FinSet}{\mathrm{FinSet}}
 \newcommand{\FPGphCat}{\mathrm{FPGphCat}}
 \newcommand{\Set}{\mathrm{Set}}
@@ -465,7 +466,7 @@ A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a fun
 
 Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  The set $S$ is called the set of {\bf sorts}.  Any Gph-theory has an underlying multisorted Lawvere theory given by forgetting the edges of each hom graph.
 
-A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[Th, Gph] \to Gph$ that picks out the underlying graph of a model has a left adjoint $L$ that picks out the free model on a graph.
+A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint $L$ that picks out the free model on a graph.
 
 \section{Gph-theories as models of computation}
 
