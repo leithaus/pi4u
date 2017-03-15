@@ -154,7 +154,7 @@ L.G. Meredith\inst{2}\\
   $\mathsf{Y}$-combinator-like term that serves in the role of
   replication, and thus have more in common with traditional
   applicative algebra presentations such as the famous $\mathsf{SKI}$
-  presentations of the $\lambda$-calculus.
+  presentation of the $\lambda$-calculus.
 
 \end{abstract}
 \section{Introduction}
@@ -178,7 +178,7 @@ the structure of processes.
 
 The mathematics of bound variable names is subtle.  Sch\:onfinkel introduced the SKI combinator calculus in 1924 to clarify the role of quantified variables in intuitionistic logic by eliminating them; Curry developed his ideas much further.  The recent work by Andrew Pitts \cite{Pitts} and others \cite{Etc} on nominal set theory has put the study of bound names and substitution on a much nicer foundation, but there is still value in eliminating bound variables because of the clear connection between combinators and the axioms of logic.  As concurrency becomes more important to computer science, it is worth attempting to eliminate bound variables or names to study the resulting logics.
 
-Semantically, pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: it binds a name and prevents reduction of the term underneath it.  There is an equivalent notion of the weak head normal form for SKI combinators.  Yoshida \cite{Yoshida} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names. She prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder is introduced.
+Pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: both bind a variable or name and prevent the reduction of the term underneath it.  There is an equivalent notion of the weak head normal form for SKI combinators, where only the leftmost application of a combinator may be reduced.  Yoshida \cite{Yoshida} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names. She prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder is introduced.
 
 [[ Replace nu operator with reflection \& types.]]
 
