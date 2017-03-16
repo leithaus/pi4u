@@ -218,13 +218,16 @@ forwarder is introduced.
 
 \section{Reflective higher-order concurrent combinator calculus}
 
-Yoshida's original combinator calculus
+\subsection{Yoshida's original combinator calculus}
 
 \begin{mathpar}
   \inferrule* [lab=atom] {} { P \bc m(a,b) \;|\; d(a,b,c) \;|\; k(a) \;|\; fw(a,b) \;|\; br(a,b) \;|\; bl(a,b) \;|\; s(a,b,c) }
   \and
   \inferrule* [lab=process] {} {\bm \; (\mathsf{new}\; a)P \;|\; P|P \;|\; !P}
 \end{mathpar}
+
+As in the {\pic}, the $\mathsf{new}$ operator is a binding operator
+for names. Thus, we have a notion of free and bound names.
 
 \begin{mathpar}
   \freenames{\pzero} := \emptyset
@@ -256,7 +259,7 @@ denotes the capture-avoiding substitution of $\vec{y}$ for $\vec{x}$ in $Q$.
   between processes is the least congruence containing
   alpha-equivalence, satisfying the abelian monoid laws
   (associativity, commutativity and $\pzero$ as identity) for parallel
-  composition $|$ and for summation $+$.
+  composition $|$.
 \end{definition}
 
 Rewrite rules
@@ -279,7 +282,17 @@ Rewrite rules
   \inferrule* {{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
 \end{mathpar}
 
-We remove new names and replication and introduce quoting/unquoting operators, then allow processes in the second argument of a send.
+\subsection{Yoshida's original combinator calculus}
+We remove new names and replication and introduce quoting/unquoting
+operators, then allow processes in the second argument of a send.
+
+\begin{mathpar}
+  \inferrule* [lab=atom] {} { P \bc m(a,P) \;|\; d(a,b,c) \;|\; k(a) \;|\; fw(a,b) \;|\; br(a,b) \;|\; bl(a,b) \;|\; s(a,b,c) }
+  \and
+  \inferrule* [lab=process] {} {\bm \; *a \;|\; P|P}
+  \and
+  \inferrule* [lab=nominal] {} {a \bc \quotep{P}}
+\end{mathpar}
 
 \section{Gph-enriched categories}
 Here we give standard definitions of various concepts in enriched category theory; see \cite{CIS-335497},
