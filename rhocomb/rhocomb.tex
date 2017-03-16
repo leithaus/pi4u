@@ -81,8 +81,8 @@
 \newcommand{\prefix}[3]{#1?(#2) . #3}
 \newcommand{\lift}[2]{#1 \lliftb #2 \rliftb}
 \newcommand{\clift}[1]{\lliftb #1 \rliftb}
-\newcommand{\quotep}[1]{\lpquote #1 \rpquote}
-\newcommand{\dropn}[1]{\rpquote #1 \lpquote}
+\newcommand{\quotep}[1]{\mathsf{@}#1}
+\newcommand{\dropn}[1]{\mathsf{*}#1}
 \newcommand{\procn}[1]{\stackrel{\vee}{x}}
 
 \newcommand{\newp}[2]{(\newkw \; #1 ) #2}
@@ -114,6 +114,7 @@
 \newcommand{\redhat}{\hat{\longrightarrow}}
 \newcommand{\lred}[1]{\stackrel{#1}{\longrightarrow}} %transitions
 \newcommand{\wlred}[1]{\stackrel{#1}{\Longrightarrow}}
+\newcommand{\vect}[1]{\stackrel{\rightharpoonup}{#1}}
 
 \newcommand{\rhoc}{$\rho$-calculus}
 
@@ -129,7 +130,7 @@
     \@ishortstack}
 \makeatother
 
-\title{Logic as a distributive law}
+\title{Rho by any other name}
 \author{
 Michael Stay\inst{1}\\
 \and
@@ -146,7 +147,9 @@ L.G. Meredith\inst{2}\\
 \maketitle
 \begin{abstract}
 \noindent
-  Building on the work of Meredith and Radestock
+  We show that graph-enriched Lawvere theories suffice to faithfully
+  model concurrent combinators for mobile concurrent
+  processes. Building on the work of Meredith and Radestock
   \cite{DBLP:journals/entcs/MeredithR05} defining a reflective higher
   order mobile process calculus, we present two different systems of
   concurrent combinators into which we can give a full and faithful
@@ -189,23 +192,15 @@ Pi calculus' input prefix plays a role similar to the lambda operator in the lam
 \subsubsection{Process grammar}\label{subsub:process_grammar}
 
 \begin{mathpar}
-  \inferrule* [lab=summation] {} {{M,N} \bc \pzero \;|\; x.A \;|\; M+N }
-  \and
-  \inferrule* [lab=agent] {} {{A} \bc (\vec{x})P \;| \; \clift{\vec{P}}}
-  \and
-  \inferrule* [lab=process] {} {{P,Q} \bc N \;| \;P|Q \;|\; \dropn{x}}
+  \inferrule* [lab=summation] {} {{P,Q} \bc \pzero \;|\; \mathsf{for( y \leftarrow x)P } \;|\; x!(Q) \;|\;P|Q \;|\; \dropn{x} }
   \and
   \inferrule* [lab=name] {} {{x,y} \bc \quotep{P}}
 \end{mathpar} 
 
-Note that $\vec{x}$ (resp. $\vec{P}$) denotes a vector of names
-(resp. processes) of length $|\vec{x}|$ (resp. $|\vec{P}|$). We adopt
-the following useful abbreviations.
+We adopt the following useful abbreviations.
 
 \begin{mathpar}
-   x?(\vec{y}).P := x.(\vec{y})P \and  x\clift{\vec{P}} := x.\clift{\vec{P}}
-   \and x!(y) := \lift{x}{\dropn{y}}
-   \and \Pi_{i=0}^{n-1}P_i := P_0 | \ldots | P_{n-1}
+  \Pi_{i=0}^{n-1}P_i := P_0 | \ldots | P_{n-1}
 \end{mathpar}
 
 \subsubsection{Structural congruence}
@@ -219,25 +214,23 @@ follows:
 
 \begin{mathpar}
   \freenames{\pzero} := \emptyset
-  \and \\
-  \freenames{x?(\vec{y}).P} := \{ x \} \cup (\freenames{P} \setminus \{ \vec{y} \})
+  \and
+  \freenames{\mathsf{for}( y \leftarrow x)P} := \{ x \} \cup (\freenames{P} \setminus \{ y \})
   \and 
-  \freenames{x \clift{\vec{P}}} := \{ x \} \cup \{ \vec{P} \} 
-  \and \\
+  \freenames{x!(P)} := \{ x \} \cup \{ P \} 
+  \and
   \freenames{P|Q} := \freenames{P} \cup \freenames{Q}
   \and
-  \freenames{P + Q} := \freenames{P} \cup \freenames{Q}
-  \and \\
   \freenames{\dropn{x}} := \{ x \}
 \end{mathpar}
 
 The bound names of a process, $\boundnames{P}$, are those names occurring in $P$
-that are not free. For example, in $x?(y).0$, the name $x$ is free, while $y$ is bound.
+that are not free. For example, in $\mathsf{for}(y \leftarrow x)0$, the name $x$ is free, while $y$ is bound.
 
 \begin{definition}
-Then two processes, $P,Q$, are alpha-equivalent if $P = Q\{\vec{y}/\vec{x}\}$ for
-some $\vec{x} \in \boundnames{Q},\vec{y} \in \boundnames{P}$, where $Q\{\vec{y}/\vec{x}\}$
-denotes the capture-avoiding substitution of $\vec{y}$ for $\vec{x}$ in $Q$.
+Then two processes, $P,Q$, are alpha-equivalent if $P = Q\{\vect{y}/\vect{x}\}$ for
+some $\vect{x} \in \boundnames{Q},\vect{y} \in \boundnames{P}$, where $Q\{\vect{y}/\vect{x}\}$
+denotes the capture-avoiding substitution of $\vect{y}$ for $\vect{x}$ in $Q$.
 \end{definition}
 
 \begin{definition}
@@ -273,7 +266,7 @@ appendix \ref{appendix:rho_details}.
 \subsection{Substitution}
 
 We use $\Proc$ for the set of processes, $\QProc$ for the set of
-names, and $\id{\{}\vec{y} / \vec{x} \id{\}}$ to denote partial maps,
+names, and $\id{\{}\vect{y} / \vect{x} \id{\}}$ to denote partial maps,
 $s : \QProc \rightarrow \QProc$. A map, $s$ lifts, uniquely, to a map
 on process terms, $\widehat{s} : \Proc \rightarrow \Proc$ by the
 following equations.
@@ -283,12 +276,12 @@ following equations.
   (R \juxtap S) \psubstp{Q}{P}
   :=    
   (R)\psubstp{Q}{P} \juxtap (S) \psubstp{Q}{P} \\
-  (x?(y).R) \psubstp{Q}{P}    
+  (\mathsf{for}( y \leftarrow x)R) \psubstp{Q}{P}    
   :=    
   (x)\substp{Q}{P} (z)\concat( (R \psubstn{z}{y}) \psubstp{Q}{P} ) \\
-  (\lift{x}{R}) \psubstp{Q}{P}  
+  ({x}!({R})) \psubstp{Q}{P}  
   :=
-  \lift{(x)\substp{Q}{P}}{ R \psubstp{Q}{P} } \\
+  {(x)\substp{Q}{P}}!({ R \psubstp{Q}{P} }) \\
 %   (\dropn{x})  \psubstp{Q}{P}       
 %   := 
 %   \left\{ 
@@ -311,10 +304,10 @@ following equations.
 where
 
 \begin{eqnarray}
-  (x)\id{\{} \lpquote Q \rpquote / \lpquote P \rpquote \id{\}}            = 
+  (x)\id{\{} \quotep{Q} / \quotep{P} \id{\}}            = 
   \left\{ 
     \begin{array}{ccc}
-      \lpquote Q \rpquote & & x \nameeq \lpquote P \rpquote \\
+      \quotep{Q} & & x \nameeq \quotep{P} \\
       x & & otherwise \\
     \end{array}
   \right. \nonumber
@@ -370,7 +363,7 @@ give a recursive presentation of this relation for the calculus used
 in the encoding.
 
 \begin{mathpar}
-  \inferrule* [lab=Comm] { x_{src} \nameeq x_{trgt} \\ \vec{y} \cap \vec{v} = \emptyset \\ |\vec{y}| = |\vec{z}|} { R_{L} + x_{trgt}?(\vec{y})P \; | \; x_{src}\clift{\vec{Q}} + R_{R} \red P\{\vec{\quotep{Q}}/\vec{y}\} }
+  \inferrule* [lab=Comm] { x_{src} \nameeq x_{trgt} \\ \vect{y} \cap \vect{v} = \emptyset \\ |\vect{y}| = |\vect{z}|} { R_{L} + x_{trgt}?(\vect{y})P \; | \; x_{src}\clift{\vect{Q}} + R_{R} \red P\{\vect{\quotep{Q}}/\vect{y}\} }
   \and \\
   \inferrule* [lab=Par] {{P} \red {P}'} {{{P} | {Q}} \red {{P}' | {Q}}}
   \and
