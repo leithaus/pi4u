@@ -198,7 +198,17 @@ concurrency becomes more important to computer science, it is worth
 attempting to eliminate bound variables or names to study the
 resulting logics.
 
-Pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: both bind a variable or name and prevent the reduction of the term underneath it.  There is an equivalent notion of the weak head normal form for SKI combinators, where only the leftmost application of a combinator may be reduced.  Yoshida \cite{DBLP:journals/tcs/Yoshida02} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names. She prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder is introduced.
+Pi calculus' input prefix plays a role similar to the lambda operator
+in the lambda calculus with the weak head normal form evaluation
+strategy: both bind a variable or name and prevent the reduction of
+the term underneath it.  There is an equivalent notion of the weak
+head normal form for SKI combinators, where only the leftmost
+application of a combinator may be reduced.  Yoshida
+\cite{DBLP:journals/tcs/Yoshida02} describes an elimination process
+that gets rid of input prefixes, but still depends on the nu operator
+to introduce new names. She prevents reduction by splitting each name
+into a pair of names; communication cannot occur on the names until a
+forwarder is introduced.
 
 [[ Replace nu operator with reflection \& types.]]
 
@@ -478,9 +488,7 @@ A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that p
 
 \section{Gph-theories as models of computation}
 
-We can think of the underlying multisorted Lawvere theory of a Gph-theory as a grammar for a term calculus: we choose one of the sorts to play the role of a terminal, and the others become nonterminals.  We think of morphisms into the terminal sort as term constructors.  The edges in the hom graphs encode the reduction relation.
-
-For example, here is a presentation of the SKI combinator calculus as a Gph-theory:
+Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  Here is a presentation of the SKI combinator calculus as a Gph-theory:
 \begin{itemize}
   \item one sort $T$, for terms
   \item term constructors
@@ -492,33 +500,17 @@ For example, here is a presentation of the SKI combinator calculus as a Gph-theo
   \end{array}\]
   \item rewrites
   \[\begin{array}{rl}
-    \sigma:(((S\; x)\; y)\; z) &\Rightarrow ((x\; z)\; (y\; z))\\
-    \kappa:((K\; y)\; z) &\Rightarrow y\\
-    \iota:(I\; z) &\Rightarrow z\\
+    \sigma&:(((S\; x)\; y)\; z) \Rightarrow ((x\; z)\; (y\; z))\\
+    \kappa&:((K\; y)\; z) \Rightarrow y\\
+    \iota&:(I\; z) \Rightarrow z\\
   \end{array}\]
 \end{itemize}
-A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$ with loops, and equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v)$ in $M(T),$ there is a vertex $(u\;v)$, and similarly for edges.  The functor $M$ also equips $M(T)$ with graph shifts asserting the existence of an edge out of a reducible expression to the term it reduces to.  Note that because application is a graph homomorphism, there must be rewrites of subterms that are not in head position: given that $(I\; K)$ rewrites to $K,$ it must be the case that $(S\; (I\; K))$ rewrites to $(S\; K).$
+where in the rewrites we have used expressions like $((K\; y)\; z)$ as shorthand for
+\[ T\times T \xrightarrow{\tiny\mbox{left}^{-1}} 1\times T \times T \xrightarrow{K \times T \times T} T\times T \times T \xrightarrow{(-\;-)\times T} T\times T \xrightarrow{(-\;-)} T. \]
 
-In order to enforce the weak head normal form evaluation strategy in a Gph-theory, we have to introduce a context marker for reduction contexts and modify the rewrite rules to apply only in those contexts:
-\begin{itemize}
-  \item one sort $T$, for terms
-  \item term constructors
-  \[\begin{array}{rl}
-    S&:1 \to T\\
-    K&:1 \to T\\
-    I&:1 \to T\\
-    (-\; -)&: T^2 \to T\\
-    R&:T \to T
-  \end{array}\]
-  \item rewrites
-  \[\begin{array}{rl}
-    \sigma:(((RS\; x)\; y)\; z) &\Rightarrow ((Rx\; z)\; (y\; z))\\
-    \kappa:((RK\; y)\; z) &\Rightarrow Ry\\
-    \iota:(RI\; z) &\Rightarrow Rz\\
-    \rho:R(x\;y) &\Rightarrow (Rx\;y)\\
-  \end{array}\]
-\end{itemize}
-[[Theorem: for any term N in the SKI calculus, RN reduces to weak head normal form.]]
+A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$; it equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v),$ there is a vertex $(u\;v)$, and similarly for edges; and it equips $M(T)$ with graph shifts asserting the existence of an edge out of a reducible expression to the term it reduces to.
+
+That this Gph-theory captures the semantics of the SKI calculus is almost definitional: there is an edge in $M(T)$ precisely when the source vertex is reducible to the target vertex.  It is straightforward to verify that Gph-theories suffice to capture the semantics of any calculus where every context is a reduction context.
 
 \section{Gph-theories for the RHO combinators}
 Yoshida-style rho combinators: gets rid of prefixing,
