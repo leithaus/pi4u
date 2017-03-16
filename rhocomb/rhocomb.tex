@@ -185,7 +185,7 @@ the structure of processes.
 
 The mathematics of bound variable names is subtle.  Sch\:onfinkel introduced the SKI combinator calculus in 1924 to clarify the role of quantified variables in intuitionistic logic by eliminating them; Curry developed Sch\:onfinkel's ideas much further.  The recent work by Andrew Pitts \cite{Pitts} and others \cite{Etc} on nominal set theory has put the study of bound names and substitution on a much nicer foundation, but there is still value in eliminating bound variables because of the clear connection between combinators and logical axioms.  As concurrency becomes more important to computer science, it is worth attempting to eliminate bound variables or names to study the resulting logics.
 
-Pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: both bind a variable or name and prevent the reduction of the term underneath it.  Yoshida \cite{Yoshida} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names. She prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder is introduced.
+Pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: both bind a variable or name and prevent the reduction of the term underneath it.  Yoshida \cite{Yoshida} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names. She prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder between them is introduced.
 
 [[ Replace nu operator with reflection \& types.]]
 
@@ -471,11 +471,13 @@ A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a fun
 
 Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  The set $S$ is called the set of {\bf sorts}.  Any Gph-theory has an underlying multisorted Lawvere theory given by forgetting the edges of each hom graph.
 
-A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint $L$ that picks out the free model on a graph.
+A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint $L$ that picks out the free model on a graph.
 
 \section{Gph-theories as models of computation}
 
-Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  Here is a presentation of the SKI combinator calculus as a Gph-theory:
+Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  A presentation of underlying multisorted Lawvere theory of a finitely-generated Gph-theory is a signature for a term calculus, consisting of a set of sorts and a set of term constructors, while the edges in the hom graphs of the theory encode the reduction relation.  It is straightforward to verify that Gph-theories suffice to capture the semantics of any calculus where every context is a reduction context.
+
+Here is a presentation of the SKI combinator calculus as a Gph-theory:
 \begin{itemize}
   \item one sort $T$, for terms
   \item term constructors
@@ -497,7 +499,7 @@ where in the rewrites we have used expressions like $((K\; y)\; z)$ as shorthand
 
 A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$; it equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v),$ there is a vertex $(u\;v)$, and similarly for edges; and it equips $M(T)$ with graph shifts asserting the existence of an edge out of a reducible expression to the term it reduces to.
 
-That this Gph-theory captures the semantics of the SKI calculus is almost definitional: there is an edge in $M(T)$ precisely when the source vertex is reducible to the target vertex.  It is straightforward to verify that Gph-theories suffice to capture the semantics of any calculus where every context is a reduction context.
+That this Gph-theory captures the semantics of the SKI calculus is almost definitional: there is an edge in $M(T)$ precisely when the source vertex is reducible to the target vertex.  
 
 \section{Gph-theories for the RHO combinators}
 Yoshida-style rho combinators: gets rid of prefixing,
