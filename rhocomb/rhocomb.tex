@@ -76,8 +76,8 @@
 \newcommand{\nameeq}{\mathbin{\equiv_N}}
 \newcommand{\alphaeq}{\mathbin{\equiv_{\alpha}}}
 \newcommand{\names}[1]{\mathbin{\mathcal{N}(#1)}}
-\newcommand{\freenames}[1]{\mathbin{\mathcal{FN}(#1)}}
-\newcommand{\boundnames}[1]{\mathbin{\mathcal{BN}(#1)}}
+\newcommand{\freenames}[1]{\mathbin{\mathsf{FN}(#1)}}
+\newcommand{\boundnames}[1]{\mathbin{\mathsf{BN}(#1)}}
 %\newcommand{\lift}[2]{\texttt{lift} \; #1 \concat #2}
 \newcommand{\binpar}[2]{#1 | #2}
 \newcommand{\outputp}[2]{#1!(#2)}
@@ -223,6 +223,39 @@ forwarder is introduced.
   \and
   \inferrule* [lab=process] {} {\bm \; (\mathsf{new}\; a)P \;|\; P|P \;|\; !P}
 \end{mathpar}
+
+\begin{mathpar}
+  \freenames{\pzero} := \emptyset
+  \and
+  \freenames{k(a)} := \{ a \}
+  \and
+  \freenames{m(a,b)} = \freenames{f(a,b)} = \freenames{br(a,b)} = \freenames{bl(a,b)} := \{ a, b \}
+  \and
+  \freenames{d(a,b,c)} = \freenames{s(a,b,c)} := \{ a, b, c \}
+  \and
+  \freenames{(\mathsf{new}\;a)P} := \freenames{P} \setminus \{ a \}
+  \and
+  \freenames{P|Q} := \freenames{P} \cup \freenames{Q}
+  \and
+  \freenames{!P} := \freenames{P}
+\end{mathpar}
+
+The bound names of a process, $\boundnames{P}$, are those names occurring in $P$
+that are not free. For example, in $(\mathsf{new}\; b)m(a,b)$, the name $a$ is free, while $b$ is bound.
+
+\begin{definition}
+Then two processes, $P,Q$, are alpha-equivalent if $P = Q\{\vec{y}/\vec{x}\}$ for
+some $\vec{x} \in \boundnames{Q},\vec{y} \in \boundnames{P}$, where $Q\{\vec{y}/\vec{x}\}$
+denotes the capture-avoiding substitution of $\vec{y}$ for $\vec{x}$ in $Q$.
+\end{definition}
+
+\begin{definition}
+  The {\em structural congruence} \cite{SangiorgiWalker} , $\equiv$,
+  between processes is the least congruence containing
+  alpha-equivalence, satisfying the abelian monoid laws
+  (associativity, commutativity and $\pzero$ as identity) for parallel
+  composition $|$ and for summation $+$.
+\end{definition}
 
 Rewrite rules
 \[\begin{array}{rl}
