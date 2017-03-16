@@ -1,7 +1,0 @@
-matrix {
-text(d)[l,t=#1#]\\
-\\
-line(u,d)\\
-\\
-text(u)[l,t=#2#]\\
-}

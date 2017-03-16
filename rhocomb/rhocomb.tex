@@ -148,24 +148,22 @@ L.G. Meredith\inst{2}\\
 \begin{abstract}
 \noindent
   We show that graph-enriched Lawvere theories suffice to faithfully
-  model concurrent combinators for mobile concurrent
-  processes. Building on the work of Meredith and Radestock
-  \cite{DBLP:journals/entcs/MeredithR05} defining a reflective higher
-  order mobile process calculus, we present two different systems of
-  concurrent combinators into which we can give a full and faithful
-  encoding of the rho-calculus. Unlike Yoshida's concurrent
-  combinators, which endure a dependency on names, the new operator,
-  and replication, both presentations are name-free and can encode a
-  $\mathsf{Y}$-combinator-like term that serves in the role of
-  replication, and thus have more in common with traditional
-  applicative algebra presentations such as the famous $\mathsf{SKI}$
-  presentation of the $\lambda$-calculus.
+  model concurrent combinators for mobile concurrent processes. In a
+  manner akin to abstraction elimination which transforms lambda terms
+  into terms in Schönfinkel and Curry's SKI combinator calculus, which
+  has no names, Yoshida's elimination algorithm for the asynch \pic
+  produces a combinator calculus \cite{DBLP:journals/tcs/Yoshida02},
+  but still uses names and the $\mathsf{new}$ operator to introduce
+  them, as well as replication.  We show that Meredith and Radestock's
+  reflection technique \cite{DBLP:journals/entcs/MeredithR05} allows
+  us to give a name-free higher-order concurrent combinator calculus
+  that captures the full behavior of the rho-calculus, and thus the
+  \pic, without any dependency on names, the $\mathsf{new}$ operator,
+  or replication. The resulting combinator calculus has a natural
+  presentation in graph-enriched Lawvere theories, which faithfully
+  capture its operational semantics.
 
 \end{abstract}
-
-[[
-Abstraction elimination transforms lambda terms into terms in Schönfinkel and Curry's SKI combinator calculus, which has no names.  Yoshida's elimination algorithm for the asynch pi calculus produces a combinator calculus, but still uses names and the nu operator to introduce them.  We show how Meredith and Radestock's reflection technique allows us to give a name-free higher-order concurrent combinator calculus.  We show that Gph-enriched Lawvere theories suffice as an operational semantics for both SKI combinator calculus and the RHO concurrent combinator calculus.
-]]
 
 \section{Introduction}
   
@@ -186,9 +184,21 @@ questions regarding the role of names with structure in calculi of
 interaction and the relationship between the structure of names and
 the structure of processes.
 
-The mathematics of bound variable names is subtle.  Sch\:onfinkel introduced the SKI combinator calculus in 1924 to clarify the role of quantified variables in intuitionistic logic by eliminating them; Curry developed his ideas much further.  The recent work by Andrew Pitts \cite{Pitts} and others \cite{Etc} on nominal set theory has put the study of bound names and substitution on a much nicer foundation, but there is still value in eliminating bound variables because of the clear connection between combinators and logical axioms.  As concurrency becomes more important to computer science, it is worth attempting to eliminate bound variables or names to study the resulting logics.
+The mathematics of bound variable names is subtle.  Sch\:onfinkel
+introduced the SKI combinator calculus in 1924 to clarify the role of
+quantified variables in intuitionistic logic by eliminating them
+\cite{finkel}; Curry developed his ideas much further.  The recent
+work by Jamie Gabbay and Andrew Pitts
+\cite{DBLP:journals/fac/GabbayP02} and others
+\cite{DBLP:journals/jcss/Clouston14} on nominal set theory has put the
+study of bound names and substitution on a much nicer foundation, but
+there is still value in eliminating bound variables because of the
+clear connection between combinators and logical axioms.  As
+concurrency becomes more important to computer science, it is worth
+attempting to eliminate bound variables or names to study the
+resulting logics.
 
-Pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: both bind a variable or name and prevent the reduction of the term underneath it.  There is an equivalent notion of the weak head normal form for SKI combinators, where only the leftmost application of a combinator may be reduced.  Yoshida \cite{Yoshida} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names. She prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder is introduced.
+Pi calculus' input prefix plays a role similar to the lambda operator in the lambda calculus with the weak head normal form evaluation strategy: both bind a variable or name and prevent the reduction of the term underneath it.  There is an equivalent notion of the weak head normal form for SKI combinators, where only the leftmost application of a combinator may be reduced.  Yoshida \cite{DBLP:journals/tcs/Yoshida02} describes an elimination process that gets rid of input prefixes, but still depends on the nu operator to introduce new names. She prevents reduction by splitting each name into a pair of names; communication cannot occur on the names until a forwarder is introduced.
 
 [[ Replace nu operator with reflection \& types.]]
 
@@ -445,11 +455,11 @@ operator, restricted to input-guarded processes, may be obtained as follows.
 \section{Yoshida's input prefix elimination applied to RHO}
 
 \section{Gph-enriched categories}
-Here we give standard definitions of various concepts in enriched category theory; see \cite{Kelly},
+Here we give standard definitions of various concepts in enriched category theory; see \cite{CIS-335497},
 % www.tac.mta.ca/tac/reprints/articles/10/tr10.pdf
-\cite{Power},
+\cite{Power99EnrichedLawvereTheories},
 % www.tac.mta.ca/tac/volumes/6/n7/6-07abs.html
-\cite{LackRosicky},
+\cite{DBLP:journals/acs/LackR11},
 % https://arxiv.org/abs/0810.2578
 and \cite{Trimble} for more details.
 % https://ncatlab.org/toddtrimble/published/multisorted+Lawvere+theories
@@ -598,5 +608,5 @@ Rewrite rules
 TBD
 
 \bibliographystyle{amsplain}
-\bibliography{ladl}
+\bibliography{rhocomb}
 \end{document}
