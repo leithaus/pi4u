@@ -1,6 +1,9 @@
 \documentclass{llncs}
 \usepackage{mathpartir}
+\usepackage{bigpage}
 \usepackage{bcprules}
+\usepackage{mathtools}
+\usepackage{listings}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{comment}
@@ -108,6 +111,7 @@
 \newcommand{\QProc}{\quotep{\mathbin{Proc}}}
 
 \newcommand{\bc}{\mathbin{\mathbf{::=}}}
+\newcommand{\bm}{\mathbin{\mathbf\mid}}
 
 \newcommand{\red}{\rightarrow}
 \newcommand{\wred}{\Rightarrow}
@@ -214,7 +218,31 @@ forwarder is introduced.
 
 \section{Reflective higher-order concurrent combinator calculus}
 
+\begin{mathpar}
+  \inferrule* [lab=atom] {} { P \bc m(a,b) \;|\; d(a,b,c) \;|\; k(a) \;|\; fw(a,b) \;|\; br(a,b) \;|\; bl(a,b) \;|\; s(a,b,c) }
+  \and
+  \inferrule* [lab=process] {} {\bm \; (\mathsf{new}\; a)P \;|\; P|P \;|\; !P}
+\end{mathpar}
 
+Rewrite rules
+\[\begin{array}{rl}
+  d(abc) | m(ax) & \red m(bx) | m(cx) \\
+  k(a) | m(ax) & \red 0 \\
+  fw(ab) | m(ax) & \red m(bx) \\
+\end{array} \quad \quad
+\begin{array}{rl}
+  br(ab) | m(ax) & \red fw(bx) \\
+  bl(ab) | m(ax) & \red fw(xb) \\
+  s(abc) | m(ax) & \red fw(bc)
+\end{array}\]
+\[\begin{array}{rl}
+  !P & \red P|!P \\
+\end{array}\]
+\begin{mathpar}
+  \inferrule* {{P} \red {P}'} {{{P} | {Q}} \red {{P}' | {Q}}}
+  \and
+  \inferrule* {{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
+\end{mathpar}
 
 \section{Gph-enriched categories}
 Here we give standard definitions of various concepts in enriched category theory; see \cite{CIS-335497},
