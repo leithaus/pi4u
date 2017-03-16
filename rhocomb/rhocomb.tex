@@ -156,10 +156,10 @@ L.G. Meredith\inst{2}\\
   manner akin to abstraction elimination which transforms lambda terms
   into terms in Schönfinkel and Curry's SKI combinator calculus, which
   has no names, Yoshida's elimination algorithm for the asynch \pic
-  produces a combinator calculus \cite{DBLP:journals/tcs/Yoshida02},
+  produces a combinator calculus,
   but still uses names and the $\mathsf{new}$ operator to introduce
   them, as well as replication.  We show that Meredith and Radestock's
-  reflection technique \cite{DBLP:journals/entcs/MeredithR05} allows
+  reflection technique allows
   us to give a name-free higher-order concurrent combinator calculus
   that captures the full behavior of the rho-calculus, and thus the
   \pic, without any dependency on names, the $\mathsf{new}$ operator,
@@ -171,56 +171,26 @@ L.G. Meredith\inst{2}\\
 
 \section{Introduction}
   
-  Enriched Lawvere theories \cite{GhaniLuth} 
+  Lawvere theories enriched over category-like structures like graphs or posets provide a 
+provide a nice framework for term rewriting \cite{GhaniLuth}.  The underlying Lawvere theory provides an algebraic signature for the syntax of terms, while the enrichment provides structure for encoding the reduction relation on the terms.
 % N. Ghani, C. Lüth, Monads and modular term rewriting, in: Proc. CTCS ’97, Lecture Notes in Computer Science, Vol. 1290, Springer, Berlin, 1997, pp. 69–86.
-provide a structure for representing not only the signature of terms in a calculus, but also the reduction relation on those terms.
-  
-  The {\pic} (\cite{milner91polyadicpi}) is not a closed theory, but
-rather a theory dependent upon some theory of names. Taking an
-operational view, one may think of the {\pic} as a procedure that when
-handed a theory of names provides a theory of processes that
-communicate over those names. This openness of the theory has been
-exploited in {\pic} implementations, like the execution engine in
-Microsoft's Biztalk \cite{biztalk}, where an ancillary binding
-language providing a means of specifying a `theory' of names; e.g.,
-names may be tcp/ip ports or urls or object references, etc. But
-foundationally, one might ask if there is a closed theory of
-processes, {\em i.e.} one in which the theory of names arises from and is
-wholly determined by the theory of processes. Behind this question
-lurk a whole host of other exciting and potentially enlightening
-questions regarding the role of names with structure in calculi of
-interaction and the relationship between the structure of names and
-the structure of processes.
-
-The mathematics of bound variable names is subtle.  Sch\:onfinkel
+Many term calculi, like lambda calculus or pi calculus, involve binders for names, and the mathematics of bound variable names is subtle.  Sch\:onfinkel
 introduced the SKI combinator calculus in 1924 to clarify the role of
 quantified variables in intuitionistic logic by eliminating them
-\cite{finkel}; Curry developed his ideas much further.  The recent
+\cite{finkel}; Curry developed Sch\:onfinkel's ideas much further.  The recent
 work by Jamie Gabbay and Andrew Pitts
 \cite{DBLP:journals/fac/GabbayP02} and others
 \cite{DBLP:journals/jcss/Clouston14} on nominal set theory has put the
 study of bound names and substitution on a much nicer foundation, but
 there is still value in eliminating bound variables because of the
 clear connection between combinators and logical axioms.  As
-concurrency becomes more important to computer science, it is worth
+concurrency becomes more important to the practice of computer science, it is worth
 attempting to eliminate bound variables or names to study the
 resulting logics.
 
-Pi calculus' input prefix plays a role similar to the lambda operator
-in the lambda calculus with the weak head normal form evaluation
-strategy: both bind a variable or name and prevent the reduction of
-the term underneath it.  There is an equivalent notion of the weak
-head normal form for SKI combinators, where only the leftmost
-application of a combinator may be reduced.  Yoshida
-\cite{DBLP:journals/tcs/Yoshida02} describes an elimination process
-that gets rid of input prefixes, but still depends on the nu operator
-to introduce new names. She prevents reduction by splitting each name
-into a pair of names; communication cannot occur on the names until a
-forwarder is introduced.
+  The {\pic} (\cite{milner91polyadicpi}) has two binders for names: the $\nu$ operator, which introduces a new name into scope, and the input prefix, which introduces a name for labeling locations for substitution.  Yoshida \cite{DBLP:journals/tcs/Yoshida02} describes an elimination algorithm that gets rid of input prefixes, but not the $\nu$ operator.  Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} introduce reflective operators into a higher-order pi calculus and implment $\nu$ and replication in terms of reflection.  Here, we present a combination of those ideas: a name-free concurrent combinator calculus into which Yoshida's combinators have a faithful embedding.  The operational semantics of the resulting calculus can be presented using a Lawvere theory enriched over graphs.
 
-[[ Replace nu operator with reflection \& types.]]
-
-\section{Reflective higher-order concurrent combinator calculus}
+\section{A reflective higher-order concurrent combinator calculus}
 
 \subsection{Yoshida's original combinator calculus}
 
@@ -286,9 +256,26 @@ Rewrite rules
   \inferrule* {{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
 \end{mathpar}
 
-\subsection{Yoshida's original combinator calculus}
+\subsection{RHO combinator calculus}
+  The {\pic} is not a closed theory, but
+rather a theory dependent upon some theory of names. Taking an
+operational view, one may think of the {\pic} as a procedure that when
+handed a theory of names provides a theory of processes that
+communicate over those names. This openness of the theory has been
+exploited in {\pic} implementations, like the execution engine in
+Microsoft's Biztalk \cite{biztalk}, where an ancillary binding
+language providing a means of specifying a `theory' of names; {\em e.g.},
+names may be TCP/IP ports, or URLs, or object references, {\em etc.}  But
+foundationally, one might ask if there is a closed theory of
+processes, {\em i.e.} one in which the theory of names arises from and is
+wholly determined by the theory of processes. Behind this question
+lurk a whole host of other exciting and potentially enlightening
+questions regarding the role of names with structure in calculi of
+interaction and the relationship between the structure of names and
+the structure of processes.
+
 We remove new names and replication and introduce quoting/unquoting
-operators, then allow processes in the second argument of a send.
+operators, then allow processes in the second argument of a send and introduce an extra rewrite governing the interaction between sending and unquoting.
 
 \begin{mathpar}
   \inferrule* [lab=atom] {} { P \bc m(a,P) \;|\; d(a,b,c) \;|\; k(a) \;|\; fw(a,b) \;|\; br(a,b) \;|\; bl(a,b) \;|\; s(a,b,c) }
@@ -431,6 +418,7 @@ The RHO combinators above also have a presentation as a Gph-theory:
     \end{array} \quad \quad
     \begin{array}{rl}
       s(abc) | m(aP) & \Rightarrow fw(bc) \\
+      *a | m(aP) & \Rightarrow P \\
       *(@P) & \Rightarrow P \\
       P | Q & \Leftrightarrow Q | P \\
       ((P | Q) | R) & \Leftrightarrow (P | (Q | R)) \\
