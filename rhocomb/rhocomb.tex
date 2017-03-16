@@ -218,6 +218,8 @@ forwarder is introduced.
 
 \section{Reflective higher-order concurrent combinator calculus}
 
+Yoshida's original combinator calculus
+
 \begin{mathpar}
   \inferrule* [lab=atom] {} { P \bc m(a,b) \;|\; d(a,b,c) \;|\; k(a) \;|\; fw(a,b) \;|\; br(a,b) \;|\; bl(a,b) \;|\; s(a,b,c) }
   \and
@@ -277,6 +279,8 @@ Rewrite rules
   \inferrule* {{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
 \end{mathpar}
 
+We remove new names and replication and introduce quoting/unquoting operators, then allow processes in the second argument of a send.
+
 \section{Gph-enriched categories}
 Here we give standard definitions of various concepts in enriched category theory; see \cite{CIS-335497},
 % www.tac.mta.ca/tac/reprints/articles/10/tr10.pdf
@@ -331,18 +335,6 @@ That this Gph-theory captures the semantics of the SKI calculus is almost defini
 Yoshida-style rho combinators: gets rid of prefixing,
 abstraction/substitution and new names
 
-\[\begin{array}{rl}
-  m(a,P) &= a!(P) \\
-  d(a,b,c) &= for(x \leftarrow a).(b!(*x) | c!(*x)) \\
-  k(a) &= for(x \leftarrow a).0 \\ 
-  fw(a,b) &= for(x \leftarrow a).b!(*x) \\
-  br(a,b) &= for(r \leftarrow a).fw(b,r) \\
-  bl(a,b) &= for(l \leftarrow a).fw(l,b) \\
-  s(a,b,c) &= for(x \leftarrow a).fw(b,c) \\
-  @(P) &= @P \\
-  *(x) &= *x \\  
-\end{array}\]
-
 Sorts $N, T$
 
 Term constructors
@@ -363,12 +355,14 @@ Rewrite rules
   d(abc) | m(aP) & \Rightarrow m(bP) | m(cP) \\
   k(a) | m(aP) & \Rightarrow 0 \\
   fw(ab) | m(aP) & \Rightarrow m(bP) \\
-\end{array} \quad \quad
-\begin{array}{rl}
   br(ab) | m(aP) & \Rightarrow fw(b@(P)) \\
   bl(ab) | m(aP) & \Rightarrow fw(@(P)b) \\
+\end{array} \quad \quad
+\begin{array}{rl}
   s(abc) | m(aP) & \Rightarrow fw(bc) \\
   *(@P) & \Rightarrow P \\
+  P | Q & \Leftrightarrow Q | P \\
+  ((P | Q) | R) & \Leftrightarrow (P | (Q | R)) \\
 \end{array}\]
 
 %!P = for( y \leftarrow x ){ *y | x!( *y ) }   |   x!( for( y \leftarrow x ){ *y | x!( *y ) } | P )
