@@ -172,12 +172,13 @@ L.G. Meredith\inst{2}\\
 \section{Introduction}
   
   Lawvere theories enriched over category-like structures like graphs or posets provide a 
-provide a nice framework for term rewriting \cite{GhaniLuth}.  The underlying Lawvere theory provides an algebraic signature for the syntax of terms, while the enrichment provides structure for encoding the reduction relation on the terms.
+provide a nice framework for term rewriting \cite{GhaniLuth}: the underlying Lawvere theory provides an algebraic signature for the syntax of terms, while the enrichment provides structure for encoding the reduction relation on the terms.
 % N. Ghani, C. Lüth, Monads and modular term rewriting, in: Proc. CTCS ’97, Lecture Notes in Computer Science, Vol. 1290, Springer, Berlin, 1997, pp. 69–86.
-Many term calculi, like lambda calculus or pi calculus, involve binders for names, and the mathematics of bound variable names is subtle.  Sch\:onfinkel
+
+  Many term calculi, like lambda calculus or pi calculus, involve binders for names, and the mathematics of bound variable names is subtle.  Sch\"onfinkel
 introduced the SKI combinator calculus in 1924 to clarify the role of
 quantified variables in intuitionistic logic by eliminating them
-\cite{finkel}; Curry developed Sch\:onfinkel's ideas much further.  The recent
+\cite{finkel}; Curry developed Sch\"onfinkel's ideas much further.  The recent
 work by Jamie Gabbay and Andrew Pitts
 \cite{DBLP:journals/fac/GabbayP02} and others
 \cite{DBLP:journals/jcss/Clouston14} on nominal set theory has put the
@@ -188,7 +189,7 @@ concurrency becomes more important to the practice of computer science, it is wo
 attempting to eliminate bound variables or names to study the
 resulting logics.
 
-  The {\pic} (\cite{milner91polyadicpi}) has two binders for names: the $\nu$ operator, which introduces a new name into scope, and the input prefix, which introduces a name for labeling locations for substitution.  Yoshida \cite{DBLP:journals/tcs/Yoshida02} describes an elimination algorithm that gets rid of input prefixes, but not the $\nu$ operator.  Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} introduce reflective operators into a higher-order pi calculus and implment $\nu$ and replication in terms of reflection.  Here, we present a combination of those ideas: a name-free concurrent combinator calculus into which Yoshida's combinators have a faithful embedding.  The operational semantics of the resulting calculus can be presented using a Lawvere theory enriched over graphs.
+  The {\pic} (\cite{milner91polyadicpi}) has two binders for names: the $\nu$ operator, which introduces a new name into scope, and the input prefix, which introduces a name for labeling locations for substitution.  Yoshida \cite{DBLP:journals/tcs/Yoshida02} describes an elimination algorithm that gets rid of input prefixes, but not the $\nu$ operator.  Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} introduce reflective operators into a higher-order pi calculus and implment $\nu$ and replication in terms of reflection.  Here, we present a fusion of those ideas: a name-free concurrent combinator calculus into which Yoshida's combinators have a faithful embedding.  The operational semantics of the resulting calculus can be presented using a Lawvere theory enriched over graphs.
 
 \section{A reflective higher-order concurrent combinator calculus}
 
@@ -285,7 +286,27 @@ operators, then allow processes in the second argument of a send and introduce a
   \inferrule* [lab=nominal] {} {a \bc \quotep{P}}
 \end{mathpar}
 
-\section{Replication}
+Rewrite rules
+\[\begin{array}{rl}
+  d(abc) | m(aP) & \red m(bP) | m(cP) \\
+  k(a) | m(aP) & \red 0 \\
+  fw(ab) | m(aP) & \red m(bP) \\
+\end{array} \quad \quad
+\begin{array}{rl}
+  br(ab) | m(aP) & \red fw(b@P) \\
+  bl(ab) | m(aP) & \red fw(@Pb) \\
+  s(abc) | m(aP) & \red fw(bc) \\
+  *a     | m(aP) & \red P
+\end{array}\]
+\begin{mathpar}
+  \inferrule* {{P} \red {P}'} {{{P} | {Q}} \red {{P}' | {Q}}}
+  \and
+  \inferrule* {{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
+\end{mathpar}
+
+\subsubsection{Implementing new names with reflection}
+
+\subsubsection{Implementing replication with reflection}
 
 As mentioned before, it is known that replication (and hence
 recursion) can be implemented in a higher-order process algebra
@@ -350,23 +371,23 @@ operator, restricted to input-guarded processes, may be obtained as follows.
 \end{remark}
 
 \section{Gph-enriched categories}
-Here we give standard definitions of various concepts in enriched category theory; see \cite{CIS-335497}, \cite{Power99EnrichedLawvereTheories}, \cite{DBLP:journals/acs/LackR11}, and \cite{Trimble} for more details.
+Here we review standard results in enriched category theory; see \cite{CIS-335497}, \cite{Power99EnrichedLawvereTheories}, \cite{DBLP:journals/acs/LackR11}, and \cite{Trimble} for more details.
 
-A {\bf directed multigraph}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, and two functions $s,t\maps E \to V$ picking out the source and target of each edge.  There are no constraints on $E, V, s,$ or $t$, so a graph may have infinitely many vertices, infinitely many edges between any two vertices, and loops.  A {\bf graph homomorphism} from $(E, V, s, t)$ to $(E', V', s', t')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon$ and $\upsilon\circ t = t' \circ \epsilon$.  Given two graph homomorphisms $F, G\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph shift} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = G(v).$  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t) \times (E', V', s', t')$ is $(E \times E', V \times V', s \times s', t\times t').$
+A {\bf directed multigraph}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, and two functions $s,t\maps E \to V$ picking out the source and target of each edge.  There are no constraints on $E, V, s,$ or $t$, so a graph may have infinitely many vertices, infinitely many edges between any two vertices, and loops.  A {\bf graph homomorphism} from $(E, V, s, t)$ to $(E', V', s', t')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon$ and $\upsilon\circ t = t' \circ \epsilon$.  {\bf Gph} is the category of graphs and graph homomorphisms.  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t) \times (E', V', s', t')$ is $(E \times E', V \times V', s \times s', t\times t').$
 
 A {\bf Gph-enriched category} is a category where each hom set $\hom(x,y)$ is equipped with a set $E_{x,y}$ and functions $s_{x,y}, t_{x,y}\maps E_{x,y} \to \hom(x,y);$ that is, each hom set is thought of as a set of vertices and is equipped with a set of edges making it into a graph.  A Gph-enriched category has finite products if the underlying category does.
 
-Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  The category Gph is nontrivially Gph-enriched, making it a cartesian closed category: the objects are graphs, and for any pair of graphs $(G, G')$ we get a graph whose vertices are graph homomorphisms from $G$ to $G'$ and whose edges are graph shifts.
+Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  Given two graph homomorphisms $F, G\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph shift} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = G(v).$  The category Gph is nontrivially Gph-enriched, making it a cartesian closed category: the objects are graphs, and for any pair of graphs $(G, G')$ we get a graph whose vertices are graph homomorphisms from $G$ to $G'$ and whose edges are graph shifts.
 
-A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the graph structure on each hom set is preserved, {\em i.e.} the functions between hom sets extend to graph homomorhisms between the hom graphs.
+A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the graph structure on each hom set is preserved, {\em i.e.} the functions between hom sets are graph homomorphisms between the hom graphs.
 
-Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  The set $S$ is called the set of {\bf sorts}.  Any Gph-theory has an underlying multisorted Lawvere theory given by forgetting the edges of each hom graph.
+Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a finite set $S$ of {\bf sorts} and a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  Any Gph-theory has an underlying multisorted Lawvere theory given by forgetting the edges of each hom graph.
 
 A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint $L$ that picks out the free model on a graph.
 
 \section{Gph-theories as models of computation}
 
-Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  A presentation of underlying multisorted Lawvere theory of a finitely-generated Gph-theory is a signature for a term calculus, consisting of a set of sorts and a set of term constructors, while the edges in the hom graphs of the theory encode the reduction relation.  It is straightforward to verify that Gph-theories suffice to capture the semantics of any calculus where every context is a reduction context.
+Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  A presentation of underlying multisorted Lawvere theory of a finitely-generated Gph-theory is a signature for a term calculus, consisting of a set of sorts and a set of term constructors, while the edges in the hom graphs of the theory encode the reduction relation.  It is straightforward to verify that Gph-theories suffice to capture the operational semantics of any calculus where every context is a reduction context.
 
 Here is a presentation of the SKI combinator calculus as a Gph-theory:
 \begin{itemize}
