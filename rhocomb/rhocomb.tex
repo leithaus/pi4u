@@ -53,6 +53,7 @@
 \newcommand{\lpquote}{\ulcorner}
 \newcommand{\rpquote}{\urcorner}
 \newcommand{\newkw}{\nu}
+\newcommand{\wbbisim}{\stackrel{\centerdot}{\approx}} %weak barbed bisimilar
 
 % SYNTAX
 \newcommand{\id}[1]{\texttt{#1}}
@@ -305,6 +306,74 @@ Rewrite rules
 \end{mathpar}
 
 \subsubsection{Implementing new names with reflection}
+
+The translation will be given by a function, $\meaningof{-}( -, - ) :
+\Proc_{\pi} \times \QProc \times \QProc \red \Proc$. The guiding
+intuition is that we construct alongside the process a distributed memory
+allocator, the process' access to which is mediated through the second argument
+to the function. The first argument determines the shape of the memory
+for the given allocator.
+
+Given a process, $P$, we pick $n$ and $p$ such that $n \neq p$ and
+distinct from the free names of $P$. For example, $n = \quotep{\Pi_{m
+\in \freenames{P}}\outputp{m}{\quotep{\pzero}}}$ and $p =
+\quotep{\Pi_{m \in
+\freenames{P}}\prefix{m}{\quotep{\pzero}}{\pzero}}$. Then
+
+\begin{equation*}
+	\meaningof{P} = \meaningof{P}_{2nd}( n, p )
+\end{equation*}
+
+where
+
+\begin{eqnarray*}
+   	\meaningof{\pzero}_{2nd} (  n, p )
+   		& = &
+   		 \pzero \\
+   	\meaningof{x \id{[} y \id{]}}_{2nd} (  n, p ) 
+  		& = & 
+  		x \id{[} y \id{]} \\
+   	\meaningof{x \id{(} y \id{)} \concat P}_{2nd} (  n, p ) 
+   		& = & 
+ 		x \id{(} y \id{)} \concat \meaningof{P}_{2nd} (  n, p ) \\
+   	\meaningof{P \juxtap Q}_{2nd} (  n, p ) 
+   		& = & 
+ 		\meaningof{P}_{2nd} ( n^{l}, p^{l} )
+   			 \juxtap \meaningof{Q}_{2nd} ( n^{r}, p^{r} ) \\
+%    	\meaningof{\id{!} P}_{2nd} (  n, p )
+%    		& = & \binpar{\lift{x}{\binpar{upn( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}
+% 						      {\meaningof{P}_{3rd}( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}}}
+% 		             {\binpar{D(x)}{\binpar{\outputp{n^{lr}}{n}}{\outputp{p^{lr}}{p}}}} \\
+   	\meaningof{\id{!} P}_{2nd} (  n, p )
+   		& = & \binpar{\lift{x}{\meaningof{P}_{3rd}( n^{r}, p^{r} )}}
+		             {\binpar{D(x)}{\binpar{\outputp{n^{r}}{n^{l}}}{\outputp{p^{r}}{p^{l}}}}} \\
+   	\meaningof{\id{(}\nu \; x \id{)} P}_{2nd} (  n, p ) 
+   		& = & 
+ 		\prefix{p}{x}{\binpar{\meaningof{P}_{2nd} ( n^{l}, p^{l} )}{\outputp{p}{n}}} \\
+\end{eqnarray*}
+
+and
+
+\begin{eqnarray*}
+	x^{l} & \triangleq & \quotep{\outputp{x}{x}} \\
+	x^{r} & \triangleq & \quotep{\prefix{x}{x}{\pzero}} \\
+	\meaningof{P}_{3rd}( n'', p'' ) 
+		& \triangleq & 
+			\prefix{n''}{n}{\prefix{p''}{p}{(\binpar{\meaningof{P}_{2nd}(  n, p )}
+							        {(\binpar{D(x)}{\binpar{\outputp{n''}{n^{l}}}{\outputp{p''}{p^{l}}}})})}} \\
+\end{eqnarray*}
+
+	Note that all $\nu$-binding is now interpreted, as in Wischik's
+	global $\pi$-calculus, as an input guard \cite{globalpi}.
+	
+	It is also noteworthy that the translation is dependent on how
+	the parallel compositions in a process are
+	associated. Different associations will result in different
+	bindings for $\nu$-ed names. This will not result in different
+	behavior, however, as the bindings will be consistent
+	throughout the translation of the process.
+
+	$P \wbbisim_{\pi} Q \iff \ldb P \rdb \wbbisim_{r(\texttt{FN}(P))} \ldb Q \rdb$.
 
 \subsubsection{Implementing replication with reflection}
 
