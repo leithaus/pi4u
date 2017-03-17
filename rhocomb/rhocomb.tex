@@ -137,21 +137,22 @@
 
 \title{Rho by any other name}
 \author{
-Michael Stay\inst{1}\\
+L.G. Meredith\inst{1}\\
 \and
-L.G. Meredith\inst{2}\\
+Michael Stay\inst{2}\\
 }
 \institute{
-  {Pyrofex Corp.}\\
-  \email{\fontsize{8}{8}\selectfont stay@pyrofex.net}\\
-  \and
   {RChain Cooperative}\\
   \email{\fontsize{8}{8}\selectfont greg@rchain.coop}
+  \and
+  {Pyrofex Corp.}\\
+  \email{\fontsize{8}{8}\selectfont stay@pyrofex.net}\\
 }
 \begin{document}
 \maketitle
 \begin{abstract}
 \noindent
+  [[new or $\nu$?]]
   We show that graph-enriched Lawvere theories suffice to faithfully
   model concurrent combinators for mobile concurrent processes. In a
   manner akin to abstraction elimination which transforms lambda terms
@@ -172,8 +173,7 @@ L.G. Meredith\inst{2}\\
 
 \section{Introduction}
   
-  Lawvere theories enriched over category-like structures like graphs or posets provide a 
-provide a nice framework for term rewriting \cite{GhaniLuth}: the underlying Lawvere theory provides an algebraic signature for the syntax of terms, while the enrichment provides structure for encoding the reduction relation on the terms.
+  Lawvere theories enriched over category-like structures such as graphs and posets provide a nice framework for term rewriting \cite{GhaniLuth}: the underlying Lawvere theory provides an algebraic signature for the syntax of terms, while the enrichment provides structure for encoding the reduction relation on the terms.
 % N. Ghani, C. Lüth, Monads and modular term rewriting, in: Proc. CTCS ’97, Lecture Notes in Computer Science, Vol. 1290, Springer, Berlin, 1997, pp. 69–86.
 
   Many term calculi, like lambda calculus or pi calculus, involve binders for names, and the mathematics of bound variable names is subtle.  Sch\"onfinkel
@@ -224,19 +224,23 @@ for names. Thus, we have a notion of free and bound names.
 The bound names of a process, $\boundnames{P}$, are those names occurring in $P$
 that are not free. For example, in $(\mathsf{new}\; b)m(a,b)$, the name $a$ is free, while $b$ is bound.
 
+[[Define bold name notation.]]
+
 \begin{definition}
-Then two processes, $P,Q$, are alpha-equivalent if $P = Q\{\vec{y}/\vec{x}\}$ for
+Two processes, $P,Q$, are alpha-equivalent if $P = Q\{\vec{y}/\vec{x}\}$ for
 some $\vec{x} \in \boundnames{Q},\vec{y} \in \boundnames{P}$, where $Q\{\vec{y}/\vec{x}\}$
 denotes the capture-avoiding substitution of $\vec{y}$ for $\vec{x}$ in $Q$.
 \end{definition}
 
 \begin{definition}
-  The {\em structural congruence} \cite{SangiorgiWalker} , $\equiv$,
-  between processes is the least congruence containing
-  alpha-equivalence, satisfying the abelian monoid laws
+  The {\em structural congruence} $\equiv$
+  between processes \cite{SangiorgiWalker} is the least congruence containing
+  alpha-equivalence and satisfying the commutative monoid laws
   (associativity, commutativity and $\pzero$ as identity) for parallel
   composition $|$.
 \end{definition}
+
+[[Insert commas into combinators.]]
 
 Rewrite rules
 \[\begin{array}{rl}
@@ -305,75 +309,7 @@ Rewrite rules
   \inferrule* {{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
 \end{mathpar}
 
-\subsubsection{Implementing new names with reflection}
-
-The translation will be given by a function, $\meaningof{-}( -, - ) :
-\Proc_{\pi} \times \QProc \times \QProc \red \Proc$. The guiding
-intuition is that we construct alongside the process a distributed memory
-allocator, the process' access to which is mediated through the second argument
-to the function. The first argument determines the shape of the memory
-for the given allocator.
-
-Given a process, $P$, we pick $n$ and $p$ such that $n \neq p$ and
-distinct from the free names of $P$. For example, $n = \quotep{\Pi_{m
-\in \freenames{P}}\outputp{m}{\quotep{\pzero}}}$ and $p =
-\quotep{\Pi_{m \in
-\freenames{P}}\prefix{m}{\quotep{\pzero}}{\pzero}}$. Then
-
-\begin{equation*}
-	\meaningof{P} = \meaningof{P}_{2nd}( n, p )
-\end{equation*}
-
-where
-
-\begin{eqnarray*}
-   	\meaningof{\pzero}_{2nd} (  n, p )
-   		& = &
-   		 \pzero \\
-   	\meaningof{\emph{c}(\vect{a})}_{2nd} (  n, p ) 
-  		& = & 
-  		\emph{c}(\vect{a}) \\
-   	\meaningof{m(aP)}_{2nd} (  n, p ) 
-   		& = & 
- 	        m(m \meaningof{P}_{2nd} (  n, p )) \\
-   	\meaningof{P \juxtap Q}_{2nd} (  n, p ) 
-   		& = & 
- 		\meaningof{P}_{2nd} ( n^{l}, p^{l} )
-   			 \juxtap \meaningof{Q}_{2nd} ( n^{r}, p^{r} ) \\
-%    	\meaningof{\id{!} P}_{2nd} (  n, p )
-%    		& = & \binpar{\lift{x}{\binpar{upn( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}
-% 						      {\meaningof{P}_{3rd}( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}}}
-% 		             {\binpar{D(x)}{\binpar{\outputp{n^{lr}}{n}}{\outputp{p^{lr}}{p}}}} \\
-   	\meaningof{\id{!} P}_{2nd} (  n, p )
-   		& = & \binpar{\lift{x}{\meaningof{P}_{3rd}( n^{r}, p^{r} )}}
-		             {\binpar{D(x)}{\binpar{\outputp{n^{r}}{n^{l}}}{\outputp{p^{r}}{p^{l}}}}} \\
-   	\meaningof{(\mathsf{new} \; x ) P}_{2nd} (  n, p ) 
-   		& = & 
- 		\prefix{p}{x}{\binpar{\meaningof{P}_{2nd} ( n^{l}, p^{l} )}{\outputp{p}{n}}} \\
-\end{eqnarray*}
-
-and
-
-\begin{eqnarray*}
-	x^{l} & \triangleq & \quotep{\outputp{x}{x}} \\
-	x^{r} & \triangleq & \quotep{\prefix{x}{x}{\pzero}} \\
-	\meaningof{P}_{3rd}( n'', p'' ) 
-		& \triangleq & 
-			\prefix{n''}{n}{\prefix{p''}{p}{(\binpar{\meaningof{P}_{2nd}(  n, p )}
-							        {(\binpar{D(x)}{\binpar{\outputp{n''}{n^{l}}}{\outputp{p''}{p^{l}}}})})}} \\
-\end{eqnarray*}
-
-	Note that all $\nu$-binding is now interpreted, as in Wischik's
-	global $\pi$-calculus, as an input guard \cite{globalpi}.
-	
-	It is also noteworthy that the translation is dependent on how
-	the parallel compositions in a process are
-	associated. Different associations will result in different
-	bindings for $\nu$-ed names. This will not result in different
-	behavior, however, as the bindings will be consistent
-	throughout the translation of the process.
-
-	$P \wbbisim_{\pi} Q \iff \ldb P \rdb \wbbisim_{r(\texttt{FN}(P))} \ldb Q \rdb$.
+[[Structural congruence]]
 
 \subsubsection{Implementing replication with reflection}
 
@@ -439,8 +375,82 @@ operator, restricted to input-guarded processes, may be obtained as follows.
   support no-cloning.]
 \end{remark}
 
+\subsubsection{Implementing new names with reflection}
+
+The translation will be given by a function, $\meaningof{-}( -, - ) :
+\Proc_{\pi} \times \QProc \times \QProc \red \Proc$. The guiding
+intuition is that we construct alongside the process a distributed memory
+allocator, the process' access to which is mediated through the second argument
+to the function. The first argument determines the shape of the memory
+for the given allocator.
+
+Given a process $P$, we pick $n$ and $p$ such that $n \neq p$ and
+distinct from the free names of $P$. [[Clarify $m$ used as a name vs. $m$ used as a combinator.]] For example, $n = \quotep{\Pi_{m
+\in \freenames{P}}\outputp{m}{\quotep{\pzero}}}$ and $p =
+\quotep{\Pi_{m \in
+\freenames{P}}\prefix{m}{\quotep{\pzero}}{\pzero}}$. Then
+
+\begin{equation*}
+	\meaningof{P} = \meaningof{P}_{2nd}( n, p )
+\end{equation*}
+
+where [[Translate to Yoshida's combinators.]]
+
+\begin{eqnarray*}
+   	\meaningof{\pzero}_{2nd} (  n, p )
+   		& = &
+   		 \pzero \\
+   	\meaningof{\emph{c}(\vect{a})}_{2nd} (  n, p ) 
+  		& = & 
+  		\emph{c}(\vect{a}) \\
+   	\meaningof{m(aP)}_{2nd} (  n, p ) 
+   		& = & 
+ 	        m(m \meaningof{P}_{2nd} (  n, p )) \quad \mbox{[[Should this be }m(a \meaningof{P}_{2nd} (  n, p )) \mbox{]]?} \\
+   	\meaningof{P \juxtap Q}_{2nd} (  n, p ) 
+   		& = & 
+ 		\meaningof{P}_{2nd} ( n^{l}, p^{l} )
+   			 \juxtap \meaningof{Q}_{2nd} ( n^{r}, p^{r} ) \\
+%    	\meaningof{\id{!} P}_{2nd} (  n, p )
+%    		& = & \binpar{\lift{x}{\binpar{upn( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}
+% 						      {\meaningof{P}_{3rd}( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}}}
+% 		             {\binpar{D(x)}{\binpar{\outputp{n^{lr}}{n}}{\outputp{p^{lr}}{p}}}} \\
+   	\meaningof{\id{!} P}_{2nd} (  n, p )
+   		& = & \binpar{\lift{x}{\meaningof{P}_{3rd}( n^{r}, p^{r} )}}
+		             {\binpar{D(x)}{\binpar{\outputp{n^{r}}{n^{l}}}{\outputp{p^{r}}{p^{l}}}}} \\
+   	\meaningof{(\mathsf{new} \; x ) P}_{2nd} (  n, p ) 
+   		& = & 
+ 		\prefix{p}{x}{\binpar{\meaningof{P}_{2nd} ( n^{l}, p^{l} )}{\outputp{p}{n}}} \\
+\end{eqnarray*}
+
+and
+
+\begin{eqnarray*}
+	x^{l} & \triangleq & \quotep{\outputp{x}{x}} \\
+	x^{r} & \triangleq & \quotep{\prefix{x}{x}{\pzero}} \\
+	\meaningof{P}_{3rd}( n'', p'' ) 
+		& \triangleq & 
+			\prefix{n''}{n}{\prefix{p''}{p}{(\binpar{\meaningof{P}_{2nd}(  n, p )}
+							        {(\binpar{D(x)}{\binpar{\outputp{n''}{n^{l}}}{\outputp{p''}{p^{l}}}})})}} \\
+\end{eqnarray*}
+
+	Note that all $\nu$-binding is now interpreted, as in Wischik's
+	global $\pi$-calculus, as an input guard \cite{globalpi}.
+	
+	It is also noteworthy that the translation is dependent on how
+	the parallel compositions in a process are
+	associated. Different associations will result in different
+	bindings for $\nu$-ed names. This will not result in different
+	behavior, however, as the bindings will be consistent
+	throughout the translation of the process.
+
+	$P \wbbisim_{\pi} Q \iff \ldb P \rdb \wbbisim_{r(\texttt{FN}(P))} \ldb Q \rdb$.
+
+\subsubsection{Faithful embedding of Yoshida's combinators into RHO combinators}
+
+The encodings of new and replication above are trivial translations of the same construction in \cite{DBLP:journals/entcs/MeredithR05}, where they prove that the embedding of pi calculus is faithful; see there for details.
+
 \section{Gph-enriched categories}
-Here we review standard results in enriched category theory; see \cite{CIS-335497}, \cite{Power99EnrichedLawvereTheories}, \cite{DBLP:journals/acs/LackR11}, and \cite{Trimble} for more details.
+Here we review some standard definitions and results in enriched category theory; see \cite{CIS-335497}, \cite{Power99EnrichedLawvereTheories}, \cite{DBLP:journals/acs/LackR11}, and \cite{Trimble} for more details.
 
 A {\bf directed multigraph}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, and two functions $s,t\maps E \to V$ picking out the source and target of each edge.  There are no constraints on $E, V, s,$ or $t$, so a graph may have infinitely many vertices, infinitely many edges between any two vertices, and loops.  A {\bf graph homomorphism} from $(E, V, s, t)$ to $(E', V', s', t')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon$ and $\upsilon\circ t = t' \circ \epsilon$.  {\bf Gph} is the category of graphs and graph homomorphisms.  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t) \times (E', V', s', t')$ is $(E \times E', V \times V', s \times s', t\times t').$
 
@@ -456,7 +466,7 @@ A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that p
 
 \section{Gph-theories as models of computation}
 
-Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  A presentation of underlying multisorted Lawvere theory of a finitely-generated Gph-theory is a signature for a term calculus, consisting of a set of sorts and a set of term constructors, while the edges in the hom graphs of the theory encode the reduction relation.  It is straightforward to verify that Gph-theories suffice to capture the operational semantics of any calculus where every context is a reduction context.
+Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  A presentation of underlying multisorted Lawvere theory of a finitely-generated Gph-theory is a signature for a term calculus, consisting of a set of sorts and a set of term constructors, while the edges in the hom graphs of the theory encode the reduction relation.
 
 Here is a presentation of the SKI combinator calculus as a Gph-theory:
 \begin{itemize}
@@ -482,18 +492,21 @@ A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewr
 
 That this Gph-theory captures the semantics of the SKI calculus is almost definitional: there is an edge in $M(T)$ precisely when the source vertex is reducible to the target vertex.  
 
+It is straightforward to verify that Gph-theories suffice to capture the operational semantics of any calculus where every context is a reduction context.  This restriction on reduction contexts is a consequence of the fact that models map term constructors to graph homomorphisms: given a model $M$, a graph homomorphism $F\maps M(T) \to M(T)$, and an edge $e\maps t_1 \to t_2,$ there is necessarily an edge $F(e)\maps F(t_1) \to F(t_2).$
+
 \section{Gph-theory for the RHO combinators}
 The RHO combinators above also have a presentation as a Gph-theory:
 \begin{itemize}
   \item Sorts $N, T$
   \item Term constructors
     \[\begin{array}{rl}
+      0 &: 1 \to T \\
       k &: N \to T \\
       m &: N \times T \to T \\
       fw,br,bl &: N^2 \to T \\
-      s &: N^3 \to T \\
     \end{array} \quad \quad
     \begin{array}{rl}
+      s &: N^3 \to T \\
       | &: T^2 \to T \\
       * &: N \to T \\
       @ &: T \to N \\
@@ -505,23 +518,16 @@ The RHO combinators above also have a presentation as a Gph-theory:
       fw(ab) | m(aP) & \Rightarrow m(bP) \\
       br(ab) | m(aP) & \Rightarrow fw(b@(P)) \\
       bl(ab) | m(aP) & \Rightarrow fw(@(P)b) \\
+      s(abc) | m(aP) & \Rightarrow fw(bc) \\
     \end{array} \quad \quad
     \begin{array}{rl}
-      s(abc) | m(aP) & \Rightarrow fw(bc) \\
       *a | m(aP) & \Rightarrow P \\
       *(@P) & \Rightarrow P \\
+      P | 0 & \Leftrightarrow P \\
       P | Q & \Leftrightarrow Q | P \\
       ((P | Q) | R) & \Leftrightarrow (P | (Q | R)) \\
     \end{array}\]
 \end{itemize}
-
-
-
-
-
-
-
-\section{Faithfulness of embedding Yoshida's combinators into RHO combinators}
 
 \section{Conclusion and future work}
 TBD
