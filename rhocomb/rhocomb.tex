@@ -197,7 +197,7 @@ resulting logics.
 \subsection{Yoshida's original combinator calculus}
 
 \begin{mathpar}
-  \inferrule* [lab=atom] {} { P \bc O \;|\; m(a,b) \;|\; d(a,b,c) \;|\; k(a) \;|\; fw(a,b) \;|\; br(a,b) \;|\; bl(a,b) \;|\; s(a,b,c) }
+  \inferrule* [lab=atom] {} { P \bc 0 \;|\; m(a,b) \;|\; d(a,b,c) \;|\; k(a) \;|\; fw(a,b) \;|\; br(a,b) \;|\; bl(a,b) \;|\; s(a,b,c) }
   \and
   \inferrule* [lab=process] {} {\bm \; (\mathsf{new}\; a)P \;|\; P|P \;|\; !P}
 \end{mathpar}
@@ -347,7 +347,7 @@ where
    	\meaningof{\id{!} P}_{2nd} (  n, p )
    		& = & \binpar{\lift{x}{\meaningof{P}_{3rd}( n^{r}, p^{r} )}}
 		             {\binpar{D(x)}{\binpar{\outputp{n^{r}}{n^{l}}}{\outputp{p^{r}}{p^{l}}}}} \\
-   	\meaningof{\id{(}\nu \; x \id{)} P}_{2nd} (  n, p ) 
+   	\meaningof{(\mathsf{new} \; x ) P}_{2nd} (  n, p ) 
    		& = & 
  		\prefix{p}{x}{\binpar{\meaningof{P}_{2nd} ( n^{l}, p^{l} )}{\outputp{p}{n}}} \\
 \end{eqnarray*}
