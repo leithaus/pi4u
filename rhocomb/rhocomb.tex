@@ -155,7 +155,7 @@ Michael Stay\inst{2}\\
 \noindent
   Yoshida demonstrated how to eliminate the bound names coming from
   the input prefix in the asynchronous {\pic}, but her combinators
-  still depended on the $\new$ operator to bind names.
+  still depend on the $\new$ operator to bind names.
   We modify Yoshida's combinators by replacing $\new$ and replication
   with reflective operators to provide the first combinator calculus
   with no bound names into which the asynchronous {\pic} has a faithful
@@ -164,15 +164,6 @@ Michael Stay\inst{2}\\
 \end{abstract}
 
 \section{Introduction}
-  
-Lawvere theories enriched over category-like structures such as graphs
-and posets provide a nice framework for term rewriting
-\cite{DBLP:conf/ctcs/LuethG97}: the underlying Lawvere theory provides
-an algebraic signature and a structural congruence for the syntax of
-terms, while the enrichment provides structure for encoding the
-reduction relation on the terms.
-% [[Add this reference]] 
-% N. Ghani, C. Lüth, Monads and modular term rewriting, in: Proc. CTCS ’97, Lecture Notes in Computer Science, Vol. 1290, Springer, Berlin, 1997, pp. 69–86.
 
 Many term calculi, like $\lambda$-calculus or {\pic}, involve
 binders for names, and the mathematics of bound variable names is
@@ -203,6 +194,13 @@ combinators have a faithful embedding.  The operational semantics of
 the resulting calculus can be presented using a Lawvere theory
 enriched over graphs.
 
+Lawvere theories enriched over category-like structures such as graphs
+and posets provide a nice framework for term rewriting
+\cite{DBLP:conf/ctcs/LuethG97}: the underlying Lawvere theory provides
+an algebraic signature and a structural congruence for the syntax of
+terms, while the enrichment provides structure for encoding the
+reduction relation on the terms.
+
 \section{A reflective higher-order concurrent combinator calculus}
 
 \subsection{Yoshida's original combinator calculus}
@@ -214,7 +212,7 @@ enriched over graphs.
 \end{mathpar}
 
 As in the {\pic}, the $\new$ operator is a binding operator
-for names. Thus, we have a notion of free and bound names.
+for names, so Yoshida's calculus also has a notion of free and bound names.
 
 \begin{mathpar}
   \freenames{\pzero} := \emptyset
@@ -276,10 +274,10 @@ The {\pic} is not a closed theory, but rather a theory dependent upon
 some theory of names. Taking an operational view, one may think of the
 {\pic} as a procedure that when handed a theory of names provides a
 theory of processes that communicate over those names. This openness
-of the theory has been exploited in {\pic} implementations, like the
+of the theory has been exploited in {\pic} implementations like the
 execution engine in Microsoft's Biztalk \cite{biztalk}, where an
-ancillary binding language providing a means of specifying a `theory'
-of names; {\em e.g.}, names may be TCP/IP ports, or URLs, or object
+ancillary binding language provides a means of specifying a `theory'
+of names: {\em e.g.}, names may be TCP/IP ports, or URLs, or object
 references, {\em etc.}  But foundationally, one might ask if there is
 a closed theory of processes, {\em i.e.} one in which the theory of
 names arises from and is wholly determined by the theory of
@@ -292,8 +290,8 @@ unquote the, effectively reflecting names (which are quoted processes)
 back as processes.
 
 The same technique can be applied to Yoshida's combinators. We remove
-new names and replication and introduce quoting/unquoting operators,
-then allow processes in the second argument of a send and introduce an
+new names and replication, introduce quoting/unquoting operators,
+allow processes in the second argument of a send, and introduce an
 extra rewrite governing the interaction between sending and unquoting.
 
 \begin{mathpar}
@@ -360,7 +358,7 @@ As mentioned before, it is known that replication (and hence
 recursion) can be implemented in a higher-order process algebra
 \cite{SangiorgiWalker}. As our first example of calculation with the
 machinery thus far presented we give the construction explicitly in
-the rho combinator calculus.
+the RHO combinator calculus.
 
 \begin{definition}[Replication]
   $D(x,v,w) := (d(x,v,w) | fw(v,x) | {*}(w))$
@@ -376,27 +374,28 @@ the rho combinator calculus.
 Of course, this encoding, as an implementation, runs away, unfolding
 $\bangp{P}$ eagerly. It is possible to obtain a lazier and more
 implementable replication operator, restricted to input-guarded
-processes.  The reader familiar with the $\lambda$-calculus will have noticed the
-similarity between $D$ and the paradoxical combinator $Y$.
+processes [[combinators other than m?  products of combinataors other than m?]].  
+The reader familiar with the $\lambda$-calculus will have noticed the
+similarity between $D$ and the ``paradoxical'' or ``fixed point'' combinator $Y$.
 
 \subsubsection{Implementing new names with reflection}
 
 Here we provide an encoding of Yoshida's combinator calculus into the
-rho combinator calculus. Since all names are global in the rho
+RHO combinator calculus. Since all names are global in the RHO
 combinator calculus, we encounter a small complication in the
 treatment of free names at the outset. There are several ways to
-handle this. One is to insist that the translation be handed a closed
-program (one in which all names are bound either by input or by
-restriction). This alternative feels inelegant. Another is to provide
+handle this.  One is to insist that the translation be handed a closed
+program, one in which all names are bound either by input or by
+restriction; this alternative feels inelegant. Another is to provide
 an environment, $r : \mathcal{N}_{\pi} \rightarrow \QProc$, for
-mapping the free names in a Yoshida process into names in the rho
+mapping the free names in a Yoshida process into names in the RHO
 combinator calculus. Maintaining the updates to the environment,
 however, obscures the simplicity of the translation. We adopt a third
 alternative.
 
 To hammer home the point that Yoshida's combinator calculus is
-parameterized in a theory of names, we instantiated her calculus with
-the names of the rho combinator calculus. This is no different than
+parameterized in a theory of names, we instantiate her calculus with
+the names of the RHO combinator calculus. This is no different than
 instantiating her calculus using the natural numbers, or the set of URLs as the
 set of names. Just as there is no connection between the structure of
 these kinds of names and the structure of processes in the {\pic},
@@ -412,8 +411,7 @@ given in terms of a function \[\meaningof{-}_2( -, - ) :
     \Proc_{\mbox{\tiny Yoshida}} \times \QProc {\times} \QProc \red \Proc.\] 
 The guiding intuition is that we construct alongside the process a distributed memory
 allocator, the process' access to which is mediated through the second argument
-to the function. The first argument determines the shape of the memory
-for the given allocator, and the third provides a location for replication.
+to the function, called $p$ below. The first argument, called $n$ below, determines the shape of the memory for the given allocator.
 
 Since Yoshida's calculus is parametric in a set of names, we can choose $\QProc$ for that set.  Given a process $P$ in Yoshida's calculus, 
 we pick names $n$ and $p$ in the RHO calculus such that $n \neq p$ and
@@ -422,7 +420,7 @@ both are distinct from the free names of $P$.  Then we define
   \meaningof{P} = \meaningof{P}_2(n, p),
 \end{equation*}
 
-where
+where [[fix $\interp{\new x.P}_2$ and $\interp{P}_3$]]
 
 \begin{eqnarray*}
     \meaningof{\pzero}_2 (n,p)
@@ -459,10 +457,10 @@ and
   \meaningof{P}_3(n, p) 
     & \triangleq & 
       \prefix{n}{n'}{\prefix{p}{p'}{(\binpar{\meaningof{P}_2(n',p')}
-        {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}} \\
+        {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}}. \\
 \end{eqnarray*}
 
-Note that, by construction, $\quotep{P}$ cannot occur as a name in $P$
+Note that by construction, $\quotep{P}$ cannot occur as a name in $P$
 and hence any name derived from a process that is built using
 $\quotep{P}$ cannot occur in $P$. Thus, the effect of the superscripts
 $l$ and $r$ on a name $x$ is to construct a name that is guaranteed to
@@ -473,14 +471,13 @@ global $\pi$-calculus, as an input \cite{globalpi}.
 
 It is also noteworthy that the translation is dependent on how the
 parallel compositions in a process are associated. Different
-associations will result in different bindings for $\new$-ed
-names. This will not result in different behavior, however, as the
-bindings will be consistent throughout the translation of the process;
-see below for a proof.
+associations will result in different bindings for $\new$
+names. This will not result in different behavior, however:
+while the RHO combinators can encode different behaviors depending
+on the choice of name, Yoshida's combinators cannot and the
+embedding is insensitive to the choice.
 
 \subsubsection{Faithfulness of the translation}
-
-The template for an observation relation on both calculi is given by
 
 \begin{definition}
 An \emph{observation relation}, $\downarrow_{\mathcal N}$, over a set
@@ -488,17 +485,18 @@ of names, $\mathcal N$, is the smallest relation satisfying the rules
 below.
 
 \infrule[Out-barb]{y \in {\mathcal N}, \; x \nameeq y}
-		  {m(x-) \downarrow_{\mathcal N} x}
+    {m(x-) \downarrow_{\mathcal N} x}
+
 \infrule[Par-barb]{\mbox{$P\downarrow_{\mathcal N} x$ or $Q\downarrow_{\mathcal N} x$}}
-		  {\binpar{P}{Q} \downarrow_{\mathcal N} x}
+    {\binpar{P}{Q} \downarrow_{\mathcal N} x}
 
 We write $P \Downarrow_{\mathcal N} x$ if there is $Q$ such that 
 $P \wred Q$ and $Q \downarrow_{\mathcal N} x$.
 \end{definition}
 
 This definition is parametric in the the argument accepted in the
-second position in the message combinator, $m(x-)$, i.e. the payload
-of the message. For in the rho combinators the payload is a process,
+second position in the message combinator, $m(x-)$, {\em i.e.} the payload
+of the message: in the RHO combinators the payload is a process,
 while in Yoshida's the payload is a name. Likewise, because the
 definition of barbed bisimulation given below is dependent on the
 definition of the observation relation, the definition is really a
@@ -538,7 +536,7 @@ $P \wbbisim_{\mathcal N} Q$, if $P \rel{S}_{\mathcal N} Q$ for some ${\mathcal N
 
 \begin{remark}
   In light of this theorem, it is worth pointing out that this version
-  of the rho combinators has no rule for \emph{introducing} terms of
+  of the RHO combinators has no rule for \emph{introducing} terms of
   the form $\dropn{x}$. The $br$ and $bl$ combinators introduce new
   names from processes, but the do not introduce new reflection
   terms. Yet, this calculus suffices to faithfully represent the
@@ -589,7 +587,7 @@ where in the rewrites we have used expressions like $((K\; y)\; z)$ as shorthand
 
 A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$; it equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v),$ there is a vertex $(u\;v)$, and similarly for edges; and it equips $M(T)$ with graph shifts asserting the existence of an edge out of a reducible expression to the term it reduces to.
 
-That this Gph-theory captures the semantics of the SKI calculus is almost definitional: there is an edge in $M(T)$ precisely when the source vertex is reducible to the target vertex.  
+That this Gph-theory captures the semantics of the SKI calculus is almost definitional: there is an edge in the free model on the empty graph if and only if the source vertex is reducible to the target vertex.  
 
 It is straightforward to verify that Gph-theories suffice to capture the operational semantics of any calculus where every context is a reduction context.  This restriction on reduction contexts is a consequence of the fact that models map term constructors to graph homomorphisms: given a model $M$, a graph homomorphism $F\maps M(T) \to M(T)$, and an edge $e\maps t_1 \to t_2,$ there is necessarily an edge $F(e)\maps F(t_1) \to F(t_2).$
 
