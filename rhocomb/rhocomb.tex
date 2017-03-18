@@ -11,6 +11,7 @@
 \usepackage{longtable}
 \usepackage{stmaryrd}
 
+\newcommand{\new}{\mathsf{new}}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
 \newcommand{\Th}{\mathrm{Th}}
@@ -52,7 +53,6 @@
 % \newcommand{\rpquote}{\rceil}
 \newcommand{\lpquote}{\ulcorner}
 \newcommand{\rpquote}{\urcorner}
-\newcommand{\newkw}{\nu}
 \newcommand{\wbbisim}{\stackrel{\centerdot}{\approx}} %weak barbed bisimilar
 
 % SYNTAX
@@ -152,19 +152,18 @@ Michael Stay\inst{2}\\
 \maketitle
 \begin{abstract}
 \noindent
-  [[new or $\nu$?]]
   We show that graph-enriched Lawvere theories suffice to faithfully
   model concurrent combinators for mobile concurrent processes. In a
   manner akin to abstraction elimination which transforms lambda terms
   into terms in Schönfinkel and Curry's SKI combinator calculus, which
   has no names, Yoshida's elimination algorithm for the asynch \pic
   produces a combinator calculus,
-  but still uses names and the $\mathsf{new}$ operator to introduce
+  but still uses names and the $\new$ operator to introduce
   them, as well as replication.  We show that Meredith and Radestock's
   reflection technique allows
   us to give a name-free higher-order concurrent combinator calculus
   that captures the full behavior of the rho-calculus, and thus the
-  \pic, without any dependency on names, the $\mathsf{new}$ operator,
+  \pic, without any dependency on names, the $\new$ operator,
   or replication. The resulting combinator calculus has a natural
   presentation in graph-enriched Lawvere theories, which faithfully
   capture its operational semantics.
@@ -190,7 +189,7 @@ concurrency becomes more important to the practice of computer science, it is wo
 attempting to eliminate bound variables or names to study the
 resulting logics.
 
-  The {\pic} (\cite{milner91polyadicpi}) has two binders for names: the $\nu$ operator, which introduces a new name into scope, and the input prefix, which introduces a name for labeling locations for substitution.  Yoshida \cite{DBLP:journals/tcs/Yoshida02} describes an elimination algorithm that gets rid of input prefixes, but not the $\nu$ operator.  Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} introduce reflective operators into a higher-order pi calculus and implment $\nu$ and replication in terms of reflection.  Here, we present a fusion of those ideas: a name-free concurrent combinator calculus into which Yoshida's combinators have a faithful embedding.  The operational semantics of the resulting calculus can be presented using a Lawvere theory enriched over graphs.
+  The {\pic} (\cite{milner91polyadicpi}) has two binders for names: the $\new$ operator, which introduces a new name into scope, and the input prefix, which introduces a name for labeling locations for substitution.  Yoshida \cite{DBLP:journals/tcs/Yoshida02} describes an elimination algorithm that gets rid of input prefixes, but not the $\new$ operator.  Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} introduce reflective operators into a higher-order pi calculus and implment $\new$ and replication in terms of reflection.  Here, we present a fusion of those ideas: a name-free concurrent combinator calculus into which Yoshida's combinators have a faithful embedding.  The operational semantics of the resulting calculus can be presented using a Lawvere theory enriched over graphs.
 
 \section{A reflective higher-order concurrent combinator calculus}
 
@@ -199,10 +198,10 @@ resulting logics.
 \begin{mathpar}
   \inferrule* [lab=atom] {} { P \bc 0 \;|\; m(a,b) \;|\; d(a,b,c) \;|\; k(a) \;|\; fw(a,b) \;|\; br(a,b) \;|\; bl(a,b) \;|\; s(a,b,c) }
   \and
-  \inferrule* [lab=process] {} {\bm \; (\mathsf{new}\; a)P \;|\; P|P \;|\; !P}
+  \inferrule* [lab=process] {} {\bm \; (\new\; a)P \;|\; P|P \;|\; !P}
 \end{mathpar}
 
-As in the {\pic}, the $\mathsf{new}$ operator is a binding operator
+As in the {\pic}, the $\new$ operator is a binding operator
 for names. Thus, we have a notion of free and bound names.
 
 \begin{mathpar}
@@ -214,7 +213,7 @@ for names. Thus, we have a notion of free and bound names.
   \and
   \freenames{d(a,b,c)} = \freenames{s(a,b,c)} := \{ a, b, c \}
   \and
-  \freenames{(\mathsf{new}\;a)P} := \freenames{P} \setminus \{ a \}
+  \freenames{(\new\;a)P} := \freenames{P} \setminus \{ a \}
   \and
   \freenames{P|Q} := \freenames{P} \cup \freenames{Q}
   \and
@@ -222,7 +221,7 @@ for names. Thus, we have a notion of free and bound names.
 \end{mathpar}
 
 The bound names of a process, $\boundnames{P}$, are those names occurring in $P$
-that are not free. For example, in $(\mathsf{new}\; b)m(a,b)$, the name $a$ is free, while $b$ is bound.
+that are not free. For example, in $(\new\; b)m(a,b)$, the name $a$ is free, while $b$ is bound.
 
 [[Define bold name notation.]]
 
@@ -417,7 +416,7 @@ where [[Translate to Yoshida's combinators.]]
    	\meaningof{\id{!} P}_{2nd} (  n, p )
    		& = & \binpar{\lift{x}{\meaningof{P}_{3rd}( n^{r}, p^{r} )}}
 		             {\binpar{D(x)}{\binpar{\outputp{n^{r}}{n^{l}}}{\outputp{p^{r}}{p^{l}}}}} \\
-   	\meaningof{(\mathsf{new} \; x ) P}_{2nd} (  n, p ) 
+   	\meaningof{(\new \; x ) P}_{2nd} (  n, p ) 
    		& = & 
  		\prefix{p}{x}{\binpar{\meaningof{P}_{2nd} ( n^{l}, p^{l} )}{\outputp{p}{n}}} \\
 \end{eqnarray*}
@@ -433,13 +432,13 @@ and
 							        {(\binpar{D(x)}{\binpar{\outputp{n''}{n^{l}}}{\outputp{p''}{p^{l}}}})})}} \\
 \end{eqnarray*}
 
-	Note that all $\nu$-binding is now interpreted, as in Wischik's
+	Note that all $\new$-binding is now interpreted, as in Wischik's
 	global $\pi$-calculus, as an input guard \cite{globalpi}.
 	
 	It is also noteworthy that the translation is dependent on how
 	the parallel compositions in a process are
 	associated. Different associations will result in different
-	bindings for $\nu$-ed names. This will not result in different
+	bindings for $\new$-ed names. This will not result in different
 	behavior, however, as the bindings will be consistent
 	throughout the translation of the process.
 
