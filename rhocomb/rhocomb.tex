@@ -396,9 +396,9 @@ processes.
 
 \subsubsection{Implementing new names with reflection}
 
-Let $\Proc_{\mbox{\tiny Yoshida}}$ be the set of terms of her combinator calculus, $\QProc$ be set of names in the RHO combinator calculus, and $\Proc$ be the set of terms of the RHO combinator calculus.  The translation will be given in terms of a function, 
-$\meaningof{-}_2( -, - ) : 
-    \Proc_{\mbox{\tiny Yoshida}} \times \QProc {\times} \QProc \red \Proc$. 
+Let $\Proc_{\mbox{\tiny Yoshida}}$ be the set of terms of her combinator calculus, $\QProc$ be set of names in the RHO combinator calculus, and $\Proc$ be the set of terms of the RHO combinator calculus.  The translation will be given in terms of a function
+\[\meaningof{-}_2( -, - ) : 
+    \Proc_{\mbox{\tiny Yoshida}} \times \QProc {\times} \QProc \red \Proc.\] 
 The guiding intuition is that we construct alongside the process a distributed memory
 allocator, the process' access to which is mediated through the second argument
 to the function. The first argument determines the shape of the memory
@@ -463,6 +463,8 @@ An \emph{observation relation}, $\downarrow_{\mathcal N}$, over a set
 of names, $\mathcal N$, is the smallest relation satisfying the rules
 below.
 
+[[m(xv) below doesn't parse now]]
+
 \infrule[Out-barb]{y \in {\mathcal N}, \; x \nameeq y}
 		  {m(xv) \downarrow_{\mathcal N} x}
 \infrule[Par-barb]{\mbox{$P\downarrow_{\mathcal N} x$ or $Q\downarrow_{\mathcal N} x$}}
@@ -491,8 +493,7 @@ $P \wbbisim_{\mathcal N} Q$, if $P \rel{S}_{\mathcal N} Q$ for some ${\mathcal N
 	$P \wbbisim_{\pi} Q \iff \ldb P \rdb \wbbisim_{r(\texttt{FN}(P))} \ldb Q \rdb$.
 
 \subsubsection{Faithful embedding of Yoshida's combinators into RHO combinators}
-
-The encodings of new and replication above are trivial translations of the same construction in \cite{DBLP:journals/entcs/MeredithR05}, where they prove that the embedding of pi calculus is faithful; see there for details.
+[[TODO]]
 
 \section{Gph-enriched categories}
 Here we review some standard definitions and results in enriched category theory; see \cite{CIS-335497}, \cite{Power99EnrichedLawvereTheories}, \cite{DBLP:journals/acs/LackR11}, and \cite{Trimble} for more details.
