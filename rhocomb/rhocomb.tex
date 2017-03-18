@@ -430,9 +430,12 @@ where
          \juxtap \meaningof{Q}_2 (n^r, p^r) \\ 
     \meaningof{\id{!} P}_2 (n,p)
           & = & \binpar{m(x, \meaningof{P}_3(n^r,p^r))}
-                  {\binpar{D(x)}
+                  {\binpar{D(x,v,w)}
                     {\binpar{m(n^r, *n^l)}{m(n^r, *n^l)}}} \\
-                  & & \mbox{where $x = @(\meaningof{P}_2(n,p))^l$} \\
+                  & & \mbox{where } 
+                      x = @(\meaningof{P}_2(n,p))^{ll}, 
+                      v = @(\meaningof{P}_2(n,p))^{lr}, \mbox{ and }
+                      w = @(\meaningof{P}_2(n,p))^{rr} \\
     \meaningof{(\new \; x ) P}_2 (n, p) 
           & = & 
          \prefix{p}{x}{\binpar{\meaningof{P}_2 ( n^l, p^l )}{m(p, *n)}} 
