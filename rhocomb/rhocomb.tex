@@ -363,61 +363,27 @@ Note that alpha equivalence is no longer part of structural congruence.  While t
 % = vc1c2.(m(x(D_x | P)) | m(c2(D_x | P)) | *c2)
 % = vc1c2.(m(x(D_x | P)) | D_x | P)
 % = m(x(D_x | P)) | D_x | P
-
-
-
 As mentioned before, it is known that replication (and hence
 recursion) can be implemented in a higher-order process algebra
 \cite{SangiorgiWalker}. As our first example of calculation with the
 machinery thus far presented we give the construction explicitly in
-the {\rhoc}.
+the rho combinator calculus.
 
-\begin{eqnarray}
-  D_{x} & := & \prefix{x}{y}{(\binpar{\outputp{x}{y}}{\dropn{y}})} \nonumber\\
-  \bangp_{x}{P} & := & \binpar{\lift{x}{\binpar{D_{x}}{P}}}{D_{x}} \nonumber
-\end{eqnarray}
-
-\begin{eqnarray}
-  \bangp_{x}{P} & & \nonumber\\
-  =
-  & \lift{x}{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} 
-        | \prefix{x}{y}{(\outputp{x}{y} | \dropn{y})} & \nonumber\\
-  \red
-  & (\outputp{x}{y} | \dropn{y})\substn{\quotep{(\prefix{x}{y}{(\dropn{y} | \outputp{x}{y})) | P}}}{y} & \nonumber\\
-  =
-  & \outputp{x}{\quotep{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}}}
-    | {(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} & \nonumber\\
-  \red
-  & \ldots & \nonumber\\
-  \red^*
-  & P | P | \ldots & \nonumber
-\end{eqnarray}
+\begin{definition}[Replication]
+  $D(x,v,w) := (d(xvw) | fw(vx) | *w)$
+\end{definition}
+\[\begin{array}{rl}
+  !_{(x,v,w)} P &= m(x(D(x,v,w) | P)) | D(x,v,w) \\
+        &= d(xvw) | fw(vx) | *w | m(x(D(x,v,w) | P)) \\
+        &= m(v(D(x,v,w) | P)) | m(w(D(x,v,w) | P)) | fw(vx) | *w | m(x(D(x,v,w) | P)) \\
+        &= m(x(D(x,v,w) | P)) | m(w(D(x,v,w) | P)) | *w \\
+        &= m(x(D(x,v,w) | P)) | D(x,v,w) | P
+\end{array}\]
 
 Of course, this encoding, as an implementation, runs away, unfolding
-$\bangp{P}$ eagerly. A lazier and more implementable replication
-operator, restricted to input-guarded processes, may be obtained as follows.
-
-\begin{eqnarray}
-\bangp{\prefix{u}{v}{P}} 
-  := 
-  \binpar{\lift{x}{\prefix{u}{v}{(\binpar{D(x)}{P})}}}{D(x)} \nonumber
-\end{eqnarray}
-
-\begin{remark}
-  Note that the lazier definition still does not deal with summation
-  or mixed summation (i.e. sums over input and output). The reader is
-  invited to construct definitions of replication that deal with these
-  features. 
-
-  Further, the definitions are parameterized in a name, $x$. Can you,
-  gentle reader, make a definition that eliminates this parameter and
-  guarantees no accidental interaction between the replication
-  machinery and the process being replicated -- i.e. no accidental
-  sharing of names used by the process to get its work done and the
-  name(s) used by the replication to effect copying. This latter
-  revision of the definition of replication is crucial to obtaining
-  the expected identity $!!P \sim !P$.
-\end{remark}
+$\bangp{P}$ eagerly. It is possible to obtain a lazier and more
+implementable replication operator, restricted to input-guarded
+processes.
 
 \begin{remark}\label{rem:paradoxical_combinator}
   The reader familiar with the lambda calculus will have noticed the
