@@ -136,7 +136,7 @@
     \@ishortstack}
 \makeatother
 
-\title{Rho by any other name}
+\title{RHO by any other name}
 \author{
 L.G. Meredith\inst{1}\\
 \and
@@ -153,22 +153,14 @@ Michael Stay\inst{2}\\
 \maketitle
 \begin{abstract}
 \noindent
-  We show that graph-enriched Lawvere theories suffice to faithfully
-  model concurrent combinators for mobile concurrent processes. In a
-  manner akin to abstraction elimination which transforms lambda terms
-  into terms in Schönfinkel and Curry's SKI combinator calculus, which
-  has no names, Yoshida's elimination algorithm for the asynch \pic
-  produces a combinator calculus,
-  but still uses names and the $\new$ operator to introduce
-  them, as well as replication.  We show that Meredith and Radestock's
-  reflection technique allows
-  us to give a name-free higher-order concurrent combinator calculus
-  that captures the full behavior of the rho-calculus, and thus the
-  \pic, without any dependency on names, the $\new$ operator,
-  or replication. The resulting combinator calculus has a natural
-  presentation in graph-enriched Lawvere theories, which faithfully
-  capture its operational semantics.
-
+  Yoshida demonstrated how to eliminate the bound names coming from
+  the input prefix in the asynchronous $\pic,$ but her combinators
+  still depended on the $\new$ operator to bind names.
+  We modify Yoshida's combinators by replacing $\new$ and replication
+  with reflective operators to provide the first combinator calculus
+  with no bound names into which the asynchronous $\pic$ has a faithful
+  embedding.  We also show that multisorted Lawvere theories enriched 
+  over graphs suffice to capture the operational semantics of the calculus.
 \end{abstract}
 
 \section{Introduction}
@@ -179,6 +171,7 @@ and posets provide a nice framework for term rewriting
 signature and a structural congruence for the syntax of terms, while
 the enrichment provides structure for encoding the reduction relation
 on the terms.
+% [[Add this reference]] 
 % N. Ghani, C. Lüth, Monads and modular term rewriting, in: Proc. CTCS ’97, Lecture Notes in Computer Science, Vol. 1290, Springer, Berlin, 1997, pp. 69–86.
 
 Many term calculi, like lambda calculus or pi calculus, involve
