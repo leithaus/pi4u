@@ -172,24 +172,42 @@ Michael Stay\inst{2}\\
 
 \section{Introduction}
   
-  Lawvere theories enriched over category-like structures such as graphs and posets provide a nice framework for term rewriting \cite{GhaniLuth}: the underlying Lawvere theory provides an algebraic signature and a structural congruence for the syntax of terms, while the enrichment provides structure for encoding the reduction relation on the terms.
+Lawvere theories enriched over category-like structures such as graphs
+and posets provide a nice framework for term rewriting
+\cite{GhaniLuth}: the underlying Lawvere theory provides an algebraic
+signature and a structural congruence for the syntax of terms, while
+the enrichment provides structure for encoding the reduction relation
+on the terms.
 % N. Ghani, C. Lüth, Monads and modular term rewriting, in: Proc. CTCS ’97, Lecture Notes in Computer Science, Vol. 1290, Springer, Berlin, 1997, pp. 69–86.
 
-  Many term calculi, like lambda calculus or pi calculus, involve binders for names, and the mathematics of bound variable names is subtle.  Sch\"onfinkel
-introduced the SKI combinator calculus in 1924 to clarify the role of
-quantified variables in intuitionistic logic by eliminating them
-\cite{finkel}; Curry developed Sch\"onfinkel's ideas much further.  The recent
-work by Jamie Gabbay and Andrew Pitts
+Many term calculi, like lambda calculus or pi calculus, involve
+binders for names, and the mathematics of bound variable names is
+subtle.  Sch\"onfinkel introduced the SKI combinator calculus in 1924
+to clarify the role of quantified variables in intuitionistic logic by
+eliminating them \cite{finkel}; Curry developed Sch\"onfinkel's ideas
+much further.  The recent work by Jamie Gabbay and Andrew Pitts
 \cite{DBLP:journals/fac/GabbayP02} and others
 \cite{DBLP:journals/jcss/Clouston14} on nominal set theory has put the
 study of bound names and substitution on a much nicer foundation, but
 there is still value in eliminating bound variables because of the
 clear connection between combinators and logical axioms.  As
-concurrency becomes more important to the practice of computer science, it is worth
-attempting to eliminate bound variables or names to study the
-resulting logics.
+concurrency becomes more important to the practice of computer
+science, it is worth attempting to eliminate bound variables or names
+to study the resulting logics.
 
-  The {\pic} (\cite{milner91polyadicpi}) has two binders for names: the $\new$ operator, which introduces a new name into scope, and the input prefix, which introduces a name for labeling locations for substitution.  Yoshida \cite{DBLP:journals/tcs/Yoshida02} describes an elimination algorithm that gets rid of input prefixes, but not the $\new$ operator.  Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} introduce reflective operators into a higher-order pi calculus and implment $\new$ and replication in terms of reflection.  Here, we present a fusion of those ideas: a name-free concurrent combinator calculus into which Yoshida's combinators have a faithful embedding.  The operational semantics of the resulting calculus can be presented using a Lawvere theory enriched over graphs.
+The {\pic} (\cite{milner91polyadicpi}) has two binders for names: the
+$\new$ operator, which introduces a new name into scope, and the input
+prefix, which introduces a name for labeling locations for
+substitution.  Yoshida \cite{DBLP:journals/tcs/Yoshida02} describes an
+elimination algorithm that gets rid of input prefixes, but not the
+$\new$ operator.  Meredith and Radestock
+\cite{DBLP:journals/entcs/MeredithR05} introduce reflective operators
+into a higher-order pi calculus and implment $\new$ and replication in
+terms of reflection.  Here, we present a fusion of those ideas: a
+name-free concurrent combinator calculus into which Yoshida's
+combinators have a faithful embedding.  The operational semantics of
+the resulting calculus can be presented using a Lawvere theory
+enriched over graphs.
 
 \section{A reflective higher-order concurrent combinator calculus}
 
@@ -260,25 +278,29 @@ Rewrite rules
 \end{mathpar}
 
 \subsection{RHO combinator calculus}
-  The {\pic} is not a closed theory, but
-rather a theory dependent upon some theory of names. Taking an
-operational view, one may think of the {\pic} as a procedure that when
-handed a theory of names provides a theory of processes that
-communicate over those names. This openness of the theory has been
-exploited in {\pic} implementations, like the execution engine in
-Microsoft's Biztalk \cite{biztalk}, where an ancillary binding
-language providing a means of specifying a `theory' of names; {\em e.g.},
-names may be TCP/IP ports, or URLs, or object references, {\em etc.}  But
-foundationally, one might ask if there is a closed theory of
-processes, {\em i.e.} one in which the theory of names arises from and is
-wholly determined by the theory of processes. Behind this question
-lurk a whole host of other exciting and potentially enlightening
-questions regarding the role of names with structure in calculi of
-interaction and the relationship between the structure of names and
-the structure of processes.
+The {\pic} is not a closed theory, but rather a theory dependent upon
+some theory of names. Taking an operational view, one may think of the
+{\pic} as a procedure that when handed a theory of names provides a
+theory of processes that communicate over those names. This openness
+of the theory has been exploited in {\pic} implementations, like the
+execution engine in Microsoft's Biztalk \cite{biztalk}, where an
+ancillary binding language providing a means of specifying a `theory'
+of names; {\em e.g.}, names may be TCP/IP ports, or URLs, or object
+references, {\em etc.}  But foundationally, one might ask if there is
+a closed theory of processes, {\em i.e.} one in which the theory of
+names arises from and is wholly determined by the theory of
+processes. Meredith and Radestock have shown that this is not only
+possible, but results in a calculus that enjoys both the features of
+concurrency and meta-programming
+\cite{DBLP:journals/entcs/MeredithR05}. The key idea is to provide the
+ability to quote processes, effectively reifying them as names, and to
+unquote the, effectively reflecting names (which are quoted processes)
+back as processes.
 
-We remove new names and replication and introduce quoting/unquoting
-operators, then allow processes in the second argument of a send and introduce an extra rewrite governing the interaction between sending and unquoting.
+The same technique can be applied to Yoshida's combinators. We remove
+new names and replication and introduce quoting/unquoting operators,
+then allow processes in the second argument of a send and introduce an
+extra rewrite governing the interaction between sending and unquoting.
 
 \begin{mathpar}
   \inferrule* [lab=atom] {} { P \bc 0 \;|\; m(a,P) \;|\; d(a,b,c) \;|\; k(a) \;|\; fw(a,b) \;|\; br(a,b) \;|\; bl(a,b) \;|\; s(a,b,c) }
