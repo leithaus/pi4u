@@ -242,7 +242,7 @@ for names. Thus, we have a notion of free and bound names.
 The bound names of a process, $\boundnames{P}$, are those names occurring in $P$
 that are not free. For example, in $(\new\; b)m(a,b)$, the name $a$ is free, while $b$ is bound.
 
-In the following definition, [[bold/overarrow]] indicates a list of names.
+In the following definition, $\vect{x}$ indicates a list of names.
 
 \begin{definition}
 Two processes, $P,Q$, are alpha-equivalent if $P = Q\{\vect{y}/\vect{x}\}$ for
@@ -341,6 +341,31 @@ Note that alpha equivalence is no longer part of structural congruence.  While t
 
 \subsubsection{Implementing replication with reflection}
 
+% D_x = x?(y).(x<*y> | *y)
+% 
+%       x#y.(x<*y> | *y)
+% 1 => vc1c2.(d(xc1c2) | c1#y.m(x*y) | c2#y.*y)
+% 7 => vc1c2.(d(xc1c2) | fw(c1x) | c2#y.*y)
+% * => vc1c2.(d(xc1c2) | fw(c1x) | *c2)
+% 
+% 
+% 
+% vc1c2.(d(xc1c2) | fw(c1x) | *c2) | m(xP)
+% => vc1c2.(d(xc1c2) | fw(c1x) | *c2 | m(xP))
+% => vc1c2.(d(xc1c2) | m(xP) | fw(c1x) | *c2)
+% => vc1c2.(m(c1P) | m(c2P) | fw(c1x) | *c2)
+% => vc1c2.(m(xP) | m(c2P) | *c2)
+% => vc1c2.(m(xP) | P)
+% 
+% !_x P = m(x(D_x | P)) | D_x
+% = vc1c2.(d(xc1c2) | fw(c1x) | *c2 | m(x(D_x | P)))
+% = vc1c2.(m(c1(D_x | P)) | m(c2(D_x | P)) | fw(c1x) | *c2 | m(x(D_x | P)))
+% = vc1c2.(m(x(D_x | P)) | m(c2(D_x | P)) | *c2)
+% = vc1c2.(m(x(D_x | P)) | D_x | P)
+% = m(x(D_x | P)) | D_x | P
+
+
+
 As mentioned before, it is known that replication (and hence
 recursion) can be implemented in a higher-order process algebra
 \cite{SangiorgiWalker}. As our first example of calculation with the
@@ -405,7 +430,6 @@ operator, restricted to input-guarded processes, may be obtained as follows.
 
 \subsubsection{Implementing new names with reflection}
 
-[[Figure out which Proc is which here.]]
 Let $\Proc_{\mbox{\tiny Yoshida}}$ be the set of terms of her combinator calculus, $\QProc$ be set of names in the RHO combinator calculus, and $\Proc$ be the set of terms of the RHO combinator calculus.  The translation will be given in terms of a function, 
 $\meaningof{-}_2( -, - ) : 
     \Proc_{\mbox{\tiny Yoshida}} \times \QProc {\times} \QProc \red \Proc$. 
