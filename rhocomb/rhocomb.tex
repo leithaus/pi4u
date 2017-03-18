@@ -337,7 +337,7 @@ Rewrite rules
   composition $|$.
 \end{definition}
 
-Note that alpha equivalence is no longer part of structural congruence.  While there is a faithful embedding of Yoshida's combinators into RHO combinators [[see section ???]], RHO combinators can see the internal structure of names and distinguish them.
+Note that alpha equivalence is no longer part of structural congruence.  While there is a faithful embedding of Yoshida's combinators into RHO combinators (see below), RHO combinators can see the internal structure of names and distinguish them.
 
 \subsubsection{Implementing replication with reflection}
 
@@ -370,29 +370,21 @@ machinery thus far presented we give the construction explicitly in
 the rho combinator calculus.
 
 \begin{definition}[Replication]
-  $D(x,v,w) := (d(xvw) | fw(vx) | *w)$
+  $D(x,v,w) := (d(x,v,w) | fw(v,x) | {*}(w))$
 \end{definition}
 \[\begin{array}{rl}
-  !_{(x,v,w)} P &= m(x(D(x,v,w) | P)) | D(x,v,w) \\
-        &= d(xvw) | fw(vx) | *w | m(x(D(x,v,w) | P)) \\
-        &= m(v(D(x,v,w) | P)) | m(w(D(x,v,w) | P)) | fw(vx) | *w | m(x(D(x,v,w) | P)) \\
-        &= m(x(D(x,v,w) | P)) | m(w(D(x,v,w) | P)) | *w \\
-        &= m(x(D(x,v,w) | P)) | D(x,v,w) | P
+  !_{(x,v,w)} P &= m(x,D(x,v,w) \; |\; P) \; |\; D(x,v,w) \\
+        &= d(x,v,w) \; |\; fw(v,x) \; |\; {*}(w) \; |\; m(x,D(x,v,w) \; |\; P) \\
+        &= m(v,D(x,v,w) \; |\; P) \; |\; m(w,D(x,v,w) \; |\; P) \; |\; fw(v,x) \; |\; {*}(w) \; |\; m(x,D(x,v,w) \; |\; P) \\
+        &= m(x,D(x,v,w) \; |\; P) \; |\; m(w,D(x,v,w) \; |\; P) \; |\; {*}(w) \\
+        &= m(x,D(x,v,w) \; |\; P) \; |\; D(x,v,w) \; |\; P
 \end{array}\]
 
 Of course, this encoding, as an implementation, runs away, unfolding
 $\bangp{P}$ eagerly. It is possible to obtain a lazier and more
-implementable replication operator, restricted to input-guarded
-processes.
-
-\begin{remark}\label{rem:paradoxical_combinator}
-  The reader familiar with the lambda calculus will have noticed the
-  similarity between $D$ and the paradoxical combinator.
-
-  [Ed. note: the existence of this seems to suggest we have to be more
-  restrictive on the set of processes and names we admit if we are to
-  support no-cloning.]
-\end{remark}
+implementable replication operator, restricted to [[input-guarded?]]
+processes.  The reader familiar with the lambda calculus will have noticed the
+similarity between $D$ and the paradoxical combinator $Y$.
 
 \subsubsection{Implementing new names with reflection}
 
@@ -404,8 +396,7 @@ allocator, the process' access to which is mediated through the second argument
 to the function. The first argument determines the shape of the memory
 for the given allocator, and the third provides a location for replication.
 
-Since Yoshida's calculus is parametric in a set of names, we choose $\QProc$ for that set.
-Given a process $P$ in Yoshida's calculus, 
+Since Yoshida's calculus is parametric in a set of names, we can choose $\QProc$ for that set.  Given a process $P$ in Yoshida's calculus, 
 we pick names $n$ and $p$ in the RHO calculus such that $n \neq p$ and
 both are distinct from the free names of $P$.  Then we define
 \begin{equation*}
@@ -452,14 +443,16 @@ and
         {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}} \\
 \end{eqnarray*}
 
-Note that all $\new$-binding is now interpreted, as in Wischik's
+The effect of the superscripts $l$ and $r$ on a name $x$ is to construct a name that is guaranteed to be fresh with respect to the support of the process ${*}(x).$
+
+[[Modify for combinator context]] Note that all $\new$-binding is now interpreted, as in Wischik's
 global $\pi$-calculus, as an input guard \cite{globalpi}.
-	
+
 It is also noteworthy that the translation is dependent on how the
 parallel compositions in a process are associated. Different
 associations will result in different bindings for $\new$-ed
 names. This will not result in different behavior, however, as the
-bindings will be consistent throughout the translation of the process.
+bindings will be consistent throughout the translation of the process; see below for a proof.
 
 \begin{definition}
 An \emph{observation relation}, $\downarrow_{\mathcal N}$, over a set
