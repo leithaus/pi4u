@@ -347,24 +347,24 @@ machinery thus far presented we give the construction explicitly in
 the {\rhoc}.
 
 \begin{eqnarray}
-	D_{x} & := & \prefix{x}{y}{(\binpar{\outputp{x}{y}}{\dropn{y}})} \nonumber\\
-	\bangp_{x}{P} & := & \binpar{\lift{x}{\binpar{D_{x}}{P}}}{D_{x}} \nonumber
+  D_{x} & := & \prefix{x}{y}{(\binpar{\outputp{x}{y}}{\dropn{y}})} \nonumber\\
+  \bangp_{x}{P} & := & \binpar{\lift{x}{\binpar{D_{x}}{P}}}{D_{x}} \nonumber
 \end{eqnarray}
 
 \begin{eqnarray}
-	\bangp_{x}{P} & & \nonumber\\
-	=
-	& \lift{x}{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} 
-	      | \prefix{x}{y}{(\outputp{x}{y} | \dropn{y})} & \nonumber\\
-	\red
-	& (\outputp{x}{y} | \dropn{y})\substn{\quotep{(\prefix{x}{y}{(\dropn{y} | \outputp{x}{y})) | P}}}{y} & \nonumber\\
-	=
-	& \outputp{x}{\quotep{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}}}
-	  | {(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} & \nonumber\\
-	\red
-	& \ldots & \nonumber\\
-	\red^*
-	& P | P | \ldots & \nonumber
+  \bangp_{x}{P} & & \nonumber\\
+  =
+  & \lift{x}{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} 
+        | \prefix{x}{y}{(\outputp{x}{y} | \dropn{y})} & \nonumber\\
+  \red
+  & (\outputp{x}{y} | \dropn{y})\substn{\quotep{(\prefix{x}{y}{(\dropn{y} | \outputp{x}{y})) | P}}}{y} & \nonumber\\
+  =
+  & \outputp{x}{\quotep{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}}}
+    | {(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} & \nonumber\\
+  \red
+  & \ldots & \nonumber\\
+  \red^*
+  & P | P | \ldots & \nonumber
 \end{eqnarray}
 
 Of course, this encoding, as an implementation, runs away, unfolding
@@ -373,8 +373,8 @@ operator, restricted to input-guarded processes, may be obtained as follows.
 
 \begin{eqnarray}
 \bangp{\prefix{u}{v}{P}} 
-	:= 
-	\binpar{\lift{x}{\prefix{u}{v}{(\binpar{D(x)}{P})}}}{D(x)} \nonumber
+  := 
+  \binpar{\lift{x}{\prefix{u}{v}{(\binpar{D(x)}{P})}}}{D(x)} \nonumber
 \end{eqnarray}
 
 \begin{remark}
@@ -436,14 +436,13 @@ where
     \meaningof{P \juxtap Q}_2 (n,p,x) 
       & = & 
     \meaningof{P}_2 (n^l, p^l, x^l)
-         \juxtap \meaningof{Q}_2 (n^r, p^r, x^r) \\
-    \meaningof{\id{!} P}_2 (n,p,x)
-      & = & \binpar{m(x,\meaningof{P}_3(n^r,p^r,x^r))}
-                 {\binpar{D(x)}{\binpar{m(n^r,n^l)}{m(p^r,p^l)}}} \\
-    \meaningof{(\new \; y ) P}_2 (n,p,x) 
-      & = & 
-    \prefix{p}{y}{\binpar{\meaningof{P}_2 (n^l,p^l,x^l)}{\outputp{p}{n}}} \\
-\end{eqnarray*}
+         \juxtap \meaningof{Q}_2 (n^r, p^r, x^r) \\ 
+    \meaningof{\id{!} P}_{2nd} (  n, p )
+          & = & \binpar{\lift{x}{\meaningof{P}_{3rd}( n^{r}, p^{r} )}}
+         {\binpar{D(x)}{\binpar{\outputp{n^{r}}{n^{l}}}{\outputp{p^{r}}{p^{l}}}}} \\
+    \meaningof{(\new \; x ) P}_{2nd} (  n, p ) 
+          & = & 
+         \prefix{p}{x}{\binpar{\meaningof{P}_{2nd} ( n^{l}, p^{l} )}{\outputp{p}{n}}} \end{eqnarray*}
 
 and
 
@@ -456,17 +455,17 @@ and
         {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}} \\
 \end{eqnarray*}
 
-	Note that all $\new$-binding is now interpreted, as in Wischik's
-	global $\pi$-calculus, as an input guard \cite{globalpi}.
-	
-	It is also noteworthy that the translation is dependent on how
-	the parallel compositions in a process are
-	associated. Different associations will result in different
-	bindings for $\new$-ed names. This will not result in different
-	behavior, however, as the bindings will be consistent
-	throughout the translation of the process.
+  Note that all $\new$-binding is now interpreted, as in Wischik's
+  global $\pi$-calculus, as an input guard \cite{globalpi}.
+  
+  It is also noteworthy that the translation is dependent on how
+  the parallel compositions in a process are
+  associated. Different associations will result in different
+  bindings for $\new$-ed names. This will not result in different
+  behavior, however, as the bindings will be consistent
+  throughout the translation of the process.
 
-	$P \wbbisim_{\pi} Q \iff \ldb P \rdb \wbbisim_{r(\texttt{FN}(P))} \ldb Q \rdb$.
+  $P \wbbisim_{\pi} Q \iff \ldb P \rdb \wbbisim_{r(\texttt{FN}(P))} \ldb Q \rdb$.
 
 \subsubsection{Faithful embedding of Yoshida's combinators into RHO combinators}
 
