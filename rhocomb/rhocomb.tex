@@ -172,7 +172,7 @@ Michael Stay\inst{2}\\
 
 \section{Introduction}
   
-  Lawvere theories enriched over category-like structures such as graphs and posets provide a nice framework for term rewriting \cite{GhaniLuth}: the underlying Lawvere theory provides an algebraic signature for the syntax of terms, while the enrichment provides structure for encoding the reduction relation on the terms.
+  Lawvere theories enriched over category-like structures such as graphs and posets provide a nice framework for term rewriting \cite{GhaniLuth}: the underlying Lawvere theory provides an algebraic signature and a structural congruence for the syntax of terms, while the enrichment provides structure for encoding the reduction relation on the terms.
 % N. Ghani, C. Lüth, Monads and modular term rewriting, in: Proc. CTCS ’97, Lecture Notes in Computer Science, Vol. 1290, Springer, Berlin, 1997, pp. 69–86.
 
   Many term calculi, like lambda calculus or pi calculus, involve binders for names, and the mathematics of bound variable names is subtle.  Sch\"onfinkel
@@ -223,7 +223,7 @@ for names. Thus, we have a notion of free and bound names.
 The bound names of a process, $\boundnames{P}$, are those names occurring in $P$
 that are not free. For example, in $(\new\; b)m(a,b)$, the name $a$ is free, while $b$ is bound.
 
-[[Define bold name notation.]]
+In the following definition, [[bold/overarrow]] indicates a list of names.
 
 \begin{definition}
 Two processes, $P,Q$, are alpha-equivalent if $P = Q\{\vec{y}/\vec{x}\}$ for
@@ -239,18 +239,16 @@ denotes the capture-avoiding substitution of $\vec{y}$ for $\vec{x}$ in $Q$.
   composition $|$.
 \end{definition}
 
-[[Insert commas into combinators.]]
-
 Rewrite rules
 \[\begin{array}{rl}
-  d(abc) | m(ax) & \red m(bx) | m(cx) \\
-  k(a) | m(ax) & \red 0 \\
-  fw(ab) | m(ax) & \red m(bx) \\
+  d(a,b,c) | m(a,x) & \red m(b,x) | m(c,x) \\
+  k(a) | m(a,x) & \red 0 \\
+  fw(a,b) | m(a,x) & \red m(b,x) \\
 \end{array} \quad \quad
 \begin{array}{rl}
-  br(ab) | m(ax) & \red fw(bx) \\
-  bl(ab) | m(ax) & \red fw(xb) \\
-  s(abc) | m(ax) & \red fw(bc)
+  br(a,b) | m(a,x) & \red fw(b,x) \\
+  bl(a,b) | m(a,x) & \red fw(x,b) \\
+  s(a,b,c) | m(a,x) & \red fw(b,c)
 \end{array}\]
 \[\begin{array}{rl}
   !P & \red P|!P \\
@@ -292,15 +290,15 @@ operators, then allow processes in the second argument of a send and introduce a
 
 Rewrite rules
 \[\begin{array}{rl}
-  d(abc) | m(aP) & \red m(bP) | m(cP) \\
-  k(a) | m(aP) & \red 0 \\
-  fw(ab) | m(aP) & \red m(bP) \\
+  d(a,b,c) | m(a,P) & \red m(b,P) | m(c,P) \\
+  k(a) | m(a,P) & \red 0 \\
+  fw(a,b) | m(a,P) & \red m(b,P) \\
 \end{array} \quad \quad
 \begin{array}{rl}
-  br(ab) | m(aP) & \red fw(b@P) \\
-  bl(ab) | m(aP) & \red fw(@Pb) \\
-  s(abc) | m(aP) & \red fw(bc) \\
-  *a     | m(aP) & \red P
+  br(a,b) | m(a,P) & \red fw(b,@(P)) \\
+  bl(a,b) | m(a,P) & \red fw(@(P),b) \\
+  s(a,b,c) | m(a,P) & \red fw(b,c) \\
+  *(a) | m(a,P) & \red P
 \end{array}\]
 \begin{mathpar}
   \inferrule* {{P} \red {P}'} {{{P} | {Q}} \red {{P}' | {Q}}}
@@ -510,21 +508,24 @@ The RHO combinators above also have a presentation as a Gph-theory:
       * &: N \to T \\
       @ &: T \to N \\
     \end{array}\]
+  \item Structural equivalence
+    \[\begin{array}{rl}
+      P | 0 & = P \\
+      P | Q & = Q | P \\
+      ((P | Q) | R) & = (P | (Q | R)) \\
+    \end{array}\]
   \item Rewrite rules
     \[\begin{array}{rl}
-      d(abc) | m(aP) & \Rightarrow m(bP) | m(cP) \\
-      k(a) | m(aP) & \Rightarrow 0 \\
-      fw(ab) | m(aP) & \Rightarrow m(bP) \\
-      br(ab) | m(aP) & \Rightarrow fw(b@(P)) \\
-      bl(ab) | m(aP) & \Rightarrow fw(@(P)b) \\
-      s(abc) | m(aP) & \Rightarrow fw(bc) \\
+      d(a,b,c) | m(a,P) & \Rightarrow m(b,P) | m(c,P) \\
+      k(a,) | m(a,P) & \Rightarrow 0 \\
+      fw(a,b) | m(a,P) & \Rightarrow m(b,P) \\
+      br(a,b) | m(a,P) & \Rightarrow fw(b,@(P)) \\
     \end{array} \quad \quad
     \begin{array}{rl}
-      *a | m(aP) & \Rightarrow P \\
-      *(@P) & \Rightarrow P \\
-      P | 0 & \Leftrightarrow P \\
-      P | Q & \Leftrightarrow Q | P \\
-      ((P | Q) | R) & \Leftrightarrow (P | (Q | R)) \\
+      bl(a,b) | m(a,P) & \Rightarrow fw(@(P),b) \\
+      s(a,b,c) | m(a,P) & \Rightarrow fw(b,c) \\
+      *a | m(a,P) & \Rightarrow P \\
+      *(@(P)) & \Rightarrow P \\
     \end{array}\]
 \end{itemize}
 
