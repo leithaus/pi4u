@@ -348,24 +348,24 @@ machinery thus far presented we give the construction explicitly in
 the {\rhoc}.
 
 \begin{eqnarray}
-	D_{x} & := & \prefix{x}{y}{(\binpar{\outputp{x}{y}}{\dropn{y}})} \nonumber\\
-	\bangp_{x}{P} & := & \binpar{\lift{x}{\binpar{D_{x}}{P}}}{D_{x}} \nonumber
+  D_{x} & := & \prefix{x}{y}{(\binpar{\outputp{x}{y}}{\dropn{y}})} \nonumber\\
+  \bangp_{x}{P} & := & \binpar{\lift{x}{\binpar{D_{x}}{P}}}{D_{x}} \nonumber
 \end{eqnarray}
 
 \begin{eqnarray}
-	\bangp_{x}{P} & & \nonumber\\
-	=
-	& \lift{x}{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} 
-	      | \prefix{x}{y}{(\outputp{x}{y} | \dropn{y})} & \nonumber\\
-	\red
-	& (\outputp{x}{y} | \dropn{y})\substn{\quotep{(\prefix{x}{y}{(\dropn{y} | \outputp{x}{y})) | P}}}{y} & \nonumber\\
-	=
-	& \outputp{x}{\quotep{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}}}
-	  | {(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} & \nonumber\\
-	\red
-	& \ldots & \nonumber\\
-	\red^*
-	& P | P | \ldots & \nonumber
+  \bangp_{x}{P} & & \nonumber\\
+  =
+  & \lift{x}{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} 
+        | \prefix{x}{y}{(\outputp{x}{y} | \dropn{y})} & \nonumber\\
+  \red
+  & (\outputp{x}{y} | \dropn{y})\substn{\quotep{(\prefix{x}{y}{(\dropn{y} | \outputp{x}{y})) | P}}}{y} & \nonumber\\
+  =
+  & \outputp{x}{\quotep{(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}}}
+    | {(\prefix{x}{y}{(\outputp{x}{y} | \dropn{y})) | P}} & \nonumber\\
+  \red
+  & \ldots & \nonumber\\
+  \red^*
+  & P | P | \ldots & \nonumber
 \end{eqnarray}
 
 Of course, this encoding, as an implementation, runs away, unfolding
@@ -374,8 +374,8 @@ operator, restricted to input-guarded processes, may be obtained as follows.
 
 \begin{eqnarray}
 \bangp{\prefix{u}{v}{P}} 
-	:= 
-	\binpar{\lift{x}{\prefix{u}{v}{(\binpar{D(x)}{P})}}}{D(x)} \nonumber
+  := 
+  \binpar{\lift{x}{\prefix{u}{v}{(\binpar{D(x)}{P})}}}{D(x)} \nonumber
 \end{eqnarray}
 
 \begin{remark}
@@ -416,34 +416,35 @@ for the given allocator, and the third provides a location for replication.
 
 Since Yoshida's calculus is parametric in a set of names, we choose $\QProc$ for that set.
 Given a process $P$ in Yoshida's calculus, 
-we pick names $n, p$ and $x$ in the RHO calculus such that $n \neq p$ and
-all are distinct from the free names of $P$.  Then we define
+we pick names $n$ and $p$ in the RHO calculus such that $n \neq p$ and
+both are distinct from the free names of $P$.  Then we define
 \begin{equation*}
-  \meaningof{P} = \meaningof{P}_2(n, p, x),
+  \meaningof{P} = \meaningof{P}_2(n, p),
 \end{equation*}
 
 where
 
 \begin{eqnarray*}
-    \meaningof{\pzero}_2 (n,p,x)
+    \meaningof{\pzero}_2 (n,p)
       & = &
        \pzero \\
-    \meaningof{\emph{c}(\vect{a})}_2 (n,p,x) 
+    \meaningof{\emph{c}(\vect{a})}_2 (n,p) 
       & = & 
       \emph{c}(\vect{a})\mbox{, where $\emph{c}$ is any combinator but $m$} \\
-    \meaningof{m(aP)}_2 (n,p,x) 
+    \meaningof{m(aP)}_2 (n,p) 
       & = & 
-          m(a \meaningof{P}_2 (n,p,x)) \\
-    \meaningof{P \juxtap Q}_2 (n,p,x) 
+          m(a \meaningof{P}_2 (n,p)) \\
+    \meaningof{P \juxtap Q}_2 (n,p) 
       & = & 
-    \meaningof{P}_2 (n^l, p^l, x^l)
-         \juxtap \meaningof{Q}_2 (n^r, p^r, x^r) \\
-    \meaningof{\id{!} P}_2 (n,p,x)
-      & = & \binpar{m(x,\meaningof{P}_3(n^r,p^r,x^r))}
-                 {\binpar{D(x)}{\binpar{m(n^r,n^l)}{m(p^r,p^l)}}} \\
-    \meaningof{(\new \; y ) P}_2 (n,p,x) 
-      & = & 
-    \prefix{p}{y}{\binpar{\meaningof{P}_2 (n^l,p^l,x^l)}{\outputp{p}{n}}} \\
+    \meaningof{P}_2 (n^l, p^l)
+         \juxtap \meaningof{Q}_2 (n^r, p^r) \\ 
+    \meaningof{\id{!} P}_2 (n,p)
+          & = & \binpar{m(@(\meaningof{P}_2(n,p))^l, \meaningof{P}_3(n^r,p^r))}
+                  {\binpar{D(@(\meaningof{P}_2(n,p))^l)}
+                  {\binpar{m(n^r, *n^l)}{m(n^r, *n^l)}}} \\
+    \meaningof{(\new \; x ) P}_2 (n, p) 
+          & = & 
+         \prefix{p}{x}{\binpar{\meaningof{P}_2 ( n^l, p^l )}{m(p, *n)}} 
 \end{eqnarray*}
 
 and
