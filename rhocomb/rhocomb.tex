@@ -328,7 +328,15 @@ Rewrite rules
   \inferrule* {{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
 \end{mathpar}
 
-[[Structural congruence]]
+\begin{definition}
+  The {\em structural congruence} $\equiv$
+  between processes \cite{SangiorgiWalker} is the least congruence
+  satisfying the commutative monoid laws
+  (associativity, commutativity and $\pzero$ as identity) for parallel
+  composition $|$.
+\end{definition}
+
+Note that alpha equivalence is no longer part of structural congruence.  While there is a faithful embedding of Yoshida's combinators into RHO combinators [[see section ???]], RHO combinators can see the internal structure of names and distinguish them.
 
 \subsubsection{Implementing replication with reflection}
 
@@ -396,60 +404,56 @@ operator, restricted to input-guarded processes, may be obtained as follows.
 
 \subsubsection{Implementing new names with reflection}
 
-The translation will be given by a function, $\meaningof{-}( -, - ) :
-\Proc_{\pi} \times \QProc \times \QProc \red \Proc$. The guiding
-intuition is that we construct alongside the process a distributed memory
+[[Figure out which Proc is which here.]]
+Let $\Proc_{\mbox{\tiny Yoshida}}$ be the set of terms of her combinator calculus, $\QProc$ be set of names in the RHO combinator calculus, and $\Proc$ be the set of terms of the RHO combinator calculus.  The translation will be given in terms of a function, 
+$\meaningof{-}_2( -, - ) : 
+    \Proc_{\mbox{\tiny Yoshida}} \times \QProc {\times} \QProc \red \Proc$. 
+The guiding intuition is that we construct alongside the process a distributed memory
 allocator, the process' access to which is mediated through the second argument
 to the function. The first argument determines the shape of the memory
-for the given allocator.
+for the given allocator, and the third provides a location for replication.
 
-Given a process $P$, we pick $n$ and $p$ such that $n \neq p$ and
-distinct from the free names of $P$. [[Clarify $m$ used as a name vs. $m$ used as a combinator.]] For example, $n = \quotep{\Pi_{m
-\in \freenames{P}}\outputp{m}{\quotep{\pzero}}}$ and $p =
-\quotep{\Pi_{m \in
-\freenames{P}}\prefix{m}{\quotep{\pzero}}{\pzero}}$. Then
-
+Since Yoshida's calculus is parametric in a set of names, we choose $\QProc$ for that set.
+Given a process $P$ in Yoshida's calculus, 
+we pick names $n, p$ and $x$ in the RHO calculus such that $n \neq p$ and
+all are distinct from the free names of $P$.  Then we define
 \begin{equation*}
-	\meaningof{P} = \meaningof{P}_{2nd}( n, p )
+  \meaningof{P} = \meaningof{P}_2(n, p, x),
 \end{equation*}
 
-where [[Translate to Yoshida's combinators.]]
+where
 
 \begin{eqnarray*}
-   	\meaningof{\pzero}_{2nd} (  n, p )
-   		& = &
-   		 \pzero \\
-   	\meaningof{\emph{c}(\vect{a})}_{2nd} (  n, p ) 
-  		& = & 
-  		\emph{c}(\vect{a}) \\
-   	\meaningof{m(aP)}_{2nd} (  n, p ) 
-   		& = & 
- 	        m(m \meaningof{P}_{2nd} (  n, p )) \quad \mbox{[[Should this be }m(a \meaningof{P}_{2nd} (  n, p )) \mbox{]]?} \\
-   	\meaningof{P \juxtap Q}_{2nd} (  n, p ) 
-   		& = & 
- 		\meaningof{P}_{2nd} ( n^{l}, p^{l} )
-   			 \juxtap \meaningof{Q}_{2nd} ( n^{r}, p^{r} ) \\
-%    	\meaningof{\id{!} P}_{2nd} (  n, p )
-%    		& = & \binpar{\lift{x}{\binpar{upn( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}
-% 						      {\meaningof{P}_{3rd}( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}}}
-% 		             {\binpar{D(x)}{\binpar{\outputp{n^{lr}}{n}}{\outputp{p^{lr}}{p}}}} \\
-   	\meaningof{\id{!} P}_{2nd} (  n, p )
-   		& = & \binpar{\lift{x}{\meaningof{P}_{3rd}( n^{r}, p^{r} )}}
-		             {\binpar{D(x)}{\binpar{\outputp{n^{r}}{n^{l}}}{\outputp{p^{r}}{p^{l}}}}} \\
-   	\meaningof{(\new \; x ) P}_{2nd} (  n, p ) 
-   		& = & 
- 		\prefix{p}{x}{\binpar{\meaningof{P}_{2nd} ( n^{l}, p^{l} )}{\outputp{p}{n}}} \\
+    \meaningof{\pzero}_2 (n,p,x)
+      & = &
+       \pzero \\
+    \meaningof{\emph{c}(\vect{a})}_2 (n,p,x) 
+      & = & 
+      \emph{c}(\vect{a})\mbox{, where $\emph{c}$ is any combinator but $m$} \\
+    \meaningof{m(aP)}_2 (n,p,x) 
+      & = & 
+          m(a \meaningof{P}_2 (n,p,x)) \\
+    \meaningof{P \juxtap Q}_2 (n,p,x) 
+      & = & 
+    \meaningof{P}_2 (n^l, p^l, x^l)
+         \juxtap \meaningof{Q}_2 (n^r, p^r, x^r) \\
+    \meaningof{\id{!} P}_2 (n,p,x)
+      & = & \binpar{m(x,\meaningof{P}_3(n^r,p^r,x^r))}
+                 {\binpar{D(x)}{\binpar{m(n^r,n^l)}{m(p^r,p^l)}}} \\
+    \meaningof{(\new \; y ) P}_2 (n,p,x) 
+      & = & 
+    \prefix{p}{y}{\binpar{\meaningof{P}_2 (n^l,p^l,x^l)}{\outputp{p}{n}}} \\
 \end{eqnarray*}
 
 and
 
 \begin{eqnarray*}
-	x^{l} & \triangleq & \quotep{\outputp{x}{x}} \\
-	x^{r} & \triangleq & \quotep{\prefix{x}{x}{\pzero}} \\
-	\meaningof{P}_{3rd}( n'', p'' ) 
-		& \triangleq & 
-			\prefix{n''}{n}{\prefix{p''}{p}{(\binpar{\meaningof{P}_{2nd}(  n, p )}
-							        {(\binpar{D(x)}{\binpar{\outputp{n''}{n^{l}}}{\outputp{p''}{p^{l}}}})})}} \\
+  x^l & \triangleq & \quotep{\outputp{x}{x}} \\
+  x^r & \triangleq & \quotep{\prefix{x}{x}{\pzero}} \\
+  \meaningof{P}_3(n, p) 
+    & \triangleq & 
+      \prefix{n}{n'}{\prefix{p}{p'}{(\binpar{\meaningof{P}_2(n',p')}
+        {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}} \\
 \end{eqnarray*}
 
 	Note that all $\new$-binding is now interpreted, as in Wischik's
