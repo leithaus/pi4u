@@ -114,6 +114,7 @@
 \newcommand{\bc}{\mathbin{\mathbf{::=}}}
 \newcommand{\bm}{\mathbin{\mathbf\mid}}
 
+\newcommand{\rel}[1]{\;{\mathcal #1}\;} %relation
 \newcommand{\red}{\rightarrow}
 \newcommand{\wred}{\Rightarrow}
 \newcommand{\redhat}{\hat{\longrightarrow}}
@@ -456,15 +457,44 @@ and
         {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}} \\
 \end{eqnarray*}
 
-	Note that all $\new$-binding is now interpreted, as in Wischik's
-	global $\pi$-calculus, as an input guard \cite{globalpi}.
+Note that all $\new$-binding is now interpreted, as in Wischik's
+global $\pi$-calculus, as an input guard \cite{globalpi}.
 	
-	It is also noteworthy that the translation is dependent on how
-	the parallel compositions in a process are
-	associated. Different associations will result in different
-	bindings for $\new$-ed names. This will not result in different
-	behavior, however, as the bindings will be consistent
-	throughout the translation of the process.
+It is also noteworthy that the translation is dependent on how the
+parallel compositions in a process are associated. Different
+associations will result in different bindings for $\new$-ed
+names. This will not result in different behavior, however, as the
+bindings will be consistent throughout the translation of the process.
+
+\begin{definition}
+An \emph{observation relation}, $\downarrow_{\mathcal N}$, over a set
+of names, $\mathcal N$, is the smallest relation satisfying the rules
+below.
+
+\infrule[Out-barb]{y \in {\mathcal N}, \; x \nameeq y}
+		  {m(xv) \downarrow_{\mathcal N} x}
+\infrule[Par-barb]{\mbox{$P\downarrow_{\mathcal N} x$ or $Q\downarrow_{\mathcal N} x$}}
+		  {\binpar{P}{Q} \downarrow_{\mathcal N} x}
+
+We write $P \Downarrow_{\mathcal N} x$ if there is $Q$ such that 
+$P \wred Q$ and $Q \downarrow_{\mathcal N} x$.
+\end{definition}
+
+%% Notice that $\prefix{x}{y}{P}$ has no barb.  Indeed, in {\rhoc} as well
+%% as other asynchronous calculi, an observer has no direct means to
+%% detect if a message sent has been received or not.
+
+\begin{definition}
+%\label{def.bbisim}
+An  ${\mathcal N}$-\emph{barbed bisimulation} over a set of names, ${\mathcal N}$, is a symmetric binary relation 
+${\mathcal S}_{\mathcal N}$ between agents such that $P\rel{S}_{\mathcal N}Q$ implies:
+\begin{enumerate}
+\item If $P \red P'$ then $Q \wred Q'$ and $P'\rel{S}_{\mathcal N} Q'$.
+\item If $P\downarrow_{\mathcal N} x$, then $Q\Downarrow_{\mathcal N} x$.
+\end{enumerate}
+$P$ is ${\mathcal N}$-barbed bisimilar to $Q$, written
+$P \wbbisim_{\mathcal N} Q$, if $P \rel{S}_{\mathcal N} Q$ for some ${\mathcal N}$-barbed bisimulation ${\mathcal S}_{\mathcal N}$.
+\end{definition}
 
 	$P \wbbisim_{\pi} Q \iff \ldb P \rdb \wbbisim_{r(\texttt{FN}(P))} \ldb Q \rdb$.
 
