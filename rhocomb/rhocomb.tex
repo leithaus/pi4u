@@ -563,7 +563,7 @@ specification.
 (XIII)&  \meaningof{\prefix{p}{x}{s(v,x^{-},w)}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{(\binpar{s(v,w_{1},w_{2})}{\binpar{m(w_{1},*x)}{bl(w_{2},w)}})}}_{4}(n', q) \\
-    & & & \mbox{where $w_{1} = @(\binpar{b_{l}(q,n)}{b_{r}(v,x^{-})})$, $w_{2} = @(\binpar{m(q,*n)}{b_{r}(v,x^{-})})$,} \\
+    & & & \mbox{where $w_{1} = @(\binpar{b_{l}(q,n)}{s(v,x^{-},w)})$, $w_{2} = @(\binpar{b_{r}(q,n)}{s(v,x^{-},w)})$,} \\
     & & & \mbox{and $n' = \quotep{(m(w_{1},*w_{2}))}$}
 \end{array}\]
 
@@ -718,7 +718,7 @@ The RHO combinators above also have a presentation as a Gph-theory:
   \item Rewrite rules
     \[\begin{array}{rl}
       d(a,b,c) | m(a,P) & \Rightarrow m(b,P) | m(c,P) \\
-      k(a,) | m(a,P) & \Rightarrow 0 \\
+      k(a) | m(a,P) & \Rightarrow 0 \\
       fw(a,b) | m(a,P) & \Rightarrow m(b,P) \\
       br(a,b) | m(a,P) & \Rightarrow fw(b,@(P)) \\
     \end{array} \quad \quad
