@@ -500,6 +500,10 @@ $m(a^{+},v^{\pm});d(a^{−},b^{+},c^{+});k(a^{−});fw(a^{−},b^{+});bl(a^{−}
 Note the annotated polarities are preserved by reduction, e.g.
 $d(a^{−},b^{+},c^{+}) | m(a^{+},v) \to m(b^{+},v) | m(b^{+},v)$
 
+Similarly, for economy of expression, we emulate Yoshida's use of
+$\emph{c}$ to represent any combinator matching the arity
+specification. 
+
 \[\begin{array}{llrl}
 (I)&  \meaningof{\prefix{p}{x}{P|Q}}_4(n, q) 
     & := & 
@@ -520,17 +524,17 @@ $d(a^{−},b^{+},c^{+}) | m(a^{+},v) \to m(b^{+},v) | m(b^{+},v)$
 (VIII)&  \meaningof{\prefix{p}{x}{(f(x,v))}}_4(n, q) 
     & := & 
     b_{l}(p,v) \\
-(IX)&  \meaningof{\prefix{p}{x}{(f(v,x))}}_4(n, q) 
+(IX)&  \meaningof{\prefix{p}{x}{(fw(v,x))}}_4(n, q) 
     & := & 
     b_{r}(p,v) \\
 (X)&  \meaningof{\prefix{p}{x}{\emph{c}(\vect{v},x^{+},\vect{w})}}_4(n, q) 
     & := & 
-    \meaningof{\prefix{p}{x}{\binpar{fw(a,x)}{\emph{c}(\vect{v},a,\vect{w})}}}_f(n, q')
+    \meaningof{\prefix{p}{x}{\binpar{fw(a,x)}{\emph{c}(\vect{v},a,\vect{w})}}}_4(n, q')
     \mbox{where $a = @(m(q,n)|\emph{c}(v^{-},w))$} \\
     & & & \mbox{and $q'= \quotep{(m(a,m(q,n)))}$} \\
 (XI)&  \meaningof{\prefix{p}{x}{(\emph{c}(x^{-},v))}}_4(n, q) 
     & := & 
-    \meaningof{\prefix{p}{x}{\binpar{fw(x,a)}{\emph{c}(a^{-},\vect{v})}}}_f(n, q')
+    \meaningof{\prefix{p}{x}{\binpar{fw(x,a)}{\emph{c}(a^{-},\vect{v})}}}_4(n, q')
     \mbox{where $a = @(m(q,n)|\emph{c}(x^{-},v))$} \\
     & & & \mbox{and $q'= \quotep{(m(a,m(q,n)))}$} \\
 (XII)&  \meaningof{\prefix{p}{x}{(b_{r}(v,x^{-}))}}_4(n, q) 
