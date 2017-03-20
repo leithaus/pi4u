@@ -487,33 +487,38 @@ prefix and new elimination.
         {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}}}_4. \\
 \end{eqnarray*}
 
-To handle prefix elimination we must essentially import all of
-Yoshida's algorithm. The key difference is that we have name
-allocation which guarantees freshness relative to the free names of
-$P$. Thus, we don't have to import rules 2 - 4 of her algorithm. Like
-her, we assume the following annotations (+ stands for the output and
-− stands for the input), which denote how each name is used in the
-rules of interaction:
+To handle prefix elimination we must import most of Yoshida's
+algorithm. The key difference is that we must allocate names that
+guarantee freshness relative to the free names of the processes being
+translated. For example, in rule $I$, for prefix to a parallel
+composition, we must ensure that $v$ and $w$ are fresh with respect to
+the names in $P$ and $Q$, and distinct from each other, and then we
+must update the name allocator in the recursive call. We do not
+have to import rules 2 - 4 of her algorithm. Like her, we assume the
+following annotations (+ stands for the output and − stands for the
+input), which denote how each name is used in the rules of
+interaction:
 
-$m(a^{+},v^{\pm});d(a^{−},b^{+},c^{+});k(a^{−});fw(a^{−},b^{+});bl(a^{−}b^{+});br(a^{−}b^{−});s(a^{−}b^{−}c^{+})$
+\[m(a^{+},v^{\pm});d(a^{−},b^{+},c^{+});k(a^{−});fw(a^{−},b^{+});bl(a^{−}b^{+});br(a^{−}b^{−});s(a^{−}b^{−}c^{+})\]
 
 Note the annotated polarities are preserved by reduction, e.g.
-$d(a^{−},b^{+},c^{+}) | m(a^{+},v) \to m(b^{+},v) | m(b^{+},v)$
+\[\binpar{d(a^{−},b^{+},c^{+})}{m(a^{+},v)} \to \binpar{m(b^{+},v)}{m(b^{+},v)}\]
 
 Similarly, for economy of expression, we emulate Yoshida's use of
 $\emph{c}$ to represent any combinator matching the arity
 specification. 
 
 \[\begin{array}{llrl}
-(I)&  \meaningof{\prefix{p}{x}{P|Q}}_4(n, q) 
+(I)&  \meaningof{\prefix{p}{x}{\binpar{P}{Q}}}_4(n, q) 
     & := & 
-    (d(p,v,w)|\binpar{\meaningof{\prefix{v}{x}{P}}_{4}(n, q_{1})}{\meaningof{\prefix{w}{x}{Q}}_{4}(n, q_{2}) } \\
-    & & & \mbox{where $v = \quotep{(m(q,b_{l}(q,n)|P|Q))}$, $w = \quotep{(m(q,b_{r}(q,n)|P|Q))}$,} \\
-    & & &\mbox{$q_{1} = \quotep{(\binpar{b_{l}(v,w)}{m(q,m(v,w))})}$, $q_{2} = \quotep{(\binpar{b_{r}(v,w)}{m(q,m(v,w))})}$} \\
+    (d(p,v,w)|\binpar{\meaningof{\prefix{v}{x}{P}}_{4}(n_{1}, q_{1})}{\meaningof{\prefix{w}{x}{Q}}_{4}(n_{2}, q_{2}) } \\
+    & & & \mbox{where $v = \quotep{(m(q,\binpar{b_{l}(q,n)}{\binpar{P}{Q}}))}$, $w = \quotep{(m(q,\binpar{b_{r}(q,n)}{\binpar{P}{Q}}))}$,} \\
+    & & &\mbox{$n_{1} = \quotep{(\binpar{b_{l}(v,w)}{m(q,m(v,*w))})}$, $n_{2} = \quotep{(\binpar{b_{r}(v,w)}{m(q,m(v,*w))})}$} \\
+    & & &\mbox{$q_{1} = \quotep{(\binpar{b_{l}(n_{1},n_{2})}{m(q,m(v,*w))})}$, $q_{2} = \quotep{(\binpar{b_{r}(n_{1},n_{2})}{m(q,m(v,*w))})}$} \\
 (V)&  \meaningof{\prefix{p}{x}{(\emph{c}(v^{+},w))}}_4(n, q) 
     & := & 
     s(p,a,v)|\emph{c}(v^{+},\vect{w})
-    \mbox{, where $a = @(m(q,n)|\emph{c}(v^{+},\vect{w}))$ and $x \not\in v : \vect{w}$}\\
+    \mbox{, where $a = @(\binpar{m(q,n)}{\emph{c}(v^{+},\vect{w})})$ and $x \not\in v : \vect{w}$}\\
 (VI)&  \meaningof{\prefix{p}{x}{\emph{c}(v^{-},\vect{w})}}_4(n, q) 
     & := & 
     s(p,v,a)|\emph{c}(v^{-},\vect{w})
@@ -529,22 +534,22 @@ specification.
     b_{r}(p,v) \\
 (X)&  \meaningof{\prefix{p}{x}{\emph{c}(\vect{v},x^{+},\vect{w})}}_4(n, q) 
     & := & 
-    \meaningof{\prefix{p}{x}{\binpar{fw(ax)}{\emph{c}(\vect{v},a,\vect{w})}}}_4(n, q')\\
-    & & & \mbox{where $a = @(m(q,n)|\emph{c}(v^{-},w))$} \mbox{ and $q'= \quotep{(m(a,m(q,n)))}$} \\
+    \meaningof{\prefix{p}{x}{\binpar{fw(a,x)}{\emph{c}(\vect{v},a,\vect{w})}}}_4(n', q)\\
+    & & & \mbox{where $a = @(\binpar{m(q,*n)}{\emph{c}(v^{-},w)})$} \mbox{ and $n'= \quotep{(m(a,m(q,n)))}$} \\
 (XI)&  \meaningof{\prefix{p}{x}{(\emph{c}(x^{-},v))}}_4(n, q) 
     & := & 
-    \meaningof{\prefix{p}{x}{\binpar{fw(xa)}{\emph{c}(a^{-},\vect{v})}}}_4(n, q')\\
-    & & & \mbox{where $a = @(m(q,n)|\emph{c}(x^{-},v))$} \mbox{ and $q'= \quotep{(m(a,m(q,n)))}$} \\
+    \meaningof{\prefix{p}{x}{\binpar{fw(x,a)}{\emph{c}(a^{-},\vect{v})}}}_4(n', q)\\
+    & & & \mbox{where $a = @(\binpar{m(q,*n)}{\emph{c}(x^{-},v)})$} \mbox{ and $n'= \quotep{(m(a,m(q,*n)))}$} \\
 (XII)&  \meaningof{\prefix{p}{x}{(b_{r}(v,x^{-}))}}_4(n, q) 
     & := & 
-    \meaningof{\prefix{p}{x}{(d(v,w_{1},w_{2})|s(w_{1},x,w_{3})|br(w_{2},w_{3}))}}_{4}(n, q') \\
-    & & & \mbox{where $w_{1} = \quotep{(b_{l}(q,n)|b_{r}(v,x^{-}))}$, $w_{2} = \quotep{(m(q,n)|b_{r}(v,x^{-}))}$,} \\
-    & & & \mbox{$w_{3} = \quotep{(b_{r}(p,v)|b_{r}(v,x^{-}))}$, and $q' = \quotep{(s(w_{1},w_{2},w_{3}))}$} \\
+    \meaningof{\prefix{p}{x}{(\binpar{d(v,w_{1},w_{2})}{\binpar{s(w_{1},x,w_{3})}{br(w_{2},w_{3})}})}}_{4}(n', q) \\
+    & & & \mbox{where $w_{1} = \quotep{(\binpar{b_{l}(q,n)}{b_{r}(v,x^{-})})}$, $w_{2} = \quotep{(\binpar{m(q,n)}{b_{r}(v,x^{-})})}$,} \\
+    & & & \mbox{$w_{3} = \quotep{(\binpar{b_{r}(p,v)}{b_{r}(v,x^{-})})}$, and $n' = \quotep{(s(w_{1},w_{2},w_{3}))}$} \\
 (XIII)&  \meaningof{\prefix{p}{x}{(s(v,x^{-},w))}}_4(n, q) 
     & := & 
-    \meaningof{\prefix{p}{x}{\prefix{a}{x}{(s(v,w_{1},w_{2}) | m(w_{1},x) | bl(w_{2},w))}}}_{4}(n, q') \\
-    & & & \mbox{where $w_{1} = @(b_{l}(q,n)|b_{r}(v,x^{-}))$, $w_{2} = @(m(q,n)|b_{r}(v,x^{-}))$,} \\
-    & & & \mbox{and $w_{3} = @(b_{r}(p,v)|b_{r}(v,x^{-}))$}
+    \meaningof{\prefix{p}{x}{\prefix{a}{x}{(\binpar{s(v,w_{1},w_{2})}{\binpar{m(w_{1},x)}{bl(w_{2},w)}})}}}_{4}(n', q) \\
+    & & & \mbox{where $w_{1} = @(\binpar{b_{l}(q,n)}{b_{r}(v,x^{-})})$, $w_{2} = @(\binpar{m(q,*n)}{b_{r}(v,x^{-})})$,} \\
+    & & & \mbox{and $w_{3} = @(\binpar{b_{r}(p,v)}{b_{r}(v,x^{-})})$, $n' = \quotep{(s(w_{1},w_{2},w_{3}))}$}
 \end{array}\]
 
 Note that all $\new$-binding is now interpreted, as in Wischik's
