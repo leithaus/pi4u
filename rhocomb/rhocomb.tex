@@ -272,7 +272,7 @@ Rewrite rules
   \inferrule* {{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
 \end{mathpar}
 
-\subsection{RHO combinator calculus}
+\subsection{Reflective higher-order (RHO) combinator calculus}
 The {\pic} is not a closed theory, but rather a theory dependent upon
 some theory of names. Taking an operational view, one may think of the
 {\pic} as a procedure that when handed a theory of names provides a
@@ -289,8 +289,7 @@ possible, but results in a calculus that enjoys both the features of
 concurrency and meta-programming
 \cite{DBLP:journals/entcs/MeredithR05}. The key idea is to provide the
 ability to quote processes, effectively reifying them as names, and to
-unquote the, effectively reflecting names (which are quoted processes)
-back as processes.
+unquote them, effectively reflecting names back as processes.
 
 The same technique can be applied to Yoshida's combinators. We remove
 new names and replication, introduce quoting/unquoting operators,
@@ -364,6 +363,7 @@ machinery thus far presented we give the construction explicitly in
 the RHO combinator calculus.
 
 \begin{definition}[Replication]
+  \label{replication}
   $D(x,v,w) := (d(x,v,w) | fw(v,x) | {*}(w))$
 \end{definition}
 \[\begin{array}{rl}
@@ -371,13 +371,14 @@ the RHO combinator calculus.
         &= d(x,v,w) \; |\; fw(v,x) \; |\; {*}(w) \; |\; m(x,D(x,v,w) \; |\; P) \\
         &\red m(v,D(x,v,w) \; |\; P) \; |\; m(w,D(x,v,w) \; |\; P) \; |\; fw(v,x) \; |\; {*}(w) \; |\; m(x,D(x,v,w) \; |\; P) \\
         &\red m(x,D(x,v,w) \; |\; P) \; |\; m(w,D(x,v,w) \; |\; P) \; |\; {*}(w) \\
-        &\red m(x,D(x,v,w) \; |\; P) \; |\; D(x,v,w) \; |\; P
+        &\red m(x,D(x,v,w) \; |\; P) \; |\; D(x,v,w) \; |\; P \\
+        & = \; !_{(x,v,w)} P \; |\; P
 \end{array}\]
 
 Of course, this encoding, as an implementation, runs away, unfolding
-$\bangp{P}$ eagerly. It is possible to obtain a lazier and more
-implementable replication operator, restricted to the image of
-input-guarded processes. The reader familiar with the
+$\bangp{P}$ eagerly. It is possible to obtain a lazier
+replication operator restricted to the embedding of
+input-guarded $\pi$ processes. The reader familiar with the
 $\lambda$-calculus will have noticed the similarity between $D$ and
 the ``paradoxical'' or ``fixed point'' combinator $Y$.
 
@@ -389,8 +390,8 @@ combinator calculus, we encounter a small complication in the
 treatment of free names at the outset. There are several ways to
 handle this.  One is to insist that the translation be handed a closed
 program, one in which all names are bound either by input or by
-restriction; this alternative feels inelegant. Another is to provide
-an environment, $r : \mathcal{N}_{\pi} \rightarrow \QProc$, for
+restriction, but this feels inelegant. Another is to provide
+an environment, $r : \mathcal{N}_{\mbox{\tiny Yoshida}} \rightarrow \QProc$, for
 mapping the free names in a Yoshida process into names in the RHO
 combinator calculus. Maintaining the updates to the environment,
 however, obscures the simplicity of the translation. We adopt a third
@@ -440,10 +441,10 @@ $l$ and $r$ on a name $x$ is to construct a name that is guaranteed to
 be fresh with respect to the free names of the process being
 interpreted. More generally, mentioning a name, say $n$, in the
 constructor of a another name, say $n'$, guarantees distinction
-between $n$ and $n'$; likewise, mentioning a process, say $P$ in the
-constructor of a name, $n$ guarantees $n$ is fresh in $P$. The
-particular choices of process constructors used in the name
-constructors are not essentially for the purposes of freshness. We
+between $n$ and $n'$; likewise, mentioning a process, say $P$, in the
+constructor of a name $n$ guarantees that $n$ is fresh in $P$. The
+particular choices of combinators used in the name
+constructors are irrelevant for the purposes of freshness. We
 make heavy use of this fact in our interpretation of prefix
 elimination.
 
@@ -627,9 +628,9 @@ $P \wbbisim_{\mathcal N} Q$, if $P \rel{S}_{\mathcal N} Q$ for some ${\mathcal N
 \begin{proof}[Proof sketch]
   The forward direction $\Rightarrow$ is immediate from the definition
   of the translation. The reverse direction is only interesting in the
-  case of $!$ and $\mathsf{new}$. In the first case, this is
-  exactly why we carried out the replication calculation in more
-  detail. In the second case, transitions on $\mathsf{new}$-bound
+  case of $!$ and $\mathsf{new}$. The replication case follows immediately
+  from the calculation following definition \ref{replication}. 
+  In the $\new$ case, transitions on $\mathsf{new}$-bound
   names will be in one-to-one correspondence with names provided by
   the name parameters of the translation function. By construction,
   these are not observable by the observation relation.
@@ -654,7 +655,7 @@ A {\bf directed multigraph}, hereafter {\bf graph}, consists of a set $E$ of edg
 
 A {\bf Gph-enriched category} is a category where each hom set $\hom(x,y)$ is equipped with a set $E_{x,y}$ and functions $s_{x,y}, t_{x,y}\maps E_{x,y} \to \hom(x,y);$ that is, each hom set is thought of as a set of vertices and is equipped with a set of edges making it into a graph.  A Gph-enriched category has finite products if the underlying category does.
 
-Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  Given two graph homomorphisms $F, G\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph shift} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = G(v).$  The category Gph is nontrivially Gph-enriched, making it a cartesian closed category: the objects are graphs, and for any pair of graphs $(G, G')$ we get a graph whose vertices are graph homomorphisms from $G$ to $G'$ and whose edges are graph shifts.
+Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  Given two graph homomorphisms $F, G\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph transformation} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = G(v).$  The category Gph is nontrivially Gph-enriched, making it a cartesian closed category: the objects are graphs, and for any pair of graphs $(G, G')$ we get a graph whose vertices are graph homomorphisms from $G$ to $G'$ and whose edges are graph transformations.
 
 A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the graph structure on each hom set is preserved, {\em i.e.} the functions between hom sets are graph homomorphisms between the hom graphs.
 
@@ -664,7 +665,7 @@ A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that p
 
 \section{Gph-theories as models of computation}
 
-Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  A presentation of underlying multisorted Lawvere theory of a finitely-generated Gph-theory is a signature for a term calculus, consisting of a set of sorts and a set of term constructors, while the edges in the hom graphs of the theory encode the reduction relation.
+Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  A presentation of the underlying multisorted Lawvere theory of a finitely-generated Gph-theory is a signature for a term calculus, consisting of a set of sorts, a set of term constructors, and a set of equations, while the edges in the hom graphs of the theory encode the reduction relation.
 
 Here is a presentation of the SKI combinator calculus as a Gph-theory:
 \begin{itemize}
@@ -676,6 +677,7 @@ Here is a presentation of the SKI combinator calculus as a Gph-theory:
     I&:1 \to T\\
     (-\; -)&: T^2 \to T\\
   \end{array}\]
+  \item structural congruence (no equations)
   \item rewrites
   \[\begin{array}{rl}
     \sigma&:(((S\; x)\; y)\; z) \Rightarrow ((x\; z)\; (y\; z))\\
@@ -686,7 +688,7 @@ Here is a presentation of the SKI combinator calculus as a Gph-theory:
 where in the rewrites we have used expressions like $((K\; y)\; z)$ as shorthand for
 \[ T\times T \xrightarrow{\tiny\mbox{left}^{-1}} 1\times T \times T \xrightarrow{K \times T \times T} T\times T \times T \xrightarrow{(-\;-)\times T} T\times T \xrightarrow{(-\;-)} T. \]
 
-A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$; it equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v),$ there is a vertex $(u\;v)$, and similarly for edges; and it equips $M(T)$ with graph shifts asserting the existence of an edge out of a reducible expression to the term it reduces to.
+A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$; it equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v),$ there is a vertex $(u\;v)$, and similarly for edges; and it equips $M(T)$ with graph transformations asserting the existence of an edge out of a reducible expression to the term it reduces to.
 
 That this Gph-theory captures the semantics of the SKI calculus is almost definitional: there is an edge in the free model on the empty graph if and only if the source vertex is reducible to the target vertex.  
 
@@ -733,7 +735,7 @@ The RHO combinators above also have a presentation as a Gph-theory:
 \section{Conclusion and future work}
 We have shown how to construct a concurrent higher-order combinator
 calculus that uses reflection to avoid the necessity for new and bound
-names.  Yoshida's combinators, and therefore the asynchronous {\pic}
+names.  Yoshida's combinators, and therefore the asynchronous {\pic},
 have a faithful embedding into the calculus.  We have also given a
 Gph-theory that captures the calculus' operational semantics.  Just as
 the S and K combinators correspond to the axioms of intuitionistic
