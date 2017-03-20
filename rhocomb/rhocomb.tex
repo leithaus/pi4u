@@ -437,7 +437,15 @@ Note that by construction, $\quotep{P}$ cannot occur as a name in $P$
 and hence any name derived from a process that is built using
 $\quotep{P}$ cannot occur in $P$. Thus, the effect of the superscripts
 $l$ and $r$ on a name $x$ is to construct a name that is guaranteed to
-be fresh with respect to the free names of the process being interpreted.
+be fresh with respect to the free names of the process being
+interpreted. More generally, mentioning a name, say $n$, in the
+constructor of a another name, say $n'$, guarantees distinction
+between $n$ and $n'$; likewise, mentioning a process, say $P$ in the
+constructor of a name, $n$ guarantees $n$ is fresh in $P$. The
+particular choices of process constructors used in the name
+constructors are not essentially for the purposes of freshness. We
+make heavy use of this fact in our interpretation of prefix
+elimination.
 
 The interpretation function $\meaningof{-}_2(n, p)$ is straightforward
 for all but replication and $\mathsf{new}$.
@@ -493,10 +501,13 @@ guarantee freshness relative to the free names of the processes being
 translated. For example, in rule $I$, for prefix to a parallel
 composition, we must ensure that $v$ and $w$ are fresh with respect to
 the names in $P$ and $Q$, and distinct from each other, and then we
-must update the name allocator in the recursive call. We do not
-have to import rules 2 - 4 of her algorithm. Like her, we assume the
-following annotations (+ stands for the output and − stands for the
-input), which denote how each name is used in the rules of
+must update both the name allocator for each parallel component and
+the channels on which fresh names are communicate (so that there is no
+interference between the two components) in the recursive call. 
+
+We do not have to import rules 2 - 4 of her algorithm. Like her, we
+assume the following annotations (+ stands for the output and − stands
+for the input), which denote how each name is used in the rules of
 interaction:
 
 \[m(a^{+},v^{\pm});d(a^{−},b^{+},c^{+});k(a^{−});fw(a^{−},b^{+});bl(a^{−}b^{+});br(a^{−}b^{−});s(a^{−}b^{−}c^{+})\]
@@ -518,11 +529,11 @@ specification.
 (V)&  \meaningof{\prefix{p}{x}{(\emph{c}(v^{+},w))}}_4(n, q) 
     & := & 
     s(p,a,v)|\emph{c}(v^{+},\vect{w})
-    \mbox{, where $a = @(\binpar{m(q,n)}{\emph{c}(v^{+},\vect{w})})$ and $x \not\in v : \vect{w}$}\\
+    \mbox{, where $a = @(\binpar{m(q,*n)}{\emph{c}(v^{+},\vect{w})})$ and $x \not\in v : \vect{w}$}\\
 (VI)&  \meaningof{\prefix{p}{x}{\emph{c}(v^{-},\vect{w})}}_4(n, q) 
     & := & 
     s(p,v,a)|\emph{c}(v^{-},\vect{w})
-    \mbox{, where $a = @(m(q,n)|\emph{c}(v^{-},w))$ and $x \not\in v : \vect{w}$} \\
+    \mbox{, where $a = @(m(q,*n)|\emph{c}(v^{-},w))$ and $x \not\in v : \vect{w}$} \\
 (VII)&  \meaningof{\prefix{p}{x}{(m(v,x))}}_4(n, q) 
     & := & 
     fw(p,v) \\
@@ -535,7 +546,7 @@ specification.
 (X)&  \meaningof{\prefix{p}{x}{\emph{c}(\vect{v},x^{+},\vect{w})}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{\binpar{fw(a,x)}{\emph{c}(\vect{v},a,\vect{w})}}}_4(n', q)\\
-    & & & \mbox{where $a = @(\binpar{m(q,*n)}{\emph{c}(v^{-},w)})$} \mbox{ and $n'= \quotep{(m(a,m(q,n)))}$} \\
+    & & & \mbox{where $a = @(\binpar{m(q,*n)}{\emph{c}(v^{-},w)})$} \mbox{ and $n'= \quotep{(m(a,m(q,*n)))}$} \\
 (XI)&  \meaningof{\prefix{p}{x}{(\emph{c}(x^{-},v))}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{\binpar{fw(x,a)}{\emph{c}(a^{-},\vect{v})}}}_4(n', q)\\
@@ -543,11 +554,11 @@ specification.
 (XII)&  \meaningof{\prefix{p}{x}{(b_{r}(v,x^{-}))}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{(\binpar{d(v,w_{1},w_{2})}{\binpar{s(w_{1},x,w_{3})}{br(w_{2},w_{3})}})}}_{4}(n', q) \\
-    & & & \mbox{where $w_{1} = \quotep{(\binpar{b_{l}(q,n)}{b_{r}(v,x^{-})})}$, $w_{2} = \quotep{(\binpar{m(q,n)}{b_{r}(v,x^{-})})}$,} \\
+    & & & \mbox{where $w_{1} = \quotep{(\binpar{b_{l}(q,n)}{b_{r}(v,x^{-})})}$, $w_{2} = \quotep{(\binpar{m(q,*n)}{b_{r}(v,x^{-})})}$,} \\
     & & & \mbox{$w_{3} = \quotep{(\binpar{b_{r}(p,v)}{b_{r}(v,x^{-})})}$, and $n' = \quotep{(s(w_{1},w_{2},w_{3}))}$} \\
 (XIII)&  \meaningof{\prefix{p}{x}{(s(v,x^{-},w))}}_4(n, q) 
     & := & 
-    \meaningof{\prefix{p}{x}{\prefix{a}{x}{(\binpar{s(v,w_{1},w_{2})}{\binpar{m(w_{1},x)}{bl(w_{2},w)}})}}}_{4}(n', q) \\
+    \meaningof{\prefix{p}{x}{\prefix{a}{x}{(\binpar{s(v,w_{1},w_{2})}{\binpar{m(w_{1},*x)}{bl(w_{2},w)}})}}}_{4}(n', q) \\
     & & & \mbox{where $w_{1} = @(\binpar{b_{l}(q,n)}{b_{r}(v,x^{-})})$, $w_{2} = @(\binpar{m(q,*n)}{b_{r}(v,x^{-})})$,} \\
     & & & \mbox{and $w_{3} = @(\binpar{b_{r}(p,v)}{b_{r}(v,x^{-})})$, $n' = \quotep{(s(w_{1},w_{2},w_{3}))}$}
 \end{array}\]
