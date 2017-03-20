@@ -498,7 +498,10 @@ prefix and new elimination.
 To handle prefix elimination we must import most of Yoshida's
 algorithm. The key difference is that we must allocate names that
 guarantee freshness relative to the free names of the processes being
-translated. For example, in rule $I$, for prefix to a parallel
+translated. In those rules below with a ``where'' clause, the specific
+choice of combinators in the names is not so important as mentioning
+those names and processes with respect to which the name mush be fresh.
+For example, in rule $I$, for prefix to a parallel
 composition, we must ensure that $v$ and $w$ are fresh with respect to
 the names in $P$ and $Q$, and distinct from each other, and then we
 must update both the name allocator for each parallel component and
