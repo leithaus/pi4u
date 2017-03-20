@@ -508,10 +508,11 @@ must update both the name allocator for each parallel component and
 the channels on which fresh names are communicate (so that there is no
 interference between the two components) in the recursive call. 
 
-We do not have to import rules 2 - 4 of her algorithm. Like her, we
-assume the following annotations (+ stands for the output and − stands
-for the input), which denote how each name is used in the rules of
-interaction:
+Because the input to $\meaningof{-}_4$ is already in combinator form,
+we do not have to import rules 2 -- 4 of her algorithm. Like her, we
+assume the following annotations ($+$ stands for the output and $−$
+stands for the input), which denote how each name is used in the rules
+of interaction:
 
 \[m(a^{+},v^{\pm});d(a^{−},b^{+},c^{+});k(a^{−});fw(a^{−},b^{+});bl(a^{−}b^{+});br(a^{−}b^{−});s(a^{−}b^{−}c^{+})\]
 
@@ -529,7 +530,7 @@ specification.
     & & & \mbox{where $v = \quotep{(m(q,\binpar{b_{l}(q,n)}{\binpar{P}{Q}}))}$, $w = \quotep{(m(q,\binpar{b_{r}(q,n)}{\binpar{P}{Q}}))}$,} \\
     & & &\mbox{$n_{1} = \quotep{(\binpar{b_{l}(v,w)}{m(q,m(v,*w))})}$, $n_{2} = \quotep{(\binpar{b_{r}(v,w)}{m(q,m(v,*w))})}$} \\
     & & &\mbox{$q_{1} = \quotep{(\binpar{b_{l}(n_{1},n_{2})}{m(q,m(v,*w))})}$, $q_{2} = \quotep{(\binpar{b_{r}(n_{1},n_{2})}{m(q,m(v,*w))})}$} \\
-(V)&  \meaningof{\prefix{p}{x}{(\emph{c}(v^{+},w))}}_4(n, q) 
+(V)&  \meaningof{\prefix{p}{x}{\emph{c}(v^{+},w)}}_4(n, q) 
     & := & 
     s(p,a,v)|\emph{c}(a^{+},\vect{w})
     \mbox{, where $a = @(\binpar{m(q,*n)}{\emph{c}(v^{+},\vect{w})})$ and $x \not\in v : \vect{w}$}\\
@@ -537,33 +538,33 @@ specification.
     & := & 
     s(p,v,a)|\emph{c}(a^{-},\vect{w})
     \mbox{, where $a = @(m(q,*n)|\emph{c}(v^{-},w))$ and $x \not\in v : \vect{w}$} \\
-(VII)&  \meaningof{\prefix{p}{x}{(m(v,x))}}_4(n, q) 
+(VII)&  \meaningof{\prefix{p}{x}{m(v,x)}}_4(n, q) 
     & := & 
     fw(p,v) \\
-(VIII)&  \meaningof{\prefix{p}{x}{(fw(x,v))}}_4(n, q) 
+(VIII)&  \meaningof{\prefix{p}{x}{fw(x,v)}}_4(n, q) 
     & := & 
     b_{l}(p,v) \\
-(IX)&  \meaningof{\prefix{p}{x}{(fw(v,x))}}_4(n, q) 
+(IX)&  \meaningof{\prefix{p}{x}{fw(v,x)}}_4(n, q) 
     & := & 
     b_{r}(p,v) \\
 (X)&  \meaningof{\prefix{p}{x}{\emph{c}(\vect{v},x^{+},\vect{w})}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{\binpar{fw(a,x)}{\emph{c}(\vect{v},a^{+},\vect{w})}}}_4(n', q)\\
     & & & \mbox{where $a = @(\binpar{m(q,*n)}{\emph{c}(\vect{v},x^{+},\vect{w})})$} \mbox{ and $n'= \quotep{(m(a,m(q,*n)))}$} \\
-(XI)&  \meaningof{\prefix{p}{x}{(\emph{c}(x^{-},v))}}_4(n, q) 
+(XI)&  \meaningof{\prefix{p}{x}{\emph{c}(x^{-},\vect{v})}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{\binpar{fw(x,a)}{\emph{c}(a^{-},\vect{v})}}}_4(n', q)\\
     & & & \mbox{where $a = @(\binpar{m(q,*n)}{\emph{c}(x^{-},v)})$} \mbox{ and $n'= \quotep{(m(a,m(q,*n)))}$} \\
-(XII)&  \meaningof{\prefix{p}{x}{(b_{r}(v,x^{-}))}}_4(n, q) 
+(XII)&  \meaningof{\prefix{p}{x}{b_{r}(v,x^{-})}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{(\binpar{d(v,w_{1},w_{2})}{\binpar{s(w_{1},x,w_{3})}{br(w_{2},w_{3})}})}}_{4}(n', q) \\
-    & & & \mbox{where $w_{1} = \quotep{(\binpar{b_{l}(q,n)}{b_{r}(v,x^{-})})}$, $w_{2} = \quotep{(\binpar{m(q,*n)}{b_{r}(v,x^{-})})}$,} \\
-    & & & \mbox{$w_{3} = \quotep{(\binpar{b_{r}(p,v)}{b_{r}(v,x^{-})})}$, and $n' = \quotep{(s(w_{1},w_{2},w_{3}))}$} \\
-(XIII)&  \meaningof{\prefix{p}{x}{(s(v,x^{-},w))}}_4(n, q) 
+    & & & \mbox{where $w_{1} = \quotep{(\binpar{b_{l}(q,n)}{m(q,b_{r}(v,x^{-}))})}$, $w_{2} = \quotep{(\binpar{b_{r}(q,n)}{m(q,b_{r}(v,x^{-}))})}$,} \\
+    & & & \mbox{$w_{3} = \quotep{(\binpar{b_{l}(p,v)}{m(w_{1},*w_{2}})}$, and $n' = \quotep{(s(w_{1},w_{2},w_{3}))}$} \\
+(XIII)&  \meaningof{\prefix{p}{x}{s(v,x^{-},w)}}_4(n, q) 
     & := & 
-    \meaningof{\prefix{p}{x}{\prefix{a}{x}{(\binpar{s(v,w_{1},w_{2})}{\binpar{m(w_{1},*x)}{bl(w_{2},w)}})}}}_{4}(n', q) \\
+    \meaningof{\prefix{p}{x}{(\binpar{s(v,w_{1},w_{2})}{\binpar{m(w_{1},*x)}{bl(w_{2},w)}})}}_{4}(n', q) \\
     & & & \mbox{where $w_{1} = @(\binpar{b_{l}(q,n)}{b_{r}(v,x^{-})})$, $w_{2} = @(\binpar{m(q,*n)}{b_{r}(v,x^{-})})$,} \\
-    & & & \mbox{and $w_{3} = @(\binpar{b_{r}(p,v)}{b_{r}(v,x^{-})})$, $n' = \quotep{(s(w_{1},w_{2},w_{3}))}$}
+    & & & \mbox{and $n' = \quotep{(m(w_{1},*w_{2}))}$}
 \end{array}\]
 
 Note that all $\new$-binding is now interpreted, as in Wischik's
