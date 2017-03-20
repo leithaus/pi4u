@@ -490,9 +490,10 @@ prefix and new elimination.
 To handle prefix elimination we must essentially import all of
 Yoshida's algorithm. The key difference is that we have name
 allocation which guarantees freshness relative to the free names of
-$P$. Like her, we assume the following annotations (+ stands for the
-output and − stands for the input), which denote how each name is used
-in the rules of interaction:
+$P$. Thus, we don't have to import rules 2 - 4 of her algorithm. Like
+her, we assume the following annotations (+ stands for the output and
+− stands for the input), which denote how each name is used in the
+rules of interaction:
 
 $m(a^{+},v^{\pm});d(a^{−},b^{+},c^{+});k(a^{−});fw(a^{−},b^{+});bl(a^{−}b^{+});br(a^{−}b^{−});s(a^{−}b^{−}c^{+})$
 
@@ -507,21 +508,21 @@ $d(a^{−},b^{+},c^{+}) | m(a^{+},v) \to m(b^{+},v) | m(b^{+},v)$
     & & \mbox{$q_{1} = \quotep{(\binpar{b_{l}(v,w)}{m(q,(m(v,w)))})}$, $q_{2} = \quotep{(\binpar{b_{r}(v,w)}{m(q,(m(v,w)))})}$} \\
   \meaningof{\prefix{p}{x}{(\emph{c}(v^{+},w))}}_4(n, q) 
     & := & 
-    (s(pav)|\emph{c}(v^{+}\vect{w}))
+    (s(p,a,v)|\emph{c}(v^{+},\vect{w}))
     \mbox{where $a = @(m(q,n)|\emph{c}(v^{+},\vect{w}))$ and $x \not\in v : \vect{w}$}\\
   \meaningof{\prefix{p}{x}{\emph{c}(v^{-},\vect{w})}}_4(n, q) 
     & := & 
-    (s(pva)|\emph{c}(v^{-}\vect{w}))
+    (s(p,v,a)|\emph{c}(v^{-},\vect{w}))
     \mbox{where $a = @(m(q,n)|\emph{c}(v^{-},w))$ and $x \not\in v : \vect{w}$} \\
   \meaningof{\prefix{p}{x}{(m(v,x))}}_4(n, q) 
     & := & 
-    fw(pv) \\
+    fw(p,v) \\
   \meaningof{\prefix{p}{x}{(f(x,v))}}_4(n, q) 
     & := & 
-    b_{l}(pv) \\
+    b_{l}(p,v) \\
   \meaningof{\prefix{p}{x}{(f(v,x))}}_4(n, q) 
     & := & 
-    b_{r}(pv) \\
+    b_{r}(p,v) \\
   \meaningof{\prefix{p}{x}{\emph{c}(\vect{v},x^{+},\vect{w})}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{\binpar{fw(ax)}{\emph{c}(\vect{v},a,\vect{w})}}}_f(n, q')
