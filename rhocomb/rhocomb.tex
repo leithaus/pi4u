@@ -413,14 +413,31 @@ The guiding intuition is that we construct alongside the process a distributed m
 allocator, the process' access to which is mediated through the second argument
 to the function, called $p$ below. The first argument, called $n$ below, determines the shape of the memory for the given allocator.
 
-Since Yoshida's calculus is parametric in a set of names, we can choose $\QProc$ for that set.  Given a process $P$ in Yoshida's calculus, 
-we pick names $n$ and $p$ in the RHO calculus such that $n \neq p$ and
-both are distinct from the free names of $P$.  Then we define
+Since Yoshida's calculus is parametric in a set of names, we can
+choose $\QProc$ for that set.  Given a process $P$ in Yoshida's
+calculus, we pick names $n$ and $p$ in the RHO calculus such that $n \neq p$
+and both are distinct from the free names of $P$.  Then we define
+
 \begin{equation*}
   \meaningof{P} = \meaningof{P}_2(n, p),
 \end{equation*}
 
-where 
+Name allocation will make heavy use of the following two name
+constructors
+
+\begin{eqnarray*}
+  x^l & := & \quotep{b_{l}(x,m(x,*x))} \\
+  x^r & := & \quotep{b_{r}(x,m(x,*x))}
+\end{eqnarray*}
+
+Note that by construction, $\quotep{P}$ cannot occur as a name in $P$
+and hence any name derived from a process that is built using
+$\quotep{P}$ cannot occur in $P$. Thus, the effect of the superscripts
+$l$ and $r$ on a name $x$ is to construct a name that is guaranteed to
+be fresh with respect to the support of the process ${*}(x).$
+
+The interpretation function $\meaningof{-}_2(n, p)$ is straightforward
+for all but replication and $\mathsf{new}$.
 
 \begin{eqnarray*}
     \meaningof{\pzero}_2 (n,p)
@@ -436,6 +453,13 @@ where
       & = & 
     \meaningof{P}_2 (n^l, p^l)
          \juxtap \meaningof{Q}_2 (n^r, p^r) \\ 
+\end{eqnarray*}
+
+These latter two forms require extra care. We define them in terms of
+a prefix form and then use a version of Yoshida's prefix elimination
+to remove the prefix.
+
+\begin{eqnarray*}
     \meaningof{\id{!} P}_2 (n,p)
           & = & \binpar{m(x, \meaningof{P}_3(n^r,p^r))}
                   {\binpar{D(x,v,w)}
@@ -449,28 +473,23 @@ where
          \meaningof{\prefix{p}{x}{\binpar{\meaningof{P}_2 ( n^l, p^l )}{m(p, *n)}}}_4(n, p)
 \end{eqnarray*}
 
-and
-
+As expected, the interpretation of replication makes use of the $D$
+operator defined above. Note that name allocation is intertwined with
+prefix and new elimination.
+         
 \begin{eqnarray*}
-  x^l & := & \quotep{b_{l}(x,m(x,*x))} \\
-  x^r & := & \quotep{b_{r}(x,m(x,*x))} \\
   \meaningof{P}_3(n, p) 
     & := & 
-      \prefix{n}{n'}{\prefix{p}{p'}{(\binpar{\meaningof{P}_2(n',p')}
-        {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}}. \\
+      \meaningof{\prefix{n}{n'}{\prefix{p}{p'}{(\binpar{\meaningof{P}_2(n',p')}
+        {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}}}_4. \\
 \end{eqnarray*}
 
-Note that by construction, $\quotep{P}$ cannot occur as a name in $P$
-and hence any name derived from a process that is built using
-$\quotep{P}$ cannot occur in $P$. Thus, the effect of the superscripts
-$l$ and $r$ on a name $x$ is to construct a name that is guaranteed to
-be fresh with respect to the support of the process ${*}(x).$
-
-Because the $\mathsf{new}$ operator is interpreted as a prefix
-operator, to handle its elimination we must essentially import all of
-Yoshida's prefix elimination algorithm. Like her, we assume the following
-annotations (+ stands for the output and − stands for the input),
-which denote how each name is used in the rules of interaction:
+To handle prefix elimination we must essentially import all of
+Yoshida's algorithm. The key difference is that we have name
+allocation which guarantees freshness relative to the free names of
+$P$. Like her, we assume the following annotations (+ stands for the
+output and − stands for the input), which denote how each name is used
+in the rules of interaction:
 
 $m(a^{+},v^{\pm});d(a^{−},b^{+},c^{+});k(a^{−});fw(a^{−},b^{+});bl(a^{−}b^{+});br(a^{−}b^{−});s(a^{−}b^{−}c^{+})$
 
@@ -500,6 +519,10 @@ $d(a^{−},b^{+},c^{+}) | m(a^{+},v) \to m(b^{+},v) | m(b^{+},v)$
   \meaningof{\prefix{p}{x}{(f(v,x))}}_4(n, q) 
     & := & 
     b_{r}(pv) \\
+  \meaningof{\prefix{p}{x}{\emph{c}(v,x^{+},w)}}_4(n, q) 
+    & := & 
+    (fw(ax)|\emph{c}(v,a,w))
+    \mbox{where $a = @(m(q,n)|\emph{c}(v^{-},w))$} \\
   \meaningof{\prefix{p}{x}{(b_{r}(v,x^{-}))}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{(d(v,w_{1},w_{2})|s(w_{1},x,w_{3})|br(w_{2},w_{3}))}}_{4}(n, q') \\
