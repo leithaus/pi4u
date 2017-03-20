@@ -373,10 +373,10 @@ the RHO combinator calculus.
 
 Of course, this encoding, as an implementation, runs away, unfolding
 $\bangp{P}$ eagerly. It is possible to obtain a lazier and more
-implementable replication operator, restricted to input-guarded
-processes [[combinators other than m?  products of combinataors other than m?]].  
-The reader familiar with the $\lambda$-calculus will have noticed the
-similarity between $D$ and the ``paradoxical'' or ``fixed point'' combinator $Y$.
+implementable replication operator, restricted to the image of
+input-guarded processes. The reader familiar with the
+$\lambda$-calculus will have noticed the similarity between $D$ and
+the ``paradoxical'' or ``fixed point'' combinator $Y$.
 
 \subsubsection{Implementing new names with reflection}
 
@@ -446,19 +446,56 @@ where [[fix $\interp{\new x.P}_2$ and $\interp{P}_3$]]
                       w = @(\meaningof{P}_2(n,p))^{rr} \\
     \meaningof{(\new \; x ) P}_2 (n, p) 
           & = & 
-         \prefix{p}{x}{\binpar{\meaningof{P}_2 ( n^l, p^l )}{m(p, *n)}} 
+         \meaningof{\prefix{p}{x}{\binpar{\meaningof{P}_2 ( n^l, p^l )}{m(p, *n)}}}_4(n, p)
 \end{eqnarray*}
 
 and
 
 \begin{eqnarray*}
-  x^l & \triangleq & \quotep{\outputp{x}{x}} \\
-  x^r & \triangleq & \quotep{\prefix{x}{x}{\pzero}} \\
+  x^l & := & \quotep{\outputp{x}{x}} \\
+  x^r & := & \quotep{\prefix{x}{x}{\pzero}} \\
   \meaningof{P}_3(n, p) 
-    & \triangleq & 
+    & := & 
       \prefix{n}{n'}{\prefix{p}{p'}{(\binpar{\meaningof{P}_2(n',p')}
         {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}}. \\
 \end{eqnarray*}
+
+\begin{eqnarray*}
+  \meaningof{\prefix{p}{x}{P|Q}}_4(n, q) 
+    & := & 
+    (d(pvw)|\binpar{\meaningof{\prefix{v}{x}{P}}_{4}(n, q'_{1})}{\meaningof{\prefix{w}{x}{Q}}_{4}(n, q'_{2}) } \\
+    & & \mbox{where $v = \quotep{m(q(b_{l}(qn)|P|Q))}$, $w = \quotep{(m(qb_{r}(qn)|P|Q))}$,} \\
+    & & \mbox{$q'_{1} = \quotep{\binpar{b_{l}(vw)}{m(q(m(vw)))}}$, $q'_{1} = \quotep{\binpar{b_{r}(vw)}{m(q(m(vw)))}}$} \\
+  \meaningof{\prefix{p}{x}{(\emph{c}(v^{+}w))}}_4(n, q) \\    
+    & := & 
+    (s(pav)|\emph{c}(v^{+}w)) \\
+    & & \mbox{where $a = @(m(qn)|\emph{c}(v^{+}w))$} \\
+  \meaningof{\prefix{p}{x}{\emph{c}(v^{-}w)}}_4(n, q) 
+    & := & 
+    (s(pva)|\emph{c}(v^{-}w)) \\
+    & & \mbox{where $a = @(m(qn)|\emph{c}(v^{-}w))$} \\
+  \meaningof{\prefix{p}{x}{(m(vx))}}_4(n, q) 
+    & := & 
+    fw(pv) \\
+  \meaningof{\prefix{p}{x}{(f(xv))}}_4(n, q) 
+    & := & 
+    b_{l}(pv) \\
+  \meaningof{\prefix{p}{x}{(f(vx))}}_4(n, q) 
+    & := & 
+    b_{r}(pv) \\
+  \meaningof{\prefix{p}{x}{(b_{r}(vx^{-}))}}_4(n, q) 
+    & := & 
+    \meaningof{\prefix{p}{x}{(d(vw_{1}w_{2})|s(w_{1}xw_{3})|br(w_{2}w_{3}))}}_{4}(n, q') \\
+    & & \mbox{where $w_{1} = @(b_{l}(qn)|b_{r}(vx^{-}))$, $w_{2} = @(m(qn)|b_{r}(vx^{-}))$,} \\
+    & & \mbox{$w_{3} = @(b_{r}(pv)|b_{r}(vx^{-}))$, and $q' = s(w_{1}w_{2w_{3}})$} \\
+  \meaningof{\prefix{p}{x}{(s(vx^{-}w))}}_4(n, q) 
+    & := & 
+    \meaningof{\prefix{p}{x}{\prefix{a}{x}{(s(vw_{1}w_{2}) | m(w_{1}x) | bl(w_{2}w))}}}_{4}(n, q') \\
+    & & \mbox{where $w_{1} = @(b_{l}(qn)|b_{r}(vx^{-}))$, $w_{2} = @(m(qn)|b_{r}(vx^{-}))$, and $w_{3} = @(b_{r}(pv)|b_{r}(vx^{-}))$} \\
+\end{eqnarray*}
+
+
+
 
 Note that by construction, $\quotep{P}$ cannot occur as a name in $P$
 and hence any name derived from a process that is built using
