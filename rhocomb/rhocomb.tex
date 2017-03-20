@@ -420,7 +420,7 @@ both are distinct from the free names of $P$.  Then we define
   \meaningof{P} = \meaningof{P}_2(n, p),
 \end{equation*}
 
-where [[fix $\interp{\new x.P}_2$ and $\interp{P}_3$]]
+where 
 
 \begin{eqnarray*}
     \meaningof{\pzero}_2 (n,p)
@@ -460,20 +460,37 @@ and
         {(\binpar{D(x)}{\binpar{\outputp{n}{n'^l}}{\outputp{p}{p'^l}}})})}}. \\
 \end{eqnarray*}
 
+Note that by construction, $\quotep{P}$ cannot occur as a name in $P$
+and hence any name derived from a process that is built using
+$\quotep{P}$ cannot occur in $P$. Thus, the effect of the superscripts
+$l$ and $r$ on a name $x$ is to construct a name that is guaranteed to
+be fresh with respect to the support of the process ${*}(x).$
+
+Because the $\mathsf{new}$ operator is interpreted as a prefix
+operator, to handle its elimination we must essentially import all of
+Yoshida's prefix elimination algorithm. Like her, we assume the following
+annotations (+ stands for the output and − stands for the input),
+which denote how each name is used in the rules of interaction:
+
+$m(a^{+},v^{\pm});d(a^{−},b^{+},c^{+});k(a^{−});fw(a^{−},b^{+});bl(a^{−}b^{+});br(a^{−}b^{−});s(a^{−}b^{−}c^{+})$
+
+Note the annotated polarities are preserved by reduction, e.g.
+$d(a^{−},b^{+},c^{+}) | m(a^{+},v) \to m(b^{+},v) | m(b^{+},v)$
+
 \begin{eqnarray*}
   \meaningof{\prefix{p}{x}{P|Q}}_4(n, q) 
     & := & 
     (d(p,v,w)|\binpar{\meaningof{\prefix{v}{x}{P}}_{4}(n, q'_{1})}{\meaningof{\prefix{w}{x}{Q}}_{4}(n, q'_{2}) } \\
     & & \mbox{where $v = \quotep{m(q(b_{l}(q,n)|P|Q))}$, $w = \quotep{(m(q,b_{r}(q,n)|P|Q))}$,} \\
     & & \mbox{$q'_{1} = \quotep{\binpar{b_{l}(v,w)}{m(q(m(v,w)))}}$, $q'_{1} = \quotep{\binpar{b_{r}(v,w)}{m(q(m(v,w)))}}$} \\
-  \meaningof{\prefix{p}{x}{(\emph{c}(v^{+},w))}}_4(n, q) \\    
+  \meaningof{\prefix{p}{x}{(\emph{c}(v^{+},w))}}_4(n, q) 
     & := & 
-    (s(pav)|\emph{c}(v^{+}w)) \\
-    & & \mbox{where $a = @(m(q,n)|\emph{c}(v^{+},w))$} \\
+    (s(pav)|\emph{c}(v^{+}w))
+    \mbox{where $a = @(m(q,n)|\emph{c}(v^{+},w))$} \\
   \meaningof{\prefix{p}{x}{\emph{c}(v^{-},w)}}_4(n, q) 
     & := & 
-    (s(pva)|\emph{c}(v^{-}w)) \\
-    & & \mbox{where $a = @(m(q,n)|\emph{c}(v^{-},w))$} \\
+    (s(pva)|\emph{c}(v^{-}w))
+    \mbox{where $a = @(m(q,n)|\emph{c}(v^{-},w))$} \\
   \meaningof{\prefix{p}{x}{(m(v,x))}}_4(n, q) 
     & := & 
     fw(pv) \\
@@ -494,12 +511,6 @@ and
     & & \mbox{where $w_{1} = @(b_{l}(q,n)|b_{r}(v,x^{-}))$, $w_{2} = @(m(q,n)|b_{r}(v,x^{-}))$,} \\
     & & \mbox{and $w_{3} = @(b_{r}(p,v)|b_{r}(v,x^{-}))$}
 \end{eqnarray*}
-
-Note that by construction, $\quotep{P}$ cannot occur as a name in $P$
-and hence any name derived from a process that is built using
-$\quotep{P}$ cannot occur in $P$. Thus, the effect of the superscripts
-$l$ and $r$ on a name $x$ is to construct a name that is guaranteed to
-be fresh with respect to the support of the process ${*}(x).$
 
 Note that all $\new$-binding is now interpreted, as in Wischik's
 global $\pi$-calculus, as an input \cite{globalpi}.
