@@ -310,9 +310,9 @@ Rewrite rules
   d(a,b,c) | m(a,P) & \red m(b,P) | m(c,P) \\
   k(a) | m(a,P) & \red 0 \\
   fw(a,b) | m(a,P) & \red m(b,P) \\
+  br(a,b) | m(a,P) & \red fw(b,@(P)) \\  
 \end{array} \quad \quad
 \begin{array}{rl}
-  br(a,b) | m(a,P) & \red fw(b,@(P)) \\
   bl(a,b) | m(a,P) & \red fw(@(P),b) \\
   s(a,b,c) | m(a,P) & \red fw(b,c) \\
   *(a) | m(a,P) & \red P
@@ -328,7 +328,7 @@ Rewrite rules
   between processes \cite{SangiorgiWalker} is the least congruence
   satisfying the commutative monoid laws
   (associativity, commutativity and $\pzero$ as identity) for parallel
-  composition $|$.
+  composition $|$ and $*(@(P)) \equiv P$.
 \end{definition}
 
 Note that alpha equivalence is no longer part of structural congruence.  While there is a faithful embedding of Yoshida's combinators into RHO combinators (see below), RHO combinators can see the internal structure of names and distinguish them.
@@ -714,6 +714,7 @@ The RHO combinators above also have a presentation as a Gph-theory:
       P | 0 & = P \\
       P | Q & = Q | P \\
       ((P | Q) | R) & = (P | (Q | R)) \\
+      *(@(P)) & = P \\
     \end{array}\]
   \item Rewrite rules
     \[\begin{array}{rl}
@@ -726,7 +727,6 @@ The RHO combinators above also have a presentation as a Gph-theory:
       bl(a,b) | m(a,P) & \Rightarrow fw(@(P),b) \\
       s(a,b,c) | m(a,P) & \Rightarrow fw(b,c) \\
       *a | m(a,P) & \Rightarrow P \\
-      *(@(P)) & \Rightarrow P \\
     \end{array}\]
 \end{itemize}
 
