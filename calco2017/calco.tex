@@ -1,0 +1,295 @@
+\documentclass[a4paper,UKenglish]{lipics-v2016}
+\usepackage{microtype}
+\usepackage{bussproofs}
+
+\newcommand{\new}{\mathsf{new}}
+\newcommand{\interp}[1]{\llbracket #1 \rrbracket}
+\newcommand{\maps}{\colon}
+\newcommand{\Th}{\mathrm{Th}}
+\newcommand{\Gph}{\mathrm{Gph}}
+\newcommand{\FinSet}{\mathrm{FinSet}}
+\newcommand{\FPGphCat}{\mathrm{FPGphCat}}
+\newcommand{\Set}{\mathrm{Set}}
+\newcommand{\Cat}{\mathrm{Cat}}
+\newcommand{\Calc}{\mathrm{Calc}}
+\newcommand{\Mon}{\mathrm{Mon}}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\NN}{\mathbb{N}}
+
+\title{Representing operational semantics with enriched Lawvere theories}
+\author[1]{
+Michael Stay\\
+}
+\affil[1]{
+  Pyrofex Corp., Kirkland, WA, USA\\
+  {\tt stay@pyrofex.net}
+}
+\Copyright{Michael Stay}
+\subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation". 
+\keywords{Dummy keyword -- please provide 1--5 keywords}% mandatory: Please provide 1-5
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\EventEditors{John Q. Open and Joan R. Acces}
+\EventNoEds{2}
+\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
+\EventShortTitle{CVIT 2016}
+\EventAcronym{CVIT}
+\EventYear{2016}
+\EventDate{December 24--27, 2016}
+\EventLocation{Little Whinging, United Kingdom}
+\EventLogo{}
+\SeriesVolume{42}
+\ArticleNo{23}
+% Editor-only macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+\maketitle
+\begin{abstract}
+\noindent
+\end{abstract}
+\EnableBpAbbreviations
+
+\section{Introduction}
+\section{Gph-enriched categories}
+Here we review some standard definitions and results in enriched category theory; see \cite{CIS-335497}, \cite{Power99EnrichedLawvereTheories}, \cite{DBLP:journals/acs/LackR11}, and \cite{Trimble} for more details.
+
+A {\bf directed multigraph}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, and two functions $s,t\maps E \to V$ picking out the source and target of each edge.  There are no constraints on $E, V, s,$ or $t$, so a graph may have infinitely many vertices, infinitely many edges between any two vertices, and loops.  A {\bf graph homomorphism} from $(E, V, s, t)$ to $(E', V', s', t')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon$ and $\upsilon\circ t = t' \circ \epsilon$.  {\bf Gph} is the category of graphs and graph homomorphisms.  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t) \times (E', V', s', t')$ is $(E \times E', V \times V', s \times s', t\times t').$
+
+A {\bf Gph-enriched category} is a category where each hom set $\hom(x,y)$ is equipped with a set $E_{x,y}$ and functions $s_{x,y}, t_{x,y}\maps E_{x,y} \to \hom(x,y);$ that is, each hom set is thought of as a set of vertices and is equipped with a set of edges making it into a graph.  A Gph-enriched category has finite products if the underlying category does.
+
+Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  Given two graph homomorphisms $F, G\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph transformation} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = G(v).$  The category Gph is nontrivially Gph-enriched, making it a cartesian closed category: the objects are graphs, and for any pair of graphs $(G, G')$ we get a graph whose vertices are graph homomorphisms from $G$ to $G'$ and whose edges are graph transformations.
+
+A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the graph structure on each hom set is preserved, {\em i.e.} the functions between hom sets are graph homomorphisms between the hom graphs.
+
+Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a finite set $S$ of {\bf sorts} and a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  Any Gph-theory has an underlying multisorted Lawvere theory given by forgetting the edges of each hom graph.
+
+A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint $L$ that picks out the free model on a graph.
+
+\section{Gph-theories as models of computation}
+
+Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  A presentation of the underlying multisorted Lawvere theory of a finitely-generated Gph-theory is a signature for a term calculus, consisting of a set of sorts, a set of term constructors, and a set of equations, while the edges in the hom graphs of the theory encode the reduction relation.
+
+Here is a presentation of the SKI combinator calculus as a Gph-theory:
+\begin{itemize}
+  \item one sort $T$, for terms
+  \item term constructors
+  \[\begin{array}{rl}
+    S&:1 \to T\\
+    K&:1 \to T\\
+    I&:1 \to T\\
+    (-\; -)&: T^2 \to T\\
+  \end{array}\]
+  \item structural congruence (no equations)
+  \item rewrites
+  \[\begin{array}{rl}
+    \sigma&:(((S\; x)\; y)\; z) \Rightarrow ((x\; z)\; (y\; z))\\
+    \kappa&:((K\; y)\; z) \Rightarrow y\\
+    \iota&:(I\; z) \Rightarrow z\\
+  \end{array}\]
+\end{itemize}
+where in the rewrites we have used expressions like $((K\; y)\; z)$ as shorthand for
+\[ T\times T \xrightarrow{\mbox{\tiny left}^{-1}} 1\times T \times T \xrightarrow{K \times T \times T} T\times T \times T \xrightarrow{(-\;-)\times T} T\times T \xrightarrow{(-\;-)} T. \]
+
+A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$; it equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v),$ there is a vertex $(u\;v)$, and similarly for edges; and it equips $M(T)$ with graph transformations asserting the existence of an edge out of a reducible expression to the term it reduces to.
+
+That this Gph-theory captures the semantics of the SKI calculus is almost definitional: there is an edge in the free model on the empty graph if and only if the source vertex is reducible to the target vertex.  
+
+It is straightforward to verify that Gph-theories suffice to capture the operational semantics of any calculus where every context is a reduction context.  This restriction on reduction contexts is a consequence of the fact that models map term constructors to graph homomorphisms: given a model $M$, a graph homomorphism $F\maps M(T) \to M(T)$, and an edge $e\maps t_1 \to t_2,$ there is necessarily an edge $F(e)\maps F(t_1) \to F(t_2).$
+
+\section{Gph-theory for SKI with the weak head normal form evaluation strategy}
+\label{whnf}
+In modern programming languages, many contexts are {\em not} reduction contexts.  In Haskell, for instance, there are no reductions under a lambda abstraction: even if $t_1$ reduces to $t_2$ as a program, there are no reductions out of $\backslash x \to t_1$.  
+
+Gph-theories can still capture the operational semantics of calculi with restrictions on reduction contexts by introducing term constructors that explicitly mark the reduction contexts.  For example, suppose that we want an evaluation strategy for the SKI calculus that only reduces the leftmost combinator when it has been applied to sufficiently many arguments, the {\em weak head normal form}; we can accomplish this by introducing a term constructor $R\maps T \to T$ that explicitly marks the reduction contexts.  We then add a structural congruence rule for propagating the context and modify the existing reduction rules to apply only to marked contexts.
+
+\begin{itemize}
+  \item one sort $T$, for terms
+  \item term constructors
+  \[\begin{array}{rl}
+    S&:1 \to T\\
+    K&:1 \to T\\
+    I&:1 \to T\\
+    (-\; -)&: T^2 \to T\\
+    R&:T \to T\\
+  \end{array}\]
+  \item structural congruence
+  \[\begin{array}{rl}
+    R(x\; y) &= (Rx\; y)\\
+  \end{array}\]
+  \item rewrites
+  \[\begin{array}{rl}
+    \sigma&:(((RS\; x)\; y)\; z) \Rightarrow ((Rx\; z)\; (y\; z))\\
+    \kappa&:((RK\; y)\; z) \Rightarrow Ry\\
+    \iota&:(RI\; z) \Rightarrow Rz\\
+  \end{array}\]
+\end{itemize}
+
+\begin{theorem}
+  Let $t$ be a term in which $R$ does not appear.  Then $Rt$ reduces to $Rt',$ where $t'$ is the weak head normal form of $t.$
+\end{theorem}
+
+\begin{proof}
+If we form the term $Rt$ where $t$ contains no uses of $R$, no reductions will ever take place in the right-hand argument of an application: the structural congruence and rewrite rules enforce that the $R$ context can only move to the left term in an application, never the right.  The result follows by induction on the number of steps to reach $t'.$
+\end{proof}
+
+\section{Explicit reduction contexts as gas}
+The Ethereum \cite{Ethereum} and RChain \cite{RChain} projects are building virtual machines on the blockchain.  Both use the concept of a linear resource called ``gas'' (as in gasoline) that is consumed as the virtual machine executes.  Gph-theories can capture the operational semantics of a calculus where reduction contexts are consumable, and thus play a role similar to that of gas.
+
+\begin{itemize}
+  \item one sort $T$, for terms
+  \item term constructors
+  \[\begin{array}{rl}
+    S&:1 \to T\\
+    K&:1 \to T\\
+    I&:1 \to T\\
+    (-\; -)&: T^2 \to T\\
+    R&:T \to T\\
+  \end{array}\]
+  \item structural congruence
+  \[\begin{array}{rl}
+    R(x\; y) &= (Rx\; y)\\
+  \end{array}\]
+  \item rewrites
+  \[\begin{array}{rl}
+    \sigma&:(((RS\; x)\; y)\; z) \Rightarrow ((x\; z)\; (y\; z))\\
+    \kappa&:((RK\; y)\; z) \Rightarrow y\\
+    \iota&:(RI\; z) \Rightarrow z\\
+  \end{array}\]
+\end{itemize}
+
+\begin{theorem}
+  Let $t$ be a term in which $R$ does not appear; let $t'$ be the weak head normal form of $t$; let $m$ be the number of steps by which $Rt$ reduces to $Rt'$ in the calculus of section \ref{whnf}; and let $n\ge m$.  Then in this calculus, $R^n t$ reduces to $R^{n-m}t'$ in $m$ steps.
+\end{theorem}
+
+\begin{proof}
+As before, if we form the term $Rt$ where $t$ contains no uses of $R$, no reductions will ever take place in the right-hand argument of an application.  Each application of the reduction rules reduces the number of $R$s by one, and structural equivalence preserves the number of $R$s.  The result follows by induction on the number of steps to reach $t'.$
+\end{proof}
+
+\section{Gph-theory for a pi calculus variant}
+Gph-theories can capture the operational semantics of concurrent calculi as well as serial calculi like SKI above.
+
+  Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} describe a reflective higher-order variant of pi calculus we call the RHO calculus.  Rather than the usual replication and $\new$ operators, they have quoting and unquoting operators.  Quoting turns a process into a name and unquoting does the opposite.  They prove that there is a faithful embedding of the monadic asynchronous pi calculus into the RHO calculus.
+
+\subsection{The RHO calculus}
+\subsubsection{Syntax.}
+\[\begin{array}{rl}
+  P, Q &::= 0 \\ 
+  &| \quad x?y.P \\ 
+  &| \quad x!P \\ 
+  &| \quad P \;|\; Q \\
+  &| \quad *x \\ 
+  &\\
+  x, y &::= \&P \\ 
+\end{array}\]
+\subsubsection{Free and bound names.}
+\[\begin{array}{rl}
+FN(0) &= \emptyset \\
+FN(x?y.P) &= \{x\}\cup (FN(P)\backslash \{y\}) \\
+FN(x!P) &= \{x\}\cup FN(P) \\
+\end{array}\quad\quad
+\begin{array}{rl}
+FN(P|Q) &= FN(P)\cup FN(Q) \\
+FN(*x) &= \{x\}
+\end{array}\]
+\subsubsection{Structural congruence.}
+Structural (process) congruence is the smallest equivalence relation $\equiv$ containing $\alpha$-equivalence and making $(|, 0)$ into a commutative monoid.
+\subsubsection{Name equivalence.}
+Name equivalence is the smallest equivalence relation $\equiv_N$ on names such that 
+\begin{center}
+  \AXC{} \UIC{$*\&x \equiv_N x$} \DP and \AXC{$P \equiv Q$} \UIC{$\&P \equiv_N \&Q$} \DP.
+\end{center}
+\subsubsection{Substitution.}
+\[\begin{array}{rl}
+  (0)\{u/v\} &= 0\\
+  (x?y.P)\{u/v\} &= x\{u/v\}?w.P\{w/y, u/v\}\\
+  (x!P)\{u/v\} &= x\{u/v\}!P\{u/v\}\\
+  (P|Q)\{u/v\} &= P\{u/v\} \;|\; Q\{u/v\}\\
+  (*x)\{u/v\} &= *(x\{u/v\}),
+\end{array}\]
+where
+\[ x\{u/v\} = \left\{\begin{array}{rl}
+                  u & \mbox{ if } x\equiv_N v\\
+                  x & \mbox{ otherwise}
+                \end{array}\right.\]
+\subsubsection{Reduction rules.}
+\begin{center}
+\AXC{$x_0 \equiv_N x_1$} 
+\UIC{$x_0!Q \;|\; x_1?y.P \;\to\;P\{\&Q / y\}$} \DP \quad \quad
+\end{center}
+
+\begin{center}
+\AXC{$P\to P'$}
+\UIC{$P\;|\; Q \quad \to \quad P' \;|\; Q$} \DP
+\end{center}
+
+\begin{center}
+\AXC{$P\equiv P'$} \AXC{$P' \to Q'$} \AXC{$Q' \equiv Q$}
+\TIC{$P\to Q$} \DP
+\end{center}
+\subsection{RHO combinators}
+  Here we present a combinator calculus that uses abstraction elimination to eliminate bound names from the RHO calculus while preserving the notion of an input prefix.  Like the weak head normal form SKI calculus above, this calculus uses a linear resource $C$ to reify reduction contexts.
+
+A Gph-theory for the operational semantics of these combinators has:
+\begin{itemize}
+  \item one sort $T$, for terms
+  \item term constructors
+    \[\begin{array}{rl}
+      C &: 1 \to T \\ 
+      0 &: 1 \to T \\ 
+      | &: 1 \to T \\ 
+      ? &: 1 \to T \\ 
+      ! &: 1 \to T \\ 
+      \& &: 1 \to T \\ 
+    \end{array}\quad\quad
+    \begin{array}{rl}
+      * &: 1 \to T \\ 
+      S &: 1 \to T \\ 
+      K &: 1 \to T \\ 
+      I &: 1 \to T \\ 
+      () &: T \times T \to T \\ 
+    \end{array}\]
+  \item structural congruence rules
+    \[\begin{array}{rl}
+      0|x &= x \\
+      (x|y)|z &= x|(y|z) \\
+      x|y &= y|x \\
+      *\&x &= x \\
+    \end{array}\]
+  \item reduction rules
+    \[\begin{array}{rl}
+      \sigma &: Sxyz \Rightarrow xz(yz) \\ 
+      \kappa &: Kyz \Rightarrow y \\ 
+      \iota &: Iz \Rightarrow z \\ 
+      \xi &: C\;|\;\&x?y\;|\;\&x!z \Rightarrow C\;|\;y\&z \\ 
+    \end{array}\]
+\end{itemize}
+where we have used infix notation and operator precedence to make the reduction rules look more like the syntax of pi calculus.  In particular, 
+\[\begin{array}{rl}
+  P\;|\;Q &\mbox{ means } ((|\; P)\; Q)\\
+  *\&x &\mbox{ means } (*\; (\&\; x))\\  
+  Sxyz &\mbox{ means } (((S\; x)\; y)\; z)\\
+  Kyz &\mbox{ means } ((K\; y)\; z)\\
+\end{array}\quad\quad
+\begin{array}{rl}
+  Iz &\mbox{ means } (I\; z)\\
+  \&x?y &\mbox{ means } ((?\; (\&\; x))\; y)\\
+  \&x!z &\mbox{ means } ((!\; (\&\; x))\; z)\\
+  y\&z &\mbox{ means } (y\; (\&\; z))\\
+\end{array}\]
+
+\subsubsection{Abstraction elimination}
+[[ Define interpretation of RHO calculus into RHO combinators, including abstraction elimination. ]]
+
+\begin{theorem}
+  $P \sim_{\pi} Q \iff  \interp{P} \sim_{\texttt{FN}(P)} \interp{Q}$.
+\end{theorem}
+
+\begin{proof}[]
+  [[...]]
+\end{proof}
+\section{Conclusion and future work}
+
+\bibliographystyle{plainurl}
+\bibliography{calco}
+\end{document}
