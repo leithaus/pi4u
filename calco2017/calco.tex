@@ -66,6 +66,8 @@ Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets 
 
 A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint $L$ that picks out the free model on a graph.
 
+[[ Any 2-category has an underlying sesquicategory (interchange law doesn't hold) and any sesquicategory has an underlying Gph-enriched category.]]
+
 \section{Gph-theories as models of computation}
 
 Lawvere theories and their generalizations are categories with infinitely many objects and morphisms, but most theories of interest are finitely generated.  A presentation of the underlying multisorted Lawvere theory of a finitely-generated Gph-theory is a signature for a term calculus, consisting of a set of sorts, a set of term constructors, and a set of equations, while the edges in the hom graphs of the theory encode the reduction relation.
