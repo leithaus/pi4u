@@ -52,6 +52,8 @@ Michael Stay\\
 \EnableBpAbbreviations
 
 \section{Introduction}
+[[ Reference our MFPS paper, say the approach of section \ref{rhocomb} is very different from that one and Yoshida's combinators. ]]
+
 \section{Gph-enriched categories}
 Here we review some standard definitions and results in enriched category theory; see \cite{CIS-335497}, \cite{Power99EnrichedLawvereTheories}, \cite{DBLP:journals/acs/LackR11}, and \cite{Trimble} for more details.
 
@@ -59,7 +61,7 @@ A {\bf directed multigraph}, hereafter {\bf graph}, consists of a set $E$ of edg
 
 A {\bf Gph-enriched category} is a category where each hom set $\hom(x,y)$ is equipped with a set $E_{x,y}$ and functions $s_{x,y}, t_{x,y}\maps E_{x,y} \to \hom(x,y);$ that is, each hom set is thought of as a set of vertices and is equipped with a set of edges making it into a graph.  A Gph-enriched category has finite products if the underlying category does.
 
-Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  Given two graph homomorphisms $F, G\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph transformation} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = G(v).$  The category Gph is nontrivially Gph-enriched, making it a cartesian closed category: the objects are graphs, and for any pair of graphs $(G, G')$ we get a graph whose vertices are graph homomorphisms from $G$ to $G'$ and whose edges are graph transformations.
+Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  Given two graph homomorphisms $F, G\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph transformation} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = G(v).$  The category Gph is nontrivially Gph-enriched, making it a cartesian closed category: the objects are graphs, and for any pair of graphs $(G, G')$ we get a graph whose vertices are functions from $V_G$ to $V_{G'}$ and whose edges are [[???]].
 
 A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the graph structure on each hom set is preserved, {\em i.e.} the functions between hom sets are graph homomorphisms between the hom graphs.
 
@@ -170,6 +172,7 @@ As before, if we form the term $Rt$ where $t$ contains no uses of $R$, no reduct
 \end{proof}
 
 \section{Gph-theory for a pi calculus variant}
+\label{rhocomb}
 Gph-theories can capture the operational semantics of concurrent calculi as well as serial calculi like SKI above.
 
   Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} describe a reflective higher-order variant of pi calculus we call the RHO calculus.  Rather than the usual replication and $\new$ operators, they have quoting and unquoting operators.  Quoting turns a process into a name and unquoting does the opposite.  They prove that there is a faithful embedding of the monadic asynchronous pi calculus into the RHO calculus.
