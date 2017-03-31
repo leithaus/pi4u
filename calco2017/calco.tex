@@ -200,7 +200,7 @@ Gph-theories can capture the operational semantics of concurrent calculi as well
 \subsubsection{Syntax.}
 \[\begin{array}{rl}
   P, Q &::= 0 \\ 
-  &| \quad x?y.P \\ 
+  &| \quad \for(y \leftarrow x)P \\ 
   &| \quad x!P \\ 
   &| \quad P \;|\; Q \\
   &| \quad *x \\ 
