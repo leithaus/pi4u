@@ -4,6 +4,7 @@
 \usepackage{stmaryrd}
 
 \newcommand{\new}{\mathsf{new}}
+\newcommand{\for}{\mathrm{for }}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
 \newcommand{\Th}{\mathrm{Th}}
@@ -19,13 +20,20 @@
 
 \title{Representing operational semantics with enriched Lawvere theories}
 \author[1]{
-Michael Stay\\
+Michael Stay
+}
+\author[2]{
+L.\ G.\ Meredith
 }
 \affil[1]{
   Pyrofex Corp., Kirkland, WA, USA\\
   {\tt stay@pyrofex.net}
 }
-\Copyright{Michael Stay}
+\affil[2]{
+{RChain Cooperative}\\
+{\tt greg@rchain.coop}
+}
+\Copyright{Michael Stay, Lucius Gregory Meredith}
 \subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation". 
 \keywords{Dummy keyword -- please provide 1--5 keywords}% mandatory: Please provide 1-5
 
@@ -76,7 +84,7 @@ A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a fun
 
 Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a finite set $S$ of {\bf sorts} and a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  Any Gph-theory has an underlying multisorted Lawvere theory given by forgetting the edges of each hom graph.
 
-A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint $L$ that picks out the free model on a graph.
+A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint that picks out the free model on a graph.
 
 Gph-enriched categories are part of a spectrum of 2-category-like structures.  A strict 2-category is a category enriched over Cat with its usual product.  A sesquicategory can be thought of as a 2-category where the interchange law doesn't hold; sesquicategories are categories enriched over Cat with the ``funny'' tensor product \cite{Lack2CategoriesCompanion}.  A Gph-enriched category can be thought of as a sesquicategory where 2-morphisms (now edges) can't be composed.  Any strict 2-category has an underlying sesquicategory, and any sesquicategory has an underlying Gph-enriched category.  These forgetful functors have left adjoints.
 
@@ -147,8 +155,10 @@ Gph-theories can still capture the operational semantics of calculi with restric
 If we form the term $Rt$ where $t$ contains no uses of $R$, no reductions will ever take place in the right-hand argument of an application: the structural congruence and rewrite rules enforce that the $R$ context can only move to the left term in an application, never the right.  The result follows by induction on the number of steps to reach $t'.$
 \end{proof}
 
+[[Is it ever *not* possible to mark reduction contexts this way?]]
+
 \section{Explicit reduction contexts as gas}
-The Ethereum \cite{Ethereum} and RChain \cite{RChain} projects are building virtual machines on the blockchain.  Both use the concept of a linear resource called ``gas'' (as in gasoline) that is consumed as the virtual machine executes.  Gph-theories can capture the operational semantics of a calculus where reduction contexts are consumable, and thus play a role similar to that of gas.
+The Ethereum \cite{Ethereum} and RChain \cite{RChain} projects are building virtual machines on the blockchain.  Both use the concept of a linear resource called ``gas'' (as in gasoline) that is consumed as the virtual machine executes.  Gph-theories can capture the operational semantics of a calculus where reduction contexts are consumable, and thus play a role similar to that of gas \cite{MeredithStayHDRA}.
 
 \begin{itemize}
   \item one sort $T$, for terms
@@ -216,11 +226,11 @@ Name equivalence is the smallest equivalence relation $\equiv_N$ on names such t
 \end{center}
 \subsubsection{Substitution.}
 \[\begin{array}{rl}
-  (0)\{u/v\} &= 0\\
-  (x?y.P)\{u/v\} &= x\{u/v\}?w.P\{w/y, u/v\}\\
-  (x!P)\{u/v\} &= x\{u/v\}!P\{u/v\}\\
-  (P|Q)\{u/v\} &= P\{u/v\} \;|\; Q\{u/v\}\\
-  (*x)\{u/v\} &= *(x\{u/v\}),
+  0\{u/v\} &= 0\\
+  \for (y \leftarrow x) P\{u/v\} &= \for (w \leftarrow x\{u/v\}) P\{w/y, u/v\}\\
+  x!P\{u/v\} &= x\{u/v\}!P\{u/v\}\\
+  P|Q\{u/v\} &= P\{u/v\} \;|\; Q\{u/v\}\\
+  *x\{u/v\} &= *(x\{u/v\}),
 \end{array}\]
 where
 \[ x\{u/v\} = \left\{\begin{array}{rl}
@@ -230,7 +240,7 @@ where
 \subsubsection{Reduction rules.}
 \begin{center}
 \AXC{$x_0 \equiv_N x_1$} 
-\UIC{$x_0!Q \;|\; x_1?y.P \;\to\;P\{\&Q / y\}$} \DP \quad \quad
+\UIC{$x_0!Q \;|\; \for(y \leftarrow x_1)P \;\to\;P\{\&Q / y\}$} \DP \quad \quad
 \end{center}
 
 \begin{center}
@@ -253,7 +263,7 @@ A Gph-theory for the operational semantics of these combinators has:
       C &: 1 \to T \\ 
       0 &: 1 \to T \\ 
       | &: 1 \to T \\ 
-      ? &: 1 \to T \\ 
+      \for &: 1 \to T \\ 
       ! &: 1 \to T \\ 
       \& &: 1 \to T \\ 
     \end{array}\quad\quad
@@ -266,34 +276,36 @@ A Gph-theory for the operational semantics of these combinators has:
     \end{array}\]
   \item structural congruence rules
     \[\begin{array}{rl}
-      0|x &= x \\
-      (x|y)|z &= x|(y|z) \\
-      x|y &= y|x \\
-      *\&x &= x \\
+      0|P &= Q \\
+      (P|Q)|R &= P|(Q|R) \\
+      P|Q &= P|Q \\
+      *\&P &= P \\
     \end{array}\]
   \item reduction rules
     \[\begin{array}{rl}
-      \sigma &: Sxyz \Rightarrow xz(yz) \\ 
-      \kappa &: Kyz \Rightarrow y \\ 
-      \iota &: Iz \Rightarrow z \\ 
-      \xi &: C\;|\;\&x?y\;|\;\&x!z \Rightarrow C\;|\;y\&z \\ 
+      \sigma &: SPQR \Rightarrow PR(QR) \\ 
+      \kappa &: KPQ \Rightarrow P \\ 
+      \iota &: IP \Rightarrow P \\ 
+      \xi &: C\;|\;\for(\&P)Q\;|\;\&P!R \Rightarrow C\;|\;Q\&R \\ 
     \end{array}\]
 \end{itemize}
 where we have used infix notation and operator precedence to make the reduction rules look more like the syntax of pi calculus.  In particular, 
 \[\begin{array}{rl}
   P\;|\;Q &\mbox{ means } ((|\; P)\; Q)\\
-  *\&x &\mbox{ means } (*\; (\&\; x))\\  
-  Sxyz &\mbox{ means } (((S\; x)\; y)\; z)\\
-  Kyz &\mbox{ means } ((K\; y)\; z)\\
+  *\&P &\mbox{ means } (*\; (\&\; P))\\  
+  SPQR &\mbox{ means } (((S\; P)\; Q)\; R)\\
+  KPQ &\mbox{ means } ((K\; P)\; Q)\\
 \end{array}\quad\quad
 \begin{array}{rl}
-  Iz &\mbox{ means } (I\; z)\\
-  \&x?y &\mbox{ means } ((?\; (\&\; x))\; y)\\
-  \&x!z &\mbox{ means } ((!\; (\&\; x))\; z)\\
-  y\&z &\mbox{ means } (y\; (\&\; z))\\
+  IP &\mbox{ means } (I\; P)\\
+  \for(\&P)Q &\mbox{ means } ((\for\; (\&\; P))\; Q)\\
+  \&P!R &\mbox{ means } ((!\; (\&\; P))\; R)\\
+  Q\&R &\mbox{ means } (Q\; (\&\; R))\\
 \end{array}\]
 
 \subsubsection{Abstraction elimination}
+
+
 [[ Define interpretation of RHO calculus into RHO combinators, including abstraction elimination. ]]
 
 \begin{theorem}
