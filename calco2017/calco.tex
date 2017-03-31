@@ -226,11 +226,11 @@ Name equivalence is the smallest equivalence relation $\equiv_N$ on names such t
 \end{center}
 \subsubsection{Substitution.}
 \[\begin{array}{rl}
-  0\{u/v\} &= 0\\
-  \for (y \leftarrow x) P\{u/v\} &= \for (w \leftarrow x\{u/v\}) P\{w/y, u/v\}\\
-  x!P\{u/v\} &= x\{u/v\}!P\{u/v\}\\
-  P|Q\{u/v\} &= P\{u/v\} \;|\; Q\{u/v\}\\
-  *x\{u/v\} &= *(x\{u/v\}),
+  (0)\{u/v\} &= 0\\
+  (\for (y \leftarrow x) P)\{u/v\} &= \for (w \leftarrow (x\{u/v\})) (P\{w/y, u/v\})\\
+  (x!P)\{u/v\} &= (x\{u/v\})!(P\{u/v\})\\
+  (P|Q)\{u/v\} &= (P\{u/v\}) \;|\; (Q\{u/v\})\\
+  (*x)\{u/v\} &= *(x\{u/v\}),
 \end{array}\]
 where
 \[ x\{u/v\} = \left\{\begin{array}{rl}
