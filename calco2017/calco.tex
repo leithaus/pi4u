@@ -54,6 +54,13 @@ Michael Stay\\
 \section{Introduction}
 [[ Reference our MFPS paper, say the approach of section \ref{rhocomb} is very different from that one and Yoshida's combinators. ]]
 
+\section{Previous work}
+There's a long history and an enormous body of work on modeling term rewriting and operational semantics with various notions of category enriched over category-like structures.  Here's a sampling.  Seely \cite{Seely} suggested using 2-categories for modeling the [[what kind?]] semantics of lambda calculus; [[does he have relations between 2-cells?  Certainly confluent.]].  Barney Hilken [[The simply typed 2λ-calculus]], Tom Hirschowitz [[CARTESIAN CLOSED 2-CATEGORIES AND PERMUTATION EQUIVALENCE IN HIGHER-ORDER REWRITING]].  Stell \cite{Stell}
+% http://www.comp.leeds.ac.uk/jgs/caen.ps
+considered sesquicategories for term rewriting [[2-morphism involve substitutions of variables; we eliminate variables entirely]].  L\"uth and Ghani [[Monads and Modular Term Rewriting]] use poset-enriched categories.
+
+[[In each case above, one sentence about what they did and how their work differs from ours.]]
+
 \section{Gph-enriched categories}
 Here we review some standard definitions and results in enriched category theory; see \cite{CIS-335497}, \cite{Power99EnrichedLawvereTheories}, \cite{DBLP:journals/acs/LackR11}, and \cite{Trimble} for more details.
 
@@ -61,7 +68,9 @@ A {\bf directed multigraph}, hereafter {\bf graph}, consists of a set $E$ of edg
 
 A {\bf Gph-enriched category} is a category where each hom set $\hom(x,y)$ is equipped with a set $E_{x,y}$ and functions $s_{x,y}, t_{x,y}\maps E_{x,y} \to \hom(x,y);$ that is, each hom set is thought of as a set of vertices and is equipped with a set of edges making it into a graph.  A Gph-enriched category has finite products if the underlying category does.
 
-Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  Given two graph homomorphisms $F, G\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph transformation} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = G(v).$  The category Gph is nontrivially Gph-enriched, making it a cartesian closed category: the objects are graphs, and for any pair of graphs $(G, G')$ we get a graph whose vertices are functions from $V_G$ to $V_{G'}$ and whose edges are [[???]].
+Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  The category Gph is nontrivially Gph-enriched in multiple ways.  Gph is a topos, and therefore cartesian closed, and therefore enriched over itself.  Given any two graphs $G$ and $G',$ there is an exponential graph $G'^G$ whose vertices are functions from the vertices of $G$ to the vertices of $G'$ and whose edges are graph homomorphisms from $A \times G$ to $G',$ where $A$ is the graph with two nodes and one directed edge between them; see \cite{VignaGuidedTour} for more details.  Those vertices in $G'^G$ with loops are graph homomorphisms.
+
+A different enrichment arises from a symmetric monoidal closed structure on Gph that is not the cartesian closed structure.  Given two graph homomorphisms $F, F'\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph transformation} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = F'(v).$  For any pair of graphs $(G, G')$ we get a graph whose vertices are homomorphisms from $V_G$ to $V_{G'}$ and whose edges are graph transformations.  It is this latter, more restricted enrichment that we will use in the remainder of the paper.
 
 A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the graph structure on each hom set is preserved, {\em i.e.} the functions between hom sets are graph homomorphisms between the hom graphs.
 
@@ -69,7 +78,7 @@ Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets 
 
 A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint $L$ that picks out the free model on a graph.
 
-[[ Any 2-category has an underlying sesquicategory (interchange law doesn't hold) and any sesquicategory has an underlying Gph-enriched category.]]
+Gph-enriched categories are part of a spectrum of 2-category-like structures.  A strict 2-category is a Any strict 2-category has an underlying sesquicategory and any sesquicategory has an underlying Gph-enriched category.  These forgetful functors have left adjoints
 
 \section{Gph-theories as models of computation}
 
