@@ -210,7 +210,7 @@ Gph-theories can capture the operational semantics of concurrent calculi as well
 \subsubsection{Free and bound names.}
 \[\begin{array}{rl}
 FN(0) &= \emptyset \\
-FN(x?y.P) &= \{x\}\cup (FN(P)\backslash \{y\}) \\
+FN(\for(y \leftarrow x)P) &= \{x\}\cup (FN(P)\backslash \{y\}) \\
 FN(x!P) &= \{x\}\cup FN(P) \\
 \end{array}\quad\quad
 \begin{array}{rl}
@@ -227,7 +227,7 @@ Name equivalence is the smallest equivalence relation $\equiv_N$ on names such t
 \subsubsection{Substitution.}
 \[\begin{array}{rl}
   (0)\{u/v\} &= 0\\
-  (\for (y \leftarrow x) P)\{u/v\} &= \for (w \leftarrow (x\{u/v\})) (P\{w/y, u/v\})\\
+  (\for (y \leftarrow x) P)\{u/v\} &= \for (w \leftarrow (x\{u/v\})) (P\{w/y\}\{u/v\}) \mbox{ where } w\not\in FN(P)\\
   (x!P)\{u/v\} &= (x\{u/v\})!(P\{u/v\})\\
   (P|Q)\{u/v\} &= (P\{u/v\}) \;|\; (Q\{u/v\})\\
   (*x)\{u/v\} &= *(x\{u/v\}),
@@ -240,7 +240,7 @@ where
 \subsubsection{Reduction rules.}
 \begin{center}
 \AXC{$x_0 \equiv_N x_1$} 
-\UIC{$x_0!Q \;|\; \for(y \leftarrow x_1)P \;\to\;P\{\&Q / y\}$} \DP \quad \quad
+\UIC{$x_0!Q \;|\; \for(y \leftarrow x_1)P \quad \to\quad P\{\&Q / y\}$} \DP \quad \quad
 \end{center}
 
 \begin{center}
@@ -275,38 +275,36 @@ A Gph-theory for the operational semantics of these combinators has:
       () &: T \times T \to T \\ 
     \end{array}\]
   \item structural congruence rules
-    \[\begin{array}{rl}
-      0|P &= Q \\
-      (P|Q)|R &= P|(Q|R) \\
-      P|Q &= P|Q \\
-      *\&P &= P \\
+    \[\begin{array}{rll}
+      ((|\; 0)\; P) &= P & \mbox{unit law}\\
+      ((|\; ((|\; P)\; Q))\; R) &= ((|\; P)\; ((|\; Q)\; R) & \mbox{associativity}\\
+      ((|\; P)\; Q) &= ((|\; Q)\; P) &\mbox{commutativity}\\
+      (*\; (\&\; P)) &= P &\mbox{left inverse}\\
     \end{array}\]
   \item reduction rules
     \[\begin{array}{rl}
-      \sigma &: SPQR \Rightarrow PR(QR) \\ 
-      \kappa &: KPQ \Rightarrow P \\ 
-      \iota &: IP \Rightarrow P \\ 
-      \xi &: C\;|\;\for(\&P)Q\;|\;\&P!R \Rightarrow C\;|\;Q\&R \\ 
+      \sigma &: (((S\; P)\; Q)\; R) \Rightarrow ((P\; R)\; (Q\; R)) \\ 
+      \kappa &: ((K\; P)\; Q) \Rightarrow P \\ 
+      \iota &: (I\; P) \Rightarrow P \\ 
+      \xi &: ((|\; C)\; ((|\; ((\for\; (\&\; P))\; Q))\; ((!\; (\&\; P))\; R))) \Rightarrow ((|\; C)\; (Q\; (\&\; R)))\\
     \end{array}\]
 \end{itemize}
-where we have used infix notation and operator precedence to make the reduction rules look more like the syntax of pi calculus.  In particular, 
-\[\begin{array}{rl}
-  P\;|\;Q &\mbox{ means } ((|\; P)\; Q)\\
-  *\&P &\mbox{ means } (*\; (\&\; P))\\  
-  SPQR &\mbox{ means } (((S\; P)\; Q)\; R)\\
-  KPQ &\mbox{ means } ((K\; P)\; Q)\\
-\end{array}\quad\quad
-\begin{array}{rl}
-  IP &\mbox{ means } (I\; P)\\
-  \for(\&P)Q &\mbox{ means } ((\for\; (\&\; P))\; Q)\\
-  \&P!R &\mbox{ means } ((!\; (\&\; P))\; R)\\
-  Q\&R &\mbox{ means } (Q\; (\&\; R))\\
-\end{array}\]
 
 \subsubsection{Abstraction elimination}
-
-
-[[ Define interpretation of RHO calculus into RHO combinators, including abstraction elimination. ]]
+The following is an embedding of the RHO calculus into RHO combinators:
+\[\begin{array}{rl}
+  \interp{0} &= 0 \\
+  \interp{\for(y \leftarrow \&P)Q} &= ((for\; (\&\; \interp{P}))\; \interp{Q}_y)\\
+  \interp{\&P!Q} &= ((!\; (\&\; \interp{P}))\; \interp{Q}) \\
+  \interp{P|Q} &= ((|\; \interp{P}) \interp{Q})\\
+\end{array}\]
+where
+\[\begin{array}{rl}
+  \interp{P}_x &= (K\; P) \mbox{ where $x$ is not free in } P \\
+  \interp{\for(y \leftarrow \&P)Q}_x &= ((S\; ((S\; (K for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{\interp{Q}_y}_x)\\
+  \interp{\&P!Q}_x &= ((S\; ((S\; (K\; !))\; ((S\; (K\; \&)) \interp{P}_x)))\; \interp{Q}_x) \\
+  \interp{P|Q}_x &= ((S\; ((S\; (K\; |))\; \interp{P}_x))\; \interp{Q}_x). \\
+\end{array}\]
 
 \begin{theorem}
   $P \sim_{\pi} Q \iff  \interp{P} \sim_{\texttt{FN}(P)} \interp{Q}$.
