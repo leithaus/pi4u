@@ -86,7 +86,7 @@ Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets 
 
 A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint that picks out the free model on a graph.
 
-Gph-enriched categories are part of a spectrum of 2-category-like structures.  A strict 2-category is a category enriched over Cat with its usual product.  A sesquicategory can be thought of as a 2-category where the interchange law doesn't hold; sesquicategories are categories enriched over Cat with the ``funny'' tensor product \cite{Lack2CategoriesCompanion}.  A Gph-enriched category can be thought of as a sesquicategory where 2-morphisms (now edges) can't be composed.  Any strict 2-category has an underlying sesquicategory, and any sesquicategory has an underlying Gph-enriched category.  These forgetful functors have left adjoints.
+Gph-enriched categories are part of a spectrum of 2-category-like structures.  A strict 2-category is a category enriched over Cat with its usual product.  Sesquicategories are categories enriched over Cat with the ``funny'' tensor product \cite{Lack2CategoriesCompanion}; a sesquicategory can be thought of as a 2-category where the interchange law doesn't hold.  A Gph-enriched category can be thought of as a sesquicategory where 2-morphisms (now edges) can't be composed.  Any strict 2-category has an underlying sesquicategory, and any sesquicategory has an underlying Gph-enriched category.  These forgetful functors have left adjoints.
 
 \section{Gph-theories as models of computation}
 
@@ -222,21 +222,33 @@ Structural (process) congruence is the smallest equivalence relation $\equiv$ co
 \subsubsection{Name equivalence.}
 Name equivalence is the smallest equivalence relation $\equiv_N$ on names such that 
 \begin{center}
-  \AXC{} \UIC{$*\&x \equiv_N x$} \DP and \AXC{$P \equiv Q$} \UIC{$\&P \equiv_N \&Q$} \DP.
+  \AXC{} \UIC{$\&*x \equiv_N x$} \DP and \AXC{$P \equiv Q$} \UIC{$\&P \equiv_N \&Q$} \DP.
 \end{center}
 \subsubsection{Substitution.}
+Syntactic substitution:
 \[\begin{array}{rl}
-  (0)\{u/v\} &= 0\\
-  (\for (y \leftarrow x) P)\{u/v\} &= \for (w \leftarrow (x\{u/v\})) (P\{w/y\}\{u/v\}) \mbox{ where } w\not\in FN(P)\\
-  (x!P)\{u/v\} &= (x\{u/v\})!(P\{u/v\})\\
-  (P|Q)\{u/v\} &= (P\{u/v\}) \;|\; (Q\{u/v\})\\
-  (*x)\{u/v\} &= *(x\{u/v\}),
+  (0)\{\&Q/\&P\} &= 0\\
+  (\for (y \leftarrow x) R)\{\&Q/\&P\} &= \for (z \leftarrow (x\{\&Q/\&P\})) (R\{z/y\}\{\&Q/\&P\})\\
+  (x!R)\{\&Q/\&P\} &= (x\{\&Q/\&P\})!(R\{\&Q/\&P\})\\
+  (R|S)\{\&Q/\&P\} &= (R\{\&Q/\&P\}) \;|\; (S\{\&Q/\&P\})\\
+  (*x)\{\&Q/\&P\} &= \left\{\begin{array}{rl}
+    *\&Q & \mbox{when } x \equiv_N \&Q\\
+    *x & \mbox{otherwise,}
+  \end{array}\right.
 \end{array}\]
 where
-\[ x\{u/v\} = \left\{\begin{array}{rl}
-                  u & \mbox{ if } x\equiv_N v\\
+\[ x\{\&Q/\&P\} = \left\{\begin{array}{rl}
+                  \&Q & \mbox{if } x\equiv_N \&P \\
                   x & \mbox{ otherwise}
                 \end{array}\right.\]
+and, in the rule for input, $z$ is chosen to be distinct from $\&P, \&Q,$ the free names in $Q,$ and all the names in $R.$
+
+Semantic substitution, for use in $\alpha$-equivalence:
+\[ (*x)\{\&Q/\&P\} = \left\{\begin{array}{rl}
+  Q & \mbox{when } x \equiv_N \&Q\\
+  *x & \mbox{otherwise}
+\end{array}\right. \]
+
 \subsubsection{Reduction rules.}
 \begin{center}
 \AXC{$x_0 \equiv_N x_1$} 
@@ -279,35 +291,41 @@ A Gph-theory for the operational semantics of these combinators has:
       ((|\; 0)\; P) &= P & \mbox{unit law}\\
       ((|\; ((|\; P)\; Q))\; R) &= ((|\; P)\; ((|\; Q)\; R) & \mbox{associativity}\\
       ((|\; P)\; Q) &= ((|\; Q)\; P) &\mbox{commutativity}\\
-      (*\; (\&\; P)) &= P &\mbox{left inverse}\\
     \end{array}\]
   \item reduction rules
-    \[\begin{array}{rl}
-      \sigma &: (((S\; P)\; Q)\; R) \Rightarrow ((P\; R)\; (Q\; R)) \\ 
-      \kappa &: ((K\; P)\; Q) \Rightarrow P \\ 
-      \iota &: (I\; P) \Rightarrow P \\ 
-      \xi &: ((|\; C)\; ((|\; ((\for\; (\&\; P))\; Q))\; ((!\; (\&\; P))\; R))) \Rightarrow ((|\; C)\; (Q\; (\&\; R)))\\
+    \[\begin{array}{ll}
+      \sigma\maps (((S\; P)\; Q)\; R) \Rightarrow ((P\; R)\; (Q\; R)) & \mbox{action of }S \\ 
+      \kappa\maps ((K\; P)\; Q) \Rightarrow P & \mbox{action of }K\\ 
+      \iota\maps (I\; P) \Rightarrow P & \mbox{action of }I\\ 
+      \xi\maps ((|\; C)\; ((|\; ((\for\; (\&\; P))\; Q))\; ((!\; (\&\; P))\; R))) \Rightarrow ((|\; C)\; (Q\; (\&\; R))) & \mbox{communication}\\
+      \epsilon\maps ((|\; C)\;(*\; (\&\; P))) \Rightarrow ((|\; C)\; P) & \mbox{evaluation} \\
     \end{array}\]
 \end{itemize}
 
-\subsubsection{Abstraction elimination}
-The following is an embedding of the RHO calculus into RHO combinators:
+\subsubsection{Faithful embedding}
+We can define an embedding $\interp{-}$ of closed RHO calculus terms into RHO combinators.  The idea is that we think of an input-prefixed process $\for(x \leftarrow y)P$ as consisting of two parts; the first names the channel $y$ on which the process is listening, while the second describes the continuation $\lambda x.P$ in terms of an abstracted name.  The right hand side of the communication rule, in effect, applies the continuation to the name to be substituted.  Since the only bound names in the RHO calculus come from input prefixing, we can completely eliminate bound names by using abstraction elimination on the continuation.
+
 \[\begin{array}{rl}
   \interp{0} &= 0 \\
-  \interp{\for(y \leftarrow \&P)Q} &= ((for\; (\&\; \interp{P}))\; \interp{Q}_y)\\
+  \interp{\for(x \leftarrow \&P)Q} &= ((for\; (\&\; \interp{P}))\; \interp{Q}_x)\\
   \interp{\&P!Q} &= ((!\; (\&\; \interp{P}))\; \interp{Q}) \\
-  \interp{P|Q} &= ((|\; \interp{P}) \interp{Q})\\
+  \interp{P|Q} &= ((|\; \interp{P})\; \interp{Q})\\
+  \interp{*\&P} &= (*\; (\&\; \interp{P}))
 \end{array}\]
-where
+where $\interp{-}_x$ eliminates the free name $x:$
 \[\begin{array}{rl}
   \interp{P}_x &= (K\; P) \mbox{ where $x$ is not free in } P \\
-  \interp{\for(y \leftarrow \&P)Q}_x &= ((S\; ((S\; (K for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{\interp{Q}_y}_x)\\
-  \interp{\&P!Q}_x &= ((S\; ((S\; (K\; !))\; ((S\; (K\; \&)) \interp{P}_x)))\; \interp{Q}_x) \\
+  \interp{\for(y \leftarrow \&P)Q}_x &= \left\{
+    \begin{array}{ll}
+      ((S\; ((S\; (K for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{\interp{Q}_y}_x) & \mbox{when }y \not \equiv_N x\\
+      ((S\; ((S\; (K for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{Q}_y) & \mbox{when }y \equiv_N x\\
+    \end{array}\right.\\
+  \interp{\&P!Q}_x &= ((S\; ((S\; (K\; !))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{Q}_x) \\
   \interp{P|Q}_x &= ((S\; ((S\; (K\; |))\; \interp{P}_x))\; \interp{Q}_x). \\
 \end{array}\]
 
 \begin{theorem}
-  $P \sim_{\pi} Q \iff  \interp{P} \sim_{\texttt{FN}(P)} \interp{Q}$.
+  $P \sim_{\pi} Q \iff  ((|\; C)\; \interp{P}) \sim ((|\; C)\; \interp{Q})$.
 \end{theorem}
 
 \begin{proof}[]
