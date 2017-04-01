@@ -72,13 +72,11 @@ considered sesquicategories for term rewriting [[2-morphism involve substitution
 \section{Gph-enriched categories}
 Here we review some standard definitions and results in enriched category theory; see \cite{CIS-335497}, \cite{Power99EnrichedLawvereTheories}, \cite{DBLP:journals/acs/LackR11}, and \cite{Trimble} for more details.
 
-A {\bf directed multigraph}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, and two functions $s,t\maps E \to V$ picking out the source and target of each edge.  There are no constraints on $E, V, s,$ or $t$, so a graph may have infinitely many vertices, infinitely many edges between any two vertices, and loops.  A {\bf graph homomorphism} from $(E, V, s, t)$ to $(E', V', s', t')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon$ and $\upsilon\circ t = t' \circ \epsilon$.  {\bf Gph} is the category of graphs and graph homomorphisms.  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t) \times (E', V', s', t')$ is $(E \times E', V \times V', s \times s', t\times t').$
+A {\bf directed multigraph with self loops}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, two functions $s,t\maps E \to V$ picking out the source and target of each edge, and a function $a\maps V \to E$ such that $s\circ a$ and $t \circ a$ are both the identity on $V$---that is, $a$ equips each vertex in $V$ with a chosen self loop.  There are no constraints on $E, V, s,$ or $t$, so a graph may have infinitely many vertices, infinitely many edges between any pair of vertices.  A {\bf graph homomorphism} from $(E, V, s, t, a)$ to $(E', V', s', t', a')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon$ and $\upsilon\circ t = t' \circ \epsilon$.  {\bf Gph} is the category of graphs and graph homomorphisms.  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t, a) \times (E', V', s', t', a')$ is $(E \times E', V \times V', s \times s', t\times t', a \times a').$
 
 A {\bf Gph-enriched category} is a category where each hom set $\hom(x,y)$ is equipped with a set $E_{x,y}$ and functions $s_{x,y}, t_{x,y}\maps E_{x,y} \to \hom(x,y);$ that is, each hom set is thought of as a set of vertices and is equipped with a set of edges making it into a graph.  A Gph-enriched category has finite products if the underlying category does.
 
-Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  The category Gph is nontrivially Gph-enriched in multiple ways.  Gph is a topos, and therefore cartesian closed, and therefore enriched over itself.  Given any two graphs $G$ and $G',$ there is an exponential graph $G'^G$ whose vertices are functions from the vertices of $G$ to the vertices of $G'$ and whose edges are graph homomorphisms from $A \times G$ to $G',$ where $A$ is the graph with two nodes and one directed edge between them; see \cite{VignaGuidedTour} for more details.  Those vertices in $G'^G$ with loops are graph homomorphisms.
-
-A different enrichment arises from a symmetric monoidal closed structure on Gph that is not the cartesian closed structure.  Given two graph homomorphisms $F, F'\maps (E, V, s, t) \to (E', V', s', t'),$ a {\bf graph transformation} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = F'(v).$  For any pair of graphs $(G, G')$ we get a graph whose vertices are homomorphisms from $V_G$ to $V_{G'}$ and whose edges are graph transformations.  It is this latter, more restricted enrichment that we will use in the remainder of the paper.
+Any category is trivially Gph-enriched by taking the all the sets of edges to be empty.  The category Gph is nontrivially Gph-enriched in multiple ways.  Gph is a topos, and therefore cartesian closed, and therefore enriched over itself.  Given two graph homomorphisms $F, F'\maps (E, V, s, t, a) \to (E', V', s', t', a'),$ a {\bf graph transformation} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = F'(v).$  Given any two graphs $G$ and $G',$ there is an exponential graph $G'^G$ whose vertices are graph homomorphisms between them and whose edges are graph transformations.
 
 A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the graph structure on each hom set is preserved, {\em i.e.} the functions between hom sets are graph homomorphisms between the hom graphs.
 
@@ -115,15 +113,15 @@ where in the rewrites we have used expressions like $((K\; y)\; z)$ as shorthand
 
 A model $M$ of this Gph-theory in Gph picks out a graph $M(T)$ of terms and rewrites.  It picks out three special vertices $S,K,$ and $I$ of $M(T)$; it equips $M(T)$ with a graph homomorphism from $M(T)^2$ to $M(T)$ that says for every pair of vertices $(u,v),$ there is a vertex $(u\;v)$, and similarly for edges; and it equips $M(T)$ with graph transformations asserting the existence of an edge out of a reducible expression to the term it reduces to.
 
-That this Gph-theory captures the semantics of the SKI calculus is almost definitional: there is an edge in the free model on the empty graph if and only if the source vertex is reducible to the target vertex.  
+That this Gph-theory captures the operational semantics of the SKI calculus is almost definitional: there is an edge between distinct vertices in the free model on the empty graph if and only if the source vertex is reducible to the target vertex in a single step.
 
 It is straightforward to verify that Gph-theories suffice to capture the operational semantics of any calculus where every context is a reduction context.  This restriction on reduction contexts is a consequence of the fact that models map term constructors to graph homomorphisms: given a model $M$, a graph homomorphism $F\maps M(T) \to M(T)$, and an edge $e\maps t_1 \to t_2,$ there is necessarily an edge $F(e)\maps F(t_1) \to F(t_2).$
 
 \section{Gph-theory for SKI with the weak head normal form evaluation strategy}
 \label{whnf}
-In modern programming languages, many contexts are {\em not} reduction contexts.  In Haskell, for instance, there are no reductions under a lambda abstraction: even if $t_1$ reduces to $t_2$ as a program, there are no reductions out of $\backslash x \to t_1$.  
+In modern programming languages, many contexts are {\em not} reduction contexts.  In Haskell, for instance, there are no reductions under a lambda abstraction: even if $t_1$ reduces to $t_2$ as a program, the term $\backslash x \to t_1$ does not reduce to $\backslash x \to t_2.$
 
-Gph-theories can still capture the operational semantics of calculi with restrictions on reduction contexts by introducing term constructors that explicitly mark the reduction contexts.  For example, suppose that we want an evaluation strategy for the SKI calculus that only reduces the leftmost combinator when it has been applied to sufficiently many arguments, the {\em weak head normal form}; we can accomplish this by introducing a term constructor $R\maps T \to T$ that explicitly marks the reduction contexts.  We then add a structural congruence rule for propagating the context and modify the existing reduction rules to apply only to marked contexts.
+Gph-theories can still capture the operational semantics of calculi with restrictions on reduction contexts by introducing term constructors that explicitly mark the reduction contexts.  For example, suppose that we want an evaluation strategy for the SKI calculus that only reduces the leftmost combinator when it has been applied to sufficiently many arguments, {\em i.e.} we want the {\em weak head normal form}; we can accomplish this by introducing a term constructor $R\maps T \to T$ that explicitly marks the reduction contexts.  We then add a structural congruence rule for propagating the context and modify the existing reduction rules to apply only to marked contexts.
 
 \begin{itemize}
   \item one sort $T$, for terms
@@ -194,7 +192,7 @@ As before, if we form the term $Rt$ where $t$ contains no uses of $R$, no reduct
 \label{rhocomb}
 Gph-theories can capture the operational semantics of concurrent calculi as well as serial calculi like SKI above.
 
-  Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} describe a reflective higher-order variant of pi calculus we call the RHO calculus.  Rather than the usual replication and $\new$ operators, they have quoting and unquoting operators.  Quoting turns a process into a name and unquoting does the opposite.  They prove that there is a faithful embedding of the monadic asynchronous pi calculus into the RHO calculus.
+  Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} describe a reflective higher-order variant of pi calculus we call the RHO calculus.  Rather than the usual replication and $\new$ operators, they have quoting and unquoting operators.  Quoting turns a process into a name and unquoting does the opposite; freshness of names is obtained using a type discipline.  They prove that there is a faithful embedding of the monadic asynchronous pi calculus into the RHO calculus.
 
 \subsection{The RHO calculus}
 \subsubsection{Syntax.}
@@ -265,7 +263,7 @@ Semantic substitution, for use in $\alpha$-equivalence:
 \TIC{$P\to Q$} \DP
 \end{center}
 \subsection{RHO combinators}
-  Here we present a combinator calculus that uses abstraction elimination to eliminate bound names from the RHO calculus while preserving the notion of an input prefix.  Like the weak head normal form SKI calculus above, this calculus uses a linear resource $C$ to reify reduction contexts.
+We can define an embedding $\interp{-}$ of closed RHO calculus terms into a set of RHO combinators.  We follow Milner \cite{MilnerPseudoapplication} in thinking of an input-prefixed process $\for(x \leftarrow y)P$ as consisting of two parts: the first names the channel $y$ on which the process is listening, while the second describes the continuation $\lambda x.P$ in terms of an abstracted name.  The right hand side of the communication rule, in effect, applies the continuation to the name to be substituted.  Since the only bound names in the RHO calculus come from input prefixing, we can completely eliminate bound names by using abstraction elimination on the continuation.  Like the weak head normal form SKI calculus above, this combinator calculus uses a linear resource $C$ to reify reduction contexts.
 
 A Gph-theory for the operational semantics of these combinators has:
 \begin{itemize}
@@ -302,8 +300,8 @@ A Gph-theory for the operational semantics of these combinators has:
     \end{array}\]
 \end{itemize}
 
-\subsubsection{Faithful embedding}
-We can define an embedding $\interp{-}$ of closed RHO calculus terms into RHO combinators.  The idea is that we think of an input-prefixed process $\for(x \leftarrow y)P$ as consisting of two parts; the first names the channel $y$ on which the process is listening, while the second describes the continuation $\lambda x.P$ in terms of an abstracted name.  The right hand side of the communication rule, in effect, applies the continuation to the name to be substituted.  Since the only bound names in the RHO calculus come from input prefixing, we can completely eliminate bound names by using abstraction elimination on the continuation.
+\subsection{Embedding}
+We define an interpretation function $\interp{-}$ from RHO calculus terms into RHO combinators by
 
 \[\begin{array}{rl}
   \interp{0} &= 0 \\
@@ -324,8 +322,15 @@ where $\interp{-}_x$ eliminates the free name $x:$
   \interp{P|Q}_x &= ((S\; ((S\; (K\; |))\; \interp{P}_x))\; \interp{Q}_x). \\
 \end{array}\]
 
+\subsection{Barbed bisimilarity}
+\subsubsection{Bisimilarity for the RHO calculus}
+[[TODO]]
+\subsubsection{Bisimilarity for the RHO combinators}
+[[TODO]]
+
+\subsection{Faithfulness}
 \begin{theorem}
-  $P \sim_{\pi} Q \iff  ((|\; C)\; \interp{P}) \sim ((|\; C)\; \interp{Q})$.
+  $P \sim_{\mbox{\timy calc}} Q \iff  ((|\; C)\; \interp{P}) \sim_{\mbox{\tiny comb}} ((|\; C)\; \interp{Q})$.
 \end{theorem}
 
 \begin{proof}[]
