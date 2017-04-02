@@ -249,6 +249,7 @@ Semantic substitution, for use in $\alpha$-equivalence:
 \end{array}\right. \]
 
 \subsubsection{Reduction rules.}
+We use $\to$ to denote single-step reduction.
 \begin{center}
 \AXC{$x_0 \equiv_N x_1$} 
 \UIC{$x_0!Q \;|\; \for(y \leftarrow x_1)P \quad \to\quad P\{\&Q / y\}$} \DP \quad \quad
@@ -329,7 +330,15 @@ An {\bf observation relation} $\downarrow_\Ncal$ over a set of names $\Ncal$ is 
 \begin{center}
   \AXC{$y \in \Ncal$} \AXC{$x \equiv_N y$} \BIC{$x!P \downarrow_\Ncal x$} \DP $\quad$ and $\quad$ \AXC{$P  \downarrow_\Ncal x \mbox{ or } Q \downarrow_\Ncal x$} \UIC{$P\;|\;Q  \downarrow_\Ncal x$} \DP.
 \end{center}
-We write $P \Downarrow_\Ncal x$ if there exists a process $Q$ such that $P$ reduces to $Q$ and $Q \downarrow_\Ncal x.$
+
+We denote eventual reduction by $\to^*$ and write $P \downarrow^*_\Ncal x$ if there exists a process $Q$ such that $P \to^* Q$ and $Q \downarrow_\Ncal x.$
+
+An {\bf }$\Ncal$-barbed bisimulation} over a set of names $\Ncal$ is a symmetric binary relation $S_\Ncal$ between agents such that $P \mathop{S_\Ncal} Q$ implies
+\begin{enumerate}
+  \item If $P \to P'$ then $Q \to^* Q'$ and $P \mathop{S_\Ncal} Q'.$
+\end{enumerate}
+
+
 \subsubsection{Bisimilarity for the RHO combinators}
 [[TODO]]
 
