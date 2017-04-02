@@ -5,6 +5,7 @@
 
 \newcommand{\new}{\mathsf{new}}
 \newcommand{\for}{\mathrm{for }}
+\newcommand{\Ncal}{\mathcal{N}}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\maps}{\colon}
 \newcommand{\Th}{\mathrm{Th}}
@@ -324,13 +325,17 @@ where $\interp{-}_x$ eliminates the free name $x:$
 
 \subsection{Barbed bisimilarity}
 \subsubsection{Bisimilarity for the RHO calculus}
-[[TODO]]
+An {\bf observation relation} $\downarrow_\Ncal$ over a set of names $\Ncal$ is the smallest relation satisfying
+\begin{center}
+  \AXC{$y \in \Ncal$} \AXC{$x \equiv_N y$} \BIC{$x!P \downarrow_\Ncal x$} \DP $\quad$ and $\quad$ \AXC{$P  \downarrow_\Ncal x \mbox{ or } Q \downarrow_\Ncal x$} \UIC{$P\;|\;Q  \downarrow_\Ncal x$} \DP.
+\end{center}
+We write $P \Downarrow_\Ncal x$ if there exists a process $Q$ such that $P$ reduces to $Q$ and $Q \downarrow_\Ncal x.$
 \subsubsection{Bisimilarity for the RHO combinators}
 [[TODO]]
 
 \subsection{Faithfulness}
 \begin{theorem}
-  $P \sim_{\mbox{\timy calc}} Q \iff  ((|\; C)\; \interp{P}) \sim_{\mbox{\tiny comb}} ((|\; C)\; \interp{Q})$.
+  $P \sim_{\mbox{\tiny calc}} Q \iff  ((|\; C)\; \interp{P}) \sim_{\mbox{\tiny comb}} ((|\; C)\; \interp{Q})$.
 \end{theorem}
 
 \begin{proof}[]
