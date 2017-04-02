@@ -7,6 +7,7 @@
 \newcommand{\for}{\mathrm{for }}
 \newcommand{\Ncal}{\mathcal{N}}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
+\newcommand{\from}{\leftarrow}
 \newcommand{\maps}{\colon}
 \newcommand{\Th}{\mathrm{Th}}
 \newcommand{\Gph}{\mathrm{Gph}}
@@ -199,7 +200,7 @@ Gph-theories can capture the operational semantics of concurrent calculi as well
 \subsubsection{Syntax.}
 \[\begin{array}{rl}
   P, Q &::= 0 \\ 
-  &| \quad \for(y \leftarrow x)P \\ 
+  &| \quad \for(y \from x)P \\ 
   &| \quad x!P \\ 
   &| \quad P \;|\; Q \\
   &| \quad *x \\ 
@@ -209,7 +210,7 @@ Gph-theories can capture the operational semantics of concurrent calculi as well
 \subsubsection{Free and bound names.}
 \[\begin{array}{rl}
 FN(0) &= \emptyset \\
-FN(\for(y \leftarrow x)P) &= \{x\}\cup (FN(P)\backslash \{y\}) \\
+FN(\for(y \from x)P) &= \{x\}\cup (FN(P)\backslash \{y\}) \\
 FN(x!P) &= \{x\}\cup FN(P) \\
 \end{array}\quad\quad
 \begin{array}{rl}
@@ -227,7 +228,7 @@ Name equivalence is the smallest equivalence relation $\equiv_N$ on names such t
 Syntactic substitution:
 \[\begin{array}{rl}
   (0)\{\&Q/\&P\} &= 0\\
-  (\for (y \leftarrow x) R)\{\&Q/\&P\} &= \for (z \leftarrow (x\{\&Q/\&P\})) (R\{z/y\}\{\&Q/\&P\})\\
+  (\for (y \from x) R)\{\&Q/\&P\} &= \for (z \from (x\{\&Q/\&P\})) (R\{z/y\}\{\&Q/\&P\})\\
   (x!R)\{\&Q/\&P\} &= (x\{\&Q/\&P\})!(R\{\&Q/\&P\})\\
   (R|S)\{\&Q/\&P\} &= (R\{\&Q/\&P\}) \;|\; (S\{\&Q/\&P\})\\
   (*x)\{\&Q/\&P\} &= \left\{\begin{array}{rl}
@@ -252,7 +253,7 @@ Semantic substitution, for use in $\alpha$-equivalence:
 We use $\to$ to denote single-step reduction.
 \begin{center}
 \AXC{$x_0 \equiv_N x_1$} 
-\UIC{$x_0!Q \;|\; \for(y \leftarrow x_1)P \quad \to\quad P\{\&Q / y\}$} \DP \quad \quad
+\UIC{$x_0!Q \;|\; \for(y \from x_1)P \quad \to\quad P\{\&Q / y\}$} \DP \quad \quad
 \end{center}
 
 \begin{center}
@@ -265,7 +266,7 @@ We use $\to$ to denote single-step reduction.
 \TIC{$P\to Q$} \DP
 \end{center}
 \subsection{RHO combinators}
-We can define an embedding $\interp{-}$ of closed RHO calculus terms into a set of RHO combinators.  We follow Milner \cite{MilnerPseudoapplication} in thinking of an input-prefixed process $\for(x \leftarrow y)P$ as consisting of two parts: the first names the channel $y$ on which the process is listening, while the second describes the continuation $\lambda x.P$ in terms of an abstracted name.  The right hand side of the communication rule, in effect, applies the continuation to the name to be substituted.  Since the only bound names in the RHO calculus come from input prefixing, we can completely eliminate bound names by using abstraction elimination on the continuation.  Like the weak head normal form SKI calculus above, this combinator calculus uses a linear resource $C$ to reify reduction contexts.
+We can define an embedding $\interp{-}$ of closed RHO calculus terms into a set of RHO combinators.  We follow Milner \cite{MilnerPseudoapplication} in thinking of an input-prefixed process $\for(x \from y)P$ as consisting of two parts: the first names the channel $y$ on which the process is listening, while the second describes the continuation $\lambda x.P$ in terms of an abstracted name.  The right hand side of the communication rule, in effect, applies the continuation to the name to be substituted.  Since the only bound names in the RHO calculus come from input prefixing, we can completely eliminate bound names by using abstraction elimination on the continuation.  Like the weak head normal form SKI calculus above, this combinator calculus uses a linear resource $C$ to reify reduction contexts.
 
 A Gph-theory for the operational semantics of these combinators has:
 \begin{itemize}
@@ -307,40 +308,47 @@ We define an interpretation function $\interp{-}$ from RHO calculus terms into R
 
 \[\begin{array}{rl}
   \interp{0} &= 0 \\
-  \interp{\for(x \leftarrow \&P)Q} &= ((for\; (\&\; \interp{P}))\; \interp{Q}_x)\\
+  \interp{\for(x \from \&P)Q} &= ((for\; (\&\; \interp{P}))\; \interp{Q}_x)\\
   \interp{\&P!Q} &= ((!\; (\&\; \interp{P}))\; \interp{Q}) \\
   \interp{P|Q} &= ((|\; \interp{P})\; \interp{Q})\\
   \interp{*\&P} &= (*\; (\&\; \interp{P}))
 \end{array}\]
 where $\interp{-}_x$ eliminates the free name $x:$
 \[\begin{array}{rl}
-  \interp{P}_x &= (K\; P) \mbox{ where $x$ is not free in } P \\
-  \interp{\for(y \leftarrow \&P)Q}_x &= \left\{
+  \interp{P}_x &= (K\; \interp{P}) \mbox{ where $x$ is not free in } P \\
+  \interp{\for(y \from \&P)Q}_x &= \left\{
     \begin{array}{ll}
       ((S\; ((S\; (K for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{\interp{Q}_y}_x) & \mbox{when }y \not \equiv_N x\\
       ((S\; ((S\; (K for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{Q}_y) & \mbox{when }y \equiv_N x\\
     \end{array}\right.\\
   \interp{\&P!Q}_x &= ((S\; ((S\; (K\; !))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{Q}_x) \\
-  \interp{P|Q}_x &= ((S\; ((S\; (K\; |))\; \interp{P}_x))\; \interp{Q}_x). \\
+  \interp{P|Q}_x &= ((S\; ((S\; (K\; |))\; \interp{P}_x))\; \interp{Q}_x) \\
+  \interp{*\&P} &= \left\{\begin{array}{ll}
+    ((S\; (K\; *))\; I) & \mbox{when } \&P \equiv_N x\\
+    ((S\; (K\; *))\; ((S (K\; \&))\; \interp{P}_x) & \mbox{otherwise.}
+  \end{array}\right.
 \end{array}\]
 
 \subsection{Barbed bisimilarity}
-\subsubsection{Bisimilarity for the RHO calculus}
 An {\bf observation relation} $\downarrow_\Ncal$ over a set of names $\Ncal$ is the smallest relation satisfying
 \begin{center}
-  \AXC{$y \in \Ncal$} \AXC{$x \equiv_N y$} \BIC{$x!P \downarrow_\Ncal x$} \DP $\quad$ and $\quad$ \AXC{$P  \downarrow_\Ncal x \mbox{ or } Q \downarrow_\Ncal x$} \UIC{$P\;|\;Q  \downarrow_\Ncal x$} \DP.
+  \AXC{$y \in \Ncal$} \AXC{$x \equiv_N y$} \BIC{$x!P \downarrow_\Ncal x$} \DP $\quad$ and $\quad$ \AXC{$P  \downarrow_\Ncal x \mbox{ or } Q \downarrow_\Ncal x$} \UIC{$P\;|\;Q  \downarrow_\Ncal x$} \DP
 \end{center}
+for the RHO calculus or
+\begin{center}
+  \AXC{$y \in \Ncal$} \AXC{$x \equiv_N y$} \BIC{$((!\; x)\; P) \downarrow_\Ncal x$} \DP $\quad$ and $\quad$ \AXC{$P  \downarrow_\Ncal x \mbox{ or } Q \downarrow_\Ncal x$} \UIC{$((|\; P)\; Q)  \downarrow_\Ncal x$} \DP.
+\end{center}
+for the RHO combinators.
 
 We denote eventual reduction by $\to^*$ and write $P \downarrow^*_\Ncal x$ if there exists a process $Q$ such that $P \to^* Q$ and $Q \downarrow_\Ncal x.$
 
-An {\bf }$\Ncal$-barbed bisimulation} over a set of names $\Ncal$ is a symmetric binary relation $S_\Ncal$ between agents such that $P \mathop{S_\Ncal} Q$ implies
+An {\bf $\Ncal$-barbed bisimulation} over a set of names $\Ncal$ is a symmetric binary relation $S_\Ncal$ between agents such that $P \mathop{S_\Ncal} Q$ implies
 \begin{enumerate}
-  \item If $P \to P'$ then $Q \to^* Q'$ and $P \mathop{S_\Ncal} Q'.$
+  \item if $P \to P'$ then $Q \to^* Q'$ and $P \mathop{S_\Ncal} Q',$ and 
+  \item if $P \downarrow_\Ncal x,$ then $Q \downarrow^*_\Ncal x.$
 \end{enumerate}
+$P$ is $\Ncal$-barbed bisimilar to $Q,$ written $P \approx Q,$ if $P \mathop{S_\Ncal} Q$ for some $\Ncal$-barbed bisimulation $S_\Ncal.$
 
-
-\subsubsection{Bisimilarity for the RHO combinators}
-[[TODO]]
 
 \subsection{Faithfulness}
 \begin{theorem}
@@ -351,6 +359,45 @@ An {\bf }$\Ncal$-barbed bisimulation} over a set of names $\Ncal$ is a symmetric
   [[...]]
 \end{proof}
 \section{Conclusion and future work}
+
+\section{Appendix: abstraction elimination calculations}
+\[\begin{array}{rl}
+  & ((K\; \interp{P})\; x) \\
+  = & \interp{P}\\
+  \\
+  
+  & (((S\; ((S\; (K\; for))\; ((S\; (K\; \&))\; \; \interp{P}_x)))\; \interp{\interp{Q}_y}_x)\; x)\\
+  =&  ((((S\; (K\; for))\; ((S\; (K\; \&))\; \; \interp{P}_x))\; x)\; (\interp{\interp{Q}_y}_x\; x))\\
+  =&  ((((K\; for)\; x)\; (((S\; (K\; \&))\; \; \interp{P}_x)\; x))\; \interp{Q}_y)\\
+  =&  ((for\; (((K\; \&)\; x)\; (\interp{P}_x\; x)))\; \interp{Q}_y)\\
+  =&  ((for\; (\&\; \interp{P}))\; \interp{Q}_y)\\
+  \\
+  & (((S\; ((S\; (K\; for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{Q}_y)\; x)\\
+  =&  ((((S\; (K\; for))\; ((S\; (K\; \&))\; \interp{P}_x))\; x)\; (\interp{Q}_y\; x))\\
+  =&  ((((K\; for)\; x)\; (((S\; (K\; \&))\; \interp{P}_x)\; x))\; \interp{Q}\{x/y\})\\
+  =&  ((for\; (((K\; \&)\; x)\; (\interp{P}_x\; x)))\; \interp{Q}\{x/y\})\\
+  =&  ((for\; (\&\; \interp{P}))\; \interp{Q}\{x/y\})\\
+  \\
+  & (((S\; ((S\; (K\; !))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{Q}_x)\; x)\\
+  =&  (((((S\; (K\; !))\; ((S\; (K\; \&))\; \interp{P}_x)))\; x)\; (\interp{Q}_x\; x))\\
+  =&  ((((K\; !)\; x)\; (((S\; (K\; \&))\; \interp{P}_x)\; x))\; \interp{Q})\\
+  =&  ((!\; (((K\; \&)\; x)\; (\interp{P}_x\; x)))\; \interp{Q})\\
+  =&  ((!\; (\&\; \interp{P}))\; \interp{Q})\\
+  \\
+  & (((S\; ((S\; (K\; |))\; \interp{P}_x))\; \interp{Q}_x)\; x)\\
+  =& ((((S\; (K\; |))\; \interp{P}_x)\; x)\; (\interp{Q}_x\; x))\\
+  =& ((((K\; |)\; x)\; (\interp{P}_x\; x))\; \interp{Q})\\
+  =& (|\; \interp{P})\; \interp{Q})\\
+  \\
+  & (((S\; (K\; *))\; I)\; x)\\
+  =&  (((K\; *)\; x)\; (I\; x))\\
+  =&  (*\; x)\\
+  \\
+  & (((S\; (K\; *))\; ((S\; (K\; \&))\; \interp{P}_x))\; x)\\
+  =&  (((K\; *)\; x)\; (((S\; (K\; \&))\; \interp{P}_x)\; x))\\
+  =&  (*\; (((K\; \&)\; x)\; (\interp{P}_x\; x)))\\
+  =&  (*\; (\&\; \interp{P}))\\
+\end{array}\]
 
 \bibliographystyle{plainurl}
 \bibliography{calco}
