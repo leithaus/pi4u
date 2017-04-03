@@ -247,15 +247,26 @@ Gph-theories can capture the operational semantics of concurrent calculi as well
 
 \subsection{The RHO calculus}
 \subsubsection{Syntax}
-\[\begin{array}{rl}
-  P, Q &::= 0 \\ 
-  &| \quad \for(y \from x)P \\ 
-  &| \quad x!P \\ 
-  &| \quad P \;|\; Q \\
-  &| \quad *x \\ 
+\[\begin{array}{rlr}
+  P, Q &::= 0 & \mbox{the stopped process}\\ 
+  &| \quad \for(y \from x)P & \mbox{input guarded process} \\ 
+  &| \quad x!P & \mbox{output process}\\ 
+  &| \quad P \;|\; Q & \mbox{parallel composition}\\
+  &| \quad *x & \mbox{deference}\\ 
   &\\
-  x, y &::= \&P \\ 
+  x, y &::= \&P & \mbox{quotation}\\ 
 \end{array}\]
+
+Note that in the original rho-calculus papers the notation was
+somewhat different. The quotation and dereference constructions were
+originally written, $\ulcorner P \urcorner$ and $\urcorner x \ulcorner$,
+respectively. Here we have adopted a more programmer
+friendly style employing the $\&$ and $*$ of the $\mathsf{C}$ programming
+language for reference (quotation) and dereference, respectively. Input
+guards which were written with a whimper $?$ in more traditional process calculi style  are now written in for-comprehension style as adopted
+in languages like $\mathsf{Scala}$; e.g. $x?(y)P$ is written
+here $\mathsf{for}( y \from x )P$.
+
 \subsubsection{Free and bound names}
 \[\begin{array}{rl}
 FN(0) &= \emptyset \\
@@ -268,7 +279,7 @@ FN(*x) &= \{x\}
 \end{array}\]
 \subsubsection{Structural congruence}
 Structural (process) congruence is the smallest equivalence relation $\equiv$ containing $\alpha$-equivalence and making $(|, 0)$ into a commutative monoid.
-\subsubsection{Name equivalence.}
+\subsubsection{Name equivalence}
 Name equivalence is the smallest equivalence relation $\equiv_N$ on names such that 
 \begin{center}
   \AXC{} \UIC{$\&*x \equiv_N x$} \DP and \AXC{$P \equiv Q$} \UIC{$\&P \equiv_N \&Q$} \DP.
@@ -302,7 +313,7 @@ Semantic substitution, for use in $\alpha$-equivalence:
 We use $\to$ to denote single-step reduction.
 \begin{center}
 \AXC{$x_0 \equiv_N x_1$} 
-\UIC{$x_0!Q \;|\; \for(y \from x_1)P \quad \to\quad P\{\&Q / y\}$} \DP \quad \quad
+\UIC{$\for(y \from x_1)P \;|\; x_0!Q \quad \to\quad P\{\&Q / y\}$} \DP \quad \quad
 \end{center}
 
 \begin{center}
