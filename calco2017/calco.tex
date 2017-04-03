@@ -33,7 +33,7 @@ L.\ G.\ Meredith
   {\tt stay@pyrofex.net}
 }
 \affil[2]{
-{RChain Cooperative}\\
+{RChain Cooperative, Seattle, WA, USA}\\
 {\tt greg@rchain.coop}
 }
 \Copyright{Michael Stay, Lucius Gregory Meredith}
@@ -63,18 +63,18 @@ L.\ G.\ Meredith
   binders for names, and the mathematics of bound variable names is
   subtle.  Sch\"onfinkel introduced the SKI combinator calculus in
   1924 to clarify the role of quantified variables in intuitionistic
-  logic by eliminating them \cite{finkel}. Yoshida demonstrated how to
+  logic by eliminating them. Yoshida demonstrated how to
   eliminate the bound names coming from the input prefix in the
   asynchronous {\pic}, but her combinators still depend on the $\new$
-  operator to bind names.  Recently, Meredith and Stay \cite{Rhocomb}
+  operator to bind names.  Recently, Meredith and Stay
   showed how to modify Yoshida's combinators by replacing $\new$ and
   replication with reflective operators to provide the first
   combinator calculus with no bound names into which the asynchronous
   {\pic} has a faithful embedding. Here we provide an alternative set
-  of combinators built from $\mathsf{SKI}$ plus reflection, that also
-  eliminates all nominal phenomena yet provides a faithful
+  of combinators built from $\mathsf{SKI}$ plus reflection that also
+  eliminates all nominal phenomena, yet provides a faithful
   embedding. We show that with the nominal features effectively
-  eliminated as syntactic sugar multisorted Lawvere theories enriched
+  eliminated as syntactic sugar, multisorted Lawvere theories enriched
   over graphs suffice to capture the operational semantics of the
   calculus.
 \end{abstract}
@@ -94,8 +94,8 @@ modify Yoshida's combinators by replacing $\new$ and replication with
 reflective operators to provide the first combinator calculus with no
 bound names into which the asynchronous {\pic} has a faithful
 embedding. Here we provide an alternative set of combinators built
-from $\mathsf{SKI}$ plus reflection, that also eliminates all nominal
-phenomena yet provides a faithful embedding.
+from $\mathsf{SKI}$ plus reflection that also eliminates all nominal
+phenomena, yet provides a faithful embedding.
 
 The recent work by Jamie Gabbay and Andrew Pitts
 \cite{DBLP:journals/fac/GabbayP02} and others
@@ -103,7 +103,7 @@ The recent work by Jamie Gabbay and Andrew Pitts
 study of bound names and substitution on a much nicer foundation, at
 the cost of an increase in the complexity of the semantic
 framework. It interprets nominal phenomena in terms of atoms in
-Fraenkl-Mostovski set theory. Clouston's work, in particular makes
+Fraenkl-Mostowski set theory. Clouston's work in particular makes
 evident the additional machinery needed to interpret nominal phenomena
 as Lawvere theories. On the other hand, with the nominal features
 effectively eliminated as syntactic sugar, we show that multisorted
@@ -111,7 +111,10 @@ Lawvere theories enriched over graphs suffice to capture the
 operational semantics of the calculus.
 
 \section{Previous work}
-There's a long history and an enormous body of work on modeling term rewriting and operational semantics with various notions of category enriched over category-like structures.  Here's a sampling.  Seely \cite{Seely} suggested using 2-categories for modeling the [[what kind?]] semantics of lambda calculus; [[does he have relations between 2-cells?  Certainly confluent.]].  Barney Hilken [[The simply typed 2$\lambda$-calculus]], Tom Hirschowitz [[CARTESIAN CLOSED 2-CATEGORIES AND PERMUTATION EQUIVALENCE IN HIGHER-ORDER REWRITING]].  Stell \cite{Stell}
+%  Seely [174], Hilken [96], and Mellie ́s [152]
+There is a long history and an enormous body of work on modeling term rewriting and operational semantics with various notions of category enriched over category-like structures; we only have room here for a sampling.  Seely \cite{Seely} 
+% R. A. G. Seely, Modeling computations: a 2-categorical framework, in Proc. Symp. Logic Comp. Sci. 1987, Computer Society of the IEEE, pp. 65–71. Also available at http://www.math.mcgill.ca/rags/WkAdj/LICS.pdf.
+suggested using 2-categories for modeling the [[what kind?]] semantics of lambda calculus; [[does he have relations between 2-cells?  Certainly confluent.]].  Barney Hilken [[The simply typed 2$\lambda$-calculus]], Tom Hirschowitz [[CARTESIAN CLOSED 2-CATEGORIES AND PERMUTATION EQUIVALENCE IN HIGHER-ORDER REWRITING]].  Stell \cite{Stell}
 % http://www.comp.leeds.ac.uk/jgs/caen.ps
 considered sesquicategories for term rewriting [[2-morphism involve substitutions of variables; we eliminate variables entirely]].  L\"uth and Ghani [[Monads and Modular Term Rewriting]] use poset-enriched categories.
 
@@ -243,7 +246,7 @@ Gph-theories can capture the operational semantics of concurrent calculi as well
   Meredith and Radestock \cite{DBLP:journals/entcs/MeredithR05} describe a reflective higher-order variant of pi calculus we call the RHO calculus.  Rather than the usual replication and $\new$ operators, they have quoting and unquoting operators.  Quoting turns a process into a name and unquoting does the opposite; freshness of names is obtained using a type discipline.  They prove that there is a faithful embedding of the monadic asynchronous pi calculus into the RHO calculus.
 
 \subsection{The RHO calculus}
-\subsubsection{Syntax.}
+\subsubsection{Syntax}
 \[\begin{array}{rl}
   P, Q &::= 0 \\ 
   &| \quad \for(y \from x)P \\ 
@@ -253,7 +256,7 @@ Gph-theories can capture the operational semantics of concurrent calculi as well
   &\\
   x, y &::= \&P \\ 
 \end{array}\]
-\subsubsection{Free and bound names.}
+\subsubsection{Free and bound names}
 \[\begin{array}{rl}
 FN(0) &= \emptyset \\
 FN(\for(y \from x)P) &= \{x\}\cup (FN(P)\backslash \{y\}) \\
@@ -263,14 +266,14 @@ FN(x!P) &= \{x\}\cup FN(P) \\
 FN(P|Q) &= FN(P)\cup FN(Q) \\
 FN(*x) &= \{x\}
 \end{array}\]
-\subsubsection{Structural congruence.}
+\subsubsection{Structural congruence}
 Structural (process) congruence is the smallest equivalence relation $\equiv$ containing $\alpha$-equivalence and making $(|, 0)$ into a commutative monoid.
 \subsubsection{Name equivalence.}
 Name equivalence is the smallest equivalence relation $\equiv_N$ on names such that 
 \begin{center}
   \AXC{} \UIC{$\&*x \equiv_N x$} \DP and \AXC{$P \equiv Q$} \UIC{$\&P \equiv_N \&Q$} \DP.
 \end{center}
-\subsubsection{Substitution.}
+\subsubsection{Substitution}
 Syntactic substitution:
 \[\begin{array}{rl}
   (0)\{\&Q/\&P\} &= 0\\
@@ -295,7 +298,7 @@ Semantic substitution, for use in $\alpha$-equivalence:
   *x & \mbox{otherwise}
 \end{array}\right. \]
 
-\subsubsection{Reduction rules.}
+\subsubsection{Reduction rules}
 We use $\to$ to denote single-step reduction.
 \begin{center}
 \AXC{$x_0 \equiv_N x_1$} 
