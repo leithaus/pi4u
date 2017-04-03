@@ -19,6 +19,7 @@
 \newcommand{\Mon}{\mathrm{Mon}}
 \newcommand{\op}{\mathrm{op}}
 \newcommand{\NN}{\mathbb{N}}
+\newcommand{\pic}{$\pi$-calculus}
 
 \title{Representing operational semantics with enriched Lawvere theories}
 \author[1]{
@@ -57,12 +58,57 @@ L.\ G.\ Meredith
 \begin{document}
 \maketitle
 \begin{abstract}
-\noindent
+  \noindent
+  Many term calculi, like $\lambda$-calculus or {\pic}, involve
+  binders for names, and the mathematics of bound variable names is
+  subtle.  Sch\"onfinkel introduced the SKI combinator calculus in
+  1924 to clarify the role of quantified variables in intuitionistic
+  logic by eliminating them \cite{finkel}. Yoshida demonstrated how to
+  eliminate the bound names coming from the input prefix in the
+  asynchronous {\pic}, but her combinators still depend on the $\new$
+  operator to bind names.  Recently, Meredith and Stay \cite{Rhocomb}
+  showed how to modify Yoshida's combinators by replacing $\new$ and
+  replication with reflective operators to provide the first
+  combinator calculus with no bound names into which the asynchronous
+  {\pic} has a faithful embedding. Here we provide an alternative set
+  of combinators built from $\mathsf{SKI}$ plus reflection, that also
+  eliminates all nominal phenomena yet provides a faithful
+  embedding. We show that with the nominal features effectively
+  eliminated as syntactic sugar multisorted Lawvere theories enriched
+  over graphs suffice to capture the operational semantics of the
+  calculus.
 \end{abstract}
 \EnableBpAbbreviations
 
 \section{Introduction}
-[[ Reference our MFPS paper, say the approach of section \ref{rhocomb} is very different from that one and Yoshida's combinators. ]]
+Many term calculi, like $\lambda$-calculus or {\pic}, involve binders
+for names, and the mathematics of bound variable names is subtle.
+Sch\"onfinkel introduced the SKI combinator calculus in 1924 to
+clarify the role of quantified variables in intuitionistic logic by
+eliminating them \cite{finkel}. Yoshida demonstrated how to eliminate
+the bound names coming from the input prefix in the asynchronous
+{\pic}, but her combinators still depend on the $\new$ operator to
+bind names. Curry developed Sch\"onfinkel's ideas much
+further. Recently, Meredith and Stay \cite{Rhocomb} showed how to
+modify Yoshida's combinators by replacing $\new$ and replication with
+reflective operators to provide the first combinator calculus with no
+bound names into which the asynchronous {\pic} has a faithful
+embedding. Here we provide an alternative set of combinators built
+from $\mathsf{SKI}$ plus reflection, that also eliminates all nominal
+phenomena yet provides a faithful embedding.
+
+The recent work by Jamie Gabbay and Andrew Pitts
+\cite{DBLP:journals/fac/GabbayP02} and others
+\cite{DBLP:journals/jcss/Clouston14} on nominal set theory has put the
+study of bound names and substitution on a much nicer foundation, at
+the cost of an increase in the complexity of the semantic
+framework. It interprets nominal phenomena in terms of atoms in
+Fraenkl-Mostovski set theory. Clouston's work, in particular makes
+evident the additional machinery needed to interpret nominal phenomena
+as Lawvere theories. On the other hand, with the nominal features
+effectively eliminated as syntactic sugar, we show that multisorted
+Lawvere theories enriched over graphs suffice to capture the
+operational semantics of the calculus.
 
 \section{Previous work}
 There's a long history and an enormous body of work on modeling term rewriting and operational semantics with various notions of category enriched over category-like structures.  Here's a sampling.  Seely \cite{Seely} suggested using 2-categories for modeling the [[what kind?]] semantics of lambda calculus; [[does he have relations between 2-cells?  Certainly confluent.]].  Barney Hilken [[The simply typed 2$\lambda$-calculus]], Tom Hirschowitz [[CARTESIAN CLOSED 2-CATEGORIES AND PERMUTATION EQUIVALENCE IN HIGHER-ORDER REWRITING]].  Stell \cite{Stell}
@@ -158,7 +204,7 @@ If we form the term $Rt$ where $t$ contains no uses of $R$, no reductions will e
 [[Is it ever *not* possible to mark reduction contexts this way?]]
 
 \section{Explicit reduction contexts as gas}
-The Ethereum \cite{Ethereum} and RChain \cite{RChain} projects are building virtual machines on the blockchain.  Both use the concept of a linear resource called ``gas'' (as in gasoline) that is consumed as the virtual machine executes.  Gph-theories can capture the operational semantics of a calculus where reduction contexts are consumable, and thus play a role similar to that of gas \cite{MeredithStayHDRA}.
+The Ethereum \cite{wood2014ethereum} and RChain \cite{RChain} projects are building virtual machines on the blockchain.  Both use the concept of a linear resource called ``gas'' (as in gasoline) that is consumed as the virtual machine executes.  Gph-theories can capture the operational semantics of a calculus where reduction contexts are consumable, and thus play a role similar to that of gas \cite{DBLP:journals/corr/StayM15}.
 
 \begin{itemize}
   \item one sort $T$, for terms
@@ -266,7 +312,7 @@ We use $\to$ to denote single-step reduction.
 \TIC{$P\to Q$} \DP
 \end{center}
 \subsection{RHO combinators}
-We can define an embedding $\interp{-}$ of closed RHO calculus terms into a set of RHO combinators.  We follow Milner \cite{MilnerPseudoapplication} in thinking of an input-prefixed process $\for(x \from y)P$ as consisting of two parts: the first names the channel $y$ on which the process is listening, while the second describes the continuation $\lambda x.P$ in terms of an abstracted name.  The right hand side of the communication rule, in effect, applies the continuation to the name to be substituted.  Since the only bound names in the RHO calculus come from input prefixing, we can completely eliminate bound names by using abstraction elimination on the continuation.  Like the weak head normal form SKI calculus above, this combinator calculus uses a linear resource $C$ to reify reduction contexts.
+We can define an embedding $\interp{-}$ of closed RHO calculus terms into a set of RHO combinators.  We follow Milner \cite{milner91polyadicpi} in thinking of an input-prefixed process $\for(x \from y)P$ as consisting of two parts: the first names the channel $y$ on which the process is listening, while the second describes the continuation $\lambda x.P$ in terms of an abstracted name.  The right hand side of the communication rule, in effect, applies the continuation to the name to be substituted.  Since the only bound names in the RHO calculus come from input prefixing, we can completely eliminate bound names by using abstraction elimination on the continuation.  Like the weak head normal form SKI calculus above, this combinator calculus uses a linear resource $C$ to reify reduction contexts.
 
 A Gph-theory for the operational semantics of these combinators has:
 \begin{itemize}
@@ -359,6 +405,16 @@ $P$ is $\Ncal$-barbed bisimilar to $Q,$ written $P \approx Q,$ if $P \mathop{S_\
   [[...]]
 \end{proof}
 \section{Conclusion and future work}
+This paper is part of a pair of papers demonstrating that reflection
+provides a powerful technique for treating nominal phenomena as
+syntactic sugar, thus paving the way for simpler semantic treatments
+of richly featured calculi, such as the {\pic} and other calculi of
+concurrency. We illustrated the point by providing faithful semantics
+of both the $\lambda$-calculus and the {\pic} in terms of graph-enriched
+Lawvere theories. This work may be considered preparatory for a more
+elaborate study of logics for concurrency in which the nominal
+phenomena have logical status, but may be treated in a technically
+simpler fashion.
 
 \section{Appendix: abstraction elimination calculations}
 \[\begin{array}{rl}
