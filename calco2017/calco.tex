@@ -112,11 +112,11 @@ operational semantics of the calculus.
 
 \section{Previous work}
 %  Seely [174], Hilken [96], and Mellie ́s [152]
-There is a long history and an enormous body of work on modeling term rewriting and operational semantics with various notions of category enriched over category-like structures; we only have room here for a sampling.  Seely \cite{Seely} 
+There is a long history and an enormous body of work on modeling term rewriting and operational semantics with various notions of category enriched over category-like structures; we only have room here for a sampling.  Seely \cite{DBLP:conf/lics/Seely87} 
 % R. A. G. Seely, Modeling computations: a 2-categorical framework, in Proc. Symp. Logic Comp. Sci. 1987, Computer Society of the IEEE, pp. 65–71. Also available at http://www.math.mcgill.ca/rags/WkAdj/LICS.pdf.
-suggested using 2-categories for modeling the denotational semantics of lambda calculus in Scott domains to capture the adjunction between $\beta$ reduction and $\eta$ conversion.  Hilken \cite{hilken}
+suggested using 2-categories for modeling the denotational semantics of lambda calculus in Scott domains to capture the adjunction between $\beta$ reduction and $\eta$ conversion.  Hilken \cite{DBLP:journals/tcs/Hilken96}
 % B. Hilken, Towards a proof theory of rewriting: the simply-typed 2λ- calculus, Theor. Comp. Sci. 170 (1996), 407–444. Also available at http://math.ucr.edu/home/baez/qg-winter2007/hilken_2lambda_calculus.ps
-expands Seely's work by exploring the proof theory using categorical logic.  Hirschowitz \cite{Hirschowitz}
+expands Seely's work by exploring the proof theory using categorical logic.  Hirschowitz \cite{DBLP:journals/corr/Hirschowitz13}
 % Tom Hirschowitz, Cartesian closed 2-categories and permutation equivalence in higher-order rewriting, Logical Methods in Computer Science, IfCoLog (Interna- tional Federation of Computational Logic), 9 (3) (2013), 10–28. Also available at https://hal.archives-ouvertes.fr/hal-00540205/file/macy.pdf
 generalizes algebraic signatures to cartesian closed 2-signatures; in addition to the usual product sorts, his system includes exponential sorts.  Seely, Hilken, and Hirschowitz all deal with nominal issues by using closedness in the signature.
 Melli\`es
@@ -143,7 +143,7 @@ Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets 
 
 A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint that picks out the free model on a graph.
 
-Gph-enriched categories are part of a spectrum of 2-category-like structures.  A strict 2-category is a category enriched over Cat with its usual product.  Sesquicategories are categories enriched over Cat with the ``funny'' tensor product \cite{Lack2CategoriesCompanion}; a sesquicategory can be thought of as a 2-category where the interchange law doesn't hold.  A Gph-enriched category can be thought of as a sesquicategory where 2-morphisms (now edges) can't be composed.  Any strict 2-category has an underlying sesquicategory, and any sesquicategory has an underlying Gph-enriched category.  These forgetful functors have left adjoints.
+Gph-enriched categories are part of a spectrum of 2-category-like structures.  A strict 2-category is a category enriched over Cat with its usual product.  Sesquicategories are categories enriched over Cat with the ``funny'' tensor product \cite{Lack2010}; a sesquicategory can be thought of as a 2-category where the interchange law doesn't hold.  A Gph-enriched category can be thought of as a sesquicategory where 2-morphisms (now edges) can't be composed.  Any strict 2-category has an underlying sesquicategory, and any sesquicategory has an underlying Gph-enriched category.  These forgetful functors have left adjoints.
 
 \section{Gph-theories as models of computation}
 
