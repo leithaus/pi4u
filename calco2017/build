@@ -1,3 +1,4 @@
 pdflatex calco
 bibtex calco
 pdflatex calco
+pdflatex calco
