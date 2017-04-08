@@ -390,11 +390,7 @@ We define an interpretation function $\interp{-}$ from RHO calculus terms into R
 where $\interp{-}_x$ eliminates the free name $x:$
 \[\begin{array}{rl}
   \interp{P}_x &= (K\; \interp{P}) \mbox{ where $x$ is not free in } P \\
-  \interp{\for(y \from \&P)Q}_x &= \left\{
-    \begin{array}{ll}
-      ((S\; ((S\; (K for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{\interp{Q}_y}_x) & \mbox{when }y \not \equiv_N x\\
-      ((S\; ((S\; (K for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{Q}_y) & \mbox{when }y \equiv_N x\\
-    \end{array}\right.\\
+  \interp{\for(y \from \&P)Q}_x &= ((S\; ((S\; (K for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{\interp{Q}_y}_x) \\
   \interp{\&P!Q}_x &= ((S\; ((S\; (K\; !))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{Q}_x) \\
   \interp{P|Q}_x &= ((S\; ((S\; (K\; |))\; \interp{P}_x))\; \interp{Q}_x) \\
   \interp{*\&P} &= \left\{\begin{array}{ll}
@@ -419,19 +415,20 @@ Consider the following sorting on RHO combinators:
   I &: \forall X.X \Rightarrow X\\
 \end{array}\]
 
-The left- and right-hand sides of each of the structural congruence and rewrite rules have the sort $W,$ and the interpretation of any RHO calculus term has the sort $W.$
+The left- and right-hand sides of each of the structural congruence and rewrite rules have the sort $W,$ the interpretation of any RHO calculus term has the sort $W,$ and the result of eliminating an abstraction has the sort $N \Rightarrow W.$
 
 We define an interpretation function $\interpp{-}$ from $W$-sorted RHO combinators not containing $C$ into the RHO calculus by
 \[\begin{array}{rl}
   \interpp{0} &= 0\\
   \interpp{P\;|\;Q} &= \interpp{P} \;|\; \interpp{Q}\\
-  \interpp{((\for\; (\&\; P))\; Q)} &= for (\&\interpp{R} \leftarrow \&\interpp{P})\interpp{(Q\; (\&\; R))} \mbox{ for any RHO combinator } R\\
+  \interpp{((\for\; (\&\; P))\; Q)} &= for (\&\interpp{R} \leftarrow \&\interpp{P})\interpp{(Q\; (\&\; R))}\\
   \interpp{((!\; (\&\; P))\; Q)} &= \&\interpp{P}!\interpp{Q}\\
   \interpp{(*(\&\; P))} &= *\&\interpp{P}\\
   \interpp{(((S\; P)\; Q)\; R)} &= \interpp{((P\; R)\; (Q\; R))}\\
   \interpp{((K\; P)\; Q)} &= \interpp{P}\\
   \interpp{(I\; P)} &= \interpp{P}
 \end{array}\]
+where $R$ is any $W$-sorted RHO combinator.
 
 Some simple calculation shows that
 \begin{theorem}
@@ -493,12 +490,6 @@ simpler fashion.
   =&  ((((K\; for)\; x)\; (((S\; (K\; \&))\; \; \interp{P}_x)\; x))\; \interp{Q}_y)\\
   =&  ((for\; (((K\; \&)\; x)\; (\interp{P}_x\; x)))\; \interp{Q}_y)\\
   =&  ((for\; (\&\; \interp{P}))\; \interp{Q}_y)\\
-  \\
-  & (((S\; ((S\; (K\; for))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{Q}_y)\; x)\\
-  =&  ((((S\; (K\; for))\; ((S\; (K\; \&))\; \interp{P}_x))\; x)\; (\interp{Q}_y\; x))\\
-  =&  ((((K\; for)\; x)\; (((S\; (K\; \&))\; \interp{P}_x)\; x))\; \interp{Q}\{x/y\})\\
-  =&  ((for\; (((K\; \&)\; x)\; (\interp{P}_x\; x)))\; \interp{Q}\{x/y\})\\
-  =&  ((for\; (\&\; \interp{P}))\; \interp{Q}\{x/y\})\\
   \\
   & (((S\; ((S\; (K\; !))\; ((S\; (K\; \&))\; \interp{P}_x)))\; \interp{Q}_x)\; x)\\
   =&  (((((S\; (K\; !))\; ((S\; (K\; \&))\; \interp{P}_x)))\; x)\; (\interp{Q}_x\; x))\\
