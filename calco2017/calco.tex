@@ -7,6 +7,7 @@
 \newcommand{\for}{\mathrm{for }}
 \newcommand{\Ncal}{\mathcal{N}}
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
+\newcommand{\interpp}[1]{\{\!| #1 |\!\}}
 \newcommand{\from}{\leftarrow}
 \newcommand{\maps}{\colon}
 \newcommand{\Th}{\mathrm{Th}}
@@ -219,8 +220,6 @@ Gph-theories can still capture the operational semantics of calculi with restric
 If we form the term $Rt$ where $t$ contains no uses of $R$, no reductions will ever take place in the right-hand argument of an application: the structural congruence and rewrite rules enforce that the $R$ context can only move to the left term in an application, never the right.  The result follows by induction on the number of steps to reach $t'.$
 \end{proof}
 
-[[Is it ever *not* possible to mark reduction contexts this way?]]
-
 \section{Explicit reduction contexts as gas}
 The Ethereum \cite{wood2014ethereum} and RChain \cite{RChain} projects are building virtual machines on the blockchain.  Both use the concept of a linear resource called ``gas'' (as in gasoline) that is consumed as the virtual machine executes.  Gph-theories can capture the operational semantics of a calculus where reduction contexts are consumable, and thus play a role similar to that of gas \cite{DBLP:journals/corr/StayM15}.
 
@@ -378,7 +377,7 @@ A Gph-theory for the operational semantics of these combinators has:
     \end{array}\]
 \end{itemize}
 
-\subsection{Embedding}
+\subsection{Embeddings}
 We define an interpretation function $\interp{-}$ from RHO calculus terms into RHO combinators by
 
 \[\begin{array}{rl}
@@ -404,6 +403,43 @@ where $\interp{-}_x$ eliminates the free name $x:$
   \end{array}\right.
 \end{array}\]
 
+Consider the following sorting on RHO combinators:
+\[\begin{array}{rl}
+  C &: W\\
+  0 &: W\\
+  | &: W \Rightarrow W \Rightarrow W\\
+  \for &: N \Rightarrow (N \Rightarrow W) \Rightarrow W\\
+  ! &: N \Rightarrow W \Rightarrow W\\
+\end{array}\quad\quad
+\begin{array}{rl}
+  \& &: W \Rightarrow N\\
+  * &: N \Rightarrow W\\
+  S &: \forall X,Y,Z.(Z \Rightarrow Y \Rightarrow X) \Rightarrow (Z \Rightarrow Y) \Rightarrow Z \Rightarrow X\\
+  K &: \forall X,Y.X \Rightarrow Y \Rightarrow X\\
+  I &: \forall X.X \Rightarrow X\\
+\end{array}\]
+
+The left- and right-hand sides of each of the structural congruence and rewrite rules have the sort $W,$ and the interpretation of any RHO calculus term has the sort $W.$
+
+We define an interpretation function $\interpp{-}$ from $W$-sorted RHO combinators not containing $C$ into the RHO calculus by
+\[\begin{array}{rl}
+  \interpp{0} &= 0\\
+  \interpp{P\;|\;Q} &= \interpp{P} \;|\; \interpp{Q}\\
+  \interpp{((\for\; (\&\; P))\; Q)} &= for (\&\interpp{R} \leftarrow \&\interpp{P})\interpp{(Q\; (\&\; R))} \mbox{ for any RHO combinator } R\\
+  \interpp{((!\; (\&\; P))\; Q)} &= \&\interpp{P}!\interpp{Q}\\
+  \interpp{(*(\&\; P))} &= *\&\interpp{P}\\
+  \interpp{(((S\; P)\; Q)\; R)} &= \interpp{((P\; R)\; (Q\; R))}\\
+  \interpp{((K\; P)\; Q)} &= \interpp{P}\\
+  \interpp{(I\; P)} &= \interpp{P}
+\end{array}\]
+
+Some simple calculation shows that
+\begin{theorem}
+\label{roundtrip}
+  $\interp{\interpp{P}} = P$ and $\interpp{\interp{Q}}$ is $\alpha$-equivalent to $Q$.
+\end{theorem}
+See the appendix for more details.
+
 \subsection{Barbed bisimilarity}
 An {\bf observation relation} $\downarrow_\Ncal$ over a set of names $\Ncal$ is the smallest relation satisfying
 \begin{center}
@@ -425,13 +461,15 @@ An {\bf $\Ncal$-barbed bisimulation} over a set of names $\Ncal$ is a symmetric 
 $P$ is $\Ncal$-barbed bisimilar to $Q,$ written $P \approx Q,$ if $P \mathop{S_\Ncal} Q$ for some $\Ncal$-barbed bisimulation $S_\Ncal.$
 
 \subsection{Faithfulness}
+
 \begin{theorem}
   $P \approx_{\mbox{\tiny calc}} Q \iff  ((|\; C)\; \interp{P}) \approx_{\mbox{\tiny comb}} ((|\; C)\; \interp{Q})$.
 \end{theorem}
 
 \begin{proof}
-  Foo.
+The only occurrence of $C$ on the right is at the topmost context and the rewrite rules preserve the location of $C$, so the only reduction context is the topmost one.  The rest follows from the two interpretation functions and theorem \ref{roundtrip}.  In particular, while the only reduction rule in the RHO calculus is synchronizing on a name, there are extra reduction rules for the RHO combinators; however, these extra reduction rules never send or receive on a name and never prevent sending or receiving on a name.  Therefore, each synchronization in the evaluation of a RHO calculus term corresponds to a synchronization in the corresponding RHO combinator term and some number of reductions of $S,K,I,$ or evaluating a quoted process.
 \end{proof}
+
 \section{Conclusion and future work}
 This paper is part of a pair of papers demonstrating that reflection
 provides a powerful technique for treating nominal phenomena as
