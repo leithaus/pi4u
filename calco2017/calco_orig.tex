@@ -1,13 +1,7 @@
-\documentclass[a4paper,UKenglish]{article}
+\documentclass[a4paper,UKenglish]{lipics-v2016}
 \usepackage{microtype}
 \usepackage{bussproofs}
 \usepackage{stmaryrd}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{hyperref}
-
-\newtheorem{theorem}{Theorem}
-\newtheorem{proof}{Proof}
 
 \newcommand{\new}{\mathsf{new}}
 \newcommand{\for}{\mathrm{for }}
@@ -28,17 +22,41 @@
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\pic}{$\pi$-calculus}
 
-\begin{document}
 \title{Representing operational semantics with enriched Lawvere theories}
-\author{
-Michael Stay\\
-  {Pyrofex Corp.}\\
-  {\fontsize{8}{8}\selectfont stay@pyrofex.net}\\
-  \and
-  L.G. Meredith\\
-  {RChain Cooperative}\\
-  {\fontsize{8}{8}\selectfont greg@rchain.coop}
+\author[1]{
+Michael Stay
 }
+\author[2]{
+L.\ G.\ Meredith
+}
+\affil[1]{
+  Pyrofex Corp., Kirkland, WA, USA\\
+  {\tt stay@pyrofex.net}
+}
+\affil[2]{
+{RChain Cooperative, Seattle, WA, USA}\\
+{\tt greg@rchain.coop}
+}
+\Copyright{Michael Stay, Lucius Gregory Meredith}
+\subjclass{F.1.2 Modes of computation, F.3.2 Semantics of Programming Languages, F.4 Mathematical Logic and Formal Languages, D.1.3 Concurrent Programming, D.3.1 Formal Definitions and Theory, D.3.3 Language Constructs and Features}
+\keywords{Concurrent combinator, nominal, pi calculus}
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\EventEditors{John Q. Open and Joan R. Acces}
+\EventNoEds{2}
+\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
+\EventShortTitle{CVIT 2016}
+\EventAcronym{CVIT}
+\EventYear{2016}
+\EventDate{December 24--27, 2016}
+\EventLocation{Little Whinging, United Kingdom}
+\EventLogo{}
+\SeriesVolume{42}
+\ArticleNo{23}
+% Editor-only macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
 \maketitle
 \begin{abstract}
   \noindent
@@ -62,7 +80,6 @@ Michael Stay\\
   over graphs suffice to capture the operational semantics of the
   calculus.
 \end{abstract}
-
 \EnableBpAbbreviations
 
 \section{Introduction}
@@ -497,6 +514,6 @@ simpler fashion.
   =&  (*\; (\&\; \interp{P}))\\
 \end{array}\]
 
-\bibliographystyle{amsplain}
+\bibliographystyle{plainurl}
 \bibliography{calco}
 \end{document}
