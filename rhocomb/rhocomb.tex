@@ -165,20 +165,72 @@ Michael Stay\inst{2}\\
 
 \section{Introduction}
 
-Many term calculi, like $\lambda$-calculus or {\pic}, involve
-binders for names, and the mathematics of bound variable names is
-subtle.  Sch\"onfinkel introduced the SKI combinator calculus in 1924
+Many term calculi, like $\lambda$-calculus or {\pic}, involve binders
+for names, and the mathematics of bound variable names is
+subtle. Sch\"onfinkel introduced the SKI combinator calculus in 1924
 to clarify the role of quantified variables in intuitionistic logic by
 eliminating them \cite{finkel}; Curry developed Sch\"onfinkel's ideas
-much further.  The recent work by Jamie Gabbay and Andrew Pitts
-\cite{DBLP:journals/fac/GabbayP02} and others
+much further. The difficulties are not merely theoretical, but
+represent a real practical challenge in the design of programming
+languages. In fact binding is one of the key features of
+the PoPLMark Challenge \cite{PoPLMark}. Certainly, the recent work by Jamie
+Gabbay and Andrew Pitts \cite{DBLP:journals/fac/GabbayP02} and others
 \cite{DBLP:journals/jcss/Clouston14} on nominal set theory has put the
-study of bound names and substitution on a much nicer foundation, but
-there is still value in eliminating bound variables because of the
-clear connection between combinators and logical axioms.  As
-concurrency becomes more important to the practice of computer
-science, it is worth attempting to eliminate bound variables or names
-to study the resulting logics.
+study of bound names and substitution on a much nicer foundation that
+can be shown to extend to practical implementations. However, it
+introduces an intriguing conundrum.
+
+Specifically, the work of Gabbay and Pitts relies on a version of set
+theory that admits an infinite supply of ``atoms''. This raises the
+question of where these atoms come from which has both theoretical and
+practical implications. On the practical side, infinite sets of
+``atomic'' entities, i.e. entities with no internal structure, are not
+realizable on modern computers. Modern computers fundamentally rely on
+sets of elements with effective internal structure to provide the kind
+of compression necessary to produce or compute with infinite sets. The
+natural numbers is a prime example. Because of their very regular
+internal structure the entire set can be represented by a single
+recursive equation. Potentially then, the natural numbers or some
+other effectively representable set could provide the source of atoms
+used in an FM-set theoretic account of binding in practical
+implementations. However, this raises a new question.
+
+In order to represent and compute these effectively representable sets
+a notion of computation must already be in place. If that notion of
+computation relies on a notion of binding, then not a lot progress has
+been made! As in \cite{DBLP:journals/entcs/MeredithR05} we argue that
+this circularity, instead of being an obstacle to overcome, might be a
+clue to an alternative approach to binding phenomena; and one that
+ties together two important computational phenomena that have not
+normally been considered as related. More explicitly, we extend the
+argument made by Meredith and Radestock that reflection suffices to
+provide the ``atoms'' used in the {\pic} as channels to produce the
+first name-free set of combinators that enjoys a full and faithful
+interpretation of the calculus.
+
+While the focus of the paper is largely on the technical results it is
+useful to consider the larger context motivating them. Reflection and
+meta-programming features more generally are part of a growing number
+of mainstream languages. Java, C\#, even the Haskell and OCaml
+communities have seen growing interest in these features with efforts
+like template Haskell and MetaOCaml, respectively. In large measure
+this has to do the fact that programming at industrial scale requires
+the leverage of computer programs to write computer programs. Thus,
+meta-programming features are simply a practical necessity. On the
+other hand, reflection and meta-programming have not received a
+theoretical account that fits well with strong typing. This is one of
+the reasons why language designs based on typed $\lambda$-calculi have
+been so slow to adopt reflection as a feature.
+
+In this setting, the idea that a single feature already enjoying
+widespread adoption could account for such a subtle phenomenon as the
+kind of binding found in the {\pic} is both intriguing and worth
+exploring, even if FM set theory provides a satisfying account of
+computation with nominal phenomena in other respects. However, it is
+precisely the foundational theoretical questions raised by the FM set
+theory approach that motivates the investigation in the first place:
+what better place to look for the source of ``atoms'' than in the
+reification of theory of computation requiring them?
 
 The {\pic} (\cite{milner91polyadicpi}) has two binders for names: the
 $\new$ operator, which introduces a new name into scope, and the input
