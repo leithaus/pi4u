@@ -94,8 +94,7 @@ Third, we say what rearrangements of the state we're going to ignore; this is ca
 Fourth, we give ``reduction rules'' describing how the state is allowed to change.  In \lac, the state only changes via $\beta$-reduction, substituting the argument of a function for the
 bound variable.  In a Turing machine, each state leads to one of five others (change the bit to 0 or 1, then move left or right; or halt). In \pic, there may be more than one transition possible out of a particular state: if a process is listening on a channel and there are two messages, then either message may be processed first. Computational complexity theory is all about how many steps it takes to compute a result, so we do not have equations between sequences of rewrites.
 
-Finally, the reduction rules themselves may only apply in certain ``contexts''; for example, in all modern programming languages based
-on the \lac, no reductions happen under an abstraction. That is, even if a term $t$ reduces to $t'$, it is never the case that $\lambda x.t$ reduces to $\lambda x.t'$.  The resulting normal form is
+Finally, the reduction rules themselves may only apply in certain ``contexts''; for example, in all modern programming languages based on the \lac, no reductions happen under an abstraction. That is, even if a term $t$ reduces to $t'$, it is never the case that $\lambda x.t$ reduces to $\lambda x.t'$.  The resulting normal form is
 called ``weak head normal form'' (WHNF).
 
 Here's an example from Boudol's paper ``The $\pi$-calculus in direct style'' \cite{Boudol}.
@@ -126,8 +125,12 @@ We should say something about binders.  Reasoning about languages with binders i
 Recently, Pitts and Gabbay \cite{PittsGabbay} developed the theory of nominal sets, and Clauston \cite{Clauston}
 % http://cs.au.dk/~ranald/Clouston_WoLLIC.pdf
 defined nominal Lawvere theories.  We anticipate that enriching nominal Lawvere theories in Gph will allow us to model the operational semantics of languages with binders, but in this paper, we restrict ourselves to languages without.  This is not a severe restriction: we can eliminate abstractions from applicative calculi like \lac by using Curry's S and K combinators; in a similar way we can eliminate input prefixes from concurrent calculi like \pic using Yoshida's combinators \cite{Yoshida} and uses of the ``new name'' binder using the reflective techniques of Meredith and Radestock \cite{MeredithRadestock}.
+%  http://www.sciencedirect.com/science/article/pii/S1571066105051893
+
 
 \subsection{Gph-theories}
+
+Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf (multisorted) Lawvere theory} is a category with finite products Th equipped with a finite set $S$ of {\bf sorts} and a functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.
 
 A {\bf directed multigraph with self loops}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, two functions $s,t\maps E \to V$ picking out the source and target of each edge, and a function $a\maps V \to E$ such that $s\circ a$ and $t \circ a$ are both the identity on $V$---that is, $a$ equips each vertex in $V$ with a chosen self loop.  A {\bf graph homomorphism} from $(E, V, s, t, a)$ to $(E', V', s', t', a')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon,$ $\upsilon\circ t = t' \circ \epsilon,$ and $\epsilon \circ a = a' \circ \upsilon.$  {\bf Gph} is the category of graphs and graph homomorphisms.  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t, a) \times (E', V', s', t', a')$ is $(E \times E', V \times V', s \times s', t\times t', a \times a').$
 
@@ -150,73 +153,45 @@ A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that p
 
 Gph-enriched categories are part of a spectrum of 2-category-like structures.  A strict 2-category is a category enriched over Cat with its usual product.  Sesquicategories are categories enriched over Cat with the ``funny'' tensor product \cite{Lack2010}; a sesquicategory can be thought of as a generalized 2-category where the interchange law does not hold.  A Gph-enriched category can be thought of as a generalized sesquicategory where 2-morphisms (now edges) cannot be composed.  Any strict 2-category has an underlying sesquicategory, and any sesquicategory has an underlying Gph-enriched category; these forgetful functors have left adjoints.
 
+\subsubsection{Example: SK calculus}
 
+Here's a presentation of the Gph-theory for the SK calculus with reduction to weak head normal form.  We have modeled reduction contexts with a morphism $R;$ given a term $t$ with no occurrences of $R,$ the term $Rt$ reduces to $Rt',$ where $t'$ is the weak head normal form of $t.$ 
 
-%% Some examples
-
-%%% The SK calculus
-
-Here's a presentation of the Gph-theory for the SK calculus:
-
-- objects
-  - $T$
-- morphisms
-  - $S\colon 1 \to T$
-  - $K\colon 1 \to T$
-  - $(-\; -)\colon T \times T \to T$
-- equations
-  - none
-- edges
-  - $\sigma\colon (((S\; x)\; y)\; z) \Rightarrow ((x\; z)\; (y\; z))$
-  - $\kappa\colon ((K\; x)\; z) \Rightarrow x$
-
-The free model of this theory on the empty graph has a vertex for every term in the SK calculus and an edge for every reduction.
-
-%%% The SK calculus with the WHNF reduction strategy
-
-Here's the theory above modified to account for WHNF.
-
-- objects
-  - $T$
-- morphisms
-  - $S\colon 1 \to T$
-  - $K\colon 1 \to T$
-  - $(-\; -)\colon T \times T \to T$
-  - $R\colon T \to T$
-- equations
-  - $R(x\; y) = (Rx\; y)$
-- edges
-  - $\sigma\colon (((RS\; x)\; y)\; z) \Rightarrow ((Rx\; z)\; (y\; z))$
-  - $\kappa\colon ((RK\; x)\; z) \Rightarrow Rx$
-
-If $M$ is an $SK$ term with no uses of $R$ and $M'$ is its weak head normal form, then $RM$ reduces to $RM'.$
-
-Once we have $R$, we can think about other things to do with it.  The rewrites treat the morphism $R$ as a linear resource.  If we treat $R$ as "fuel" rather than "catalyst"---that is, if we modify $\sigma$ and $\kappa$ so that $R$ only appears on the left-hand side---then the
-reduction of $R^nM$ counts how many steps the computation takes; this is similar to Ethereum's notion of "[gasoline](https://www.cryptocompare.com/coins/guides/what-is-the-gas-in-ethereum/)."
-
-\section{Appendix}
-Here we review some standard definitions and results in enriched category theory; see \cite{CIS-335497}, \cite{Power99EnrichedLawvereTheories}, \cite{DBLP:journals/acs/LackR11}, and \cite{Trimble} for more details.
-
-A {\bf directed multigraph with self loops}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, two functions $s,t\maps E \to V$ picking out the source and target of each edge, and a function $a\maps V \to E$ such that $s\circ a$ and $t \circ a$ are both the identity on $V$---that is, $a$ equips each vertex in $V$ with a chosen self loop.  There are no constraints on $E, V, s,$ or $t$, so a graph may have infinitely many vertices and infinitely many edges between any pair of vertices.  A {\bf graph homomorphism} from $(E, V, s, t, a)$ to $(E', V', s', t', a')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon$ and $\upsilon\circ t = t' \circ \epsilon$.  {\bf Gph} is the category of graphs and graph homomorphisms.  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t, a) \times (E', V', s', t', a')$ is $(E \times E', V \times V', s \times s', t\times t', a \times a').$
-
-A {\bf Gph-enriched category} consists of
 \begin{itemize}
-  \item a set of objects;
-  \item for each pair of objects $x, y,$ a graph $\hom(x,y);$
-  \item for each triple of objects $x, y, z,$ a composition graph homomorphism $\circ\maps \hom(y, z) \times \hom(x, y) \to \hom(x, z);$ and
-  \item for each object $x,$ a vertex of $\hom(x, x),$ the identity on $x,$
+  \item objects
+    \begin{itemize}
+      \item $T,$ for terms
+    \end{itemize}
+  \item morphisms
+    \begin{itemize}
+      \item $S\colon 1 \to T$
+      \item $K\colon 1 \to T$
+      \item $(-\; -)\colon T \times T \to T$
+      \item $R\colon T \to T,$ for reduction contexts
+    \end{itemize}
+  \item equations
+    \item $R(x\; y) = (Rx\; y),$ {\em i.e.} to reduce a term, you reduce the applicand but not the term it's applied to
+  \item edges
+    \item $\sigma\colon (((RS\; x)\; y)\; z) \Rightarrow ((Rx\; z)\; (y\; z))$
+    \item $\kappa\colon ((RK\; x)\; z) \Rightarrow Rx$
 \end{itemize}
-such that composition is associative, and composition and the identity obey the unit laws.  A Gph-enriched category has finite products if the underlying category does.
 
-Any category is trivially Gph-enrichable by treating the elements of the hom sets as vertices and adjoining a self loop to each vertex.  The category Gph is nontrivially Gph-enriched: Gph is a topos, and therefore cartesian closed, and therefore enriched over itself.  Given two graph homomorphisms $F, F'\maps (E, V, s, t, a) \to (E', V', s', t', a'),$ a {\bf graph transformation} assigns to each vertex $v$ in $V$ an edge $e'$ in $E'$ such that $s'(e') = F(v)$ and $t'(e') = F'(v).$  Given any two graphs $G$ and $G',$ there is an exponential graph $G'^G$ whose vertices are graph homomorphisms between them and whose edges are graph transformations.
+The free model of this theory on the empty graph has a vertex for every term in the calculus and an edge for every reduction.
 
-A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the graph structure on each hom set is preserved, {\em i.e.} the functions between hom sets are graph homomorphisms between the hom graphs.
+\subsection{Lawvere theory of edges}
+Given a Gph-theory Th, define the Lawvere theory 
 
-Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a finite set $S$ of {\bf sorts} and a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  Any Gph-theory has an underlying multisorted Lawvere theory given by forgetting the edges of each hom graph.
-
-A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a braided Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and braided Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint that picks out the free model on a graph.
-
-Gph-enriched categories are part of a spectrum of 2-category-like structures.  A strict 2-category is a category enriched over Cat with its usual product.  Sesquicategories are categories enriched over Cat with the ``funny'' tensor product \cite{Lack2010}; a sesquicategory can be thought of as a 2-category where the interchange law does not hold.  A Gph-enriched category can be thought of as a sesquicategory where 2-morphisms (now edges) cannot be composed.  Any strict 2-category has an underlying sesquicategory, and any sesquicategory has an underlying Gph-enriched category; these forgetful functors have left adjoints.
+% www.mathstat.dal.ca/~selinger/papers/papers/combinatory.pdf
+\begin{itemize}
+  \item equations (Curry)
+    \begin{itemize}
+      \item K = S(S(KS)(S(KK)K))(K(SKK))
+      \item S = S(S(KS)(S(K(S(KS)))(S(K(S(KK)))S)))(K(K(SKK)))
+      \item S(KK) = S(S(KS)(S(KK)(S(KS)K)))(KK)
+      \item S(KS)(S(KK)) = S(KK)(S(S(KS)(S(KK)(SKK)))(K(SKK)))
+      \item S(K(S(KS)))(S(KS)(S(KS))) = S(S(KS)(S(KK)(S(KS)(S(K(S(KS)))S))))(KS)
+    \end{itemize}
+\end{itemize}
 
 \bibliographystyle{amsplain}
 \bibliography{ladl}
