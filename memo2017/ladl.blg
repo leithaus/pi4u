@@ -3,7 +3,7 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: ladl.aux
 The style file: amsplain.bst
 I couldn't open database file ladl.bib
----line 35 of file ladl.aux
+---line 47 of file ladl.aux
  : \bibdata{ladl
  :              }
 I'm skipping whatever remains of this command
@@ -14,15 +14,24 @@ Warning--I didn't find a database entry for "Closure"
 Warning--I didn't find a database entry for "MyPy"
 Warning--I didn't find a database entry for "Milner"
 Warning--I didn't find a database entry for "Caires"
-Warning--I didn't find a database entry for "LambekScott"
+Warning--I didn't find a database entry for "kframework"
+Warning--I didn't find a database entry for "Maude"
+Warning--I didn't find a database entry for "Lambek"
+Warning--I didn't find a database entry for "Boudol"
+Warning--I didn't find a database entry for "Lawvere"
+Warning--I didn't find a database entry for "PoplMark"
+Warning--I didn't find a database entry for "PittsGabbay"
+Warning--I didn't find a database entry for "Clauston"
+Warning--I didn't find a database entry for "Yoshida"
+Warning--I didn't find a database entry for "MeredithRadestock"
+Warning--I didn't find a database entry for "Lack2010"
 Warning--I didn't find a database entry for "CIS-335497"
 Warning--I didn't find a database entry for "Power99EnrichedLawvereTheories"
 Warning--I didn't find a database entry for "DBLP:journals/acs/LackR11"
 Warning--I didn't find a database entry for "Trimble"
-Warning--I didn't find a database entry for "Lack2010"
 You've used 0 entries,
             2213 wiz_defined-function locations,
-            522 strings with 4155 characters,
+            539 strings with 4293 characters,
 and the built_in function-call counts, 32 in all, are:
 = -- 0
 > -- 0

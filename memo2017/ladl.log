@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_4) (preloaded format=pdflatex 2016.8.3)  22 JUN 2017 19:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016/MacPorts 2016_4) (preloaded format=pdflatex 2016.8.3)  23 JUN 2017 14:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -265,27 +265,29 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 )
 \Hy@SectionHShift=\skip47
 )
+(/opt/local/share/texmf-texlive/tex/latex/tools/xspace.sty
+Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
+)
 \c@theorem=\count113
 \c@proof=\count114
-
-(./ladl.aux)
+ (./ladl.aux)
 \openout1 = `ladl.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 31.
-LaTeX Font Info:    ... okay on input line 31.
-LaTeX Info: Redefining \microtypecontext on input line 31.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 33.
+LaTeX Font Info:    ... okay on input line 33.
+LaTeX Info: Redefining \microtypecontext on input line 33.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -295,12 +297,13 @@ Package microtype Info: Using default expansion set `basictext'.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
- (/opt/local/share/texmf-texlive/tex/latex/microtype/mt-cmr.cfg
+
+(/opt/local/share/texmf-texlive/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
 \AtBeginShipoutBox=\box34
-Package hyperref Info: Link coloring OFF on input line 31.
+Package hyperref Info: Link coloring OFF on input line 33.
 
 (/opt/local/share/texmf-texlive/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -310,18 +313,18 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count115
 )
-LaTeX Info: Redefining \ref on input line 31.
-LaTeX Info: Redefining \pageref on input line 31.
-LaTeX Info: Redefining \nameref on input line 31.
+LaTeX Info: Redefining \ref on input line 33.
+LaTeX Info: Redefining \pageref on input line 33.
+LaTeX Info: Redefining \nameref on input line 33.
 
 (./ladl.out) (./ladl.out)
 \@outlinefile=\write3
 \openout3 = `ladl.out'.
 
-LaTeX Font Info:    Try loading font information for U+stmry on input line 43.
+LaTeX Font Info:    Try loading font information for U+stmry on input line 45.
 
 (/opt/local/share/texmf-texlive/tex/latex/stmaryrd/Ustmry.fd)
-LaTeX Font Info:    Try loading font information for U+msa on input line 43.
+LaTeX Font Info:    Try loading font information for U+msa on input line 45.
 
 (/opt/local/share/texmf-texlive/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
@@ -329,7 +332,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (/opt/local/share/texmf-texlive/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 43.
+LaTeX Font Info:    Try loading font information for U+msb on input line 45.
 
 (/opt/local/share/texmf-texlive/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -338,121 +341,151 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 
-LaTeX Warning: Citation `TypeScript' on page 1 undefined on input line 51.
+LaTeX Warning: Citation `TypeScript' on page 1 undefined on input line 53.
 
 
-LaTeX Warning: Citation `Flow' on page 1 undefined on input line 53.
+LaTeX Warning: Citation `Flow' on page 1 undefined on input line 55.
 
 
-LaTeX Warning: Citation `Closure' on page 1 undefined on input line 55.
+LaTeX Warning: Citation `Closure' on page 1 undefined on input line 57.
 
 
-LaTeX Warning: Citation `MyPy' on page 1 undefined on input line 57.
+LaTeX Warning: Citation `MyPy' on page 1 undefined on input line 59.
 
 
-LaTeX Warning: Citation `Milner' on page 1 undefined on input line 61.
+LaTeX Warning: Citation `Milner' on page 1 undefined on input line 63.
 
 
-LaTeX Warning: Citation `Caires' on page 1 undefined on input line 63.
+LaTeX Warning: Citation `Caires' on page 1 undefined on input line 65.
 
 [1
 
 {/opt/local/var/db/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 
-LaTeX Warning: Citation `LambekScott' on page 2 undefined on input line 94.
+LaTeX Warning: Citation `kframework' on page 2 undefined on input line 78.
+
+
+LaTeX Warning: Citation `Maude' on page 2 undefined on input line 78.
+
+
+LaTeX Warning: Citation `Lambek' on page 2 undefined on input line 80.
 
 [2] [3]
-Overfull \hbox (25.36906pt too wide) in paragraph at lines 115--118
-[]\OT1/cmr/m/n/10 (-20) Here's an ex-am-ple from Boudol's pa-per "[The $\OML/cm
-m/m/it/10 ^^Y$\OT1/cmr/m/n/10 (-20) -calculus in di-rect style](http://www-
- []
 
-Missing character: There is no Ã in font cmr10!
-Missing character: There is no ¨ in font cmr10!
+LaTeX Warning: Citation `Boudol' on page 4 undefined on input line 101.
 
-Overfull \hbox (8.81181pt too wide) in paragraph at lines 138--140
-\OT1/cmr/m/n/10 (-20) tem](http://www.irif.fr/ mellies/papers/functors-are-type
--refinement-systems.pdf),
- []
 
-[4] [5]
-Overfull \hbox (90.42245pt too wide) in paragraph at lines 221--223
-\OT1/cmr/m/n/10 (-20) this is sim-i-lar to Ethereum's no-tion of "[gasoline](ht
-tps://www.cryptocompare.com/coins/guides/what-
+LaTeX Font Warning: Command \small invalid in math mode on input line 107.
+
+
+Overfull \hbox (13.23792pt too wide) detected at line 118
+[]
  []
 
 
-LaTeX Warning: Citation `CIS-335497' on page 6 undefined on input line 225.
+LaTeX Warning: Citation `Lawvere' on page 4 undefined on input line 122.
 
 
-LaTeX Warning: Citation `Power99EnrichedLawvereTheories' on page 6 undefined on
- input line 225.
+LaTeX Warning: Citation `PoplMark' on page 4 undefined on input line 124.
 
 
-LaTeX Warning: Citation `DBLP:journals/acs/LackR11' on page 6 undefined on inpu
-t line 225.
+LaTeX Warning: Citation `PittsGabbay' on page 4 undefined on input line 126.
 
 
-LaTeX Warning: Citation `Trimble' on page 6 undefined on input line 225.
+LaTeX Warning: Citation `Clauston' on page 4 undefined on input line 126.
 
-[6]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 231.
+
+LaTeX Warning: Citation `Yoshida' on page 4 undefined on input line 128.
+
+
+LaTeX Warning: Citation `MeredithRadestock' on page 4 undefined on input line 1
+28.
+
+[4]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 136.
 
  (/opt/local/share/texmf-texlive/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 231.
- [7]
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 136.
 
-LaTeX Warning: Citation `Lack2010' on page 8 undefined on input line 246.
+
+LaTeX Warning: Citation `Lack2010' on page 5 undefined on input line 151.
+
+[5]
+Overfull \hbox (90.42245pt too wide) in paragraph at lines 194--196
+\OT1/cmr/m/n/10 (-20) this is sim-i-lar to Ethereum's no-tion of "[gasoline](ht
+tps://www.cryptocompare.com/coins/guides/what-
+ []
+
+
+LaTeX Warning: Citation `CIS-335497' on page 6 undefined on input line 198.
+
+
+LaTeX Warning: Citation `Power99EnrichedLawvereTheories' on page 6 undefined on
+ input line 198.
+
+
+LaTeX Warning: Citation `DBLP:journals/acs/LackR11' on page 6 undefined on inpu
+t line 198.
+
+
+LaTeX Warning: Citation `Trimble' on page 6 undefined on input line 198.
+
+[6]
+
+LaTeX Warning: Citation `Lack2010' on page 7 undefined on input line 219.
 
 (./ladl.bbl
 
 LaTeX Warning: Empty `thebibliography' environment on input line 10.
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 250.
- [8]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 250.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 223.
+ [7]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 223.
  (./ladl.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 250.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 250.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 223.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 223.
 Package rerunfilecheck Info: File `ladl.out' has not changed.
-(rerunfilecheck)             Checksum: DB41D171234A76F86EEDDF07640BA41D;129.
+(rerunfilecheck)             Checksum: B1EBE1B86443AB35923CBFF462CFD811;263.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 250.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 223.
  ) 
 Here is how much of TeX's memory you used:
- 7127 strings out of 494180
- 105720 string characters out of 6156813
- 221364 words of memory out of 5000000
- 10268 multiletter control sequences out of 15000+600000
- 17430 words of font info for 108 fonts, out of 8000000 for 9000
+ 7172 strings out of 494180
+ 106467 string characters out of 6156813
+ 222721 words of memory out of 5000000
+ 10303 multiletter control sequences out of 15000+600000
+ 17890 words of font info for 112 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
- 30i,7n,35p,1398b,334s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 30i,7n,35p,1436b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
 </opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx10.pfb></o
 pt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx12.pfb></opt/lo
 cal/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmbx9.pfb></opt/local/sh
 are/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi10.pfb></opt/local/share/t
-exmf-texlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></opt/local/share/texmf-t
-exlive/fonts/type1/public/amsfonts/cm/cmmi9.pfb></opt/local/share/texmf-texlive
-/fonts/type1/public/amsfonts/cm/cmr10.pfb></opt/local/share/texmf-texlive/fonts
-/type1/public/amsfonts/cm/cmr12.pfb></opt/local/share/texmf-texlive/fonts/type1
-/public/amsfonts/cm/cmr17.pfb></opt/local/share/texmf-texlive/fonts/type1/publi
-c/amsfonts/cm/cmr7.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfo
-nts/cm/cmr8.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/
-cmr9.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.
-pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></
-opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy9.pfb></opt/lo
-cal/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on ladl.pdf (8 pages, 210409 bytes).
+exmf-texlive/fonts/type1/public/amsfonts/cm/cmmi6.pfb></opt/local/share/texmf-t
+exlive/fonts/type1/public/amsfonts/cm/cmmi7.pfb></opt/local/share/texmf-texlive
+/fonts/type1/public/amsfonts/cm/cmmi9.pfb></opt/local/share/texmf-texlive/fonts
+/type1/public/amsfonts/cm/cmr10.pfb></opt/local/share/texmf-texlive/fonts/type1
+/public/amsfonts/cm/cmr12.pfb></opt/local/share/texmf-texlive/fonts/type1/publi
+c/amsfonts/cm/cmr17.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsf
+onts/cm/cmr6.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm
+/cmr7.pfb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.p
+fb></opt/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr9.pfb></op
+t/local/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></opt/loc
+al/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy6.pfb></opt/local/sha
+re/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy7.pfb></opt/local/share/tex
+mf-texlive/fonts/type1/public/amsfonts/cm/cmsy9.pfb></opt/local/share/texmf-tex
+live/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on ladl.pdf (7 pages, 231052 bytes).
 PDF statistics:
- 124 PDF objects out of 1000 (max. 8388607)
- 97 compressed objects within 1 object stream
- 13 named destinations out of 1000 (max. 500000)
- 14361 words of extra memory for PDF output out of 14400 (max. 10000000)
+ 141 PDF objects out of 1000 (max. 8388607)
+ 111 compressed objects within 2 object streams
+ 14 named destinations out of 1000 (max. 500000)
+ 14889 words of extra memory for PDF output out of 17280 (max. 10000000)
 
