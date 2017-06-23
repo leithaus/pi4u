@@ -722,4 +722,196 @@ typable and will correspond to axioms in a logic of concurrency.
 
 \bibliographystyle{amsplain}
 \bibliography{rhocomb}
+
+\section{Appendix: The $\pi$-calculus again}
+\subsection{\pic}
+
+In this presentation of the {pic} we update the syntax for
+input-guarded processes to reflect the widespread adoption of
+comprehension notation in languages ranging from Scala to Python for
+use in reactive programming. Here we go with the Scala notation
+writing $\mathsf{for}( y \leftarrow x )P$ where Milner might have
+written $x?(y)P$. Admittedly, it's somewhat more verbose, but conveys
+to a younger generation of programmers more familiar with reactive
+programming the intended semantics of the expression.
+
+\begin{mathpar}
+\inferrule* [lab=process] {} {P, Q \bc \pzero \;\bm\; \mathsf{for}( y
+  \leftarrow x )P \;\bm\; x!(y) \;\bm\; (\mathsf{new}\;x)P \;\bm\; P|Q \;\bm\;	\mathsf{*}P}
+\end{mathpar}
+
+\subsection{Structural congruence}
+
+\begin{definition}
+The {\em structural congruence}, $\equiv$, between processes is 
+the least congruence closed with respect to
+alpha-renaming, satisfying the abelian monoid laws for 
+parallel (associativity, commutativity and $\pzero$ 
+as identity), and the following axioms:
+\begin{enumerate}
+\item the scope laws:
+\begin{eqnarray*}
+ (\mathsf{new}\;x)\pzero & \equiv & \pzero, \\
+ (\mathsf{new}\;x)(\mathsf{new}\;x)P & \equiv & (\mathsf{new}\;x)P, \\
+ (\mathsf{new}\;x)(\mathsf{new}\;y)P & \equiv & (\mathsf{new}\;y)(\mathsf{new}\;x)P, \\
+ P|(\mathsf{new}\;x)Q & \equiv & (\mathsf{new}\;x)P|Q, \; \mbox{\textit{if} }x \not\in \freenames{P} 
+\end{eqnarray*}
+\item
+the recursion law:
+\begin{eqnarray*}
+ \mathsf{*}P \equiv P|\mathsf{*}P
+\end{eqnarray*}
+\item
+the name equivalence law:
+\begin{eqnarray*}
+ P \equiv P \substn{x}{y}, \; \mbox{\textit{if} }x \nameeq y
+\end{eqnarray*}
+\end{enumerate}
+\end{definition}
+
+\subsection{Operational semantics} The operational semantics is standard.
+
+\begin{mathpar}
+  \inferrule* [lab=COMM] {} {\mathsf{for}( y \leftarrow x )P | x!(v)
+  \red P\substn{\mathsf{v}}{y}}
+\end{mathpar}
+
+In addition, we have the following context rules:
+
+\begin{mathpar}
+  \inferrule* [lab=PAR]{P \red P'}{P|Q \red P'|Q}
+  \and
+  \inferrule* [lab=NEW]{P \red P'}{(\mathsf{new}\;x)P \red (\mathsf{new}\;x)P'}
+  \and
+  \inferrule* [lab=EQUIV]{{P \scong P'} \andalso {P' \red Q'} \andalso {Q' \scong Q}}{P \red Q}
+\end{mathpar}
+
+
+Again, we write $\wred$ for $\red^*$, and rely on context to
+distinguish when $\red$ means reduction in the {\pic} and when it
+means reduction in the {\rhoc}. The set of {\pic} processes will be
+denoted by $\Proc_{\pi}$.
+
+\subsection{The translation}
+
+The translation will be given by a function, $\meaningof{-}( -, - ) :
+\Proc_{\pi} \times \QProc \times \QProc \red \Proc$. The guiding
+intuition is that we construct alongside the process a distributed memory
+allocator, the process' access to which is mediated through the second argument
+to the function. The first argument determines the shape of the memory
+for the given allocator.
+
+Given a process, $P$, we pick $n$ and $p$ such that $n \neq p$ and
+distinct from the free names of $P$. For example, $n = \quotep{\Pi_{m
+\in \freenames{P}}\outputp{m}{\quotep{\pzero}}}$ and $p =
+\quotep{\Pi_{m \in
+\freenames{P}}\prefix{m}{\quotep{\pzero}}{\pzero}}$. Then
+
+\begin{equation*}
+	\meaningof{P} = \meaningof{P}_{2nd}( n, p )
+\end{equation*}
+
+where
+
+\begin{eqnarray*}
+   	\meaningof{\pzero}_{2nd} (  n, p )
+   		& = &
+   		 \pzero \\
+   	\meaningof{x \id{[} y \id{]}}_{2nd} (  n, p ) 
+  		& = & 
+  		x \id{[} y \id{]} \\
+   	\meaningof{x \id{(} y \id{)} \concat P}_{2nd} (  n, p ) 
+   		& = & 
+ 		x \id{(} y \id{)} \concat \meaningof{P}_{2nd} (  n, p ) \\
+   	\meaningof{P \juxtap Q}_{2nd} (  n, p ) 
+   		& = & 
+ 		\meaningof{P}_{2nd} ( n^{l}, p^{l} )
+   			 \juxtap \meaningof{Q}_{2nd} ( n^{r}, p^{r} ) \\
+%    	\meaningof{\id{!} P}_{2nd} (  n, p )
+%    		& = & \binpar{\lift{x}{\binpar{upn( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}
+% 						      {\meaningof{P}_{3rd}( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}}}
+% 		             {\binpar{D(x)}{\binpar{\outputp{n^{lr}}{n}}{\outputp{p^{lr}}{p}}}} \\
+   	\meaningof{\mathsf{*} P}_{2nd} (  n, p )
+   		& = & \binpar{\lift{x}{\meaningof{P}_{3rd}( n^{r}, p^{r} )}}
+		             {\binpar{D(x)}{\binpar{\outputp{n^{r}}{n^{l}}}{\outputp{p^{r}}{p^{l}}}}} \\
+   	\meaningof{\id{(}\nu \; x \id{)} P}_{2nd} (  n, p ) 
+   		& = & 
+ 		\prefix{p}{x}{\binpar{\meaningof{P}_{2nd} ( n^{l}, p^{l} )}{\outputp{p}{n}}} \\
+\end{eqnarray*}
+
+and
+
+\begin{eqnarray*}
+	x^{l} & \triangleq & \quotep{\outputp{x}{x}} \\
+	x^{r} & \triangleq & \quotep{\prefix{x}{x}{\pzero}} \\
+	\meaningof{P}_{3rd}( n'', p'' ) 
+		& \triangleq & 
+			\prefix{n''}{n}{\prefix{p''}{p}{(\binpar{\meaningof{P}_{2nd}(  n, p )}
+							        {(\binpar{D(x)}{\binpar{\outputp{n''}{n^{l}}}{\outputp{p''}{p^{l}}}})})}} \\
+\end{eqnarray*}
+
+\begin{remark}
+	Note that all $\nu$-binding is now interpreted, as in Wischik's
+	global $\pi$-calculus, as an input guard \cite{globalpi}.
+\end{remark}
+	
+\begin{remark}
+	It is also noteworthy that the translation is dependent on how
+	the parallel compositions in a process are
+	associated. Different associations will result in different
+	bindings for $\nu$-ed names. This will not result in different
+	behavior, however, as the bindings will be consistent
+	throughout the translation of the process.
+\end{remark}
+
+\begin{theorem}[Correctness]	
+	$P \wbbisim_{\pi} Q \iff \ldb P \rdb \wbbisim_{r(\texttt{FN}(P))} \ldb Q \rdb$.
+\end{theorem}
+
+\emph{Proof sketch}: An easy structural induction.
+
+One key point in the proof is that there are contexts in the {\rhoc}
+that will distinguish the translations. But, these are contexts that
+can see the fresh names, $n$, and the communication channel, $p$, for
+the `memory allocator'. These contexts do not correspond to any
+observation that can be made in the {\pic} and so we exclude them in
+the {\rhoc} side of our translation by our choice of ${\mathsf N}$
+for the bisimulation. This is one of the technical motivations behind
+our introduction of a less standard bisimulation.
+
+\begin{example}
+	In a similar vein consider, for an appropriately chosen $p$ and $n$ we have
+	\begin{equation*}
+		\meaningof{(\mathsf{new}\;v)(\mathsf{new}\;v) u!(v)} = \mathsf{for}(v \leftarrow p)(\mathsf{for}({v} \leftarrow {\quotep{p!(p)}})(u!(v)|\quotep{p!(p)})!(\quotep{n!(n)})) | p!(n)
+	\end{equation*}
+	and
+	\begin{equation*}
+		\meaningof{(\mathsf{new}\;v)u!(v)} = \mathsf{for}(v \leftarrow p)(u!(v) )|p!(n)
+	\end{equation*}
+
+	Both programs will ultimately result in an output of a single
+	fresh name on the channel $u$. But, the former program will
+	consume more resources. Two names will be allocated; two memory
+	requests will be fulfilled. The {\rhoc} can see this, while the
+	{\pic} cannot. In particular, the {\pic} requires that
+	$(\mathsf{new}\;x)(\mathsf{new}\;x)P \equiv (\mathsf{newp} x)P$.
+
+	Implementations of the {\pic}, however, having the property that
+	$(\mathsf{new}\;x)P$ involves the allocation of memory for the
+	structure representing the channel $x$ come to grips with the
+	implications this requirement has regarding memory management. If
+	memory is allocated upon encountering the $\nu$-scope, there are
+	situations where the left-hand side of the equation above will
+	fail while the right-hand will succeed. Remaining faithful to the
+	equation above requires that such implementations are
+	\textit{lazy} in their interpretation of $(\mathsf{new}\;x)P$, only
+	allocating the memory for the fresh channel at the first moment
+	when that channel is used.
+
+	Having a detailed account of the structure of names elucidates
+	this issue at the theoretical level and may make way to offer
+	guidance to implementations.
+\end{example}
+
 \end{document}
+
