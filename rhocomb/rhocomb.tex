@@ -82,7 +82,7 @@
 %\newcommand{\lift}[2]{\texttt{lift} \; #1 \concat #2}
 \newcommand{\binpar}[2]{#1 | #2}
 \newcommand{\outputp}[2]{#1!(#2)}
-\newcommand{\prefix}[3]{#1?(#2) . #3}
+\newcommand{\prefix}[3]{\mathsf{for}(#2 \leftarrow #1?) #3}
 \newcommand{\lift}[2]{#1 \lliftb #2 \rliftb}
 \newcommand{\clift}[1]{\lliftb #1 \rliftb}
 \newcommand{\quotep}[1]{\mathsf{@}#1}
@@ -108,8 +108,8 @@
 \newcommand{\pmeaningof}[1]{\ldb #1 \rdb}
 \newcommand{\nmeaningof}[1]{\lrbb #1 \rrbb}
 
-\newcommand{\Proc}{\mathbin{Proc}}
-\newcommand{\QProc}{\quotep{\mathbin{Proc}}}
+\newcommand{\Proc}{\mathsf{Proc}}
+\newcommand{\QProc}{\quotep{\mathsf{Proc}}}
 
 \newcommand{\bc}{\mathbin{\mathbf{::=}}}
 \newcommand{\bm}{\mathbin{\mathbf\mid}}
@@ -723,22 +723,107 @@ typable and will correspond to axioms in a logic of concurrency.
 \bibliographystyle{amsplain}
 \bibliography{rhocomb}
 
-\section{Appendix: The $\pi$-calculus again}
+\section{Appendix: Translating the {\pic} into the {\rhoc}}
+\subsection{\rhoc}
+
+It is striking to compare the {\rhoc} with the {\pic} as the former is
+a vastly simpler theory and yet has enjoys more
+features. Specifically, the specification of the {\rhoc}'s structural
+equivalence and reduction rules are notably simpler, with one small
+technical caveat: name equivalence depends on structural equivalence
+which depends upon $\alpha$-equivalence which depends on name
+equivalence. Meredith and Radestock show that this cycle terminates
+innocently due to the design of the grammar. This technical complexity
+seems a small price to pay for a much simpler calculus that enjoys
+both higher order communication as well reflection and meta-programming
+features.
+
+\begin{mathpar}
+\inferrule* [lab=process] {} {P, Q \bc \pzero \;\bm\; \mathsf{for}( y
+  \leftarrow x )P \;\bm\; x!(Q) \;\bm\;	\mathsf{*}x \;\bm\; P|Q }
+\and
+\inferrule* [lab=name] {} {x, y \bc \mathsf{@}P }
+\end{mathpar}
+
+\begin{definition}
+\emph{Free and bound names} The calculation of the free names of a
+process, $P$, denoted $\freenames{P}$ is given recursively by
+
+\begin{mathpar}
+  \freenames{\pzero} = \emptyset
+  \and
+  \freenames{\mathsf{for}(y \leftarrow x)(P)} = \{ x \} \cup \freenames{P}\setminus\{y\}
+  \and
+  \freenames{x!(P)} = \{ x \} \cup \freenames{P}
+  \and
+  \freenames{P|Q} = \freenames{P} \cup \freenames{Q}
+  \and
+  \freenames{\mathsf{}{x}} = \{ x \} \\
+\end{mathpar}
+
+An occurrence of $x$ in a process $P$ is \textit{bound} if it is not
+free. The set of names occurring in a process (bound or free) is
+denoted by $\names{P}$.
+\end{definition}
+
+\begin{definition}
+  The {\em structural congruence} $\equiv$
+  between processes \cite{SangiorgiWalker} is the least congruence containing
+  alpha-equivalence and satisfying the commutative monoid laws
+  (associativity, commutativity and $\pzero$ as identity) for parallel
+  composition $|$.
+\end{definition}
+
+\begin{definition}
+  The {\em name equivalence} $\nameeq$ is the least congruence
+  satisfying these equations
+  \begin{mathpar}
+  \inferrule*[lab=Quote-drop] {}{ \quotep{\dropn{x}} \nameeq x }
+  \and
+  \inferrule*[lab=Struct-equiv] { P \scong Q } { \quotep{P} \nameeq \quotep{Q} }
+  \end{mathpar}
+\end{definition}
+
+\subsection{Operational semantics} 
+
+\begin{mathpar}
+  \inferrule* [lab=COMM] {x_{trgt} \nameeq x_{src}} {\mathsf{for}( y \leftarrow x_{trgt} )P | x_{src}!(Q)
+  \red P\substn{\mathsf{@}Q}{y}}
+  \and
+  \inferrule* [lab=PAR]{P \red P'}{P|Q \red P'|Q}
+  \and
+  \inferrule* [lab=EQUIV]{{P \scong P'} \andalso {P' \red Q'} \andalso {Q' \scong Q}}{P \red Q}
+\end{mathpar}
+
 \subsection{\pic}
 
-In this presentation of the {pic} we update the syntax for
+In this presentation of the {\pic} we update the syntax for
 input-guarded processes to reflect the widespread adoption of
 comprehension notation in languages ranging from Scala to Python for
 use in reactive programming. Here we go with the Scala notation
 writing $\mathsf{for}( y \leftarrow x )P$ where Milner might have
 written $x?(y)P$. Admittedly, it's somewhat more verbose, but conveys
 to a younger generation of programmers more familiar with reactive
-programming the intended semantics of the expression.
+programming the intended semantics of the expression. Similarly, since
+we keep the output expression $x!(y)$ we avoid collision with the
+traditional notation for reflection ($!P$) by writing $\mathsf{*}P$
+instead, which is at least somewhat reminiscent of the Kleene star and
+the familiar from regular expressions.
 
 \begin{mathpar}
 \inferrule* [lab=process] {} {P, Q \bc \pzero \;\bm\; \mathsf{for}( y
   \leftarrow x )P \;\bm\; x!(y) \;\bm\; (\mathsf{new}\;x)P \;\bm\; P|Q \;\bm\;	\mathsf{*}P}
 \end{mathpar}
+
+Note that there is no production for $x$'s and $y$'s in the
+grammar. This reflects the fact that the {\pic} is \emph{parametric}
+in the collection channel names. That collection merely has to be
+countably infinite and have an effective equality. As such it is
+perfectly reasonable to choose a collection names, namely the names of
+the {\rhoc}. We can make this choice without loss of generality
+because we can always choose some other countably infinite set with an
+effective equality, say $\mathcal{N}$ and then require an invertible
+map, $\mathsf{code} : \mathcal{N} \to @\mathsf{Proc}$.
 
 \subsection{Structural congruence}
 
@@ -769,16 +854,11 @@ the name equivalence law:
 \end{enumerate}
 \end{definition}
 
-\subsection{Operational semantics} The operational semantics is standard.
+\subsection{Operational semantics} 
 
 \begin{mathpar}
-  \inferrule* [lab=COMM] {} {\mathsf{for}( y \leftarrow x )P | x!(v)
-  \red P\substn{\mathsf{v}}{y}}
-\end{mathpar}
-
-In addition, we have the following context rules:
-
-\begin{mathpar}
+  \inferrule* [lab=COMM] {} {\mathsf{for}( y \leftarrow x )P | x!(v) \red P\substn{v}{y}}
+  \and
   \inferrule* [lab=PAR]{P \red P'}{P|Q \red P'|Q}
   \and
   \inferrule* [lab=NEW]{P \red P'}{(\mathsf{new}\;x)P \red (\mathsf{new}\;x)P'}
@@ -787,10 +867,10 @@ In addition, we have the following context rules:
 \end{mathpar}
 
 
-Again, we write $\wred$ for $\red^*$, and rely on context to
-distinguish when $\red$ means reduction in the {\pic} and when it
-means reduction in the {\rhoc}. The set of {\pic} processes will be
-denoted by $\Proc_{\pi}$.
+Here we stick with tradition and write $\wred$ for $\red^*$, and rely
+on context to distinguish when $\red$ means reduction in the {\pic}
+and when it means reduction in the {\rhoc}. The set of {\pic}
+processes will be denoted by $\Proc_{\pi}$.
 
 \subsection{The translation}
 
@@ -805,7 +885,7 @@ Given a process, $P$, we pick $n$ and $p$ such that $n \neq p$ and
 distinct from the free names of $P$. For example, $n = \quotep{\Pi_{m
 \in \freenames{P}}\outputp{m}{\quotep{\pzero}}}$ and $p =
 \quotep{\Pi_{m \in
-\freenames{P}}\prefix{m}{\quotep{\pzero}}{\pzero}}$. Then
+\freenames{P}}\mathsf{for}({\quotep{\pzero}} \leftarrow {m}){\pzero}}$. Then
 
 \begin{equation*}
 	\meaningof{P} = \meaningof{P}_{2nd}( n, p )
@@ -814,29 +894,23 @@ distinct from the free names of $P$. For example, $n = \quotep{\Pi_{m
 where
 
 \begin{eqnarray*}
-   	\meaningof{\pzero}_{2nd} (  n, p )
-   		& = &
-   		 \pzero \\
-   	\meaningof{x \id{[} y \id{]}}_{2nd} (  n, p ) 
-  		& = & 
-  		x \id{[} y \id{]} \\
-   	\meaningof{x \id{(} y \id{)} \concat P}_{2nd} (  n, p ) 
+   	\meaningof{\pzero}_{2nd} (n,p) & = & \pzero \\
+   	\meaningof{x!(@Q)}_{2nd} (n,p) & = & x!(Q) \\
+   	\meaningof{\mathsf{for}( y \leftarrow x) P}_{2nd} (n,p) 
    		& = & 
- 		x \id{(} y \id{)} \concat \meaningof{P}_{2nd} (  n, p ) \\
-   	\meaningof{P \juxtap Q}_{2nd} (  n, p ) 
+ 		\mathsf{for}( y \leftarrow x ) \meaningof{P}_{2nd} (n,p) \\
+   	\meaningof{P | Q}_{2nd} (n,p) 
    		& = & 
- 		\meaningof{P}_{2nd} ( n^{l}, p^{l} )
-   			 \juxtap \meaningof{Q}_{2nd} ( n^{r}, p^{r} ) \\
+ 		\meaningof{P}_{2nd} (n^{l},p^{l}) | \meaningof{Q}_{2nd} (n^{r},p^{r}) \\
 %    	\meaningof{\id{!} P}_{2nd} (  n, p )
 %    		& = & \binpar{\lift{x}{\binpar{upn( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}
 % 						      {\meaningof{P}_{3rd}( n^{lr}, p^{lr}, n^{rl}, p^{rl} )}}}
 % 		             {\binpar{D(x)}{\binpar{\outputp{n^{lr}}{n}}{\outputp{p^{lr}}{p}}}} \\
-   	\meaningof{\mathsf{*} P}_{2nd} (  n, p )
-   		& = & \binpar{\lift{x}{\meaningof{P}_{3rd}( n^{r}, p^{r} )}}
-		             {\binpar{D(x)}{\binpar{\outputp{n^{r}}{n^{l}}}{\outputp{p^{r}}{p^{l}}}}} \\
-   	\meaningof{\id{(}\nu \; x \id{)} P}_{2nd} (  n, p ) 
+   	\meaningof{\mathsf{*} P}_{2nd} (n,p)
+   		& = & x!(\meaningof{P}_{3rd}( n^{r}, p^{r} ))|D(x)|n^{r}!n^{l}|p^{r}!p^{l} \\
+   	\meaningof{(\mathsf{new} \; x) P}_{2nd} (n,p) 
    		& = & 
- 		\prefix{p}{x}{\binpar{\meaningof{P}_{2nd} ( n^{l}, p^{l} )}{\outputp{p}{n}}} \\
+ 		\mathsf{for}(x \leftarrow p)\meaningof{P}_{2nd} ( n^{l}, p^{l} )|p!(n) \\
 \end{eqnarray*}
 
 and
@@ -851,7 +925,7 @@ and
 \end{eqnarray*}
 
 \begin{remark}
-	Note that all $\nu$-binding is now interpreted, as in Wischik's
+	Note that all $\mathsf{new}$-binding is now interpreted, as in Wischik's
 	global $\pi$-calculus, as an input guard \cite{globalpi}.
 \end{remark}
 	
@@ -859,7 +933,7 @@ and
 	It is also noteworthy that the translation is dependent on how
 	the parallel compositions in a process are
 	associated. Different associations will result in different
-	bindings for $\nu$-ed names. This will not result in different
+	bindings for $\mathsf{new}$-ed names. This will not result in different
 	behavior, however, as the bindings will be consistent
 	throughout the translation of the process.
 \end{remark}
@@ -894,13 +968,13 @@ our introduction of a less standard bisimulation.
 	consume more resources. Two names will be allocated; two memory
 	requests will be fulfilled. The {\rhoc} can see this, while the
 	{\pic} cannot. In particular, the {\pic} requires that
-	$(\mathsf{new}\;x)(\mathsf{new}\;x)P \equiv (\mathsf{newp} x)P$.
+	$(\mathsf{new}\;x)(\mathsf{new}\;x)P \equiv (\mathsf{new} x)P$.
 
 	Implementations of the {\pic}, however, having the property that
 	$(\mathsf{new}\;x)P$ involves the allocation of memory for the
 	structure representing the channel $x$ come to grips with the
 	implications this requirement has regarding memory management. If
-	memory is allocated upon encountering the $\nu$-scope, there are
+	memory is allocated upon encountering the $\mathsf{new}$-scope, there are
 	situations where the left-hand side of the equation above will
 	fail while the right-hand will succeed. Remaining faithful to the
 	equation above requires that such implementations are
