@@ -1,4 +1,5 @@
-\documentclass[a4paper,UKenglish]{article}
+\documentclass[submission,copyright,creativecommons]{eptcs}
+\providecommand{\event}{MeMo 2017}
 \usepackage{microtype}
 \usepackage{bussproofs}
 \usepackage{stmaryrd}
@@ -30,19 +31,18 @@
 \newcommand{\NN}{\mathbb{N}}
 \newcommand{\pic}{$\pi\mbox{-calculus}$\xspace}
 \newcommand{\lac}{$\lambda\mbox{-calculus}$\xspace}
-\newcommand{\lhom}{\vdash}
+\newcommand{\entails}{\vdash}
 
 \begin{document}
 \EnableBpAbbreviations
 \title{How to derive a type system from a term calculus, a collection, and a distributive law}
-\author{
-Michael Stay\\
-  {Pyrofex Corp.}\\
-  {\fontsize{8}{8}\selectfont stay@pyrofex.net}\\
+\author{Michael Stay
+  \institute{Pyrofex Corp.}
+  \email{stay@pyrofex.net}
   \and
-  L.G. Meredith\\
-  {RChain Cooperative}\\
-  {\fontsize{8}{8}\selectfont greg@rchain.coop}
+  L.G. Meredith
+  \institute{RChain Cooperative}
+  \email{greg@rchain.coop}
 }
 \maketitle
 \begin{abstract}
@@ -158,7 +158,7 @@ We should say something about binders.  Reasoning about languages with binders i
   The problem of representing and reasoning about inductively-defined structures with binders is central to the PoplMark challenges. Representing binders has been recognized as crucial by the theorem proving community, and many different solutions to this problem have been proposed. In our (still limited) experience, none emerge as clear winners.
 \end{quote}
 %https://link.springer.com/chapter/10.1007/11541868_4
-More recently, Pitts and Gabbay \cite{PittsGabbay} developed the theory of nominal sets.  It is our impression that nearly everyone now agrees that using nominal sets to formally model binders is the way forward.  Clauston \cite{Clauston}
+More recently, Gabbay and Pitts \cite{GabbayPitts} developed the theory of nominal sets.  It is our impression that nearly everyone now agrees that using nominal sets to formally model binders is the way forward.  Clouston \cite{Clouston}
 % http://cs.au.dk/~ranald/Clouston_WoLLIC.pdf
 defined nominal Lawvere theories.  We anticipate that enriching nominal Lawvere theories in Gph will allow us to model the operational semantics of languages with binders, but in this paper, we restrict ourselves to languages without.  This is not a severe restriction: we can eliminate abstractions from applicative calculi like \lac by using $S$ and $K$ combinators; in a similar way, we can eliminate input prefixes from concurrent calculi like \pic using Yoshida's combinators \cite{Yoshida} and eliminate uses of the ``new name'' binder using the reflective techniques of Meredith and Radestock \cite{MeredithRadestock}.
 %  http://www.sciencedirect.com/science/article/pii/S1571066105051893
@@ -317,7 +317,7 @@ The Gph-theory Th of a term calculus has a sub-Gph-encriched category $\End_\Th(
       \item S = S(S(KS)(S(K(S(KS)))(S(K(S(KK)))S)))(K(K(SKK)))
       \item S(KK) = S(S(KS)(S(KK)(S(KS)K)))(KK)
       \item S(KS)(S(KK)) = S(KK)(S(S(KS)(S(KK)(SKK)))(K(SKK)))
-      \item S(K(S(KS)))(S(KS)(S(KS))) = S(S(KS)(S(KK)(S(KS)(S(K(S(KS)))S))))(KS)
+      \item S(K(S(KS)))(S(KS)(S(KS))) \\ = S(S(KS)(S(KK)(S(KS)(S(K(S(KS)))S))))(KS)
     \end{itemize}
 \end{itemize}
 
@@ -325,12 +325,57 @@ We can introduce our predicates from the previous subsection as types in the fol
 
 Similarly, morphisms in $Coll$ are also included among those in Pred(Th, Coll), so they act on predicates; for each predicate $P$ and morphism $m$ in $Coll$ we get a witness of a subtyping judgement $P \subset m(P)$.  In the case where Coll is Heyting algebras, $P$ constructs a subgraph and then $m$ constructs a larger subgraph around it.
 
-We can gather all these judgements together into profunctors; they form the assumptions and conclusions of certain dinatural transformations that play the role of inference rules.  The dinatural transformations come from the rewrites of Th; each rewrite gives a cut rule.  For example, $\kappa$ gives the inference rule
+We can gather all these judgements together into profunctors; they form the assumptions and conclusions of certain dinatural transformations that play the role of inference rules.  The dinatural transformations come from the rewrites of Th; each rewrite gives a cut rule.  For example, $\kappa$ gives the cut rule
 \begin{center}
-  \AXC{$\vdash K \maps A \Rightarrow (B\Rightarrow A)$} \AXC{$\Gamma \vdash y\maps A$} \AXC{$\Delta \vdash z\maps B$}
-  \TIC{$\Gamma, \Delta \vdash \kappa((K\; y) z) = y\maps A$} \DP $\kappa.$
+  \AXC{$\entails K \maps A \Rightarrow (B\Rightarrow A)$} \AXC{$\Gamma \entails y\maps A$} \AXC{$\Delta \entails z\maps B$}
+  \TIC{$\Gamma, \Delta \entails \kappa((RK\; y) z) = y\maps A$} \DP $\kappa,$
 \end{center}
+which we interpret as a transformation that's natural in $\Gamma$ and $\Delta$ and dinatural in $A$ and $B.$  By construction, these cut rules satisfy a cut elimination theorem.
 
-\bibliographystyle{amsplain}
-\bibliography{ladl}
+The end result is a Gph-enriched category equipped with extra functors and (di)natural transformations.  In the case of the SK calculus, if we mod out by edges and equations we get a cartesian closed category of predicates and equivalence classes of lambda terms, just as Lambek described.  In the case of concurrent calculi, we retain the edges and can look for other Gph-enriched categories (some of which may be sesquicategories or 2-categories) in which to interpret the category.
+
+\section{Conclusion}
+
+The type system constructed in the manner described above is sound and complete by construction.  It applies to any programming language with a formal operational semantics.  By virtue of following straightforward categorical principles, it extends the Curry-Howard-Lambek isomorphism to calculi that are not confluent and applicative.
+
+We have applied this algorithm by hand to generate type systems for various calculi, including Rholang, the language of the new RChain project \cite{Rholang}.  We have found it powerful enough to reason about deniability in object capabilities systems; Meredith \cite{GregDAO} has shown that had the authors of the DAO contract on Ethereum been able to use such a type system, they could have detected the race condition before deploying the contract and avoided the \$50M DAO attack.  The algorithm also suggests a new way to monetize open-source software: first, authors of open-source code agree to license their code to a linking service.  A client programmer then specifies a predicate describing the behavior of the code she wants.  At linking time, a linking service employs a theorem prover to search a database of open-source code for functions or processes that satisfy the given predicate.  When the linking service provides a list of results, the programmer chooses the one she wants.  The linking service then debits the client's account and gives a cut to the author.
+
+\begin{thebibliography}{99}
+
+\newcommand{\quantph}[1]{\href{http://arxiv.org/abs/quant-ph/#1}{{ arXiv:quant-ph/#1}}}
+\newcommand{\hepth}[1]{\href{http://arxiv.org/abs/hep-th/#1}{{ arXiv:hep-th/#1}}}
+\newcommand{\grqc}[1]{\href{http://arxiv.org/abs/gr-qc/#1}{{ arXiv:gr-qc/#1}}}
+\newcommand{\qalg}[1]{\href{http://arxiv.org/abs/q-alg/#1}{{ arXiv:q-alg/#1}}}
+\newcommand{\mathph}[1]{\href{http://arxiv.org/abs/math-ph/#1}{{ arXiv:math-ph/#1}}}
+\newcommand{\Math}[1]{\href{http://arxiv.org/abs/math/#1}{{ arXiv:math/#1}}}
+\newcommand{\arxiv}[1]{\href{http://arxiv.org/abs/#1}{{ arXiv:#1}}}
+
+\bibitem{Closure} \href{https://developers.google.com/closure/compiler/}{https://developers.google.com/closure/compiler/}
+\bibitem{Flow} \href{https://flow.org/}{https://flow.org/}
+\bibitem{Rholang} \href{https://github.com/rchain/Rholang}{https://github.com/rchain/Rholang}
+\bibitem{kframework} \href{http://kframework.org}{http://kframework.org}
+\bibitem{Maude} \href{http://maude.cs.illinois.edu/}{http://maude.cs.illinois.edu/}
+\bibitem{MyPy} \href{http://mypy-lang.org/}{http://mypy-lang.org/}
+\bibitem{TypeScript} \href{https://www.typescriptlang.org/}{https://www.typescriptlang.org/}
+\bibitem{PoplMark} B.\ E.\ Aydemir, A.\ Bohannon, M.\ Fairbairn, J.\ N.\ Foster, B.\ C.\ Pierce, P.\ Sewell, D.\ Vytiniotis, G.\ Washburn, S.\ Weirich, S.\ Zdancewic, ``Mechanized Metatheory for the Masses: The PoplMark Challenge,'' in {\em Theorem Proving in Higher Order Logics}, eds. J.\ Hurd and T.\ Melham. TPHOLs 2005, LNCS {\bf 3603}. Springer (2005)
+\bibitem{Boudol} G.\ Boudol, ``The pi-calculus in direct style,'' POPL'97 (1997) 228--241.
+\bibitem{Milner} Robin Milner, ``The Polyadic {pi-Calculus}: A Tutorial,'' in {\em Logic and Algebra of Specification,} eds. F.\ L.\ Hamer, W.\ Brauer, and H.\ Schwichtenberg, Springer-Verlag (1993).
+\bibitem{Caires} Lu\'is Caires, ``Behavioral and Spatial Observations in a Logic for the pi-Calculus.''  FoSSaCS 2004, LNCS {\bf 2987}, (2004) 72--89.
+\bibitem{Clouston} R.\ Clouston, ``Nominal Lawvere Theories: A category theoretic account of equational theories with names,'' {\em Journal of Computer and System Sciences} {\bf 80} (2014) 1067--1086.
+\bibitem{GabbayPitts} M. J. Gabbay and A. M. Pitts, ``A New Approach to Abstract Syntax with Variable Binding,'' {\em Formal Aspects of Computing} {\bf 13}, (2001) 341--363.
+\bibitem{Lambek} J.\ Lambek, ``From $\lambda$-calculus to cartesian
+closed categories,'' in {\sl To H.\ B.\ Curry: Essays on Combinatory
+Logic, Lambda Calculus and Formalism}, eds.\ J.\ P.\ Seldin and J.\
+R.\ Hindley, Academic Press, (1980) 375--402. 
+\bibitem{Lawvere} F.\ W.\ Lawvere, {\sl Functorial Semantics of 
+Algebraic Theories}, Ph.D.\ Dissertation, Columbia University, 1963.
+Also available at 
+\href{http://www.tac.mta.ca/tac/reprints/articles/5/tr5abs.html}
+{http://www.tac.mta.ca/tac/reprints/articles/5/tr5abs.html}.
+\bibitem{GregDAO} L.\ G.\ Meredith, ``DAO bug typing,'' \href{https://docs.google.com/document/d/1sGlObhGhoEizBXC30Ww4h1KHKGkmcy4NiCKitIBqiUg/edit}{https://docs.google.com/document/d/1sGlObhGhoEizBXC30Ww4h1KHKGkmcy4NiCKitIBqiUg/edit}
+\bibitem{MeredithRadestock} L.\ G.\ Meredith and M.\ Radestock, ``A Reflective Higher-order Calculus,'' {\em Electronic Notes in Theoretical Computer Science} {\bf 141} (2005) 49--67.
+\bibitem{Lack2010} S.\ Lack, ``A 2-Categories Companion'' in {\em Towards Higher Categories,} Springer New York (2010) 105--191.
+\bibitem{Yoshida} N.\ Yoshida, ``Minimality and separation results on asynchronous mobile processes – representability theorems by concurrent combinators,'' {\em Theoretical Computer Science} {\bf 274} (2002) 231--276.
+
+\end{thebibliography}
 \end{document}
