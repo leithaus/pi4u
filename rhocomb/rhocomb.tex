@@ -284,6 +284,20 @@ research and well worth the effort to read in conjunction with these results.
   \inferrule* [lab=process] {} {\bm \; (\new\; a)P \;|\; P|P \;|\; \mathsf{*}P}
 \end{mathpar}
 
+We write $\mathsf{c};\mathsf{c′};\ldots;$ to denote these
+agents. $\mathsf{m}(a,b)$ (message) carries $a$ name $b$ to name $a$,
+$\mathsf{d}$ (duplicator) distributes a message to two locations,
+$\mathsf{fw}$ (forwarder) forwards a message (thus linking two
+locations), $\mathsf{k}$ (killer) kills a message, while
+$\mathsf{b}_{\mathsf{r}}$ (right binder), $\mathsf{b}_{\mathsf{l}}$
+(left binder) and $\mathsf{s}$ (synchroniser) generate new links. In
+particular $\mathsf{b}_{\mathsf{r}}$ and $\mathsf{b}_{\mathsf{l}}$
+represent two different ways of binding names – in
+$\mathsf{b}_{\mathsf{r}}$ one uses the received name for output, while
+in $\mathsf{b}_{\mathsf{l}}$ one uses it for input. In contrast,
+$\mathsf{s}$ is used for pure synchronisation without value passing,
+which is indeed necessary in interaction scenarios.
+
 As in the {\pic}, the $\new$ operator is a binding operator
 for names, so Yoshida's calculus also has a notion of free and bound names.
 
