@@ -163,9 +163,9 @@ defined nominal Lawvere theories.  We anticipate that enriching nominal Lawvere 
 
 \subsection{Gph-theories}
 
-Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf (multisorted) Lawvere theory} is a category with finite products Th equipped with a finite set $S$ of {\bf sorts} and a functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.
+Let $C$ be a category, $X$ be an object of $C,$ and $X/C$ be the category of morphisms into $X$ and commuting triangles.  Let $\FinSet$ be a skeleton of the category of finite sets and functions between them.  A {\bf (multisorted) Lawvere theory} is a category with finite products Th equipped with a finite set $S$ of {\bf sorts} and a functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.
 
-A {\bf directed multigraph with self loops}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, two functions $s,t\maps E \to V$ picking out the source and target of each edge, and a function $a\maps V \to E$ such that $s\circ a$ and $t \circ a$ are both the identity on $V$---that is, $a$ equips each vertex in $V$ with a chosen self loop.  A {\bf graph homomorphism} from $(E, V, s, t, a)$ to $(E', V', s', t', a')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon,$ $\upsilon\circ t = t' \circ \epsilon,$ and $\epsilon \circ a = a' \circ \upsilon.$  {\bf Gph} is the category of graphs and graph homomorphisms.  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t, a) \times (E', V', s', t', a')$ is $(E \times E', V \times V', s \times s', t\times t', a \times a').$
+A {\bf directed multigraph with self loops}, hereafter {\bf graph}, consists of a set $E$ of edges, a set $V$ of vertices, two functions $s,t\maps E \to V$ picking out the source and target of each edge, and a function $a\maps V \to E$ such that $s\circ a$ and $t \circ a$ are both the identity on $V$---that is, $a$ equips each vertex in $V$ with a chosen self loop.  A {\bf graph homomorphism} from $(E, V, s, t, a)$ to $(E', V', s', t', a')$ is a pair of functions $(\epsilon\maps E \to E', \upsilon\maps V \to V')$ such that $\upsilon\circ s = s' \circ \epsilon,$ $\upsilon\circ t = t' \circ \epsilon,$ and $\epsilon \circ a = a' \circ \upsilon;$ that is, a graph homomorphism maps edges to edges and vertices to vertices such that adjacency and self-loops are preserved.  {\bf Gph} is the category of graphs and graph homomorphisms.  Gph has finite products: the terminal graph is the graph with one vertex and one loop, while the product of two graphs $(E, V, s, t, a) \times (E', V', s', t', a')$ is $(E \times E', V \times V', s \times s', t\times t', a \times a').$
 
 A {\bf Gph-enriched category} consists of
 \begin{itemize}
@@ -205,8 +205,10 @@ Here's a presentation of the Gph-theory for the SK calculus with reduction to WH
   \item equations
     \item $R(x\; y) = (Rx\; y),$ {\em i.e.} to reduce a term, we reduce the applicand but not the term it's applied to
   \item edges
-    \item $\sigma\maps (((RS\; x)\; y)\; z) \Rightarrow ((Rx\; z)\; (y\; z))$
-    \item $\kappa\maps ((RK\; x)\; z) \Rightarrow Rx$
+    \begin{itemize}
+      \item $\sigma\maps (((RS\; x)\; y)\; z) \Rightarrow ((Rx\; z)\; (y\; z))$
+      \item $\kappa\maps ((RK\; x)\; z) \Rightarrow Rx$
+    \end{itemize}
 \end{itemize}
 
 \subsection{Lawvere theory of edges}
