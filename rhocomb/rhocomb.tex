@@ -499,12 +499,12 @@ the RHO combinator calculus.
   $D(x,v,w) := (\mathsf{d}(x,v,w) | \mathsf{fw}(v,x) | {*}(w))$
 \end{definition}
 \[\begin{array}{rl}
-  !_{(x,v,w)} P &= \mathsf{m}(x,D(x,v,w) \; |\; P) \; |\; D(x,v,w) \\
+  \mathsf{*}_{(x,v,w)} P &= \mathsf{m}(x,D(x,v,w) \; |\; P) \; |\; D(x,v,w) \\
         &= \mathsf{d}(x,v,w) \; |\; \mathsf{fw}(v,x) \; |\; {*}(w) \; |\; \mathsf{m}(x,D(x,v,w) \; |\; P) \\
         &\red \mathsf{m}(v,D(x,v,w) \; |\; P) \; |\; \mathsf{m}(w,D(x,v,w) \; |\; P) \; |\; \mathsf{fw}(v,x) \; |\; {*}(w) \; |\; \mathsf{m}(x,D(x,v,w) \; |\; P) \\
         &\red \mathsf{m}(x,D(x,v,w) \; |\; P) \; |\; \mathsf{m}(w,D(x,v,w) \; |\; P) \; |\; {*}(w) \\
         &\red \mathsf{m}(x,D(x,v,w) \; |\; P) \; |\; D(x,v,w) \; |\; P \\
-        & = \; !_{(x,v,w)} P \; |\; P
+        & = \; \mathsf{*}_{(x,v,w)} P \; |\; P
 \end{array}\]
 
 Of course, this encoding, as an implementation, runs away, unfolding
@@ -562,8 +562,8 @@ Name allocation will make heavy use of the following two name
 constructors
 
 \begin{eqnarray*}
-  x^l & := & \quotep{b_{l}(x,\mathsf{m}(x,*x))} \\
-  x^r & := & \quotep{b_{r}(x,\mathsf{m}(x,*x))}
+  x^l & := & \quotep{\mathsf{b}_{\mathsf{l}}(x,\mathsf{m}(x,*x))} \\
+  x^r & := & \quotep{\mathsf{b}_{\mathsf{r}}(x,\mathsf{m}(x,*x))}
 \end{eqnarray*}
 
 Note that by construction, $\quotep{P}$ cannot occur as a name in $P$
@@ -592,7 +592,7 @@ for all but replication and $\mathsf{new}$.
       \emph{c}(\vect{a})\mbox{, where $\emph{c}$ is any combinator but $m$} \\
     \meaningof{\mathsf{m}(a,P)}_2 (n,p) 
       & = & 
-          \mathsf{m}(a \meaningof{P}_2 (n,p)) \\
+          \mathsf{m}(a, \meaningof{P}_2 (n,p)) \\
     \meaningof{P \juxtap Q}_2 (n,p) 
       & = & 
     \meaningof{P}_2 (n^l, p^l)
@@ -604,7 +604,7 @@ a prefix form and then use a version of Yoshida's prefix elimination
 to remove the prefix.
 
 \begin{eqnarray*}
-    \meaningof{\id{!} P}_2 (n,p)
+    \meaningof{\mathsf{*} P}_2 (n,p)
           & = & \binpar{\mathsf{m}(x, \meaningof{P}_3(n^r,p^r))}
                   {\binpar{D(x,v,w)}
                     {\binpar{\mathsf{m}(n^r, *n^l)}{\mathsf{m}(n^r, *n^l)}}} \\
@@ -649,7 +649,7 @@ of interaction:
 
 \[\mathsf{m}(a^{+},v^{\pm});\mathsf{d}(a^{−},b^{+},c^{+});\mathsf{k}(a^{−});\mathsf{fw}(a^{−},b^{+});\mathsf{b}_{\mathsf{l}}(a^{−}b^{+});\mathsf{b}_{\mathsf{r}}(a^{−}b^{−});\mathsf{s}(a^{−}b^{−}c^{+})\]
 
-Note the annotated polarities are preserved by reduction, e.g.
+As above the annotated polarities are preserved by reduction, e.g.
 \[\binpar{\mathsf{d}(a^{−},b^{+},c^{+})}{\mathsf{m}(a^{+},v)} \to \binpar{\mathsf{m}(b^{+},v)}{\mathsf{m}(b^{+},v)}\]
 
 Similarly, for economy of expression, we emulate Yoshida's use of
@@ -660,9 +660,9 @@ specification.
 (I)&  \meaningof{\prefix{p}{x}{\binpar{P}{Q}}}_4(n, q) 
     & := & 
     (\mathsf{d}(p,v,w)|\binpar{\meaningof{\prefix{v}{x}{P}}_{4}(n_{1}, q_{1})}{\meaningof{\prefix{w}{x}{Q}}_{4}(n_{2}, q_{2}) } \\
-    & & & \mbox{where $v = \quotep{(\mathsf{m}(q,\binpar{b_{l}(q,n)}{\binpar{P}{Q}}))}$, $w = \quotep{(\mathsf{m}(q,\binpar{b_{r}(q,n)}{\binpar{P}{Q}}))}$,} \\
-    & & &\mbox{$n_{1} = \quotep{(\binpar{b_{l}(v,w)}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$, $n_{2} = \quotep{(\binpar{b_{r}(v,w)}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$} \\
-    & & &\mbox{$q_{1} = \quotep{(\binpar{b_{l}(n_{1},n_{2})}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$, $q_{2} = \quotep{(\binpar{b_{r}(n_{1},n_{2})}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$} \\
+    & & & \mbox{where $v = \quotep{(\mathsf{m}(q,\binpar{\mathsf{b}_{\mathsf{l}}(q,n)}{\binpar{P}{Q}}))}$, $w = \quotep{(\mathsf{m}(q,\binpar{\mathsf{b}_{\mathsf{r}}(q,n)}{\binpar{P}{Q}}))}$,} \\
+    & & &\mbox{$n_{1} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(v,w)}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$, $n_{2} = \quotep{(\binpar{\mathsf{b}_{\mathsf{r}}(v,w)}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$} \\
+    & & &\mbox{$q_{1} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(n_{1},n_{2})}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$, $q_{2} = \quotep{(\binpar{\mathsf{b}_{\mathsf{r}}(n_{1},n_{2})}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$} \\
 (V)&  \meaningof{\prefix{p}{x}{\emph{c}(v^{+},w)}}_4(n, q) 
     & := & 
     \mathsf{s}(p,a,v)|\emph{c}(a^{+},\vect{w})
@@ -676,10 +676,10 @@ specification.
     \mathsf{fw}(p,v) \\
 (VIII)&  \meaningof{\prefix{p}{x}{\mathsf{fw}(x,v)}}_4(n, q) 
     & := & 
-    b_{l}(p,v) \\
+    \mathsf{b}_{\mathsf{l}}(p,v) \\
 (IX)&  \meaningof{\prefix{p}{x}{\mathsf{fw}(v,x)}}_4(n, q) 
     & := & 
-    b_{r}(p,v) \\
+    \mathsf{b}_{\mathsf{r}}(p,v) \\
 (X)&  \meaningof{\prefix{p}{x}{\emph{c}(\vect{v},x^{+},\vect{w})}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{\binpar{\mathsf{fw}(a,x)}{\emph{c}(\vect{v},a^{+},\vect{w})}}}_4(n', q)\\
@@ -688,15 +688,15 @@ specification.
     & := & 
     \meaningof{\prefix{p}{x}{\binpar{\mathsf{fw}(x,a)}{\emph{c}(a^{-},\vect{v})}}}_4(n', q)\\
     & & & \mbox{where $a = @(\binpar{\mathsf{m}(q,*n)}{\emph{c}(x^{-},v)})$} \mbox{ and $n'= \quotep{(\mathsf{m}(a,\mathsf{m}(q,*n)))}$} \\
-(XII)&  \meaningof{\prefix{p}{x}{b_{r}(v,x^{-})}}_4(n, q) 
+(XII)&  \meaningof{\prefix{p}{x}{\mathsf{b}_{\mathsf{r}}(v,x^{-})}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{(\binpar{\mathsf{d}(v,w_{1},w_{2})}{\binpar{\mathsf{s}(w_{1},x,w_{3})}{\mathsf{b}_{\mathsf{r}}(w_{2},w_{3})}})}}_{4}(n', q) \\
-    & & & \mbox{where $w_{1} = \quotep{(\binpar{b_{l}(q,n)}{\mathsf{m}(q,b_{r}(v,x^{-}))})}$, $w_{2} = \quotep{(\binpar{b_{r}(q,n)}{\mathsf{m}(q,b_{r}(v,x^{-}))})}$,} \\
-    & & & \mbox{$w_{3} = \quotep{(\binpar{b_{l}(p,v)}{\mathsf{m}(w_{1},*w_{2}})}$, and $n' = \quotep{(\mathsf{s}(w_{1},w_{2},w_{3}))}$} \\
+    & & & \mbox{where $w_{1} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(q,n)}{\mathsf{m}(q,\mathsf{b}_{\mathsf{r}}(v,x^{-}))})}$, $w_{2} = \quotep{(\binpar{\mathsf{b}_{\mathsf{r}}(q,n)}{\mathsf{m}(q,\mathsf{b}_{\mathsf{r}}(v,x^{-}))})}$,} \\
+    & & & \mbox{$w_{3} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(p,v)}{\mathsf{m}(w_{1},*w_{2}})}$, and $n' = \quotep{(\mathsf{s}(w_{1},w_{2},w_{3}))}$} \\
 (XIII)&  \meaningof{\prefix{p}{x}{\mathsf{s}(v,x^{-},w)}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{(\binpar{\mathsf{s}(v,w_{1},w_{2})}{\binpar{\mathsf{m}(w_{1},*x)}{\mathsf{b}_{\mathsf{l}}(w_{2},w)}})}}_{4}(n', q) \\
-    & & & \mbox{where $w_{1} = @(\binpar{b_{l}(q,n)}{\mathsf{s}(v,x^{-},w)})$, $w_{2} = @(\binpar{b_{r}(q,n)}{\mathsf{s}(v,x^{-},w)})$,} \\
+    & & & \mbox{where $w_{1} = @(\binpar{\mathsf{b}_{\mathsf{l}}(q,n)}{\mathsf{s}(v,x^{-},w)})$, $w_{2} = @(\binpar{\mathsf{b}_{\mathsf{r}}(q,n)}{\mathsf{s}(v,x^{-},w)})$,} \\
     & & & \mbox{and $n' = \quotep{(\mathsf{m}(w_{1},*w_{2}))}$}
 \end{array}\]
 
