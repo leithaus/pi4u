@@ -334,6 +334,37 @@ Rewrite rules
   \inferrule* {{{P} \scong {P}'} \andalso {{P}' \red {Q}'} \andalso {{Q}' \scong {Q}}}{{P} \red {Q}}
 \end{mathpar}
 
+\subsubsection{Translating the {\pic} into Yoshida's combinators}
+\begin{mathpar}
+  \mathsf{for}^*(x \leftarrow a)(P|Q) = (\mathsf{new}\; c_1c_2)(d(a,c_1,c_2) | \mathsf{for}^*(x \leftarrow c_1)P | \mathsf{for}^*(x \leftarrow c_2)Q)
+  \and
+  \mathsf{for}^*(x \leftarrow a)(\mathsf{new}\; c')P = (\mathsf{new}\; c)\mathsf{for}^*(x \leftarrow a)P\substn{c}{c'}
+  \and
+  \mathsf{for}^*(x \leftarrow a)\pzero = k(a)
+  \and
+  \mathsf{for}^*(x \leftarrow a)!P = (\mathsf{new}\;c)(fw(a,c) | !\mathsf{for}^*(x \leftarrow c)(P | m(c,x)))
+  \and
+  \mathsf{for}^*(x \leftarrow a)c(v^+,\vec{w}) =
+  (\mathsf{new}\;c)(s(a,c,v) | c(c^+,\vec{w})) \mbox{\quad $x \notin \{v\vec{w}\}$}
+  \and
+  \mathsf{for}^*(x \leftarrow a)c(v^-,\vec{w}) =
+  (\mathsf{new}\;c)(s(a,v,c) | c(c^-,\vec{w})) \mbox{\quad $x \notin \{v\vec{w}\}$}
+  \and
+  \mathsf{for}^*(x \leftarrow a)m(v,x) = fw(a,v) \mbox{\quad $x \neq v$}
+  \and
+  \mathsf{for}^*(x \leftarrow a)fw(x,v) = b_l(a,v) \mbox{\quad $x \neq v$}
+  \and
+  \mathsf{for}^*(x \leftarrow a)fw(v,x) = b_r(a,v) \mbox{\quad $x \neq v$}
+  \and
+  \mathsf{for}^*(x \leftarrow a)c(\vec{v}_1x^+\vec{v}_2) = (\mathsf{new}\; c)\mathsf{for}^*(x \leftarrow a)(fw(c,x) | c(\vec{v}_1c\vec{v}_2)) \mbox{\quad $x \notin \vec{v}_1$}
+  \and
+  \mathsf{for}^*(x \leftarrow a)c(x^-\vec{v}) = (\mathsf{new}\; c)\mathsf{for}^*(x \leftarrow a)(fw(x,c) | c(c\vec{v}))
+  \and
+  \mathsf{for}^*(x \leftarrow a)b_r(v,x^-) =(\mathsf{new}\; c_1c_2c_3)\mathsf{for}^*(x \leftarrow a)(d(v,c_1,c_2)|s(c_1,x,c_3)|br(c_2,c_3)) \mbox{\quad $x \notin \{v \}$}
+  \and
+  \mathsf{for}^*(x \leftarrow a)s(v,x^-,w) = (\mathsf{new}\; c_1c_2)\mathsf{for}^*(x \leftarrow a)(s(v,c_1,c_2) | m(c_1,x) | b_l(c_2,w)) \mbox{\quad $x \notin \{v \}$}
+\end{mathpar}
+
 \subsection{Reflective higher-order (RHO) combinator calculus}
 The {\pic} is not a closed theory, but rather a theory dependent upon
 some theory of names. Taking an operational view, one may think of the
@@ -392,7 +423,10 @@ Rewrite rules
   composition $|$ and $*(@(P)) \equiv P$.
 \end{definition}
 
-Note that alpha equivalence is no longer part of structural congruence.  While there is a faithful embedding of Yoshida's combinators into RHO combinators (see below), RHO combinators can see the internal structure of names and distinguish them.
+Note that alpha equivalence is no longer part of structural
+congruence.  While there is a faithful embedding of Yoshida's
+combinators into RHO combinators (see below), RHO combinators can see
+the internal structure of names and distinguish them.
 
 \subsubsection{Implementing replication with reflection}
 
