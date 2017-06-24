@@ -16,7 +16,7 @@
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\interpp}[1]{\{\!| #1 |\!\}}
 \newcommand{\from}{\leftarrow}
-\newcommand{\maps}{\maps}
+\newcommand{\maps}{\colon}
 \newcommand{\Th}{\mathrm{Th}}
 \newcommand{\Gph}{\mathrm{Gph}}
 \newcommand{\FinSet}{\mathrm{FinSet}}
@@ -85,14 +85,13 @@ Generalizing from categories to enriched categories lets us use Lambek's techniq
 
 To talk about the operational semantics of a programming language, there are five things we need to define.
 
-First, we have to describe the layout of the state of the computer. For each kind of data that goes into a description of the state, we have a ``sort''.  If we're using a programming language like \lac, we have a sort for variables and a sort for terms, and the term is the entire state of the computer.  If we're using a Turing machine, there are more parts: the tape, the state transition table, the current state, and the position of the read/write head on the tape.  If we're using a modern language like JavaScript, the state is very complex: there are a couple of stacks, the heap, the lexical environment, the <code>this</code> binding, and more.
+First, we have to describe the layout of the state of the computer. For each kind of data that goes into a description of the state, we have a ``sort''.  If we're using a programming language like \lac, we have a sort for variables and a sort for terms, and the term is the entire state of the computer.  If we're using a Turing machine, there are more parts: the tape, the state transition table, the current state, and the position of the read/write head on the tape.  If we're using a modern language like C, the state is very complex: K framework's formalization of C has hundreds of sorts.
 
-Second, we have to build up the state itself using ``term constructors''.  For example, in \lac, we start with variables and use abstraction and application to build up a specific term.
+Second, we have to build up the state itself using ``term constructors''.  For example, in \lac, we start with variables and use abstraction and application to build up terms.
 
 Third, we say what rearrangements of the state we're going to ignore; this is called ``structural congruence''.  In \lac, we say that two terms are the same if they only differ in the choice of bound variables.  In \pic, it doesn't matter in what order we list the processes that are all running at the same time.
 
-Fourth, we give ``reduction rules'' describing how the state is allowed to change.  In \lac, the state only changes via $\beta$-reduction, substituting the argument of a function for the
-bound variable.  In a Turing machine, each state leads to one of five others (change the bit to 0 or 1, then move left or right; or halt). In \pic, there may be more than one transition possible out of a particular state: if a process is listening on a channel and there are two messages, then either message may be processed first. Computational complexity theory is all about how many steps it takes to compute a result, so we do not have equations between sequences of rewrites.
+Fourth, we give ``reduction rules'' describing how the state is allowed to change.  In \lac, the state only changes via $\beta$-reduction, substituting the argument of a function for the bound variable.  In a Turing machine, each state leads to one of five others (change the bit to 0 or 1, then move left or right; or halt).  In \pic, there may be more than one transition possible out of a particular state: if a process is listening on a channel and there are two messages, then either message may be processed first. Computational complexity theory is all about how many steps it takes to compute a result, so we do not have equations between sequences of rewrites; in fact, dynamic programming problems like finding the optimal order in which to multiply a sequence of matrices are often about choosing which of several paths that compute the same result is shortest.
 
 Finally, the reduction rules themselves may only apply in certain ``contexts''; for example, in all modern programming languages based on the \lac, no reductions happen under an abstraction. That is, even if a term $t$ reduces to $t'$, it is never the case that $\lambda x.t$ reduces to $\lambda x.t'$.  The resulting normal form is
 called ``weak head normal form'' (WHNF).
@@ -118,13 +117,47 @@ terms.  The first line, labeled ``syntax'', defines four term constructors.  The
 
 \section{Categorical semantics}
 
-In Lawvere's seminal 1963 thesis \cite{Lawvere}, he showed that categories with finite products suffice to model all of universal algebra.  If a mathematical gadget can be described as sets equipped with functions satisfying axioms, there is a finite-products category Th such that all gadget arise as product-preserving functors from Th to Set, and each finite-products category defines a gadget.  Monoids, groups, rings, natural numbers, and graphs are all examples; fields are a notable exception that cannot be defined this way.  A ``Gph-theory'', defined below, is a Lawvere theory in which we can specify directed edges between morphisms without having to declare them equal; this lets us encode the notion of a reduction between terms.  We can think of a presentation of a Gph-theory as a specification file for a toy version of K framework, and we are working on implementing our algorithm as a transformation of actual K framework specifications.
+In Lawvere's seminal 1963 thesis \cite{Lawvere}, he showed that categories with finite products suffice to model all of universal algebra.  If a mathematical gadget can be described as sets equipped with functions satisfying axioms, there is a finite-products category Th such that all gadget arise as product-preserving functors from Th to Set, and each finite-products category defines a gadget.  For example, the Lawvere theory of monoids is the free finite products category on
+\begin{itemize}
+  \item an object M and
+  \item morphisms 
+  \begin{itemize}
+    \item $\cdot\maps M^2 \to M$ and
+    \item $e\maps 1 \to M$ modulo the following equations:
+  \end{itemize}
+  \item $\cdot \circ (\cdot \times M) = \cdot \circ (M \times \cdot),$ {\em i.e.} multiplication is associative, and
+  \item $\cdot \circ (e \times M) = \cdot \circ (M \times e) = M,$ {\em i.e.} multiplication is unital.
+\end{itemize}
+This kind of presentation should look very familiar to programmers; compare this Agda definition of a monoid:
+\begin{verbatim}
+  data Monoid (M : Set)(Eq : Equivalence M) : Set where
+    monoid :
+      (_*_ : M -> M -> M)
+      (e   : M)
+      (leftId : LeftIdentity Eq e _*_)
+      (rightId : RightIdentity Eq e _*_)
+      (assoc : Mssociative Eq _*_) ->
+      Monoid M Eq
+\end{verbatim}
+
+A model of a Lawvere theory (in the category Set unless otherwise specified) is a product-preserving functor from the theory to Set.  A model of the theory above maps $M$ to a set and $\cdot$ and $e$ to functions that satisfy the equations---that is, it picks out a monoid.  All monoids arise as such functors. Monoids, groups, rings, natural numbers, and graphs are all examples of gadgets that can be defined in this way; fields are a notable exception.  
+
+For those readers familiar with defining data structures with monads, just know that Lawvere theories correspond to finitary monads: given some algebraic gadget, we can forget all the extra structure and just look at the underlying set.  Lawvere proved that this forgetful functor has a left adjoint, the free gadget on a set.  The free functor followed by the forgetful functor gives a finitary monad on Set.  Lawvere also proved that the opposite of the category of free finitely-generated algebras of the monad is equivalent to the original Lawvere theory.
+
+A ``Gph-theory'', defined below, is a Lawvere theory in which we can specify directed edges between morphisms without having to declare them equal; this lets us encode the notion of a reduction or rewrite between terms.  We can think of a presentation of a Gph-theory as a specification file for a toy version of K framework---in fact, we are working on implementing our algorithm as a transformation of actual K framework specifications.  
+
+Gph-theories, by default, have models not in the category Set, but rather in the category Gph of graphs and graph homomorphisms.  A model of a Gph-theory of a term calculus assigns to the sort for terms an infinite graph whose vertices are all the terms of the calculus and whose edges are rewrites between them.  The model assigns a graph homomorphism to each morphism in the theory; we can think of most of the morphisms as $n\mbox{-}$ary term constructors.  The graph homomorphism corresponding to an $n\mbox{-}$ary term constructor takes an $n\mbox{-}$tuple of vertices/terms and maps it to a single vertex, the term context with its holes filled by the elements of the tuple.  It also maps edges to rewrites in that context.
+
+As noted above, not every term context is a reduction context: when reducing lambda terms to WHNF, the fact that some term $t$ reduces to $t'$ does not mean that $\lambda x.t$ reduces to $\lambda x.t'.$  However, if we model a term constructors by a graph homomorphism $K,$ any edge $e\maps t \to t'$ maps to another edge $Ke\maps Kt \to Kt'.$  The resolution to this conflict is to introduce morphisms for denoting reduction contexts and then to use those morphisms in the rewrite rules; see the example in section \ref{skexample}.
 
 We should say something about binders.  Reasoning about languages with binders is a hard-enough problem that it was the focus of the 2005 PoplMark challenge \cite{PoplMark}.
+\begin{quote}
+  The problem of representing and reasoning about inductively-defined structures with binders is central to the PoplMark challenges. Representing binders has been recognized as crucial by the theorem proving community, and many different solutions to this problem have been proposed. In our (still limited) experience, none emerge as clear winners.
+\end{quote}
 %https://link.springer.com/chapter/10.1007/11541868_4
-Recently, Pitts and Gabbay \cite{PittsGabbay} developed the theory of nominal sets, and Clauston \cite{Clauston}
+More recently, Pitts and Gabbay \cite{PittsGabbay} developed the theory of nominal sets.  It is our impression that nearly everyone now agrees that using nominal sets to formally model binders is the way forward.  Clauston \cite{Clauston}
 % http://cs.au.dk/~ranald/Clouston_WoLLIC.pdf
-defined nominal Lawvere theories.  We anticipate that enriching nominal Lawvere theories in Gph will allow us to model the operational semantics of languages with binders, but in this paper, we restrict ourselves to languages without.  This is not a severe restriction: we can eliminate abstractions from applicative calculi like \lac by using Curry's S and K combinators; in a similar way we can eliminate input prefixes from concurrent calculi like \pic using Yoshida's combinators \cite{Yoshida} and uses of the ``new name'' binder using the reflective techniques of Meredith and Radestock \cite{MeredithRadestock}.
+defined nominal Lawvere theories.  We anticipate that enriching nominal Lawvere theories in Gph will allow us to model the operational semantics of languages with binders, but in this paper, we restrict ourselves to languages without.  This is not a severe restriction: we can eliminate abstractions from applicative calculi like \lac by using Curry's $S$ and $K$ combinators; in a similar way, we can eliminate input prefixes from concurrent calculi like \pic using Yoshida's combinators \cite{Yoshida} and eliminate uses of the ``new name'' binder using the reflective techniques of Meredith and Radestock \cite{MeredithRadestock}.
 %  http://www.sciencedirect.com/science/article/pii/S1571066105051893
 
 
@@ -154,8 +187,8 @@ A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that p
 Gph-enriched categories are part of a spectrum of 2-category-like structures.  A strict 2-category is a category enriched over Cat with its usual product.  Sesquicategories are categories enriched over Cat with the ``funny'' tensor product \cite{Lack2010}; a sesquicategory can be thought of as a generalized 2-category where the interchange law does not hold.  A Gph-enriched category can be thought of as a generalized sesquicategory where 2-morphisms (now edges) cannot be composed.  Any strict 2-category has an underlying sesquicategory, and any sesquicategory has an underlying Gph-enriched category; these forgetful functors have left adjoints.
 
 \subsubsection{Example: SK calculus}
-
-Here's a presentation of the Gph-theory for the SK calculus with reduction to weak head normal form.  We have modeled reduction contexts with a morphism $R;$ given a term $t$ with no occurrences of $R,$ the term $Rt$ reduces to $Rt',$ where $t'$ is the weak head normal form of $t.$ 
+\label{skexample}
+Here's a presentation of the Gph-theory for the SK calculus with reduction to WHNF.  We have modeled reduction contexts with a morphism $R;$ given a term $t$ with no occurrences of $R,$ the term $Rt$ reduces to $Rt',$ where $t'$ is the WHNF of $t.$ 
 
 \begin{itemize}
   \item objects
