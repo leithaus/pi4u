@@ -335,35 +335,46 @@ Rewrite rules
 \end{mathpar}
 
 \subsubsection{Translating the {\pic} into Yoshida's combinators}
+We assume the following annotations ($+$ stands for the output and $-$
+stands for the input), which denote how each name is used in the rules
+of interaction:
+
+\[m(a^{+},v^{\pm});d(a^{−},b^{+},c^{+});k(a^{−});fw(a^{−},b^{+});bl(a^{−}b^{+});br(a^{−}b^{−});s(a^{−}b^{−}c^{+})\]
+
+Note the annotated polarities are preserved by reduction, e.g.
+\[\binpar{d(a^{−},b^{+},c^{+})}{m(a^{+},v)} \to \binpar{m(b^{+},v)}{m(b^{+},v)}\]
+
 \begin{mathpar}
-  \mathsf{for}^*(x \leftarrow a)(P|Q) = (\mathsf{new}\; c_1c_2)(d(a,c_1,c_2) | \mathsf{for}^*(x \leftarrow c_1)P | \mathsf{for}^*(x \leftarrow c_2)Q)
+  \meaningof{a!(b)} = m(a,b)
   \and
-  \mathsf{for}^*(x \leftarrow a)(\mathsf{new}\; c')P = (\mathsf{new}\; c)\mathsf{for}^*(x \leftarrow a)P\substn{c}{c'}
+  \meaningof{\mathsf{for}(x \leftarrow a)P} = \mathsf{for}^*(x \leftarrow a)\meaningof{P}
   \and
-  \mathsf{for}^*(x \leftarrow a)\pzero = k(a)
+  \meaningof{P|Q} = \meaningof{P}|\meaningof{Q}
   \and
-  \mathsf{for}^*(x \leftarrow a)!P = (\mathsf{new}\;c)(fw(a,c) | !\mathsf{for}^*(x \leftarrow c)(P | m(c,x)))
+  \meaningof{(\mathsf{new}\;x)P} = (\mathsf{new}\;x)\meaningof{P}
   \and
-  \mathsf{for}^*(x \leftarrow a)c(v^+,\vec{w}) =
-  (\mathsf{new}\;c)(s(a,c,v) | c(c^+,\vec{w})) \mbox{\quad $x \notin \{v\vec{w}\}$}
+  \meaningof{\mathsf{*}P} = \mathsf{*}\meaningof{P}
   \and
-  \mathsf{for}^*(x \leftarrow a)c(v^-,\vec{w}) =
-  (\mathsf{new}\;c)(s(a,v,c) | c(c^-,\vec{w})) \mbox{\quad $x \notin \{v\vec{w}\}$}
-  \and
-  \mathsf{for}^*(x \leftarrow a)m(v,x) = fw(a,v) \mbox{\quad $x \neq v$}
-  \and
-  \mathsf{for}^*(x \leftarrow a)fw(x,v) = b_l(a,v) \mbox{\quad $x \neq v$}
-  \and
-  \mathsf{for}^*(x \leftarrow a)fw(v,x) = b_r(a,v) \mbox{\quad $x \neq v$}
-  \and
-  \mathsf{for}^*(x \leftarrow a)c(\vec{v}_1x^+\vec{v}_2) = (\mathsf{new}\; c)\mathsf{for}^*(x \leftarrow a)(fw(c,x) | c(\vec{v}_1c\vec{v}_2)) \mbox{\quad $x \notin \vec{v}_1$}
-  \and
-  \mathsf{for}^*(x \leftarrow a)c(x^-\vec{v}) = (\mathsf{new}\; c)\mathsf{for}^*(x \leftarrow a)(fw(x,c) | c(c\vec{v}))
-  \and
-  \mathsf{for}^*(x \leftarrow a)b_r(v,x^-) =(\mathsf{new}\; c_1c_2c_3)\mathsf{for}^*(x \leftarrow a)(d(v,c_1,c_2)|s(c_1,x,c_3)|br(c_2,c_3)) \mbox{\quad $x \notin \{v \}$}
-  \and
-  \mathsf{for}^*(x \leftarrow a)s(v,x^-,w) = (\mathsf{new}\; c_1c_2)\mathsf{for}^*(x \leftarrow a)(s(v,c_1,c_2) | m(c_1,x) | b_l(c_2,w)) \mbox{\quad $x \notin \{v \}$}
+  \meaningof{0} = 0
 \end{mathpar}
+
+where
+
+\[\begin{array}{llrl}
+(I)&\mathsf{for}^*(x \leftarrow a)(P|Q) &=& (\mathsf{new}\; c_1c_2)(d(a,c_1,c_2) | \mathsf{for}^*(x \leftarrow c_1)P | \mathsf{for}^*(x \leftarrow c_2)Q)\\
+(II)&\mathsf{for}^*(x \leftarrow a)(\mathsf{new}\; c')P &=& (\mathsf{new}\; c)\mathsf{for}^*(x \leftarrow a)P\substn{c}{c'} \\
+(III)& \mathsf{for}^*(x \leftarrow a)\pzero &=& k(a) \\
+(IV)&\mathsf{for}^*(x \leftarrow a)!P &=& (\mathsf{new}\;c)(fw(a,c) | !\mathsf{for}^*(x \leftarrow c)(P | m(c,x)))\\
+(V)&\mathsf{for}^*(x \leftarrow a)c(v^+,\vec{w}) &=& (\mathsf{new}\;c)(s(a,c,v) | c(c^+,\vec{w})) \mbox{\quad $x \notin \{v\vec{w}\}$}\\
+(VI)&\mathsf{for}^*(x \leftarrow a)c(v^-,\vec{w})&=& (\mathsf{new}\;c)(s(a,v,c) | c(c^-,\vec{w})) \mbox{\quad $x \notin \{v\vec{w}\}$}\\
+(VII)&\mathsf{for}^*(x \leftarrow a)m(v,x)&=& fw(a,v) \mbox{\quad $x \neq v$}\\
+(VIII)&\mathsf{for}^*(x \leftarrow a)fw(x,v)&=& b_l(a,v) \mbox{\quad $x \neq v$}\\
+(IX)&\mathsf{for}^*(x \leftarrow a)fw(v,x)&=& b_r(a,v) \mbox{\quad $x \neq v$}\\
+(X)&\mathsf{for}^*(x \leftarrow a)c(\vec{v}_1x^+\vec{v}_2)&=&(\mathsf{new}\; c)\mathsf{for}^*(x \leftarrow a)(fw(c,x) | c(\vec{v}_1c\vec{v}_2)) \mbox{\quad $x \notin \vec{v}_1$}\\
+(XI)&\mathsf{for}^*(x \leftarrow a)c(x^-\vec{v})&=& (\mathsf{new}\; c)\mathsf{for}^*(x \leftarrow a)(fw(x,c) | c(c\vec{v}))\\
+(XII)&\mathsf{for}^*(x \leftarrow a)b_r(v,x^-)&=& (\mathsf{new}\; c_1c_2c_3)\mathsf{for}^*(x \leftarrow a)(d(v,c_1,c_2)|s(c_1,x,c_3)|br(c_2,c_3)) \mbox{\quad $x \notin \{v \}$}\\
+(XIII)&\mathsf{for}^*(x \leftarrow a)s(v,x^-,w) &=& (\mathsf{new}\; c_1c_2)\mathsf{for}^*(x \leftarrow a)(s(v,c_1,c_2) | m(c_1,x) | b_l(c_2,w)) \mbox{\quad $x \notin \{v \}$}
+\end{array}\]
 
 \subsection{Reflective higher-order (RHO) combinator calculus}
 The {\pic} is not a closed theory, but rather a theory dependent upon
