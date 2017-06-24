@@ -286,6 +286,23 @@ that preserves the monad operations.
 
 Such a natural transformation may not exist.  For example, if we use multisets of rewrites of SK terms rather than mere sets, there's no distributive law we can use, because $S$ and $K$ duplicate and delete their arguments, respectively.  We get different numbers of elements when we take the top right path and the bottom left path around the square that's supposed to commute.  We can use multisets, however, if we use linear combinators like $B,C,$ and $I.$
 
+\subsection{Modalities}
+
+While being able to talk about the structure of terms of a calculus is nice, it is far more interesting to consider their behavior.  We can capture some behaviors that depend only on the structure, but by introducing modalities, we get far more powerful types.
+
+Let Mod be a single-sorted Lawvere theory with no equations; we take the morphisms to be modalities.  We define Th' to be the union of Th and Mod, modulo identifying the single sort of Mod with the distinguished sort of Th.  To interpret the new syntax of our predicates, we compose the distributive law with another natural transformation
+\[ \mu\maps \mbox{Mod} \circ \mbox{Edge(Th)} \Rightarrow \mbox{Coll}\circ\mbox{Edge(Th)} \]
+that tells how to turn a modality applied to a term into a collection of terms.
+
+For example, to interpret the possibility modality $\diamond,$ we let Mod have the single morphism $\diamond\maps T \to T$ and then define $\mu$ to take $\diamond t$ to the collection of edges $\{ \rho | \exists u. \rho\maps u \to t \}.$  Each edge witnesses that some $u$ satisfies the predicate $\diamond t$, or equivalently, $u$ is of the type $\diamond t.$
+
+The modalities need not be unary.  Consider the following generalization of the possibility modality above.  We introduce a ternary modality $\phi \langle C \rangle \psi$ where $C$ is a two-hole term context and then interpret it to mean 
+\[\{ \rho | \exists tuv. u \in \phi \land \rho\maps C[t, u] \to v \land v \in \psi.\]
+
+In applicative calculi like \lac and SK calculus, we can take $C$ to be application.  The interpretation says that $\phi \langle C \rangle \psi$ denotes a set of edges that each witness that applying some $t$ to a term in $\phi$ gives a term in $\psi;$ in other words, it describes those terms $t$ that denote functions of type $\phi \Rightarrow \psi.$
+
+In concurrent calculi like \pic and Yoshida's combinator calculus, we can take $C$ to be the concurrent product.  The interpretation says that $\phi \langle C \rangle \psi$ denotes a set of edges that each witness that running a process $t$ concurrently with a process in $\phi$ may reduce to a process in $\psi.$  Caires writes this operator with a right-pointing triangle $\phi \triangleright \psi.$
+
 \subsection{Lambek's construction}
 
 Recall that Lambek defined a cartesian closed category by taking types as objects and equivalence classes of lambda terms with one free variable as morphisms.  The equivalence identified lambda terms that varied only in the choice of free variable ($\alpha\mbox{-}$equivalence); it identified terms $t$ with $\lambda x.(t\; x),$ where $x$ was not free in $t$ ($\eta\mbox{-}$equivalence or extensionality); and if some term $t$ reduced to a term $u$, it identified $t$ and $u$ ($\beta\mbox{-}$equivalence).
@@ -308,7 +325,11 @@ We can introduce our predicates from the previous subsection as types in the fol
 
 Similarly, morphisms in $Coll$ are also included among those in Pred(Th, Coll), so they act on predicates; for each predicate $P$ and morphism $m$ in $Coll$ we get a witness of a subtyping judgement $P \subset m(P)$.  In the case where Coll is Heyting algebras, $P$ constructs a subgraph and then $m$ constructs a larger subgraph around it.
 
-We can gather all these judgements together into profunctors; they form the assumptions and conclusions of certain dinatural transformations that play the role of inference rules.  The dinatural transformations come from the rewrites of Th; each rewrite gives a cut rule.  For example, $\sigma$ gives the inference rule
+We can gather all these judgements together into profunctors; they form the assumptions and conclusions of certain dinatural transformations that play the role of inference rules.  The dinatural transformations come from the rewrites of Th; each rewrite gives a cut rule.  For example, $\kappa$ gives the inference rule
+\begin{center}
+  \AXC{$\vdash K \maps A \Rightarrow (B\Rightarrow A)$} \AXC{$\Gamma \vdash y\maps A$} \AXC{$\Delta \vdash z\maps B$}
+  \TIC{$\Gamma, \Delta \vdash \kappa((K\; y) z) = y\maps A$} \DP $\kappa.$
+\end{center}
 
 \bibliographystyle{amsplain}
 \bibliography{ladl}
