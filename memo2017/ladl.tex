@@ -16,7 +16,7 @@
 \newcommand{\interp}[1]{\llbracket #1 \rrbracket}
 \newcommand{\interpp}[1]{\{\!| #1 |\!\}}
 \newcommand{\from}{\leftarrow}
-\newcommand{\maps}{\colon}
+\newcommand{\maps}{\maps}
 \newcommand{\Th}{\mathrm{Th}}
 \newcommand{\Gph}{\mathrm{Gph}}
 \newcommand{\FinSet}{\mathrm{FinSet}}
@@ -118,7 +118,7 @@ terms.  The first line, labeled ``syntax'', defines four term constructors.  The
 
 \section{Categorical semantics}
 
-In Lawvere's seminal 1963 thesis \cite{Lawvere}, he showed that categories with finite products suffice to model all of universal algebra.  If a mathematical gadget can be described as sets equipped with functions satisfying axioms, there is a finite-products category Th such that all gadget arise as product-preserving functors from Th to Set, and each finite-products category defines a gadget.  Monoids, groups, rings, natural numbers, and graphs are all examples; fields are a notable exception that cannot be defined this way.  A ``Gph-theory'', defined below, is a Lawvere theory in which we can specify directed edges between morphisms without having to declare them equal; this lets us encode the notion of a reduction between terms.  We can think of a presentation of a Gph-theory as a specification file for a toy version of K framework.
+In Lawvere's seminal 1963 thesis \cite{Lawvere}, he showed that categories with finite products suffice to model all of universal algebra.  If a mathematical gadget can be described as sets equipped with functions satisfying axioms, there is a finite-products category Th such that all gadget arise as product-preserving functors from Th to Set, and each finite-products category defines a gadget.  Monoids, groups, rings, natural numbers, and graphs are all examples; fields are a notable exception that cannot be defined this way.  A ``Gph-theory'', defined below, is a Lawvere theory in which we can specify directed edges between morphisms without having to declare them equal; this lets us encode the notion of a reduction between terms.  We can think of a presentation of a Gph-theory as a specification file for a toy version of K framework, and we are working on implementing our algorithm as a transformation of actual K framework specifications.
 
 We should say something about binders.  Reasoning about languages with binders is a hard-enough problem that it was the focus of the 2005 PoplMark challenge \cite{PoplMark}.
 %https://link.springer.com/chapter/10.1007/11541868_4
@@ -147,7 +147,7 @@ Any category is trivially Gph-enrichable by treating the elements of the hom set
 
 A {\bf Gph-enriched functor} between two Gph-enriched categories $C, D$ is a functor between the underlying categories such that the graph structure on each hom set is preserved.
 
-Let $S$ be a finite set, $\FinSet$ be a skeleton of the category of finite sets and functions between them, and $\FinSet/S$ be the category of functions into $S$ and commuting triangles.  A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a finite set $S$ of {\bf sorts} and a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  Any Gph-theory has an underlying multisorted Lawvere theory given by forgetting the edges of each hom graph.
+A {\bf multisorted Gph-enriched Lawvere theory}, hereafter {\bf Gph-theory} is a Gph-enriched category with finite products Th equipped with a finite set $S$ of {\bf sorts} and a Gph-enriched functor $\theta\maps \FinSet^{\op}/S \to \Th$ that preserves products strictly.  Any Gph-theory has an underlying multisorted Lawvere theory given by forgetting the edges of each hom graph.
 
 A {\bf model} of a Gph-theory Th is a Gph-enriched functor from Th to Gph that preserves products up to natural isomorphism.  A {\bf homomorphism of models} is a monoidal Gph-enriched natural transformation between the functors.  Let FPGphCat be the 2-category of small Gph-enriched categories with finite products, product-preserving Gph-functors, and monoidal Gph-natural transformations.  The forgetful functor $U\maps \FPGphCat[\Th, \Gph] \to \Gph$ that picks out the underlying graph of a model has a left adjoint that picks out the free model on a graph.
 
@@ -164,22 +164,20 @@ Here's a presentation of the Gph-theory for the SK calculus with reduction to we
     \end{itemize}
   \item morphisms
     \begin{itemize}
-      \item $S\colon 1 \to T$
-      \item $K\colon 1 \to T$
-      \item $(-\; -)\colon T \times T \to T$
-      \item $R\colon T \to T,$ for reduction contexts
+      \item $S\maps 1 \to T$
+      \item $K\maps 1 \to T$
+      \item $(-\; -)\maps T \times T \to T$
+      \item $R\maps T \to T,$ for reduction contexts
     \end{itemize}
   \item equations
-    \item $R(x\; y) = (Rx\; y),$ {\em i.e.} to reduce a term, you reduce the applicand but not the term it's applied to
+    \item $R(x\; y) = (Rx\; y),$ {\em i.e.} to reduce a term, we reduce the applicand but not the term it's applied to
   \item edges
-    \item $\sigma\colon (((RS\; x)\; y)\; z) \Rightarrow ((Rx\; z)\; (y\; z))$
-    \item $\kappa\colon ((RK\; x)\; z) \Rightarrow Rx$
+    \item $\sigma\maps (((RS\; x)\; y)\; z) \Rightarrow ((Rx\; z)\; (y\; z))$
+    \item $\kappa\maps ((RK\; x)\; z) \Rightarrow Rx$
 \end{itemize}
 
-The free model of this theory on the empty graph has a vertex for every term in the calculus and an edge for every reduction.
-
 \subsection{Lawvere theory of edges}
-Given a Gph-theory Th, define the Lawvere theory 
+Given a Gph-theory Th, define the Lawvere theory Edge(Th) to be the coproduct of underlying Lawvere theory of Th and, for each edge $e\maps X \Rightarrow Y \maps A \to B,$ a generating morphism $e\maps A \to B.$
 
 % www.mathstat.dal.ca/~selinger/papers/papers/combinatory.pdf
 \begin{itemize}
