@@ -182,9 +182,10 @@ can be shown to extend to practical implementations. However, it
 introduces an intriguing conundrum.
 
 Specifically, the work of Gabbay and Pitts relies on a version of set
-theory that admits an infinite supply of ``atoms''. This raises the
-question of where these atoms come from, which has both theoretical and
-practical implications. On the practical side, infinite sets of
+theory (Fraenkel-Mostowski set theory, which we abbreivate to FM set
+theory) that admits an infinite supply of ``atoms''. This raises the
+question of where these atoms come from, which has both theoretical
+and practical implications. On the practical side, infinite sets of
 ``atomic'' entities, i.e. entities with no internal structure, are not
 realizable on modern computers. Modern computers fundamentally rely on
 sets of elements with effective internal structure to provide the kind
@@ -508,7 +509,7 @@ the RHO combinator calculus.
 \end{array}\]
 
 Of course, this encoding, as an implementation, runs away, unfolding
-$\bangp{P}$ eagerly. It is possible to obtain a lazier
+$\mathsf{*}P$ eagerly. It is possible to obtain a lazier
 replication operator restricted to the embedding of
 input-guarded $\pi$ processes. The reader familiar with the
 $\lambda$-calculus will have noticed the similarity between $D$ and
