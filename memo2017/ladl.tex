@@ -79,17 +79,17 @@ Every type system of which we're aware was created by hand, and type systems are
 was only able to give a simple sorting to the \pic.  It took fourteen years to advance the field to the point that Caires was able to present a spatial-behavioral type system powerful enough to reason about the behavior of \pic terms rather than just the type of data sent on the channels \cite{Caires}.
 % Behavioral and Spatial Observations in a Logic for the π-Calculus
 
-In this paper, we will give an algorithm for generating a spatial-behavioral type system automatically from a presentation of the operational semantics of a term calculus and a grammar for a collection monad.  The resulting type system is sound and complete by construction.  The algorithm is practically forced on us when we consider the two requirements that types correspond to predicates and that predicates be represented by collections of terms.
+In this paper, we will give an algorithm for generating a spatial-behavioral type system automatically from a presentation of the operational semantics of a term calculus and a grammar for a collection monad.  The resulting type system is sound by construction.  The algorithm is practically forced on us when we consider the two requirements that types correspond to predicates and that predicates be realized by collections of terms.
 
-Given a presentation of a term calculus, we can construct a graph $G$ whose vertices are terms of the calculus and whose edges are rewrites.  If we add ``do-nothing'' rewrites to each vertex, we can describe the whole graph just in terms of its edges.  The Curry-Howard-Lambek isomorphism famously says that types correspond to predicates.  The isomorphism works for predicates on any set, but when we consider predicates on the set of edges in $G,$ something magical happens: we can think of types as being inhabited by the collection of edges that satisfy the predicate---in other words, types describe the behavior of programs.
+Given a presentation of a term calculus, we can construct a graph $G$ whose vertices are terms of the calculus and whose edges are rewrites.  If we add ``do-nothing'' rewrites to each vertex, we can describe the whole graph just in terms of its edges.  The Curry-Howard-Lambek isomorphism famously says that types correspond to predicates.  The isomorphism works for predicates on any set, but when we consider predicates on the set of edges in $G,$ something magical happens: we can think of types as being inhabited by the collection of edges that satisfy the predicate---in other words, these types describe the behavior of programs.
 
-Predicates need to talk about terms and rewrites as well as be able to assemble them together into a collection.  Usually we take the collection to be sets of edges because we want to consider subgraphs of $G,$ which form a Heyting algebra.  Since we have a grammar for the edges of $G$ and a grammar for Heyting algebras, we can consider the sum of the grammars to be a language for expressing predicates.
+Such predicates need to talk about terms and rewrites as well as be able to assemble them together into a collection.  Usually we take the collection to be sets of edges because we want to consider subgraphs of $G,$ which form a Heyting algebra.  Since we have a grammar for the edges of $G$ and a grammar for Heyting algebras, we can consider the sum of the grammars to be a language for expressing predicates.
 
 To this language we can add modalities.  If $\phi$ is a predicate that picks out some subgraph of $G,$ we can define $\diamond\phi$ to be a predicate satisfied by the set of terms that possibly reduce to a term in $\phi;$ similarly, we can define $\box\phi$ to be a predicate satisfied by the set of terms that necessarily reduce to a term in $\phi.$  We'll show later that a generalization of the ``possibly'' modality that is parametric in a two-hole term context gives rise both to the familiar arrow types of applicative calculi as well as Caires' rely-guarantee modality.
 
 Denotational semantics asks what function a term denotes, and works really well for functional programming languages.  The actual process of computation is largely ignored: it doesn't matter {\em how} you compute the function, just {\em what} the function is.  Denotational semantics gets a lot harder once we move away from functional programming languages.  Modern programs run on multiple computers at the same time, and each computer has several cores. The computers are connected by networks that can mix up the order in which messages are received.  A program may run perfectly by itself, but deadlock when you run it in parallel with another copy of itself.  The notion of ``composition'' begins to change, too: we run programs in parallel with each other and let them interact by passing messages back and forth, not simply by feeding the output of one function into the input of another.  All of this makes it hard to think of such programs as functions.
 
-Operational semantics is the other end of the spectrum, concerned with the rules by which the state of a computer changes.  Whereas denotational semantics is inspired by Church and the \lac, operational semantics is inspired by Turing and his machines: every virtual machine is an executable spec for an operational semantics.  Operational semantics has been criticized by advocates of denotational semantics as being completely ad-hoc and hard to reason about.  In response, the operational semantics community developed tools like K framework \cite{kframework} and Maude \cite{Maude}, principled approaches that make reasoning about operational semantics much easier.
+Operational semantics is the other end of the spectrum, concerned with the rules by which the state of a computer changes.  Whereas denotational semantics is inspired by Church and the \lac, operational semantics is inspired by Turing and his machines.  Every virtual machine from CP/CMS to LLVM is an executable spec for an operational semantics.  Operational semantics has been criticized by advocates of denotational semantics as not providing a compositional notion of semantics, so reasoning about the behavior of a program in all contexts can be difficult.  In response, the operational semantics community developed tools like K framework \cite{kframework} and Maude \cite{Maude}, principled approaches that make reasoning about operational semantics much easier.
 
 Categorical semantics has traditionally been very function-oriented: Lambek's contribution \cite{Lambek} to the Curry-Howard-Lambek isomorphism was to show how to construct a cartesian closed category of types and equivalence classes of lambda terms with one free variable, and then assign denotations to the types and terms with a cartesian closed functor into Set.  Despite this tradition, categorical semantics generalizes very easily.  For example, when we generalize from the cartesian product to an arbitrary tensor product, we get symmetric monoidal closed categories, whose internal language is {\em linear} \lac.  Linear \lac has models in the category Hilb of Hilbert spaces and linear transformations, so we get a notion of a quantum programming language.
 
@@ -338,36 +338,53 @@ Each rewrite rule $\rho\maps f \Rightarrow f'\maps T^n \to T$ in Th defines $n$ 
 \end{center}
 
 \subsubsection{Soundness and completeness}
-By soundness, we mean that anything one can prove using the type system is true of the collections.  By completeness, we mean that there are no collections that cannot be represented with a predicate.  The whole point of our approach is that it is correct by construction.  Soundness and completeness for the modal-free fragment follow directly from the definitions; soundness, in particular, is a direct consequence of the way realizability is incorporated into the approach.  For the formulae, the intuitions underlying the completeness argument amount to the fact that the term language for the logical operators associated with the collections are extractions of a term language for the collection monad.  Thus, they are in perfect correspondence with the model.  In the case of Heyt, this is equivalent to the well-known fact that boolean algebras are effectively realized by the powerset lattice.  Likewise, in the case of Heyt, the semantics that maps formulae to the composition of the collection monad with the monad for the term language supporting computation is nothing more than a pointwise lifting of the powerset semantics.   
+
+[[Soundness: operations on predicates correspond to operations on model; comes from distributive law
+
+Completeness: any collection in the model is described by a predicate; comes from the fact that Coll o Term is contained in Coll + Term.]]
+
+By soundness, we mean that all subtyping judgements are true in every model.  By completeness, we mean that there are no collections that cannot be represented with a predicate.  The whole point of our approach is that it is correct by construction.  Soundness and completeness for the modal-free fragment follow directly from the definitions; soundness, in particular, is a direct consequence of the way realizability is incorporated into the approach.  For the formulae, the intuitions underlying the completeness argument amount to the fact that the term language for the logical operators associated with the collections are extractions of a term language for the collection monad.  Thus, they are in perfect correspondence with the model.  In the case of Heyt, this is equivalent to the well-known fact that Heyting algebras are effectively realized by the powergraph lattice.  Likewise, in the case of Heyt, the semantics that maps formulae to the composition of the collection monad with the monad for the term language supporting computation is nothing more than a pointwise lifting of the powergraph semantics.   
 
 \subsection{Modalities and behavioral types}
 
-In order to get a Gph-enriched category that is not equivalent to the untyped one, we need to exclude certain morphisms that are not well-typed.  To capture well-typedness, we need modalities.  In what follows, we'll consider a generalization of the ``possibly'' modality typically denoted with a diamond $\diamond.$  The new modality is of the form $X\langle C, D \rangle Y,$ where $X$ and $Y$ are predicates, $C$ is a two-hole term context, and $D$ is a one-hole term context.  The parametric-possibly modality captures those terms that when placed in the context $C$ with a term of type $X$ possibly rewrite to a term of type $D[Y].$  For WHNF-SK, when we take $C[t,u] = (Rt\; u)$ and $D[v] = Rv,$ then $X\langle C, D \rangle Y$ is precisely the usual arrow type $X \Rightarrow Y.$  For \pic, we can choose $C$ to involve parallel composition rather than application; the parametric-possibly modality then becomes Caires' rely-guarantee modality $X \triangleright Y$ \cite{Caires}.  For simplicity, assume for this section that Coll = Heyt and our collections are finitely presentable subgraphs of $G.$
+In order to get a Gph-enriched category that is not equivalent to the untyped one, we need to exclude certain morphisms that are not well-typed.  To capture well-typedness, we need modalities.  In what follows, we'll consider a generalization of the ``possibly'' modality typically denoted with a diamond $\diamond.$  The new modality is of the form $X\langle R, C \rangle Y,$ where $X$ and $Y$ are predicates, $R$ is a one-hole context and $C$ is a two-hole term context.  The parametric-possibly modality captures those terms $t$ that when placed with a term $u$ of type $X$ in the context $R[C[t, u]]$ possibly rewrite to a term of type $R[Y].$  For WHNF-SK, when we take $R[t] = Rt$ and $C[t,u] = (t\; u),$ then $X\langle R, C \rangle Y$ is precisely the usual arrow type $X \Rightarrow Y.$  For \pic, we can choose $C[t, u] = t\; |\; u;$ the parametric-possibly modality then becomes Caires' rely-guarantee modality $X \triangleright Y$ \cite{Caires}.  For simplicity, assume for this section that Coll = Heyt and our collections are finitely presentable subgraphs of $G.$
 
-On the syntax side, we add new term constructors to Pred(Th).  Given a Lawvere theory $L$ with a sort $T$ for terms, one can derive a new theory $dL$ of term contexts by replacing each term constructor $f\maps T^n \to T$ with $n$ term constructors $f_i\maps T^{n-1} \to T$ where $1 \le i \le n$.  We think of $f_i$ as being $f$ with the $i$th input being a hole.  We define the Lawvere theory Modal(Th) to be Pred(Th) plus a new predicate constructor that takes two predicates $X$ and $Y,$ a two-hole term context $C,$ and a one-hole context $D$ and produces a new predicate.  As above, we generate a Gph-enriched category equivalent to $\End_{\Th}(T),$ but because we can now talk about the future behavior of terms rather than just their structure, this time we call it SpatialBehavioral(Th, Coll).
+On the syntax side, we add new term constructors to Pred(Th).  Given a Lawvere theory $L$ with a sort $T$ for terms, one can derive a new theory $dL$ of term contexts by replacing each term constructor $f\maps T^n \to T$ with $n$ term constructors $f_i\maps T^{n-1} \to T$ where $1 \le i \le n$.  We think of $f_i$ as being $f$ with the $i$th input being a hole.  We define the Lawvere theory Modal(Th) to be Pred(Th) plus a new predicate constructor that takes two predicates $X$ and $Y,$ a one-hole context $R,$ and a two-hole term context $C,$ and and produces a new predicate.  As above, we generate a Gph-enriched category equivalent to $\End_{\Th}(T),$ but because we can now talk about the future behavior of terms rather than just their structure, this time we call it SpatialBehavioral(Th, Coll).
 
 On the semantics side, we need a natural transformation from Modal(Th) to Heyt $\circ$ Edge(Th) that interprets a modal type as a set of edges satisfying that type.  We have the obvious functions src, tgt from Edge(Th) to vertices of G.  We define $\edge(x, y)$ for edges $x, y$ to be the set of edges from tgt($x$) to src($y$).  We extend $\edge$ to predicates by using the fact that our collection is a monad.  In Scala notation,
 \[ \edge(X, Y) = \for(x \from X; y \from Y; r \from \edge(x, y)) \yield r. \]
 The intepretation of the modality is
-\[ \interp{X\langle C,D\rangle Y} = \for(t \from \top; r \from \edge(C[t, X], D[Y])) \yield t. \]
+\[ \interp{X\langle R, C\rangle Y} = \for(t \from \top; r \from \edge(R[C[t, X]], R[Y])) \yield t. \]
+Typically, $R$ denotes a reduction context and $C$ denotes a context in which terms are combined in way that they can interact with each other.
 
 SpatialBehavioral(Th, Coll) comes equipped with extra subtyping inference rules involving the modality:
 \begin{center}
-  \AXC{$X \subseteq X'$} \AXC{$W \entails t[]\maps X'\langle C,D\rangle Y$}
-  \BIC{$W \entails t[]\maps X\langle C,D\rangle Y$} \DP $\quad$
-  \AXC{$W \entails t[]\maps X\langle C,D\rangle Y$} \AXC{$Y \subseteq Y'$} 
-  \BIC{$W \entails t[]\maps X\langle C,D\rangle Y'$} \DP.
+  \AXC{$X \subseteq X'$} \AXC{$W \entails t[]\maps X'\langle R, C\rangle Y$}
+  \BIC{$W \entails t[]\maps X\langle R, C\rangle Y$} \DP $\quad$
+  \AXC{$W \entails t[]\maps X\langle R, C\rangle Y$} \AXC{$Y \subseteq Y'$} 
+  \BIC{$W \entails t[]\maps X\langle R, C\rangle Y'$} \DP.
 \end{center}
 where we interpret $V, W$ in the last rule as $V \times W.$  The resulting system is sound by construction, but may not be complete because modalities may characterize sets that are not otherwise finitely presentable.
 
-When $\edge(D[Y], C[\top, X])$ is not empty and we extend the modality from talking about single rewrites to talking about arbitrary lists of rewrites, we get inference rules like
+When $\edge(R[Y], C[\top, X])$ is not empty and we extend the modality from talking about single rewrites to talking about arbitrary lists of rewrites, we get inference rules like
+
+X,Y ⊢ t[]:Z
+=================
+X |- t'[]:Y<R,C>Z
+
+
+
 \begin{center}
-  \AXC{$W \entails t[]\maps X\langle C,D\rangle Y$} \AXC{$V \entails u[]\maps Y\langle C,D\rangle Z$}
-  \BIC{$V,W \entails u[t[]]\maps X\langle C,D\rangle Z$} \DP
+  \AXC{$W \entails t[]\maps X\langle R, C\rangle Y$} \AXC{$V \entails u[]\maps Y\langle R, C\rangle Z$}
+  \BIC{$V,W \entails \lambda x.(u (t x))  u | t  ((B u) t)  ((S (K u)) ((S (K t))) I)\maps X\langle R, C\rangle Z$} \DP
 \end{center}
 at the cost of potential divergence.
 
-We leave the question of soundness and completeness of the ``eventually'' modalities for future work.
+C[t,u] = R(t u)          D[t] = Rt
+C[t,u] = COMM | t | u    D[t] = COMM | t
+
+R[t] = Rt         C[t, u] = (t u)
+R[t] = COMM | t   C[t, u] = t | u
 
 \section{Conclusion}
 
