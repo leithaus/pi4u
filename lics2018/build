@@ -1,0 +1,4 @@
+pdflatex lics2018
+bibtex lics2018
+pdflatex lics2018
+pdflatex lics2018
