@@ -130,9 +130,9 @@
 %% Note: \begin{abstract}...\end{abstract} environment must come
 %% before \maketitle command
 \begin{abstract}
-  Categorical logic focuses on structure-preserving functors from a ``syntactic'' category of formulae and proofs to a ``semantic'' category of realizations.  We show that in many interesting cases, this functor is a distributive law between monads.  The first monad $T$ describes the terms of a programming language, while the second monad $C$ describes a notion of collection.  Formulae are terms in $T+C$ while realizations are terms in $CT.$  Realization is a natural transformation defined in terms of the units and joins of the monads as well as a distributive law $\delta\maps TC \Rightarrow CT.$
-  
-  Finitary monads can capture not only term structure but also reduction relations. When we use such monads in the construction above, the resulting type system is both structural  and behavioral.  Our main result is that the ``arrow'' type constructor in functional programming languages arises as a modality in the structural-behavioral type system.
+The internal logic of a category interprets objects as collections, morphisms as terms with one free variable, and subobjects as predicates.  We describe a related but different approach to realizability of types.  We use two monads; the first monad $T$ describes the terms of a programming language, while the second monad $C$ describes a notion of collection.  Formulae are terms in $T+C$ while realizations are terms in $CT.$  Realization is a natural transformation defined in terms of the units and joins of the monads as well as a distributive law $\delta\maps TC \Rightarrow CT.$
+
+Finitary monads can capture not only term structure but also reduction relations. When we use such monads in the construction above, the resulting type system is both structural  and behavioral.  Our main result is that the ``arrow'' type constructor in functional programming languages arises as a modality in the structural-behavioral type system.
 \end{abstract}
 
 
@@ -169,6 +169,25 @@
 %% environment and commands, and keywords command.
 \maketitle
 
+\section{Introduction}
+
+Our paper centers on the insight that both formulae of a structural type system and their realizations can be expressed in terms of a monad $T$ for terms of a programming language and a monad $C$ for collecting the terms.  The realization of a type is the collection of values of that type.  By composing $C$ with $T,$ we get a functor $CT$ for collections of terms.
+
+Structural type systems express types by replacing specific values with a type identifier.  For example, in Facebook's Flow type system for JavaScript, the record
+\begin{center}{\tt \{name: "Joe Schmoe", age: 45\}}\end{center}
+is a value of type
+\begin{center}{\tt \{name: string, age: number\}}.\end{center}
+By taking the sum of the monads $T$ and $C,$ we get a monad for structural formulae.
+
+The realization of formulae is given by a natural transformation ${\interp{-}\maps (T+C)\Rightarrow CT,}$ which can be defined in terms of the units and joins of $T, C,$ and a distributive law ${\delta\maps TC \Rightarrow CT.}$  Whenever we can define $T, C,$ and $\delta$ we get a structural type system for the language $T.$
+
+Finitary monads correspond to Lawvere theories.  There is a Lawvere theory for reflexive directed multigraphs that can be extended to describe the graph of terms and rewrites in programming languages without binders like combinator calculi.  Formulae involving edges not only describe structures but also behaviors.
+
+By adding extra syntax for modal operators to $(T+C)$, we can express behavioral types concisely.  The ``possibly'' modality $\diamond t$ denotes the collection of terms that can be rewritten to $t$ in a single step.  Generalizing slightly, we can define a possibility modality that depends on a couple of types $X, Y$ and a two-hole term context $K$: $X\langle K \rangle Y$ denotes the collection of terms $t$ such that there exists a term $u$ of type $X$ and $v$ of type $Y$ such that $K[t, u]$ can rewrite to $v$ in a single step.  In an applicative calculus like the SKI combinator calculus, $X\langle K \rangle Y$ is precisely $X \Rightarrow Y.$
+
+\section{foo}
+
+\if0
 
 \section{Introduction}
 Every category has an associated internal logic.  The objects $X$ are interpreted as collections of items of type $X;$ the morphisms $X \to Y$ are interpreted as terms of type $Y$ with a single free variable of type $X.$  Subobjects $P \into X$ are interpreted as predicates $P(X)$ that pick out those items in $X$ for which $P$ is true.
@@ -183,9 +202,13 @@ The monad for the programming language can describe rewrites as easily as terms 
 
 \section{Internal logic}
 
-The internal logic of a category interprets objects as collections; in this paper we are particularly interested in collections of terms of a programming language.  Category theory encodes the operations of the collection as categories equipped with functors and natural transformations.  For example, if the notion of collection is a free monoid, then we consider strict monoidal categories.
+The internal logic of a category views the objects of the category as certain collections, which we will call ``primitive'' to distinguish them from the collections described by $C.$  It is therefore useful to consider what kind of monads we would like to call ``collections''.  At the very least, we would like to be able to add items to the collection and a notion of an empty collection; this requires the algebras of the monad to be monoids.
 
-We start with a 2-monad $T$ on Cat for the terms and rewrites of a term calculus.  The particular notion of 2-monad we use is the one that corresponds to a Cat-enriched Lawvere theory \cite{EnrichedLTs}.  Such theories suffice for describing the terms and rewrites of languages with no binders like combinator calculi; for example, figure \ref{fig:SKI} gives the generating objects, morphisms, and 2-morphisms for the SKI combinator calculus.  A model is a Cat-enriched functor from the theory to Cat.  The category of models has a forgetful functor to Cat with a left adjoint; the composition of the functors gives the monad in the usual way.  We form the category $T\emptyset,$ the free term calculus on the empty category.  It can be interpreted of as a category of singleton collections, each containing a term.
+The microcosm principle \cite{BaezDolan} says, ``Certain algebraic structures can be defined in any category equipped with a categorified version of the same structure.''  For instance, we can only define monoids in monoidal categories, so $C$ and $T$ will necessarily be monads on a monoidal category.  The unit of the tensor product plays a role analogous to the one element set.  We also typically want to apply $T$ to the empty object of generators so that the only built-in terms are the ones from the programming language itself; a mere monoidal category isn't guaranteed to have one of these, but a rig category is.
+
+The free rig category on a category is a 2-monad.  At this point we are actually interested in {\em doctrines}, which are subtly different from 2-monads on Cat \cite{nlabDoctrine}, but those details are outside the scope of this paper.  Each doctrine corresponds to a particular kind of logic: the doctrine of symmetric monoidal categories corresponds to linear logic, the doctrine of Heyting categories corresponds to first-order logic, the doctrine of elementary toposes corresponds to higher-order logic, and so forth \cite{nlabInternalLogicKindsOfInternalLogic}.
+
+
 
 \begin{figure}
   \begin{center}
@@ -202,7 +225,7 @@ We start with a 2-monad $T$ on Cat for the terms and rewrites of a term calculus
   \label{fig:SKI}
 \end{figure}
 
-Next we apply a 2-monad $C$ for the collections.  At this point we are actually interested in {\em doctrines}, which are subtly different from 2-monads \cite{nlabDoctrine}, but those details are outside the scope of this paper.  Each doctrine corresponds to a particular kind of logic: the doctrine of symmetric monoidal categories corresponds to linear logic, the doctrine of Heyting categories corresponds to first-order logic, the doctrine of elementary toposes corresponds to higher-order logic, and so forth \cite{nlabInternalLogicKindsOfInternalLogic}.
+
 
 As computer programmers, we often use abstract data types (ADTs) for describing collections.  The elements of an ADT form a set rather than a category, but we can equip the set with morphisms.  Here we consider defining morphisms from a term $t$ of an ADT to another term $u$ of the ADT to be the inclusions of $t$ as a subterm of $u$ up to relabeling, where by relabeling we mean any data in a production that is not at a recursion point.
 
@@ -210,7 +233,11 @@ The resulting category has two kinds of morphism that interact well: pointwise r
 
 
 
-\section{Toposes}
+
+\section{Comparison with toposes}
+
+
+
 \section{Collections}
 \section{Formulae}
 \section{Realization}
@@ -394,7 +421,7 @@ Given $\delta\maps T+C \Rightarrow CT$ and an algebra $h\maps CTX \to X,$ get al
 %% 
 %% ``set-like'' collections: P1 is a classifier 
 %% 
-
+\fi
 
 %% Acknowledgments
 \begin{acks}                            %% acks environment is optional
