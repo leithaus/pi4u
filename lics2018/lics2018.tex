@@ -171,7 +171,7 @@ Finitary monads can capture not only term structure but also reduction relations
 
 \section{Introduction}
 
-Our paper centers on the insight that both formulae of a structural type system and their realizations can be expressed in terms of a monad $T$ for terms of a programming language and a monad $C$ for collecting the terms.  The realization of a type is the collection of values of that type.  By composing $C$ with $T,$ we get a functor $CT$ for collections of terms.
+Our paper centers on the insight that the formulae of a structural type system and their realizations can both be expressed in terms of a monad $T$ for terms of a programming language and a monad $C$ for collecting the terms.
 
 Structural type systems express types by replacing specific values with a type identifier.  For example, in Facebook's Flow type system for JavaScript, the record
 \begin{center}{\tt \{name: "Joe Schmoe", age: 45\}}\end{center}
@@ -179,121 +179,174 @@ is a value of type
 \begin{center}{\tt \{name: string, age: number\}}.\end{center}
 By taking the sum of the monads $T$ and $C,$ we get a monad for structural formulae.
 
-The realization of formulae is given by a natural transformation ${\interp{-}\maps (T+C)\Rightarrow CT,}$ which can be defined in terms of the units and joins of $T, C,$ and a distributive law ${\delta\maps TC \Rightarrow CT.}$  Whenever we can define $T, C,$ and $\delta$ we get a structural type system for the language $T.$
+The realization of formulae is given by a natural transformation ${\interp{-}\maps (T+C)\Rightarrow CT,}$ which can be defined in terms of the units and joins of $T$ and $C$ and a distributive law ${\delta\maps TC \Rightarrow CT.}$  Whenever we can define $T, C,$ and $\delta$ we get a structural type system for the language $T.$
 
 Finitary monads correspond to Lawvere theories.  There is a Lawvere theory for reflexive directed multigraphs that can be extended to describe the graph of terms and rewrites in programming languages without binders like combinator calculi.  Formulae involving edges not only describe structures but also behaviors.
 
-By adding extra syntax for modal operators to $(T+C)$, we can express behavioral types concisely.  The ``possibly'' modality $\diamond t$ denotes the collection of terms that can be rewritten to $t$ in a single step.  Generalizing slightly, we can define a possibility modality that depends on a couple of types $X, Y$ and a two-hole term context $K$: $X\langle K \rangle Y$ denotes the collection of terms $t$ such that there exists a term $u$ of type $X$ and $v$ of type $Y$ such that $K[t, u]$ can rewrite to $v$ in a single step.  In an applicative calculus like the SKI combinator calculus, $X\langle K \rangle Y$ is precisely $X \Rightarrow Y.$
+By adding extra syntax for modal operators to $(T+C)$, we can express behavioral types concisely.  The ``possibly'' modality $\diamond t$ denotes the collection of terms that can be rewritten to $t$ in a single step.  Generalizing slightly, we can define a possibility modality that depends on a pair of types $X, Y$ and a two-hole term context $K$: $X\langle K \rangle Y$ denotes the collection of terms $t$ such that there exists a term $u$ of type $X$ and $v$ of type $Y$ such that $K[t, u]$ can rewrite to $v$ in a single step.  In an applicative calculus like the SKI combinator calculus, $X\langle K \rangle Y$ is precisely $X \Rightarrow Y.$
 
-\section{foo}
-
-\if0
-
-\section{Introduction}
-Every category has an associated internal logic.  The objects $X$ are interpreted as collections of items of type $X;$ the morphisms $X \to Y$ are interpreted as terms of type $Y$ with a single free variable of type $X.$  Subobjects $P \into X$ are interpreted as predicates $P(X)$ that pick out those items in $X$ for which $P$ is true.
-
-This line of reasoning culminated in the idea of a topos.  The motivating notion of collection in a topos is that of sets, so in any topos we have empty collections, some base collections given by fiat, the ability to form a collection of pairs, a notion of morphism between collections, and a subobject classifier.
-
-In computer programming, we often use collections that have many but not all of these capabilities.  We would like to explore how the internal logic changes with the notion of collection.  Also, types in computer science describe collections of terms of a programming language; we would like these collections to respect the reduction rules of the language.
-
-We can get a structural type system by adding the monad $T$ for the programming language to the monad $C$ for the collection.  The interpretation of these types is given by a natural transformation ${\interp{-}\maps (T+C) \Rightarrow CT}$ defined in terms of the units and joins of $T$ and $C$ and a distributive law ${\delta\maps TC \Rightarrow CT}.$
-
-The monad for the programming language can describe rewrites as easily as terms by making use of the ``edges-only'' presentation of reflexive directed multigraphs.  With edges, a structural type system is also a behavioral type system because we can talk about collections of rewrites.  The ``possibly'' modality $\diamond X,$ for instance, describes a collection of terms that can be rewritten in a single step to terms in the collection $X.$  A generalization of the possibly modality $X\langle K\rangle Y$ describes a collection of terms that when put into a two-hole term context $K$ with a term of type $X$ can be rewritten in a single step to a term of type $Y.$  When we take $K$ to be an applicative context, such terms are usually said to be of type $X \Rightarrow Y.$
-
-\section{Internal logic}
-
-The internal logic of a category views the objects of the category as certain collections, which we will call ``primitive'' to distinguish them from the collections described by $C.$  It is therefore useful to consider what kind of monads we would like to call ``collections''.  At the very least, we would like to be able to add items to the collection and a notion of an empty collection; this requires the algebras of the monad to be monoids.
-
-The microcosm principle \cite{BaezDolan} says, ``Certain algebraic structures can be defined in any category equipped with a categorified version of the same structure.''  For instance, we can only define monoids in monoidal categories, so $C$ and $T$ will necessarily be monads on a monoidal category.  The unit of the tensor product plays a role analogous to the one element set.  We also typically want to apply $T$ to the empty object of generators so that the only built-in terms are the ones from the programming language itself; a mere monoidal category isn't guaranteed to have one of these, but a rig category is.
-
-The free rig category on a category is a 2-monad.  At this point we are actually interested in {\em doctrines}, which are subtly different from 2-monads on Cat \cite{nlabDoctrine}, but those details are outside the scope of this paper.  Each doctrine corresponds to a particular kind of logic: the doctrine of symmetric monoidal categories corresponds to linear logic, the doctrine of Heyting categories corresponds to first-order logic, the doctrine of elementary toposes corresponds to higher-order logic, and so forth \cite{nlabInternalLogicKindsOfInternalLogic}.
-
-
-
-\begin{figure}
-  \begin{center}
-    \begin{itemize}
-      \item a generating object $M$
-      \item generating morphisms $S,K,I\maps 1\to M$
-      \item a generating morphism $(-\;-)\maps M^2 \to M$
-      \item a generating 2-morphism $\sigma\maps (((S\;x)\;y)\;z)\Rightarrow ((x\;z)\;(y\;z))$
-      \item a generating 2-morphism $\kappa\maps ((K\;x)\;z)\Rightarrow x$
-      \item a generating 2-morphism $\iota\maps (I\;z)\Rightarrow z$
-    \end{itemize}
-  \end{center}
-  \caption{A presentation of the Cat-enriched Lawvere theory of the SKI combinator calculus.}
-  \label{fig:SKI}
-\end{figure}
-
-
-
-As computer programmers, we often use abstract data types (ADTs) for describing collections.  The elements of an ADT form a set rather than a category, but we can equip the set with morphisms.  Here we consider defining morphisms from a term $t$ of an ADT to another term $u$ of the ADT to be the inclusions of $t$ as a subterm of $u$ up to relabeling, where by relabeling we mean any data in a production that is not at a recursion point.
-
-The resulting category has two kinds of morphism that interact well: pointwise rewrites of terms in a collection and inclusion of collections into each other.  In most programming languages, there are no equations between rewrites, only equations between structurally equivalent terms.  The result is that $CT\emptyset$ is actually a quiver, the free category on a graph.  Subobjects are isomorphism classes of monos; in a quiver, $g\circ f$ is never equal to $h\circ f$ unless $g=h,$ so all morphisms from rewrites are monos.  The morphisms coming from inclusions are monos by construction.
+\section{Term calculi}
+\begin{figure*}
+  \def\w{5}\def\h{2}
+  \begin{tikzpicture}
+    \node (A) at (0,\h) {((K w) \{x, y, z\})};
+    \node (B) at (\w,\h) {w}
+      edge [<-|] node [above] {$\kappa$} (A);
+    \node (C) at (0,0) {\{((K w) x), ((K w) y), ((K w) z)\}}
+      edge [<-|] node [left] {$\delta$} (A);
+    \node (D) at (\w,0) {\{w, w, w\} = \{w\}}
+      edge [<-|] node [right] {$\delta$} (B)
+      edge [<-|] node [below] {$\kappa$} (C);
+  \end{tikzpicture}
+  \def\w{8}\def\h{2}
+  \begin{tikzpicture}
+    \node (A) at (0,\h) {(((B v) w) \{x y z\})};
+    \node (B) at (\w,\h) {(v (w \{x y z\}))}
+      edge [<-|] node [above] {$\beta$} (A);
+    \node (C) at (0,0) {\{(((B v) w) x), (((B v) w) y), (((B v) w) z)\}}
+      edge [<-|] node [left] {$\delta$} (A);
+    \node (D) at (\w,0) {\{v (w x)), v (w y)), v (w z))\}}
+      edge [<-|] node [right] {$\delta$} (B)
+      edge [<-|] node [below] {$\beta$} (C);
+  \end{tikzpicture}
+\caption{Using the ``sets of'' collection monad with the combinators $K$ and $B$.}
+\label{fig:sets}
+\end{figure*}
 
 
 
 
-\section{Comparison with toposes}
+\begin{figure*}
+\def\w{5}\def\h{2}
+  \begin{tikzpicture}
+    \node (A) at (0,\h) {((K w) [x, y, z])};
+    \node (B) at (\w,\h) {w}
+      edge [<-|] (A);
+    \node (C) at (0,0) {[((K w) x), ((K w) y), ((K w) z)]}
+      edge [<-|] node [left] {$\delta$} (A);
+    \node (D) at (\w,0) {[w, w, w] $\ne$ [w]}
+      edge [<-|] node [right] {$\delta$} (B)
+      edge [<-|] (C);
+  \end{tikzpicture}
 
+  \def\w{8}\def\h{2}
+  \begin{tikzpicture}
+    \node (A) at (0,\h) {(((B v) w) [x y z])};
+    \node (B) at (\w,\h) {(v (w [x y z]))}
+      edge [<-|] (A);
+    \node (C) at (0,0) {[(((B v) w) x), (((B v) w) y), (((B v) w) z)]}
+      edge [<-|] node [left] {$\delta$} (A);
+    \node (D) at (\w,0) {[v (w x)), v (w y)), v (w z))]}
+      edge [<-|] node [right] {$\delta$} (B)
+      edge [<-|] (C);
+  \end{tikzpicture}
+\caption{Using the ``lists of'' collection monad with the combinators $K$ and $B$.  Because $K$ discards information, there is no nontrivial distributive law for the $SKI$ calculus and the list monad.  The $BCI$ calculus, on the other hand, is linear, and works fine with the list monad.}
+\label{fig:lists}
+\end{figure*}
 
+An operational semantics for a programming language needs to specify the grammar for the state of the computation, a structural equivalence, the reduction rules, and the reduction contexts.  There are various ways to model this in category theory.  One is by extending the multisorted Lawvere theory \cite{Trimble} of directed multigraphs with term constructors.  For example, we can model reduction of SKI terms to head normal form with the following presentation of a multisorted Lawvere theory:
+\begin{enumerate}
+  \item sorts $E, V$
+  \item function symbols $s, t\maps E \to V$
+  \item function symbols $S,K,I\maps 1 \to V$
+  \item function symbols $S_1,K_1,I_1\maps 1 \to E$
+  \item a function symbol $(-\;-)\maps V^2 \to V$
+  \item a function symbol $(-\;-)_1\maps E\times V \to E$
+  \item a function symbol $\sigma\maps V^3 \to V$
+  \item a function symbol $\kappa\maps V^2 \to V$
+  \item a function symbol $\iota\maps V\to V$
+  \item an equation $s(\sigma(x,y,z)) = (((S\; x)\; y)\; z)$
+  \item an equation $t(\sigma(x,y,z)) = ((x\; z)\;(y\; z))$
+  \item an equation $s(\kappa(x,y,z)) = ((K\; x)\; z)$
+  \item an equation $t(\kappa(x,y,z)) = x$
+  \item an equation $s(\iota (x,y,z)) = (I\; z)$
+  \item an equation $t(\iota (x,y,z)) = z$
+\end{enumerate}
+When we interpret this theory in Set, we get the set of edges and vertices in the graph of terms and rewrites, equipped with functions satisfying the equations.  Item 1 says that we have two generating objects in our theory, one for vertices and one for edges; the other objects of the theory include the terminal object 1 and those we get by taking products of objects.  Item 2 gives the source and target maps.  Item 3 says we have a chosen self edge on each vertex, a ``do nothing'' rewrite.  We include these so that the graph is the same as the one below.  Item 4 says that we have three generating vertices, one for each combinator.  Item 5 is a term constructor that lets us generate a new vertex by applying one vertex to another.  Item 6 says that the left side of an application is a reduction context.  Items 7-9 are the rewrites that generate the edges, and items 10-15 give the sources and targets of the rewrite rules.
+
+Another way to model the SKI calculus is with a Gph-enriched Lawvere theory:
+\begin{enumerate}
+  \item a sort $G$
+  \item function symbols $S,K,I\maps 1 \to G$
+  \item a function symbol $(-\;-)\maps G^2 \to G$
+  \item a function symbol $R\maps G \to G$
+  \item an equation $R(x\; y) = (Rx\; y)$
+  \item a rewrite $\sigma\maps R(((S\; x)\; y)\; z) \Rightarrow R((x\; z)\;(y\; z))$
+  \item a rewrite $\kappa\maps R((K\; x)\; z) \Rightarrow Rx$
+  \item a rewrite $\iota\maps R(I\; z) \Rightarrow Rz$
+\end{enumerate}
+Rather than interpret this theory in Set, we interpret it in Gph, the category of reflexive directed multigraphs.  We get a graph equipped with graph homomorphisms satisfying the equations and ``graph transformations'', the obvious analogy to natural transformations for graphs.  Item 1 says we have one generating object for the graph of terms and rewrites. Item 2 says we have one generating vertex with a chosen self edge for each combinator.  Item 3 says we can form new vertices by applying one vertex to another.  Item 4 is a reduction context marker.  We apply it to a term to mark the topmost context, since the fact that application is a graph homomorphism means that without a marker, if a rewrite can apply at some point in a term, it can apply at any point in the term.  Item 5 says that the left-hand side of an application is a reduction context.  Items 6-8 are the reduction rules and generate the edges of the graph.
+
+The graph is the same in both cases, but each approach has its benefits.  The multisorted approach lets us write down formulae that use $s$ and $t$.  The Gph-enriched approach is much more concise, and lets us apply function symbols to entire graphs instead of just to edges.  Note that the category Gph, like Set, is a topos.
+
+The kinds of theory mentioned above can only describe calculi without binders; for languages with binders, there are corresponding notions of nominal Lawvere theory \cite{nominal}.
 
 \section{Collections}
+
+We follow Wadler \cite{ComprehendingMonads} in thinking of collections as monads whose algebras have an annihilating element.  So far we have assumed that the collection monad acts on Set or Gph, but it's worth exploring the minimum requirements.  
+
+Suppose that the one sort in the collection theory is $X.$  The annihilating element is picked out by a function symbol ${z\maps 1 \to X,}$ which means that the theory has to have a distinguished object 1, not necessarily terminal.  For the element to annihilate something, there must be some other function symbol ${m\maps X^{n \ge 2} \to X}$ for combining elements, which means that the theory has to have some notion of product, not necessarily cartesian.  Taken together, these mean the theory must be at least monoidal.  
+
+If we don't care about the order of items in our collection, the theory should be symmetric monoidal.  If we want to be able to take a collection apart, then the theory needs projections, which forces the tensor product to be the categorical product and the distinguished object to be terminal.  We often want to model relations with collections; to do that, we need a transformation ${\rho\maps C(X\times Y) \to (X \to CY)}$ natural in $Y$ and dinatural in $X$ for mapping the ``collection of pairs'' view to the ``related elements'' view.  To support this, the theory must have internal homs.  
+
+In what follows, we assume that the theory is cartesian closed and the collection supports all the features above.  The transformation $\rho$ means that there's a map from ${C(X)\cong C(X \times 1)}$ to ${X \to C1.}$  In the special case where $C$ is the covariant power monad, $C1$ is the subobject classifier $\Omega.$
+
 \section{Formulae}
+
+A mere Lawvere theory can be thought of as either a multisorted Lawvere theory with only one sort or as a Gph-enriched Lawvere theory with no edges.  In the former case, we sum the monads by identifying the one sort from the collection theory with the sort for edges and then taking the union of the sets of function symbols and the sets of equations.  In the latter case, there's no choice to make about which sorts to identify.
+
+The logical operations on formulae are given by morphisms $C1^n \to C1$ for each $n.$  When $C$ is the monad for lists, for instance, $C1$ is isomorphic to the natural numbers, so we have a ``truth value'' for each natural number and operations like max and min, sum, absolute difference, and product.  Note that there is no ``completely true'' because infinity is not an element of the natural numbers.  Given any true statement (that is, not truth level 0), there are infinitely more that are ``more true.''
+
 \section{Realization}
-\section{Modalities}
-\section{Conclusion}
 
-\begin{enumerate}
-  \item \label{topostype:unit} There is a unit type representing the empty collection.
-  \item \label{topostype:base} There is a set of base types representing collections granted by fiat.
-  \item \label{topostype:product} There are product types representing the special case of using a collection to form pairs and take them apart again.
-  \item \label{topostype:function} There are function types representing ways to manipulate collections.
-  \item \label{topostype:omega} There is a subobject classifier $\Omega$ representing the collection of ways an element can inhabit a collection.
-\end{enumerate}
+Given an object $X,$ a useful way to think of $(T+C)X$ is as
+\[X + TX + CX + TTX + TCX + CTX + CCX + TTTX + \cdots.\]
+That is, any interleaving of term calculus function symbols and collection symbols is allowed. Using the units and joins of $T$ and $C,$ we can coerce the term into the form $(TC)^nX$ for some $n.$  The distributive law then lets us move $T$s past $C$s so that all the $C$s are on the left of the $T$s, at which point we use the joins again to get a term in $CTX.$
 
-For an example of point \ref{topostype:product} failing, we may be able to ``pair up'' collections without being able to take them apart again.  If we use the notion of a vector space to collect items rather than a set, then linear transformations are those functions that preserve the structure; the corresponding notion of product is the tensor product, not the cartesian one.  We can take the Kronecker product of a vector in $U$ and a vector in $V$ to get a vector in $U \otimes V,$ but given an arbitrary vector in $U\otimes V,$ there is rarely a way to write it as the Kronecker product of two other vectors.  
-
-More often, it is point \ref{topostype:omega} that fails.  While sets have a clear notion of morphism between them, namely functions, it is not necessarily clear what the appropriate morphism between two lists should be.  A list can be thought of as a linked list, as a free monoid, as a totally ordered multiset, {\em etc.}; each different notion has its own concept of morphism.
-
-  
-
-With this choice, all morphisms are monomorphisms and subobjects correspond to collections over the terminal type.  While the subobject classifier in a topos is isomorphic to collections over the terminal type, the converse does not always hold.
-
-\section{Formulae and realizability}
-
-Types in computer programming describe collections of terms of the programming language.  Often, this is done by allowing type identifiers to appear in place of literals in the grammar.  For instance, in Facebook's Flow type system for JavaScript, we can replace the specific name and age in the record 
-\begin{center}
-  {\tt \{name: "Joe Schmoe", age: 45\}}
-\end{center}
-with the types {\tt string} and {\tt number}, respectively, to get a type of records:
-\begin{center}
-  {\tt \{name: string, age: number\}}.
-\end{center}
-This suggests that given an ADT $T$ describing terms in a programming language and an ADT $C$ describing a notion of collection, we can sum the two to get an ADT for formulae.  
-
-The interpretation of a formula is a collection of terms.  A collection of terms is simply the composition of the two monads applied to the generators.  Therefore, we expect the interpretation of a formula to be given by a natural transformation
-\[ \interp{-}\maps T+C \Rightarrow CT. \]
-The natural transformation can be expressed in terms of the units and joins of $T$ together with a distributive law
-\[ \delta\maps TC \Rightarrow CT. \]
-We think of a collection as a way of ``summing'' terms together and the term constructors themsleves as a kind of formal product.  The distributive law maps products of sums to sums of products.
-
-Such a distributive law may not always exist.  In figures \ref{fig:sets} and \ref{fig:lists}, we show how the ``sets of'' collection monad admits both linear and nonlinear combinators, but the ``lists of'' collection monad only admits linear ones.
-
-\section{Rewrites}
-Specifications of programming languages include not only the grammar for the language but also a description of the rewrite rules and the contexts in which the rules apply.  Multisorted Lawvere theories give us a language in which to describe the reflexive graph of terms and rewrites between them.  We have one sort for vertices, one for edges, a pair of function symbols for source and target, and a set of function symbols for generating the specific terms in the grammar and the specific rewrites between terms.  We also have equations for describing structural equivalence.
-
-By referring to edges, formulae can describe behaviors of programs as well as their structure.  Suppose we have a two-hole term context $K$ and we define the type $X\langle K\rangle Y$ to be the set of terms $t$ such that there exist two terms $u\in X$ and $v \in Y$ and a rewrite from $K(t,u)$ to $v.$  In an applicative calculus like lambda calculus or a combinator calculus, we can take the context $K$ to be application; then $X\langle K\rangle Y$ is $X \Rightarrow Y.$  If instead we have a concurrent calculus like pi calculus, we can choose $K$ to be the par operator and $X\langle K\rangle Y$ gives Caires' rely-guarantee modality $X\triangleright Y$.
-
-%% exists_f S⊆VxVxVxE = {r | y <- f(S), r <- y}
-%% f(r:V,u:V,v:V,rho:E) = [r] if s(rho) = C(r, u) and t(rho) = v, [] otherwise
-%% when C = application, exists_f S has one copy of r for each way to form A => B in S.
+A nontrivial distributive law does not always exist for a particular choice of $T$ and $C.$  In figures \ref{fig:sets} and \ref{fig:lists}, we show how the ``sets of'' collection monad admits both the linear BCI and nonlinear SKI combinators, but the ``lists of'' collection monad only admits linear ones.
 
 \section{Typed terms}
-Typing works somewhat differently in this scenario.  Every term is also a formula whose interpretation is the collection containing only that term.  Every term constructor is a type constructor, so we don't immediately get, e.g. that the type of the $K$ combinator is $X \Rightarrow Y \Rightarrow X.$  We have to prove that $K$ satisfies that modality.
+
+Every term belongs to the singleton collection containing just itself, so every term is well-typed.  Every term context maps the term filling the hole to the term in contest, so every term context is a type constructor.  Using the example of the SKI calculus, the one-hole term context $(I\; -)$ is a type constructor taking any type $X$ to the type $(I\;X).$  
+
+Note that the type $(I\;X)$ is not equivalent to the type $X$ in the theories described above.  It is an assertion about the actual shape of a term, up to structural equivalence; this makes sense to do because we are not modding out by rewrites.  In the case of confluent calculi like the SKI calculus, modding out by rewrites is harmless, but in the case of concurrent calculi like the pi calculus, it matters in what order reductions occur, so we can't mod out by them without destroying the intended semantics.
+
+\section{Subtyping}
+
+The elements of $C1$ form a partially ordered set; we say $c \le c'$ if $c$ is a subterm of $c'.$  As noted above, the elements do not necessarily form a lattice; when $C$ is the monad for lists, there is no longest list to contain all the others.  We do, however, always have an empty collection by assumption.
+
+We can pull back the subtyping on collections of terms to formulae by means of the realization natural transformation, but sometimes that's unnecessary.  If we know that a type $X$ is a subtype of $Y,$ then for any one-hole formula context $K[-],$ the formula $K[X]$ is a subtype of $K[Y].$  The empty collection is, of course, a subtype of every other.
+
+\section{Soundness and completeness}
+
+Because we pull back the subtyping, the modality-free logic is sound by construction; because $CTX$ is a subset of $(T+C)X$ for all $X,$ the modality-free logic is complete.
+
+\section{Modalities}
+
+We can introduce the syntax for modalities with a third monad $M$ and define $T'$ as $T+M.$  We realize the modalities with a natural transformation $\Delta\maps M \to CT.$  The realization transformation for formulae with modalities factors as
+\[ \begin{array}{rl}
+  (T'+C) & \stackrel{\interp{-}}{\Rightarrow} CT' = C(T+M) \\
+    & \stackrel{C(T+\Delta)}{\Rightarrow} CT+CCT = (C + CC)T \\
+    & \stackrel{(C + \mu_C)T}{\Rightarrow} CT.
+\end{array} \]
+The first part of the transformation treats the modalities as atomic, leaving them unchanged; the second part interprets the modalities; and the third uses joins where necessary to get a single collection of terms.
+
+The possibility modality $\diamond t$ can be realized as 
+\[\{ t'\;|\; \exists t', \rho. s(\rho) = t' \land t(\rho) = t\}.\]  
+The generalized possibility modality $X\langle K\rangle Y$ from the introduction can be realized as 
+\[\{ t\;|\; \exists u:X, v:Y, \rho. s(\rho) = K[t, u] \land t(\rho) = v \}. \]
+Note that these comprehensions only make sense when the notion of collection gives a lattice so that it makes sense to have the quantifier range over all the variables.  When that is not the case, we have to limit the scope to specific collections:
+\[\diamond_{P,Q} t = \{ t'\;|\; \exists t':P, \rho:Q. s(\rho) = t' \land t(\rho) = t\}\]
+\[\begin{array}{l}
+  X\langle K,P,Q\rangle Y \\
+  \quad = \{ t:P\;|\; \exists u:X, v:Y, \rho:Q. s(\rho) = K[t, u] \land t(\rho) = v \}.
+\end{array} \]
+
+As before, we can pull back the subtyping, so the resulting logic is sound; this time, however, it is not necessarily complete.
+
+\section{Conclusion}
 
 
-\section{Comparison with toposes}
 
 %% types are collections
 %% unit type // must have empty collection
@@ -342,65 +395,6 @@ Typing works somewhat differently in this scenario.  Every term is also a formul
 %% θ:ΓxA -> P1, a:A => {a | θ}:P1, FV({a | θ}) = components(Γ) // special case of λ for B = P1
 
 
-\begin{figure*}
-  \def\w{5}\def\h{2}
-  \begin{tikzpicture}
-    \node (A) at (0,\h) {((K w) \{x, y, z\})};
-    \node (B) at (\w,\h) {w}
-      edge [<-|] (A);
-    \node (C) at (0,0) {\{((K w) x), ((K w) y), ((K w) z)\}}
-      edge [<-|] node [left] {$\delta$} (A);
-    \node (D) at (\w,0) {\{w, w, w\} = \{w\}}
-      edge [<-|] node [right] {$\delta$} (B)
-      edge [<-|] (C);
-  \end{tikzpicture}
-  \def\w{8}\def\h{2}
-  \begin{tikzpicture}
-    \node (A) at (0,\h) {(((B v) w) \{x y z\})};
-    \node (B) at (\w,\h) {(v (w \{x y z\}))}
-      edge [<-|] (A);
-    \node (C) at (0,0) {\{(((B v) w) x), (((B v) w) y), (((B v) w) z)\}}
-      edge [<-|] node [left] {$\delta$} (A);
-    \node (D) at (\w,0) {\{v (w x)), v (w y)), v (w z))\}}
-      edge [<-|] node [right] {$\delta$} (B)
-      edge [<-|] (C);
-  \end{tikzpicture}
-\caption{Using the ``sets of'' collection monad with the combinators $K$ and $B$.}
-\label{fig:sets}
-\end{figure*}
-
-
-
-
-\begin{figure*}
-\def\w{5}\def\h{2}
-  \begin{tikzpicture}
-    \node (A) at (0,\h) {((K w) [x, y, z])};
-    \node (B) at (\w,\h) {w}
-      edge [<-|] (A);
-    \node (C) at (0,0) {[((K w) x), ((K w) y), ((K w) z)]}
-      edge [<-|] node [left] {$\delta$} (A);
-    \node (D) at (\w,0) {[w, w, w] $\ne$ [w]}
-      edge [<-|] node [right] {$\delta$} (B)
-      edge [<-|] (C);
-  \end{tikzpicture}
-
-  \def\w{8}\def\h{2}
-  \begin{tikzpicture}
-    \node (A) at (0,\h) {(((B v) w) [x y z])};
-    \node (B) at (\w,\h) {(v (w [x y z]))}
-      edge [<-|] (A);
-    \node (C) at (0,0) {[(((B v) w) x), (((B v) w) y), (((B v) w) z)]}
-      edge [<-|] node [left] {$\delta$} (A);
-    \node (D) at (\w,0) {[v (w x)), v (w y)), v (w z))]}
-      edge [<-|] node [right] {$\delta$} (B)
-      edge [<-|] (C);
-  \end{tikzpicture}
-\caption{Using the ``lists of'' collection monad with the combinators $K$ and $B$.  Because $K$ discards information, there is no nontrivial distributive law for the $SKI$ calculus and the list monad.  The $BCI$ calculus, on the other hand, is linear, and works fine with the list monad.}
-\label{fig:lists}
-\end{figure*}
-
-Given $\delta\maps T+C \Rightarrow CT$ and an algebra $h\maps CTX \to X,$ get algebra $h\delta_X\maps (T+C)X \to X.$
 
 
 %% ∃_f S = [ y∈Y | ∃x∈X. f(x)=y  ∧  x∈S ] = map f S
@@ -421,7 +415,7 @@ Given $\delta\maps T+C \Rightarrow CT$ and an algebra $h\maps CTX \to X,$ get al
 %% 
 %% ``set-like'' collections: P1 is a classifier 
 %% 
-\fi
+
 
 %% Acknowledgments
 \begin{acks}                            %% acks environment is optional
