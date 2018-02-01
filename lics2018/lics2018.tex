@@ -58,6 +58,7 @@
 \usetikzlibrary{positioning}
 \usepackage{stmaryrd}
 \usepackage{multicol}
+\usepackage{hyperref}
 \usepackage{booktabs}   %% For formal tables:
                         %% http://ctan.org/pkg/booktabs
 \usepackage{subcaption} %% For complex figures with subfigures/subcaptions
@@ -279,11 +280,11 @@ Rather than interpret this theory in Set, we interpret it in Gph, the category o
 
 The graph is the same in both cases, but each approach has its benefits.  The multisorted approach lets us write down formulae that use $s$ and $t$.  The Gph-enriched approach is much more concise, and lets us apply function symbols to entire graphs instead of just to edges.  Note that the category Gph, like Set, is a topos.
 
-The kinds of theory mentioned above can only describe calculi without binders; for languages with binders, there are corresponding notions of nominal Lawvere theory \cite{nominal}.
+The kinds of theory mentioned above can only describe calculi without binders; for languages with binders, there are corresponding notions of nominal Lawvere theory \cite{GabbayPitts, Clouston}.
 
 \section{Collections}
 
-We follow Wadler \cite{ComprehendingMonads} in thinking of collections as monads whose algebras have an annihilating element.  So far we have assumed that the collection monad acts on Set or Gph, but it's worth exploring the minimum requirements.  
+We follow Wadler \cite{Wadler} in thinking of collections as monads whose algebras have an annihilating element.  So far we have assumed that the collection monad acts on Set or Gph, but it's worth exploring the minimum requirements.  
 
 Suppose that the one sort in the collection theory is $X.$  The annihilating element is picked out by a function symbol ${z\maps 1 \to X,}$ which means that the theory has to have a distinguished object 1, not necessarily terminal.  For the element to annihilate something, there must be some other function symbol ${m\maps X^{n \ge 2} \to X}$ for combining elements, which means that the theory has to have some notion of product, not necessarily cartesian.  Taken together, these mean the theory must be at least monoidal.  
 
@@ -346,7 +347,7 @@ As before, we can pull back the subtyping, so the resulting logic is sound; this
 
 \section{Conclusion}
 
-
+We presented an alternative approach to categorical logic based on monads and a distributive law.  The technique allows one to take a formal operational semantics of a programming language, a collection monad, and a distributive law and produce a structural-behavioral type system.  Such types have found application on the blockchain to prove the absence of race conditions in smart contracts \cite{PettersonMeredith}.
 
 %% types are collections
 %% unit type // must have empty collection
@@ -417,20 +418,26 @@ As before, we can pull back the subtyping, so the resulting logic is sound; this
 %% 
 
 
-%% Acknowledgments
-\begin{acks}                            %% acks environment is optional
-                                        %% contents suppressed with 'anonymous'
-\end{acks}
-
 
 %% Bibliography
 %\bibliography{bibfile}
+\begin{thebibliography}{99}
+\bibitem{Clouston} Ranald Clouston, ``Nominal Lawvere Theories: A category theoretic account of equational theories with names'', {\em J. Comput. Syst. Sci.}, {\bf 80} (6), 1067--1086.
 
+\bibitem{GabbayPitts} Murdoch Gabbay and Andrew M.~Pitts, ``A New Approach to Abstract Syntax with Variable Binding,'' {\em Formal Asp. Comput.} {\bf 13} (3-5), 341--363.
+
+\bibitem{PettersonMeredith} Jack Petterson and Lucius Gregory Meredith, ``Notes on the DAO re-entrancy bug and behavioral types,'' \href{https://docs.google.com/document/d/1sGlObhGhoEizBXC30Ww4h1KHKGkmcy4NiCKitIBqiUg/edit}{https://docs.google.com/document/d/1sGlObhGhoEizBXC30Ww4h1KHKGkmcy4NiCKitIBqiUg/edit}.
+
+\bibitem{Trimble} Todd Trimble, ``multisorted Lawvere theories,'' \href{https://ncatlab.org/toddtrimble/published/multisorted+Lawvere+theories}{https://ncatlab.org/toddtrimble/published/multisorted+Lawvere+theories}.
+
+\bibitem{Wadler} Philip Wadler, ``Comprehending monads,'' {\em Proceedings of the 1990 ACM conference on LISP and functional programming (LFP),} 61--78.
+
+\end{thebibliography}
 
 %% Appendix
-\appendix
-\section{Appendix}
+%%\appendix
+%%\section{Appendix}
 
-Text of appendix \ldots
+%% Text of appendix \ldots
 
 \end{document}
