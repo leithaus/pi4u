@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{comment}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{stmaryrd}
+\newcommand{\interp}[1]{\llbracket #1 \rrbracket}
+\newcommand{\maps}{\colon}
+\renewcommand{\:}{\colon}
+\newcommand{\FinSet}{\mathrm{FinSet}}
+\newcommand{\Set}{\mathrm{Set}}
+\newcommand{\Cat}{\mathrm{Cat}}
+\newcommand{\Calc}{\mathrm{Calc}}
+\newcommand{\Mon}{\mathrm{Mon}}
+\newcommand{\BoolAlg}{\mathrm{BoolAlg}}
+\renewcommand{\Form}{\mathrm{Form}}
+\newcommand{\leftu}{\mathrm{left}}
+\newcommand{\rightu}{\mathrm{right}}
+\newcommand{\send}{\mathrm{send}}
+\newcommand{\recv}{\mathrm{recv}}
+\newcommand{\comm}{\mathrm{comm}}
+\renewcommand{\quote}[1]{``#1"}
+\newcommand{\deref}[1]{\mathrm{eval}(#1)}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\NN}{\mathbb{N}}
+
+\title{Logic as a distributive law}
+\author{
+Michael Stay\inst{1}\\
+\and
+L.G. Meredith\inst{2}\\
+}
+\institute{
+  {Pyrofex Corp.}\\
+  \email{\fontsize{8}{8}\selectfont stay@pyrofex.net}\\
+  \and
+  {RChain Coop.}\\
+  \email{\fontsize{8}{8}\selectfont president@rchain.coop}
+}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+\end{abstract}
+
+\section{Introduction and motivation}
+\subsection{What is the logic as a distributive law research programme? (LGM)}
+\subsection{Propositions/filters as types, structural type systems, realizability (LGM)}
+\subsection{Generation of type systems for programming languages (Javascript, Python, et al) (LGM)}
+  Sums of languages (MAS)
+\subsection{Type systems as search mechanisms (LGM)}
+  Service discovery and type-directed service synthesis (LGM)
+\subsection{Related work}
+  Refinement types (MAS)
+
+  - Inheritance synchronization (LGM)
+
+  Abramsky's domain theory in logical form (LGM)
+
+  Topos theory is special case of LADL where collection monad is covariant powerset monad. (MAS)
+\subsection{Outline of paper}
+
+\section{Finite structures as an example (MAS)}
+Collection calculus C
+
+Comprehension calculus R
+
+Term calculus T
+
+(C+R)+T -> (C+R)(T) ?
+
+\section{What are the limits of the notion of collection?}
+Motivation: Scala repeatedly has revised its collection library repeatedly and the community agrees that it still isn't right.  Having a proper theory of collection would help with the design of the library.
+
+Criteria
+\begin{itemize}
+  \item inhabitation/addressibility (location within collection, more refined than inhabitation) 
+  \item we can take the derivative of Cont, so we can talk about locations in any monad, not just finitary ones.
+  \item For finitely presentable semantic collections the same thing works
+  \item composition (lists of lists)
+  \item decomposition
+  \item subcollections
+  \item Only the free algebra
+\end{itemize}
+
+Binary trees as unital magmas: pairing, empty tree (leaves are nodes with both children empty)
+
+Ternary trees aren't magmas, but we still think of them as a collection.
+
+Do we allow arbitrary algebraic data types?  What does it mean for one of those to be empty?
+The development of a comprehension type. (LGM + MAS)
+
+\section{Conclusions and future work (LGM + MAS)}
+Arrow as modality
+
+How lack of powerset, universal quantification, top affects operational semantics.
+
+%\bibliographystyle{amsplain}
+%\bibliography{ladl}
+\end{document}

@@ -1,0 +1,4 @@
+pdflatex ladl.tex
+bibtex ladl
+pdflatex ladl.tex
+pdflatex ladl.tex
