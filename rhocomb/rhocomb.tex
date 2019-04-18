@@ -747,13 +747,13 @@ the kind of payload accepted by the message combinator.
 \begin{definition}
 %\label{def.bbisim}
 An  ${\mathcal N}$-\emph{barbed bisimulation} over a set of names, ${\mathcal N}$, is a symmetric binary relation 
-${\mathcal S}_{\mathcal N}$ between agents such that $P\rel{S}_{\mathcal N}Q$ implies:
+${\mathcal S}_{\mathcal N}$ between agents such that $P{\mathcal S}_{\mathcal N}Q$ implies:
 \begin{enumerate}
-\item If $P \red P'$ then $Q \wred Q'$ and $P'\rel{S}_{\mathcal N} Q'$.
+\item If $P \red P'$ then $Q \wred Q'$ and $P'{\mathcal S}_{\mathcal N} Q'$.
 \item If $P\downarrow_{\mathcal N} x$, then $Q\Downarrow_{\mathcal N} x$.
 \end{enumerate}
 $P$ is ${\mathcal N}$-barbed bisimilar to $Q$, written
-$P \wbbisim_{\mathcal N} Q$, if $P \rel{S}_{\mathcal N} Q$ for some ${\mathcal N}$-barbed bisimulation ${\mathcal S}_{\mathcal N}$.
+$P \wbbisim_{\mathcal N} Q$, if $P {\mathcal S}_{\mathcal N} Q$ for some ${\mathcal N}$-barbed bisimulation ${\mathcal S}_{\mathcal N}$.
 \end{definition}
 
 \begin{theorem}
