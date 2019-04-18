@@ -274,10 +274,10 @@ This is exactly the kind of design level thinking that
 compositionality should promote, and it is actually surprising that
 this particular solution for a name-free version of a concurrent
 calculus wasn't found sooner. In point of fact, the initial
-implementations in \textsf{OCaml}, \textsf{Haskell}, and
-\textsf{Scala} used exactly this fixed point formulation to define the
+implementations of {\rhoc} in \textsf{OCaml}, \textsf{Haskell}, and
+\textsf{Scala} all used exactly this fixed point formulation to define the
 syntax for the {\rhoc}. The fact that the code type-checks
-proves that the types are inhabited, providing some assurance of the
+and that the types are inhabited provides some assurance of the
 soundness of the construction.
 
 The combinator versions take compositionality a step further by
@@ -308,6 +308,16 @@ appendix at the end as the {\pic\;} is quite well known at this point,
 and the {\rhoc} has been part of the concurrency literature for over a
 decade. This organization allows us to focus on the newer results of a
 name-free combinator calculus for mobile concurrency.
+
+\subsubsection{Related work}
+
+As mentioned previously, there is a long history of interest in
+combinatorial presentations of computational models, with Yoshida's
+work representing a seminal development for concurrent computation. We
+have also recently become aware of
+\cite{DBLP:journals/toplas/RajaS97}. They achieve a similar goal, but
+without reflection, using a technique pioneered by Quine, who was also
+a pioneer of reflective techniques. \cite{Quine59} \cite{Quine60}
 
 \section{A reflective higher-order concurrent combinator calculus}
 
@@ -542,11 +552,11 @@ the RHO combinator calculus.
   $D(x,v,w) := (\mathsf{d}(x,v,w) | \mathsf{fw}(v,x) | {*}(w))$
 \end{definition}
 \[\begin{array}{rl}
-  \mathsf{*}_{(x,v,w)} P &= \mathsf{m}(x,D(x,v,w) \; |\; P) \; |\; D(x,v,w) \\
-        &= \mathsf{d}(x,v,w) \; |\; \mathsf{fw}(v,x) \; |\; {*}(w) \; |\; \mathsf{m}(x,D(x,v,w) \; |\; P) \\
-        &\red \mathsf{m}(v,D(x,v,w) \; |\; P) \; |\; \mathsf{m}(w,D(x,v,w) \; |\; P) \; |\; \mathsf{fw}(v,x) \; |\; {*}(w) \; |\; \mathsf{m}(x,D(x,v,w) \; |\; P) \\
-        &\red \mathsf{m}(x,D(x,v,w) \; |\; P) \; |\; \mathsf{m}(w,D(x,v,w) \; |\; P) \; |\; {*}(w) \\
-        &\red \mathsf{m}(x,D(x,v,w) \; |\; P) \; |\; D(x,v,w) \; |\; P \\
+  \mathsf{*}_{(x,v,w)} P &= \mathsf{m}(x,\quotep{(D(x,v,w) \; |\; P)}) \; |\; D(x,v,w) \\
+        &= \mathsf{d}(x,v,w) \; |\; \mathsf{fw}(v,x) \; |\; {*}(w) \; |\; \mathsf{m}(x,\quotep{(D(x,v,w) \; |\; P)}) \\
+        &\red \mathsf{m}(v,\quotep{(D(x,v,w) \; |\; P)}) \; |\; \mathsf{m}(w,\quotep{(D(x,v,w) \; |\; P)}) \; |\; \mathsf{fw}(v,x) \; |\; {*}(w) \; |\; \mathsf{m}(x,\quotep{(D(x,v,w) \; |\; P)}) \\
+        &\red \mathsf{m}(x,\quotep{(D(x,v,w) \; |\; P)}) \; |\; \mathsf{m}(w,\quotep{(D(x,v,w) \; |\; P)}) \; |\; {*}(w) \\
+        &\red \mathsf{m}(x,\quotep{(D(x,v,w) \; |\; P)}) \; |\; D(x,v,w) \; |\; P \\
         & = \; \mathsf{*}_{(x,v,w)} P \; |\; P
 \end{array}\]
 
@@ -633,9 +643,9 @@ for all but replication and $\mathsf{new}$.
     \meaningof{\emph{c}(\vect{a})}_2 (n,p) 
       & = & 
       \emph{c}(\vect{a})\mbox{, where $\emph{c}$ is any combinator but $m$} \\
-    \meaningof{\mathsf{m}(a,@P)}_2 (n,p) 
+    \meaningof{\mathsf{m}(a,\quotep{P})}_2 (n,p) 
       & = & 
-          \mathsf{m}(a, \meaningof{P}_2 (n,p)) \\
+          \mathsf{m}(a, \quotep{\meaningof{P}}_2 (n,p)) \\
     \meaningof{P \juxtap Q}_2 (n,p) 
       & = & 
     \meaningof{P}_2 (n^l, p^l)
@@ -648,7 +658,7 @@ to remove the prefix.
 
 \begin{eqnarray*}
     \meaningof{\mathsf{*} P}_2 (n,p)
-          & = & \binpar{\mathsf{m}(x, \meaningof{P}_3(n^r,p^r))}
+          & = & \binpar{\mathsf{m}(x, \quotep{\meaningof{P}_3(n^r,p^r)})}
                   {\binpar{D(x,v,w)}
                     {\binpar{\mathsf{m}(n^r, *n^l)}{\mathsf{m}(n^r, *n^l)}}} \\
                   & & \mbox{where } 
@@ -657,7 +667,7 @@ to remove the prefix.
                       w = @(\meaningof{P}_2(n,p))^{rr} \\
     \meaningof{(\new \; x ) P}_2 (n, p) 
           & = & 
-         \meaningof{\prefix{p}{x}{\binpar{\meaningof{P}_2 ( n^l, p^l )}{\mathsf{m}(p, *n)}}}_4(n, p)
+         \meaningof{\prefix{p}{x}{\binpar{\meaningof{P}_2 ( n^l, p^l )}{\mathsf{m}(p, n)}}}_4(n, p)
 \end{eqnarray*}
 
 As expected, the interpretation of replication makes use of the $D$
@@ -703,17 +713,17 @@ specification.
 (I)&  \meaningof{\prefix{p}{x}{\binpar{P}{Q}}}_4(n, q) 
     & := & 
     (\mathsf{d}(p,v,w)|\binpar{\meaningof{\prefix{v}{x}{P}}_{4}(n_{1}, q_{1})}{\meaningof{\prefix{w}{x}{Q}}_{4}(n_{2}, q_{2}) } \\
-    & & & \mbox{where $v = \quotep{(\mathsf{m}(q,\binpar{\mathsf{b}_{\mathsf{l}}(q,n)}{\binpar{P}{Q}}))}$, $w = \quotep{(\mathsf{m}(q,\binpar{\mathsf{b}_{\mathsf{r}}(q,n)}{\binpar{P}{Q}}))}$,} \\
-    & & &\mbox{$n_{1} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(v,w)}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$, $n_{2} = \quotep{(\binpar{\mathsf{b}_{\mathsf{r}}(v,w)}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$} \\
-    & & &\mbox{$q_{1} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(n_{1},n_{2})}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$, $q_{2} = \quotep{(\binpar{\mathsf{b}_{\mathsf{r}}(n_{1},n_{2})}{\mathsf{m}(q,\mathsf{m}(v,*w))})}$} \\
+    & & & \mbox{where $v = \quotep{(\mathsf{m}(q,\quotep{\binpar{\mathsf{b}_{\mathsf{l}}(q,n)}{\binpar{P}{Q}}}))}$, $w = \quotep{(\mathsf{m}(q,\quotep{\binpar{\mathsf{b}_{\mathsf{r}}(q,n)}{\binpar{P}{Q}}}))}$,} \\
+    & & &\mbox{$n_{1} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(v,w)}{\mathsf{m}(q,\quotep{\mathsf{m}(v,*w)})})}$, $n_{2} = \quotep{(\binpar{\mathsf{b}_{\mathsf{r}}(v,w)}{\mathsf{m}(q,\quotep{\mathsf{m}(v,*w)})})}$} \\
+    & & &\mbox{$q_{1} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(n_{1},n_{2})}{\mathsf{m}(q,\quotep{\mathsf{m}(v,*w)})})}$, $q_{2} = \quotep{(\binpar{\mathsf{b}_{\mathsf{r}}(n_{1},n_{2})}{\mathsf{m}(q,\quotep{\mathsf{m}(v,*w)})})}$} \\
 (V)&  \meaningof{\prefix{p}{x}{\emph{c}(v^{+},w)}}_4(n, q) 
     & := & 
     \mathsf{s}(p,a,v)|\emph{c}(a^{+},\vect{w})
-    \mbox{, where $a = @(\binpar{\mathsf{m}(q,*n)}{\emph{c}(v^{+},\vect{w})})$ and $x \not\in v : \vect{w}$}\\
+    \mbox{, where $a = @(\binpar{\mathsf{m}(q,n)}{\emph{c}(v^{+},\vect{w})})$ and $x \not\in v : \vect{w}$}\\
 (VI)&  \meaningof{\prefix{p}{x}{\emph{c}(v^{-},\vect{w})}}_4(n, q) 
     & := & 
     \mathsf{s}(p,v,a)|\emph{c}(a^{-},\vect{w})
-    \mbox{, where $a = @(\mathsf{m}(q,*n)|\emph{c}(v^{-},w))$ and $x \not\in v : \vect{w}$} \\
+    \mbox{, where $a = @(\mathsf{m}(q,n)|\emph{c}(v^{-},w))$ and $x \not\in v : \vect{w}$} \\
 (VII)&  \meaningof{\prefix{p}{x}{\mathsf{m}(v,x)}}_4(n, q) 
     & := & 
     \mathsf{fw}(p,v) \\
@@ -726,21 +736,21 @@ specification.
 (X)&  \meaningof{\prefix{p}{x}{\emph{c}(\vect{v},x^{+},\vect{w})}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{\binpar{\mathsf{fw}(a,x)}{\emph{c}(\vect{v},a^{+},\vect{w})}}}_4(n', q)\\
-    & & & \mbox{where $a = @(\binpar{\mathsf{m}(q,*n)}{\emph{c}(\vect{v},x^{+},\vect{w})})$} \mbox{ and $n'= \quotep{(\mathsf{m}(a,\mathsf{m}(q,*n)))}$} \\
+    & & & \mbox{where $a = @(\binpar{\mathsf{m}(q,n)}{\emph{c}(\vect{v},x^{+},\vect{w})})$} \mbox{ and $n'= \quotep{(\mathsf{m}(a,\quotep{\mathsf{m}(q,*n)}))}$} \\
 (XI)&  \meaningof{\prefix{p}{x}{\emph{c}(x^{-},\vect{v})}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{\binpar{\mathsf{fw}(x,a)}{\emph{c}(a^{-},\vect{v})}}}_4(n', q)\\
-    & & & \mbox{where $a = @(\binpar{\mathsf{m}(q,*n)}{\emph{c}(x^{-},v)})$} \mbox{ and $n'= \quotep{(\mathsf{m}(a,\mathsf{m}(q,*n)))}$} \\
+    & & & \mbox{where $a = @(\binpar{\mathsf{m}(q,n)}{\emph{c}(x^{-},v)})$} \mbox{ and $n'= \quotep{(\mathsf{m}(a,\quotep{\mathsf{m}(q,*n)}))}$} \\
 (XII)&  \meaningof{\prefix{p}{x}{\mathsf{b}_{\mathsf{r}}(v,x^{-})}}_4(n, q) 
     & := & 
     \meaningof{\prefix{p}{x}{(\binpar{\mathsf{d}(v,w_{1},w_{2})}{\binpar{\mathsf{s}(w_{1},x,w_{3})}{\mathsf{b}_{\mathsf{r}}(w_{2},w_{3})}})}}_{4}(n', q) \\
-    & & & \mbox{where $w_{1} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(q,n)}{\mathsf{m}(q,\mathsf{b}_{\mathsf{r}}(v,x^{-}))})}$, $w_{2} = \quotep{(\binpar{\mathsf{b}_{\mathsf{r}}(q,n)}{\mathsf{m}(q,\mathsf{b}_{\mathsf{r}}(v,x^{-}))})}$,} \\
-    & & & \mbox{$w_{3} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(p,v)}{\mathsf{m}(w_{1},*w_{2}})}$, and $n' = \quotep{(\mathsf{s}(w_{1},w_{2},w_{3}))}$} \\
+    & & & \mbox{where $w_{1} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(q,n)}{\mathsf{m}(q,\quotep{\mathsf{b}_{\mathsf{r}}(v,x^{-})})})}$, $w_{2} = \quotep{(\binpar{\mathsf{b}_{\mathsf{r}}(q,n)}{\mathsf{m}(q,\quotep{\mathsf{b}_{\mathsf{r}}(v,x^{-})})})}$,} \\
+    & & & \mbox{$w_{3} = \quotep{(\binpar{\mathsf{b}_{\mathsf{l}}(p,v)}{\mathsf{m}(w_{1},w_{2}})}$, and $n' = \quotep{(\mathsf{s}(w_{1},w_{2},w_{3}))}$} \\
 (XIII)&  \meaningof{\prefix{p}{x}{\mathsf{s}(v,x^{-},w)}}_4(n, q) 
     & := & 
-    \meaningof{\prefix{p}{x}{(\binpar{\mathsf{s}(v,w_{1},w_{2})}{\binpar{\mathsf{m}(w_{1},*x)}{\mathsf{b}_{\mathsf{l}}(w_{2},w)}})}}_{4}(n', q) \\
+    \meaningof{\prefix{p}{x}{(\binpar{\mathsf{s}(v,w_{1},w_{2})}{\binpar{\mathsf{m}(w_{1},x)}{\mathsf{b}_{\mathsf{l}}(w_{2},w)}})}}_{4}(n', q) \\
     & & & \mbox{where $w_{1} = @(\binpar{\mathsf{b}_{\mathsf{l}}(q,n)}{\mathsf{s}(v,x^{-},w)})$, $w_{2} = @(\binpar{\mathsf{b}_{\mathsf{r}}(q,n)}{\mathsf{s}(v,x^{-},w)})$,} \\
-    & & & \mbox{and $n' = \quotep{(\mathsf{m}(w_{1},*w_{2}))}$}
+    & & & \mbox{and $n' = \quotep{(\mathsf{m}(w_{1},w_{2}))}$}
 \end{array}\]
 
 Note that all $\new$-binding is now interpreted, as in Wischik's
