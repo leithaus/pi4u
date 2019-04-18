@@ -422,12 +422,14 @@ ability to quote processes, effectively reifying them as names, and to
 unquote them, effectively reflecting names back as processes.
 
 The same technique can be applied to Yoshida's combinators. We remove
-new names and replication, introduce quoting/unquoting operators,
-allow processes in the second argument of a send, and introduce an
+new names and replication, introduce quoting/unquoting
+operators. Notice that this effectively allows processes in the second
+argument of a send, because the name in the second argument is
+`merely' a quoted process. This affords an opportunity to introduce an
 extra rewrite governing the interaction between sending and unquoting.
 
 \begin{mathpar}
-  \inferrule* [lab=atom] {} { P \bc 0 \;|\; \mathsf{m}(a,P) \;|\; \mathsf{d}(a,b,c) \;|\; \mathsf{k}(a) \;|\; \mathsf{fw}(a,b) \;|\; \mathsf{b}_{\mathsf{r}}(a,b) \;|\; \mathsf{b}_{\mathsf{l}}(a,b) \;|\; \mathsf{s}(a,b,c) }
+  \inferrule* [lab=atom] {} { P \bc 0 \;|\; \mathsf{m}(a,\quotep{P}) \;|\; \mathsf{d}(a,b,c) \;|\; \mathsf{k}(a) \;|\; \mathsf{fw}(a,b) \;|\; \mathsf{b}_{\mathsf{r}}(a,b) \;|\; \mathsf{b}_{\mathsf{l}}(a,b) \;|\; \mathsf{s}(a,b,c) }
   \and
   \inferrule* [lab=process] {} {\bm \; *a \;|\; P|P}
   \and
@@ -436,15 +438,15 @@ extra rewrite governing the interaction between sending and unquoting.
 
 Rewrite rules
 \[\begin{array}{rl}
-  \mathsf{d}(a,b,c) | \mathsf{m}(a,P) & \red \mathsf{m}(b,P) | \mathsf{m}(c,P) \\
-  \mathsf{k}(a) | \mathsf{m}(a,P) & \red 0 \\
-  \mathsf{fw}(a,b) | \mathsf{m}(a,P) & \red \mathsf{m}(b,P) \\
-  \mathsf{b}_{\mathsf{r}}(a,b) | \mathsf{m}(a,P) & \red \mathsf{fw}(b,@(P)) \\  
+\mathsf{d}(a,b,c) | \mathsf{m}(a,\quotep{P}) & \red \mathsf{m}(b,\quotep{P}) | \mathsf{m}(c,\quotep{P}) \\
+\mathsf{k}(a) | \mathsf{m}(a,\quotep{P}) & \red 0 \\
+\mathsf{fw}(a,b) | \mathsf{m}(a,\quotep{P}) & \red \mathsf{m}(b,\quotep{P}) \\
+\mathsf{b}_{\mathsf{r}}(a,b) | \mathsf{m}(a,\quotep{P}) & \red \mathsf{fw}(b,P) \\  
 \end{array} \quad \quad
 \begin{array}{rl}
-  \mathsf{b}_{\mathsf{l}}(a,b) | \mathsf{m}(a,P) & \red \mathsf{fw}(@(P),b) \\
-  \mathsf{s}(a,b,c) | \mathsf{m}(a,P) & \red \mathsf{fw}(b,c) \\
-  *(a) | \mathsf{m}(a,P) & \red P
+  \mathsf{b}_{\mathsf{l}}(a,b) | \mathsf{m}(a,\quotep{P}) & \red \mathsf{fw}(\quotep{P},b) \\
+  \mathsf{s}(a,b,c) | \mathsf{m}(a,\quotep{P}) & \red \mathsf{fw}(b,c) \\
+  *(a) | \mathsf{m}(a,\quotep{P}) & \red P
 \end{array}\]
 \begin{mathpar}
   \inferrule* {{P} \red {P}'} {{{P} | {Q}} \red {{P}' | {Q}}}
