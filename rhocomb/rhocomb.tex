@@ -717,18 +717,18 @@ embedding is insensitive to the choice.
 \subsubsection{Faithfulness of the translation}
 
 \begin{definition}
-An \emph{observation relation}, $\downarrow_{\mathcal N}$, over a set
+An \emph{observation relation}, $\downarrow_{\mathcal{N}}$, over a set
 of names, $\mathcal N$, is the smallest relation satisfying the rules
 below.
 
 \infrule[Out-barb]{y \in {\mathcal N}, \; x \nameeq y}
-    {\mathsf{m}(x-) \downarrow_{\mathcal N} x}
+    {\mathsf{m}(x-) \downarrow_{\mathcal{N}} x}
 
-\infrule[Par-barb]{\mbox{$P\downarrow_{\mathcal N} x$ or $Q\downarrow_{\mathcal N} x$}}
-    {\binpar{P}{Q} \downarrow_{\mathcal N} x}
+\infrule[Par-barb]{\mbox{$P\downarrow_{\mathcal{N}} x$ or $Q\downarrow_{\mathcal N} x$}}
+    {\binpar{P}{Q} \downarrow_{\mathcal{N}} x}
 
-We write $P \Downarrow_{\mathcal N} x$ if there is $Q$ such that 
-$P \wred Q$ and $Q \downarrow_{\mathcal N} x$.
+We write $P \Downarrow_{\mathcal{N}} x$ if there is $Q$ such that 
+$P \wred Q$ and $Q \downarrow_{\mathcal{N}} x$.
 \end{definition}
 
 This definition is parametric in the the argument accepted in the
