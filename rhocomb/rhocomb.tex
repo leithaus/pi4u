@@ -285,7 +285,7 @@ research and well worth the effort to read in conjunction with these results.
   \inferrule* [lab=process] {} {\bm \; (\new\; a)P \;|\; P|P \;|\; \mathsf{*}P}
 \end{mathpar}
 
-We write $\mathsf{c};\mathsf{c′};\ldots;$ to denote these
+We write $\mathsf{c};\mathsf{c'};\ldots;$ to denote these
 agents. $\mathsf{m}(a,b)$ (message) carries $a$ name $b$ to name $a$,
 $\mathsf{d}$ (duplicator) distributes a message to two locations,
 $\mathsf{fw}$ (forwarder) forwards a message (thus linking two
@@ -365,10 +365,10 @@ We assume the following annotations ($+$ stands for the output and $-$
 stands for the input), which denote how each name is used in the rules
 of interaction:
 
-\[\mathsf{m}(a^{+},v^{\pm});\mathsf{d}(a^{−},b^{+},c^{+});\mathsf{k}(a^{−});\mathsf{fw}(a^{−},b^{+});\mathsf{b}_{\mathsf{l}}(a^{−}b^{+});\mathsf{b}_{\mathsf{r}}(a^{−}b^{−});\mathsf{s}(a^{−}b^{−}c^{+})\]
+\[\mathsf{m}(a^{+},v^{\pm});\mathsf{d}(a^{-},b^{+},c^{+});\mathsf{k}(a^{-});\mathsf{fw}(a^{-},b^{+});\mathsf{b}_{\mathsf{l}}(a^{-}b^{+});\mathsf{b}_{\mathsf{r}}(a^{-}b^{-});\mathsf{s}(a^{-}b^{-}c^{+})\]
 
 Note the annotated polarities are preserved by reduction, e.g.
-\[\binpar{\mathsf{d}(a^{−},b^{+},c^{+})}{\mathsf{m}(a^{+},v)} \to \binpar{\mathsf{m}(b^{+},v)}{\mathsf{m}(b^{+},v)}\]
+\[\binpar{\mathsf{d}(a^{-},b^{+},c^{+})}{\mathsf{m}(a^{+},v)} \to \binpar{\mathsf{m}(b^{+},v)}{\mathsf{m}(b^{+},v)}\]
 
 \begin{mathpar}
   \meaningof{a!(b)} = \mathsf{m}(a,b)
@@ -591,7 +591,7 @@ for all but replication and $\mathsf{new}$.
     \meaningof{\emph{c}(\vect{a})}_2 (n,p) 
       & = & 
       \emph{c}(\vect{a})\mbox{, where $\emph{c}$ is any combinator but $m$} \\
-    \meaningof{\mathsf{m}(a,P)}_2 (n,p) 
+    \meaningof{\mathsf{m}(a,@P)}_2 (n,p) 
       & = & 
           \mathsf{m}(a, \meaningof{P}_2 (n,p)) \\
     \meaningof{P \juxtap Q}_2 (n,p) 
@@ -644,14 +644,14 @@ interference between the two components) in the recursive call.
 
 Because the input to $\meaningof{-}_4$ is already in combinator form,
 we do not have to import rules 2 -- 4 of her algorithm. Like her, we
-assume the following annotations ($+$ stands for the output and $−$
+assume the following annotations ($+$ stands for the output and $-$
 stands for the input), which denote how each name is used in the rules
 of interaction:
 
-\[\mathsf{m}(a^{+},v^{\pm});\mathsf{d}(a^{−},b^{+},c^{+});\mathsf{k}(a^{−});\mathsf{fw}(a^{−},b^{+});\mathsf{b}_{\mathsf{l}}(a^{−}b^{+});\mathsf{b}_{\mathsf{r}}(a^{−}b^{−});\mathsf{s}(a^{−}b^{−}c^{+})\]
+\[\mathsf{m}(a^{+},v^{\pm});\mathsf{d}(a^{-},b^{+},c^{+});\mathsf{k}(a^{-});\mathsf{fw}(a^{-},b^{+});\mathsf{b}_{\mathsf{l}}(a^{-}b^{+});\mathsf{b}_{\mathsf{r}}(a^{-}b^{-});\mathsf{s}(a^{-}b^{-}c^{+})\]
 
 As above the annotated polarities are preserved by reduction, e.g.
-\[\binpar{\mathsf{d}(a^{−},b^{+},c^{+})}{\mathsf{m}(a^{+},v)} \to \binpar{\mathsf{m}(b^{+},v)}{\mathsf{m}(b^{+},v)}\]
+\[\binpar{\mathsf{d}(a^{-},b^{+},c^{+})}{\mathsf{m}(a^{+},v)} \to \binpar{\mathsf{m}(b^{+},v)}{\mathsf{m}(b^{+},v)}\]
 
 Similarly, for economy of expression, we emulate Yoshida's use of
 $\emph{c}$ to represent any combinator matching the arity
