@@ -252,22 +252,60 @@ $\new$ and replication in terms of reflection.  Here, we present a
 fusion of those ideas: a name-free concurrent combinator calculus into
 which Yoshida's combinators have a faithful embedding.
 
+\subsubsection{Role of compositionality in theories of concurrency} 
+It is also interesting how compositionality plays out in this
+setting. As we emphasize throughout the paper, the {\pic\;} is not a
+closed theory, but one depending on a theory of names. In other words,
+a fully specified theory of processes involves a composition of
+theories, namely \footnote{pun gratefully accepted} an application of
+the {\pic\;} with some theory of names. In this sense we derive the {\rhoc}
+from the fixed point of applying the theory of processes to itself
+(regarded as a theory of names). Symbolically,
+
+\begin{equation*}
+  \mathcal{R} = \Pi[\quotep{\mathcal{R}}]
+\end{equation*}
+
+where $\Pi$ produces a theory of processes from whatever it is given
+as a theory of names and $\quotep{\mathcal{R}}$ is the quoted forms of
+said processes, regarding them as names.
+
+This is exactly the kind of design level thinking that
+compositionality should promote, and it is actually surprising that
+this particular solution for a name-free version of a concurrent
+calculus wasn't found sooner. In point of fact, the initial
+implementations in \textsf{OCaml}, \textsf{Haskell}, and
+\textsf{Scala} used exactly this fixed point formulation to define the
+syntax for the {\rhoc}. The fact that the code type-checks
+proves that the types are inhabited, providing some assurance of the
+soundness of the construction.
+
+The combinator versions take compositionality a step further by
+removing even more of the syntax, effectively arriving at a variant of
+an applicative algebra over a small handfull of combinators to account
+for all binding and mobility phenomena. Further still, the soundness
+of the semantics makes essential use of compositionality because we
+are effectively composing Yoshida's original semantics with the
+reflective account of name construction and deconstruction; thus
+illustrating that compositionality is not just for design-level
+thinking, but provides powerful compression of proofs.
+
 \subsubsection{Outline of the paper}
 To be fully self-contained this paper would need to present four
 different calculi and two different encodings: the original {\pic},
 Yoshida's combinator calculus, and the encoding from the term calculus
-to the combinator; the {\rhoc}, and the encoding from the {\pic} to
+to the combinator; the {\rhoc}, and the encoding from the {\pic\;} to
 the {\rhoc} and the new reflective combinator calculus, and the
 encoding from the term calculus to the reflective combinator
-calculus. Such a manifest provides all the technical inventory to illustrate
-how the two encoding techniques, prefix elimination and $\new$
-elimination, combine and how the encoding from the {\pic} can be
-constructed by composing the encoding into the {\rhoc} with the
+calculus. Such a manifest provides all the technical inventory to
+illustrate how the two encoding techniques, prefix elimination and
+$\new$ elimination, combine and how the encoding from the {\pic\;} can
+be constructed by composing the encoding into the {\rhoc} with the
 encoding into the reflective combinator calculus. We have provided the
-complete manifest, but have pushed the presentation of the {\rhoc} and the
-{\pic} and the encoding of the latter into the former in an appendix
-at the end as the {\pic} is quite well known at this point, and the
-{\rhoc} has been part of the concurrency literature for over a
+complete manifest, but have pushed the presentation of the {\rhoc} and
+the {\pic\;} and the encoding of the latter into the former in an
+appendix at the end as the {\pic\;} is quite well known at this point,
+and the {\rhoc} has been part of the concurrency literature for over a
 decade. This organization allows us to focus on the newer results of a
 name-free combinator calculus for mobile concurrency.
 
@@ -369,6 +407,8 @@ of interaction:
 
 Note the annotated polarities are preserved by reduction, e.g.
 \[\binpar{\mathsf{d}(a^{-},b^{+},c^{+})}{\mathsf{m}(a^{+},v)} \to \binpar{\mathsf{m}(b^{+},v)}{\mathsf{m}(b^{+},v)}\]
+
+It is worth pointing out that we use a slightly different syntax for input-guarded processes. Where most readers familiar with $x?(y)P$ we write $\mathsf{for}(y \leftarrow x)P$, not only to be more instep with modern programming languages, but also because it generalizes more naturally to join constructions, such as $\mathsf{for}(y_1 \leftarrow x_1; \ldots; y_n \leftarrow x_n)P$.
 
 \begin{mathpar}
   \meaningof{a!(b)} = \mathsf{m}(a,b)
