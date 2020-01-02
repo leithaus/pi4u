@@ -1,0 +1,166 @@
+\documentclass{llncs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{comment}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{stmaryrd}
+\newcommand{\interp}[1]{\llbracket #1 \rrbracket}
+\newcommand{\maps}{\colon}
+\renewcommand{\:}{\colon}
+\newcommand{\FinSet}{\mathrm{FinSet}}
+\newcommand{\Set}{\mathrm{Set}}
+\newcommand{\Cat}{\mathrm{Cat}}
+\newcommand{\Calc}{\mathrm{Calc}}
+\newcommand{\Mon}{\mathrm{Mon}}
+\newcommand{\BoolAlg}{\mathrm{BoolAlg}}
+\renewcommand{\Form}{\mathrm{Form}}
+\newcommand{\leftu}{\mathrm{left}}
+\newcommand{\rightu}{\mathrm{right}}
+\newcommand{\send}{\mathrm{send}}
+\newcommand{\recv}{\mathrm{recv}}
+\newcommand{\comm}{\mathrm{comm}}
+\renewcommand{\quote}[1]{``#1"}
+\newcommand{\deref}[1]{\mathrm{eval}(#1)}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\pic}{$\pi$-calculus}
+
+\makeatletter
+\gdef\tshortstack{\@ifnextchar[\@tshortstack{\@tshortstack[c]}}
+\gdef\@tshortstack[#1]{%
+  \leavevmode
+  \vtop\bgroup
+    \baselineskip-\p@\lineskip 3\p@
+    \let\mb@l\hss\let\mb@r\hss
+    \expandafter\let\csname mb@#1\endcsname\relax
+    \let\\\@stackcr
+    \@ishortstack}
+\makeatother
+
+\title{Logic, resource, and reflection}
+\author{
+L.G. Meredith\inst{2}\\
+\and
+Michael Stay\inst{1}\\
+}
+\institute{
+  {Pyrofex Corp.}\\
+  \email{\fontsize{8}{8}\selectfont stay@pyrofex.net}\\
+  \and
+  {RChain Cooperative}\\
+  \email{\fontsize{8}{8}\selectfont lgreg.meredith@rchain.coop}
+}
+\begin{document}
+\maketitle
+\begin{abstract}
+\noindent
+  We present an algorithm for deriving a spatial-behavioral type
+  system and term assignment from a formal presentation of a
+  interactive computational calculus. This turns out to identify a
+  species of category which we offer an axiomatic characterization of
+  interaction categories.
+\end{abstract}
+
+\section{Introduction and motivation}
+
+In groundbreaking work, Abramsky, Gay, and Nagarajan put forward the
+idea of interaction categories to give a categorical framework for
+interactive models of computing. Indeed, interactive models of
+computation are relatively new and offer distinct insights because
+they include the computational environment as part of the
+computation. Examples include the {\pic}, in fact, all the mobile
+process calculi, as well as the lambda calculus. However, interaction
+categories fail to say axiomatically what interaction is.
+
+We put forward a simple, intuitive axiomatic characterization of
+interaction and use this to derive not only a logic but a proof theory
+and term assignment algorithm for all systems satisfying these
+axioms. The resulting structure identifies a species of category and
+we offer this as an axiomatic characterization of interaction
+categories.
+
+\subsection{Intuitions}
+
+The key idea in this construction is to use both the evaluation
+context of Meredith and Stay, and computational reflection, similar to
+what is found in Meredith and Radestock, to build a proof theory with
+a cut elimination that corresponds exactly with the notion of
+computation embodied in any interactive rewrite system.
+
+The requirement that the rewrite system is interactive means the left
+hand side of every rewrite rule will necessarily be a term
+constructor, say $\mathsf{K}$, taking at least two terms. That is, when
+viewed as a piece of syntax it is at least a tuple of terms. Then, by
+controlling evaluation with an evaluation context we can force a
+distinction between a tensor and a cut, where the cut forms the redex
+with an evaluation context supplied, and the tensor is denied the
+evaluation context, effectively rendering it a data structure. Of
+course, the data is inaccessible until there is a means to unpack it,
+and a par term is constructed as the principal means to extract the
+data from the tensor.
+
+The use of the term constructor that forms a redex as a data structure
+is the essential use of reflection. The lack of a reduction context
+gives us the ability to suspend computation. Having suspended it, we
+reify computation as data, and use par to unpack the data making up
+the computation. Completing the circle, the tensor-par cut rule
+constitutes the means to reflect computational data back into actual
+computations.
+
+It turns out that denying the evaluation context is not the only way
+to suspend computation. We can also form contexts. In this case, we
+only admit 1-holed contexts, ranged over by $\chi$. With contexts we can
+define a notion of rely-guarantee, two notions actually (indicated by
+the operations $(- \rhd -)$, and $(- \lhd -)$), as a redex term constructor
+might not be commutative. .
+
+\begin{eqnarray*}
+\tau \rhd_{\mathsf{K}} \tau’ & \triangleq & \{ u \quad | \quad \exists t. u = \mathsf{!}\mathsf{K}[]r(t, []),\forall u’ : \tau. (\exists \rho : u@u’ \rightarrow v) \Rightarrow v:\tau’ \} \\
+\tau’ \lhd_{\mathsf{K}} \tau & \triangleq & \{ t \quad | \quad \exists u. t = \mathsf{K}[]l([], u)\mathsf{!},\forall t’ : \tau. (\exists \rho: t@t’ \rightarrow v) \Rightarrow v : \tau’ \}
+\end{eqnarray*}
+
+In the sequel we drop the subscript on the triangles if it’s understood from
+context. We use the notation $\chi @ t$ to mean the term formed by
+substituting $t$ for hole in $\chi$. Thus, $\mathsf{K}(t, [])@u = \mathsf{K}(t, [])[u/[]] = \mathsf{K}(t,u)$ and similarly, $\mathsf{K}([], u)@t = \mathsf{K}([], u)[t/[]] = \mathsf{K}(t,u)$
+
+To give some examples, the comm rule of rho-calculus is given by
+
+\begin{equation*}
+  \mathsf{for}( y \leftarrow x )P \quad | \quad x\mathsf{!}(Q) \rightarrow P\{ @Q/y \}
+\end{equation*}
+
+In this case K is parallel composition, and the revised, resource
+constrained comm rule, looks like
+
+\begin{equation*}
+  R | \mathsf{for}( y \leftarrow x )P \quad | \quad x\mathsf{!}(Q) \rightarrow P\{ @Q/y \}
+\end{equation*}
+
+In the lambda calculus, $\beta$-reduction is given by
+
+\begin{equation*}
+  (\lambda x.M)N \rightarrow M\{ N/x \}
+\end{equation*}  
+
+$\mathsf{K}$ is application, and the revised, resource constrained $\beta$-reduction is given by
+
+\begin{equation*}
+  R((\lambda x.M)N) \rightarrow M\{ N/x \}
+\end{equation*}    
+
+In what follows we will focus on calculi that don’t employ binding
+operators and so-called nominal phenomena. This is not to say that we
+can’t handle nominal phenomena, just that the content is already
+complex enough and we want to focus on the core ideas.
+
+
+\subsection{Related work}
+  
+
+\section{Conclusion and future work}
+
+
+\bibliographystyle{amsplain}
+\bibliography{ladl}
+\end{document}

@@ -1,0 +1,209 @@
+\documentclass{llncs}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{comment}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{stmaryrd}
+\newcommand{\interp}[1]{\llbracket #1 \rrbracket}
+\newcommand{\maps}{\colon}
+\newcommand{\FinSet}{\mathrm{FinSet}}
+\newcommand{\Set}{\mathrm{Set}}
+\newcommand{\Cat}{\mathrm{Cat}}
+\newcommand{\Calc}{\mathrm{Calc}}
+\newcommand{\Mon}{\mathrm{Mon}}
+\newcommand{\BoolAlg}{\mathrm{BoolAlg}}
+\renewcommand{\Form}{\mathrm{Form}}
+\newcommand{\leftu}{\mathrm{left}}
+\newcommand{\rightu}{\mathrm{right}}
+\newcommand{\send}{\mathrm{send}}
+\newcommand{\recv}{\mathrm{recv}}
+\newcommand{\comm}{\mathrm{comm}}
+\renewcommand{\quote}[1]{``#1"}
+\newcommand{\deref}[1]{\mathrm{eval}(#1)}
+\newcommand{\op}{\mathrm{op}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\lpquote}{\ulcorner}
+\newcommand{\rpquote}{\urcorner}
+\newcommand{\quotep}[1]{\lpquote #1 \rpquote}
+\makeatletter
+\gdef\tshortstack{\@ifnextchar[\@tshortstack{\@tshortstack[c]}}
+\gdef\@tshortstack[#1]{%
+  \leavevmode
+  \vtop\bgroup
+    \baselineskip-\p@\lineskip 3\p@
+    \let\mb@l\hss\let\mb@r\hss
+    \expandafter\let\csname mb@#1\endcsname\relax
+    \let\\\@stackcr
+    \@ishortstack}
+\makeatother
+
+\title{Modal Logics via a distributive law}
+\author{
+Michael Stay\inst{1}\\
+\and
+L.G. Meredith\inst{2}\\
+}
+\institute{
+  {Pyrofex Corp.}\\
+  \email{\fontsize{8}{8}\selectfont stay@pyrofex.net}\\
+  \and
+  {Synereo, Ltd}\\
+  \email{\fontsize{8}{8}\selectfont greg@synereo.com}
+}
+\begin{document}
+\maketitle
+\begin{abstract}
+\noindent
+
+\end{abstract}
+\section{Introduction}
+
+\subsection{The reflective higher-order $\pi$-calculus}
+
+Lawvere theories are limited in that they only talk about products of sorts.  A lambda theory is a generalization of a Lawvere theory that has the ability to talk about function sorts like $A \Rightarrow B$ and sums like $A+B$ or $1 + A + A^2 + \cdots,$ more commonly denoted with the Kleene star $A^*.$  One can think of lambda theories as having access to a ``library'' that takes care of the details of bound variables and substitution for us so we do not have to implement all that machinery.  Much of the work on nominal logics has been about exactly this factorization \cite{GabbayMJ:picfm}.  A lambda theory Th(Calc) is a bicartesian closed 2-category equipped with an identity-on-objects functor from $(\FinSet/\Sigma)^{\op}$ to Th(Calc).  Models of Th(Calc) are functors to Cat that preserve all the structure.
+
+The $\pi$-calculus was invented in the early 1990s by Robin Milner as a model of networks of processes with a dynamically changing topology; two processes initially unaware of each other can be introduced by a third process.  The reflective higher order $\pi$-calculus uses quoted processes as names; the term constructors for quote and eval replace the more traditional nu and replicate constructors.  We also add a ``comm'' term to restrict the contexts in which reduction can occur \cite{DBLP:journals/corr/StayM15}.
+
+Here is a presentation of the multisorted lambda theory Th(RHOpi) for the reflective higher-order $\pi$-calculus:
+\begin{center}
+  \begin{longtable}{|p{0.3\linewidth}|p{0.7\linewidth}|}
+    \hline
+    Sorts:
+    \begin{itemize}
+      \item $N$ for names
+      \item $P$ for processes
+    \end{itemize}\bigskip
+    Term constructors:
+    \begin{itemize}
+      \item $\mathsf{!}\maps N \times P^* \to P$
+      \item \raggedright $\forall k \in \NN \; \mathsf{for}\maps N^{k} \times ((N^*)^k \Rightarrow P) \to P$
+      \item $|\maps P^2 \to P$
+      \item $0\maps 1 \to P$
+      \item $\comm\maps 1 \to P$
+      \item $\quotep{-}\maps P \to N$
+      \item $\deref{-}\maps N \to P$
+    \end{itemize}
+    &
+    Rewrites:
+    \begin{itemize}
+      \item $\alpha\maps (p_1 | p_2) | p_3 \Rightarrow p_1 | (p_2 | p_3)$
+      \item $\beta\maps p_1 | p_2 \Rightarrow p_2 | p_1$
+      \item $\iota\maps 0 | p \Rightarrow p$
+      \item \raggedright $\chi\maps \mathsf{for}( x^1; \ldots; x^k, q) \;|\; \Pi_{i=1}^{k} x^1\mathsf{!}(p^i_1, \ldots, p^i_{n^i})\;|\; \comm \Rightarrow q([\quotep{p^1_1}, \ldots, \quotep{p^1_{n^1}}], \ldots, [\quotep{p^k_1}, \ldots, \quotep{p^k_{n^k}}]) \;|\; \comm$
+      \item $\epsilon\maps \deref{\quotep{p}} \Rightarrow p$
+    \end{itemize}
+    Equations:
+    \begin{itemize}
+      \item \tshortstack[l]{$\alpha = P^3, \beta = P^2, \iota = P$ ($|$ and 0 form a \\ commutative monoid)}
+      \item \tshortstack[l]{$\epsilon = P$ (evaluating a quoted process is the \\ same as the process itself)}
+    \end{itemize}\\
+    \hline
+  \end{longtable}
+\end{center}
+
+For readability and consistency with common practice (see Scala
+for-notation) we introduce syntactic sugar for the input guarded
+process forms, writing it as
+
+\[\interp{\mathsf{for}( \vec{y^1} \leftarrow x^1;\ldots ; \vec{y^k} \leftarrow x^k)\{ p \}} = \mathsf{for}( x^1, \ldots, x^k, \lambda \vec{y^1} \ldots \vec{y^k}.p)\]
+
+The simplest RHOpi processes are 0, the ``do nothing'' process; and comm, a ``catalyst'' process that enables communication on a channel.  The only rewrite that is not an identity is $\chi,$ the communication event.  The $\chi$ rewrite is neither confluent nor deterministic.  For example, we can model contention for resources with the term
+\[ \recv(x, P)\;|\;\recv(x, Q)\;|\;\send(x,R)\;|\;\comm \]
+which has two rewrites out of it, one where the continuation $P$ is invoked on the name $\quotep{R}$ and the other where the continuation $Q$ is invoked on it.  We can model message arrival order nondeterminism with the term
+\[ \send(x, P)\;|\;\send(x, Q)\;|\;\recv(x,R)\;|\;\comm \]
+which has two similar rewrites out of it, one where the continuation $P$ is invoked on the name $\quote{R}$ and one where $P$ is invoked on the name $\quote{Q}$.
+
+In the theory above, comm is preserved by the rewrites; one can think of each comm instance as representing a processor.  An alternative would be to consume comm in the $\chi$ rewrite; then comm would track clock ticks; an application of a consumable comm is the formal verification of billing code for tracking compute resources.
+
+Replication of processes, and therefore general recursion, can be encoded \cite{DBLP:journals/entcs/MeredithR05} via
+\[D(x) = \recv(x, y\mapsto \send(x, \deref{y}) | \deref{y})\]
+\[!P = \send(x, D(x) | P) | D(x).\]
+
+%% P    ::= { [P [| P]]}
+%%       | for( Ptrn <- X [; Ptrn <- X] )P
+%%       | X!( P )
+%%       | *X
+%%       | V
+%% V    ::= Arry | Grnd
+%% Grnd ::= Bool | Num | Str | ...
+%% Ptrn ::= X | _ | ...
+%% X    ::= @P | [Char]+
+
+%% for( y1 <- x1 ){ for( y2 <- x2 )P }
+%% for( 
+
+%% \begin{mathpar}
+%%   \inferrule* [lab=process] {} {P \bc \{ [P [| P]] \}}
+%%   \and
+%%   \inferrule* [lab=summation] {} {{M,N} \bm \mathsf{for}( Ptrn
+%%     \leftarrow X [] }
+%%   \and
+%%   \inferrule* [lab=agent] {} {{A} \bc (\vec{x})P \;| \; \clift{\vec{P}}}
+%%   \and
+%%   \inferrule* [lab=name] {} {{x,y} \bc \quotep{P}}
+%% \end{mathpar} 
+
+\[ \interp{u \langle C\rangle v} = \{ t \;|\; \exists \rho\maps C[t, u] \Rightarrow v \}; \]
+
+Caires' \cite{Caires} operator $\triangleright$ for rely-guarantee properties, the adjunct to $|,$ is an instance of our generic modal operator, where $u \triangleright v = u \langle - | - \rangle v:$
+\[ \interp{u \triangleright v} = \{ t \;|\; \exists \rho\maps (t\;|\;u) \Rightarrow v\} \]
+
+\[\interp{ \langle \quotep{\phi} \rangle \psi } = \{ t | \exists x\in\interp{\quotep{\phi}} \rho : x!(\top) | t \Rightarrow \psi \}\]
+
+Then we have that $\langle x \rangle \psi$ is merely restricting $\quotep{\phi}$ to the singleton namespace consisting of $x$.
+
+\[ \langle \rangle \psi = \interp{ 0 \langle -|- \rangle \psi } \]
+
+\subsection{Three useful kinds of formulae}
+\subsubsection{Responsiveness}
+Always responsive to outside, but may contain internal deadlocks:
+\[ \mbox{resp}(\quotep{\phi}) = \exists x \in \quotep{\phi} . \langle x\rangle(\top).\mbox{resp}(\quotep{\phi}) \]
+
+
+Attempt to say ``no deadlocks anywhere'':
+
+\[\begin{array}{rl}
+  \mbox{Responsive}( \quotep{\phi} ) = & \\
+  & \langle \quotep{\phi} \rangle \mbox{Responsive}(\quotep{\phi}) \\
+  & \lor\; \mbox{outputOnly}\; | \;\mbox{Responsive}(\quotep{\phi}) \\
+  & \lor\; \exists x. x?\top.\top \;|\; x!\top \;|\; \top \implies \langle\rangle \mbox{Responsive}(\quotep{\phi})\\
+  & \lor\; \mbox{Responsive}(\quotep{\phi}) \; | \;\mbox{Responsive}(\quotep{\phi}) \\  
+\end{array}\]
+where
+\[ \mbox{outputOnly} = 0 \lor ( \quotep{\top} ! \top \;|\; \mbox{outputOnly} ) \]
+
+Note that there can be infinite prefixes and liveness is undecidable.  E.g. for every exchange in the last line check some finitely refutable conjecture like Riemann's hypothesis or Goldbach conjecture and return to the first line only if a counterexample is found.
+
+It is easy to see that a process that satisfies $\mbox{Responsive}$ will have a shape that
+looks like
+
+\[\Pi\mathsf{for}( v \leftarrow u )P \;|\; \Pi x!(Q) \;|\; \Pi I\]
+
+where $u, x \in \quotep{\phi}$, but $\neg u \bot x$, $P \models \mbox{Responsive}(\quotep{\phi})$ and $\Pi I$ is communicates internally before becoming
+$\mbox{Responsive}$. Building on this observation we can adapt the
+formula to be parametric in a formula $\psi$, and in this way enforce
+a property on the components that eventually communicate with the environment.
+
+\[\begin{array}{rl}
+\mbox{ResponsiveP}( \quotep{\phi}, \psi ) = \psi \land \mbox{RecResponsiveP}( \quotep{\phi}, \psi ) \\
+\end{array}\]
+
+\[\begin{array}{rl}
+\mbox{RecResponsiveP}( \quotep{\phi}, \psi ) = & \\
+  & \langle \quotep{\phi} \rangle \mbox{ResponsiveP}( \quotep{\phi}, \psi ) \\
+  & \lor\; \mbox{outputOnly}\; | \;\mbox{ResponsiveP}( \quotep{\phi}, \psi ) \\
+  & \lor\; \exists x. x?\top.\top \;|\; x!\top \;|\; \top \implies \langle\rangle \mbox{ResponsiveP}( \quotep{\phi}, \psi )\\
+  & \lor\; \mbox{ResponsiveP}( \quotep{\phi}, \psi ) \; | \;\mbox{ResponsiveP}( \quotep{\phi}, \psi ) \\
+\end{array}\]
+
+\subsubsection{Containment}
+\[ \mu X. \langle \quotep{\phi} \rangle ((X \lor 0)\;|\;\neg\langle\quotep{\neg \phi}\rangle\top)\;|\;\neg\langle\quotep{\neg \phi}\rangle\top \]
+\subsubsection{Fuel}
+Revisit liveness: prove there's enough fuel to get back to first line.
+
+Computational complexity.
+
+\bibliographystyle{amsplain}
+\bibliography{ladl}
+\end{document}
